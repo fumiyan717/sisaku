@@ -114,10 +114,10 @@
     .grade-bar {
       background: #fff;
       border-bottom: 2px solid var(--border-color);
-      padding: 6px 12px;
+      padding: 8px 16px;
       display: flex;
       justify-content: center;
-      gap: 6px;
+      gap: 8px;
       overflow-x: auto;
       white-space: nowrap;
       position: sticky;
@@ -128,15 +128,15 @@
     .grade-tab {
       background: #f1f5f9;
       border: 1.5px solid #cbd5e1;
-      padding: 5px 12px;
+      padding: 6px 14px;
       border-radius: 999px;
-      font-size: 0.85rem;
+      font-size: 0.88rem;
       font-weight: 800;
       color: #475569;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
       transition: all 0.15s;
     }
 
@@ -188,7 +188,7 @@
     /* 漢字送りナビバー */
     .kanji-switch-bar {
       background: #fff;
-      padding: 6px 12px;
+      padding: 8px 14px;
       border-radius: 12px;
       display: flex;
       align-items: center;
@@ -199,10 +199,10 @@
 
     .switch-arrow-btn {
       background: #f1f5f9;
-      border: 1px solid #cbd5e1;
+      border: 1.5px solid #cbd5e1;
       border-radius: 8px;
-      padding: 6px 12px;
-      font-size: 0.9rem;
+      padding: 8px 16px;
+      font-size: 0.95rem;
       font-weight: 800;
       color: #334155;
       cursor: pointer;
@@ -224,13 +224,14 @@
     }
 
     .switch-sub-no {
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       color: #64748b;
       font-weight: bold;
+      margin-bottom: 2px;
     }
 
     .switch-main-char {
-      font-size: 1.25rem;
+      font-size: 1.35rem;
       font-weight: 900;
       color: var(--text-dark);
       display: flex;
@@ -457,8 +458,8 @@
     .card-readings-area {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      padding: 10px 12px;
-      gap: 8px;
+      padding: 10px 14px;
+      gap: 10px;
       background: #fafbfc;
       border-top: 1.5px solid var(--border-color);
     }
@@ -467,19 +468,19 @@
       background: #fff;
       border: 1.5px solid var(--border-color);
       border-radius: 10px;
-      padding: 8px 10px;
+      padding: 8px 12px;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 5px;
     }
 
     .read-col.kun { border-color: #7dd3fc; background: #f0f9ff; }
     .read-col.on { border-color: #fed7aa; background: #fff7ed; }
 
     .read-label {
-      font-size: 0.72rem;
+      font-size: 0.75rem;
       font-weight: 900;
-      padding: 2px 8px;
+      padding: 2px 10px;
       border-radius: 6px;
       align-self: flex-start;
       color: #fff;
@@ -490,15 +491,16 @@
     .read-text-list {
       display: flex;
       flex-wrap: wrap;
-      gap: 4px 8px;
+      gap: 4px 10px;
       align-items: baseline;
     }
 
     .read-item {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: 800;
       color: #1e293b;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
+      line-height: 1.45;
     }
 
     .read-item .okuri {
@@ -508,13 +510,13 @@
 
     /* 最下部メタ情報バー */
     .card-meta-bar {
-      padding: 6px 14px;
+      padding: 7px 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       background: #fff;
       border-top: 1px solid var(--border-color);
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       color: #64748b;
     }
 
@@ -539,50 +541,53 @@
     .control-panel {
       background: #fff;
       border-radius: 12px;
-      padding: 10px 12px;
+      padding: 12px;
       box-shadow: var(--shadow-sm);
       border: 1px solid var(--border-color);
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
     }
 
     .status-guide-banner {
       background: #f0f9ff;
       border-left: 4px solid var(--primary);
-      padding: 8px 12px;
+      padding: 9px 12px;
       border-radius: 0 8px 8px 0;
       display: flex;
       align-items: center;
       justify-content: space-between;
       font-weight: 800;
-      font-size: 0.92rem;
+      font-size: 0.94rem;
       color: #0c4a6e;
     }
 
     .step-pill {
       background: var(--primary);
       color: #fff;
-      padding: 2px 8px;
+      padding: 3px 10px;
       border-radius: 999px;
-      font-size: 0.78rem;
+      font-size: 0.8rem;
       white-space: nowrap;
     }
 
     /* ボタン群 */
     .btn-action-row {
       display: flex;
-      gap: 6px;
+      gap: 8px;
+      flex-wrap: wrap;
     }
 
     .act-btn {
-      flex: 1;
+      flex: 1 1 calc(25% - 8px);
+      min-width: 72px;
+      min-height: 42px;
       border: 1px solid #cbd5e1;
       background: #f8fafc;
       color: #334155;
-      padding: 9px 6px;
+      padding: 10px 8px;
       border-radius: 8px;
-      font-size: 0.88rem;
+      font-size: 0.92rem;
       font-weight: 800;
       cursor: pointer;
       display: flex;
@@ -1009,12 +1014,12 @@
         </div>
 
         <div class="btn-action-row">
-          <button class="act-btn" onclick="stepAnim(-1)">⏮ まえの画</button>
+          <button class="act-btn" onclick="stepAnim(-1)">⏮ 前の画</button>
           <button class="act-btn primary" id="btn-play-pause" onclick="togglePlayPause()">
             <span id="play-icon">▶</span> <span id="play-text">さいせい</span>
           </button>
-          <button class="act-btn" onclick="stepAnim(1)">⏭ つぎの画</button>
-          <button class="act-btn" onclick="restartAnim()">🔄 さいしょから</button>
+          <button class="act-btn" onclick="stepAnim(1)">⏭ 次の画</button>
+          <button class="act-btn" onclick="restartAnim()">🔄 最初から</button>
         </div>
 
         <div class="speed-sound-row">
@@ -1040,8 +1045,8 @@
         </div>
 
         <div class="btn-action-row">
-          <button class="act-btn" onclick="undoTraceStroke()">↩ 1画もどす</button>
-          <button class="act-btn" onclick="retryCurrentTrace()">🔄 ぜんぶ消す</button>
+          <button class="act-btn" onclick="undoTraceStroke()">↩ 1画戻す</button>
+          <button class="act-btn" onclick="retryCurrentTrace()">🔄 全部消す</button>
           <button class="act-btn" id="btn-toggle-guide" onclick="toggleTraceGuide()">👁️ お手本ON</button>
         </div>
       </div>

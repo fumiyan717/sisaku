@@ -687,29 +687,31 @@
     .mode-select-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-bottom: 14px;
+      gap: 10px;
+      margin-bottom: 16px;
     }
 
     .mode-btn {
-      background: rgba(16, 32, 60, 0.85);
+      background: rgba(16, 32, 60, 0.88);
       border: 2px solid #204987;
       border-radius: 12px;
-      padding: 10px 8px 8px 8px;
+      padding: 12px 10px 10px 10px;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.18s ease;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 3px;
+      gap: 4px;
       color: #fff;
       position: relative;
+      min-height: 98px;
+      justify-content: space-between;
     }
 
     .mode-btn:hover, .mode-btn.active {
       border-color: var(--primary-cyan);
-      background: rgba(0, 229, 255, 0.2);
-      box-shadow: 0 0 15px rgba(0, 229, 255, 0.5);
+      background: rgba(0, 229, 255, 0.22);
+      box-shadow: 0 0 16px rgba(0, 229, 255, 0.5);
       transform: translateY(-2px);
     }
 
@@ -717,15 +719,15 @@
       position: absolute;
       top: 6px;
       right: 6px;
-      background: rgba(2, 132, 199, 0.35);
+      background: rgba(2, 132, 199, 0.45);
       border: 1px solid #38bdf8;
       color: #e0f2fe;
-      font-size: 10px;
-      font-weight: 800;
-      padding: 2px 7px;
+      font-size: 11px;
+      font-weight: 900;
+      padding: 3px 8px;
       border-radius: 999px;
       text-decoration: none;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       gap: 3px;
       transition: all 0.15s;
@@ -736,24 +738,26 @@
       background: #0284c7;
       color: #fff;
       transform: scale(1.08);
-      box-shadow: 0 0 8px rgba(56, 189, 248, 0.8);
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.9);
     }
 
     .mode-btn.full-width {
       grid-column: 1 / -1;
-      padding: 10px 14px;
+      padding: 12px 16px;
       flex-direction: row;
       justify-content: center;
-      gap: 15px;
-      background: linear-gradient(90deg, rgba(32, 73, 135, 0.6) 0%, rgba(16, 32, 60, 0.85) 100%);
+      gap: 16px;
+      min-height: auto;
+      background: linear-gradient(90deg, rgba(32, 73, 135, 0.65) 0%, rgba(16, 32, 60, 0.9) 100%);
     }
 
     .grade-badge {
       font-size: 11px;
-      font-weight: bold;
+      font-weight: 800;
       padding: 2px 8px;
       border-radius: 8px;
       display: inline-block;
+      align-self: flex-start;
     }
     .grade-badge.g1 { background: rgba(255, 75, 114, 0.25); color: #ff6b8b; border: 1px solid #ff4b72; }
     .grade-badge.g2 { background: rgba(255, 152, 0, 0.25); color: #ffb74d; border: 1px solid #ff9800; }
@@ -763,20 +767,31 @@
     .grade-badge.g6 { background: rgba(213, 0, 249, 0.25); color: #ea80fc; border: 1px solid #d500f9; }
 
     .mode-name {
-      font-size: 15px;
+      font-size: 16.5px;
       font-weight: 900;
       color: var(--neon-yellow);
+      letter-spacing: 0.5px;
+      margin: 2px 0 1px 0;
     }
 
     .mode-desc {
-      font-size: 10px;
-      color: #a4c1e4;
-      line-height: 1.3;
+      font-size: 11px;
+      color: #b8d2f5;
+      line-height: 1.4;
+      text-align: center;
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 680px) {
       .mode-select-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+      .mode-btn {
+        padding: 10px 8px;
+        min-height: 90px;
+      }
+      .mode-name {
+        font-size: 15px;
       }
       .mode-btn.full-width {
         flex-direction: column;
@@ -784,18 +799,30 @@
       }
     }
 
+    @media (max-width: 440px) {
+      .mode-select-grid {
+        grid-template-columns: 1fr;
+      }
+      .mode-btn {
+        min-height: auto;
+        padding: 10px 14px;
+        align-items: flex-start;
+      }
+    }
+
     .start-btn {
       background: linear-gradient(90deg, #ff0055 0%, #ff5500 50%, #ffbb00 100%);
       color: #fff;
-      font-size: 24px;
+      font-size: 20px;
       font-weight: 900;
-      padding: 14px 45px;
+      padding: 13px 40px;
       border-radius: 35px;
       border: none;
       cursor: pointer;
       box-shadow: 0 0 25px rgba(255, 50, 0, 0.7);
-      letter-spacing: 3px;
+      letter-spacing: 2px;
       transition: all 0.2s;
+      max-width: 100%;
     }
 
     .start-btn:hover {
@@ -1292,22 +1319,46 @@
     /* === ホーム画面 拡張UI (ストリーク・称号・進捗) === */
     .home-status-bar {
       display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin: 6px 0 14px 0;
+      padding: 8px 14px;
+      background: rgba(10, 24, 48, 0.75);
+      border: 1.5px solid rgba(0, 229, 255, 0.35);
+      border-radius: 14px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+    }
+
+    .status-row-top, .status-row-bottom {
+      display: flex;
       justify-content: center;
+      align-items: center;
       gap: 12px;
       flex-wrap: wrap;
-      margin: 8px 0 16px 0;
-      padding: 8px 14px;
-      background: rgba(0, 20, 50, 0.6);
-      border: 1px solid rgba(0, 229, 255, 0.3);
-      border-radius: 20px;
     }
 
     .home-status-item {
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 6px;
-      font-size: 13px;
+      gap: 5px;
+      font-size: 12.5px;
       font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .home-status-item.clickable {
+      cursor: pointer;
+      padding: 2px 8px;
+      background: rgba(0, 229, 255, 0.1);
+      border: 1px solid rgba(0, 229, 255, 0.3);
+      border-radius: 8px;
+      transition: all 0.15s;
+    }
+
+    .home-status-item.clickable:hover {
+      background: rgba(0, 229, 255, 0.25);
+      border-color: var(--primary-cyan);
+      transform: translateY(-1px);
     }
 
     .home-status-item .status-label {
@@ -1317,46 +1368,122 @@
 
     .home-status-item .status-val {
       color: #fff;
+      font-size: 12.5px;
     }
 
     .streak-val {
       color: #ff9900 !important;
+      font-weight: 900;
       text-shadow: 0 0 8px rgba(255, 153, 0, 0.6);
     }
 
     .rank-val {
       color: var(--neon-yellow) !important;
+      font-weight: 900;
       text-shadow: 0 0 8px rgba(255, 230, 0, 0.6);
     }
 
-    .mode-progress-badge {
-      font-size: 10px;
-      padding: 2px 6px;
-      border-radius: 8px;
-      background: rgba(0, 0, 0, 0.4);
-      color: #00ffaa;
+    .privacy-guarantee-badge {
+      font-size: 11px;
+      color: #7dd3fc;
+      background: rgba(2, 132, 199, 0.18);
+      border: 1px solid #0284c7;
+      padding: 3px 10px;
+      border-radius: 999px;
+      cursor: pointer;
       font-weight: bold;
-      border: 1px solid rgba(0, 255, 170, 0.3);
-      margin-top: 2px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s;
     }
 
-    .mode-quick-start {
-      margin-top: 4px;
+    .privacy-guarantee-badge:hover {
+      background: rgba(2, 132, 199, 0.35);
+      color: #fff;
+    }
+
+    .mode-progress-badge {
       font-size: 11px;
       padding: 2px 8px;
-      background: rgba(0, 229, 255, 0.25);
-      border: 1px solid var(--primary-cyan);
-      color: #fff;
-      border-radius: 6px;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.5);
+      color: #00ffaa;
       font-weight: bold;
+      border: 1px solid rgba(0, 255, 170, 0.35);
+      margin: 1px 0;
+    }
+
+    /* 機体画像アップロードボックス */
+    .custom-ship-image-box {
+      background: rgba(10, 25, 52, 0.85);
+      border: 1.5px dashed var(--primary-cyan);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin: 12px 0 14px 0;
+      text-align: center;
+    }
+
+    .custom-ship-image-title {
+      font-size: 13.5px;
+      font-weight: 900;
+      color: var(--neon-yellow);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .custom-ship-image-desc {
+      font-size: 11px;
+      color: #94b8db;
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+
+    .custom-image-btn-row {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .custom-upload-label {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      border: 1px solid #38bdf8;
+      color: #fff;
+      padding: 7px 16px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 900;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+
+    .custom-upload-label:hover {
+      filter: brightness(1.2);
+      transform: translateY(-1px);
+    }
+
+    .custom-clear-img-btn {
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid #ef4444;
+      color: #fca5a5;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 800;
       cursor: pointer;
       transition: all 0.15s;
     }
 
-    .mode-quick-start:hover {
-      background: var(--primary-cyan);
-      color: #000;
-      transform: scale(1.05);
+    .custom-clear-img-btn:hover {
+      background: rgba(239, 68, 68, 0.4);
+      color: #fff;
     }
 
     /* === ホーム画面 整理されたナビゲーションメニュー === */
@@ -2539,35 +2666,35 @@
       <h1 class="modal-title">ファイブツアーズ<br>JET 漢字バトル</h1>
       <p class="modal-subtitle">漢字の「よみ」を答えてビームで撃破せよ！目指せ銀河の漢字マスター！</p>
 
-      <!-- 連続記録・称号・EXP・機体装備・パイロット名 ステータスバー -->
+      <!-- 整理されたステータスドック (2段構成で文字サイズと余白を最適化) -->
       <div class="home-status-bar">
-        <div class="home-status-item">
-          <span class="status-label">まいにち:</span>
-          <span class="status-val streak-val" id="home-streak-display">🔥 1日目</span>
+        <div class="status-row-top">
+          <div class="home-status-item">
+            <span class="status-label">まいにち:</span>
+            <span class="status-val streak-val" id="home-streak-display">🔥 1日目</span>
+          </div>
+          <div class="home-status-item">
+            <span class="status-label">しょうごう:</span>
+            <span class="status-val rank-val" id="home-rank-display">🧑‍🚀 みならいパイロット</span>
+          </div>
+          <div class="home-status-item">
+            <span class="status-label">EXP:</span>
+            <span class="status-val" id="home-exp-display" style="color:#00e5ff; font-weight:900;">0</span>
+          </div>
         </div>
-        <div class="home-status-item">
-          <span class="status-label">しょうごう:</span>
-          <span class="status-val rank-val" id="home-rank-display">🧑‍🚀 みならいパイロット</span>
+        <div class="status-row-bottom">
+          <div class="home-status-item clickable" onclick="openPilotNameModal()" title="パイロット二つ名を変更">
+            <span class="status-label">パイロット:</span>
+            <span class="status-val" id="home-pilot-name" style="color: #ffd700; font-weight: bold;">⚡ 疾風のハヤブサ01号</span>
+          </div>
+          <div class="home-status-item clickable" onclick="openCustomModal()" title="機体や画像をカスタマイズ">
+            <span class="status-label">そうび:</span>
+            <span class="status-val" id="home-custom-display" style="color: var(--neon-yellow);">✈️ ブルーホーク</span>
+          </div>
+          <span class="privacy-guarantee-badge" onclick="openPrivacyModal()" title="100%外部通信・本名入力なし">
+            🛡️ 個人情報ゼロ保証
+          </span>
         </div>
-        <div class="home-status-item">
-          <span class="status-label">EXP:</span>
-          <span class="status-val" id="home-exp-display" style="color:#00e5ff;">0</span>
-        </div>
-        <div class="home-status-item" onclick="openPilotNameModal()" style="cursor: pointer;" title="パイロット二つ名を変更（自由入力なしで完全安全）">
-          <span class="status-label">パイロット:</span>
-          <span class="status-val" id="home-pilot-name" style="color: #ffd700; font-weight: bold;">⚡ 疾風のハヤブサ01号</span>
-        </div>
-        <div class="home-status-item" onclick="openCustomModal()" style="cursor: pointer;" title="機体をカスタマイズ">
-          <span class="status-label">そうび:</span>
-          <span class="status-val" id="home-custom-display" style="font-size: 13px; color: var(--neon-yellow);">✈️ ブルーホーク</span>
-        </div>
-      </div>
-
-      <!-- 個人情報ゼロ安心保証バッジ -->
-      <div style="margin: 4px 0 8px 0; text-align: center;">
-        <span class="privacy-guarantee-badge" onclick="openPrivacyModal()">
-          🛡️ 100% 個人情報ゼロ保証（外部通信・本名入力なし） <span style="text-decoration: underline;">詳しく</span>
-        </span>
       </div>
 
       <!-- 主要教科書＆漢検級別 カリキュラムセレクター -->
@@ -2914,6 +3041,26 @@
         <div class="custom-preview-names">
           <span>機体: <strong id="custom-preview-ship-name" style="color: #00e5ff;">ブルーホーク</strong></span>
           <span>ビーム: <strong id="custom-preview-laser-name" style="color: #00e5ff;">蒼光シアン</strong></span>
+        </div>
+      </div>
+
+      <!-- オリジナル機体画像 挿入・アップロードセクション -->
+      <div class="custom-ship-image-box">
+        <div class="custom-ship-image-title">🖼️ オリジナル画像で出撃する（画像変更）</div>
+        <div class="custom-ship-image-desc">
+          お好きなイラストや飛行機の画像を挿入すると、ゲーム内の自機として宇宙を飛行します！
+        </div>
+        <div class="custom-image-btn-row">
+          <label class="custom-upload-label">
+            📁 画像ファイルを選択 (PNG / JPG / SVG)
+            <input type="file" id="custom-ship-file-input" accept="image/*" style="display: none;" onchange="handleCustomShipImageUpload(event)">
+          </label>
+          <button class="custom-clear-img-btn" id="btn-clear-ship-img" onclick="clearCustomShipImage()" style="display: none;">
+            🔄 元の機体に戻す
+          </button>
+        </div>
+        <div id="custom-ship-img-status" style="font-size: 11.5px; color: #00ffaa; margin-top: 8px; font-weight: bold; display: none;">
+          ✨ あなたのオリジナル画像を機体として使用中！
         </div>
       </div>
 
@@ -4472,6 +4619,73 @@ const LASER_COLORS = {
   rainbow: { name: "レインボー", stroke: "#ff00ea", core: "#00ffff", reqExp: 250 }
 };
 
+let customShipImageObj = null;
+
+function initCustomShipImage() {
+  try {
+    const saved = localStorage.getItem('kanji_jet_custom_image');
+    if (saved) {
+      customShipImageObj = new Image();
+      customShipImageObj.src = saved;
+    }
+  } catch (e) {}
+}
+initCustomShipImage();
+
+function handleCustomShipImageUpload(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const tempImg = new Image();
+    tempImg.onload = () => {
+      // 適切なサイズ（最大360x360）に圧縮してLocalStorageに保存
+      const canvasTmp = document.createElement('canvas');
+      const maxDim = 360;
+      let w = tempImg.width;
+      let h = tempImg.height;
+      if (w > maxDim || h > maxDim) {
+        if (w > h) {
+          h = Math.round((h * maxDim) / w);
+          w = maxDim;
+        } else {
+          w = Math.round((w * maxDim) / h);
+          h = maxDim;
+        }
+      }
+      canvasTmp.width = w;
+      canvasTmp.height = h;
+      const ctxTmp = canvasTmp.getContext('2d');
+      ctxTmp.drawImage(tempImg, 0, 0, w, h);
+      const dataUrl = canvasTmp.toDataURL('image/png');
+
+      try {
+        localStorage.setItem('kanji_jet_custom_image', dataUrl);
+      } catch (err) {
+        alert('画像の保存に失敗しました。もう少しファイルサイズの小さな画像をお試しください。');
+        return;
+      }
+
+      customShipImageObj = new Image();
+      customShipImageObj.src = dataUrl;
+      renderCustomModal();
+      applyCustomTheme();
+    };
+    tempImg.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearCustomShipImage() {
+  try {
+    localStorage.removeItem('kanji_jet_custom_image');
+  } catch (e) {}
+  customShipImageObj = null;
+  renderCustomModal();
+  applyCustomTheme();
+}
+
 function getCustomSetting() {
   try {
     const data = localStorage.getItem('kanji_jet_custom');
@@ -4493,7 +4707,11 @@ function applyCustomTheme() {
 
   const homeCustomEl = document.getElementById('home-custom-display');
   if (homeCustomEl) {
-    homeCustomEl.innerHTML = `<span style="color: ${shipConfig.stroke}; font-weight: bold;">✈️ ${shipConfig.name}</span> / <span style="color: ${laserConfig.stroke}; font-weight: bold;">⚡ ${laserConfig.name}</span>`;
+    if (customShipImageObj && customShipImageObj.src) {
+      homeCustomEl.innerHTML = `<span style="color: #00ffaa; font-weight: bold;">🖼️ オリジナル画像機体</span> / <span style="color: ${laserConfig.stroke}; font-weight: bold;">⚡ ${laserConfig.name}</span>`;
+    } else {
+      homeCustomEl.innerHTML = `<span style="color: ${shipConfig.stroke}; font-weight: bold;">✈️ ${shipConfig.name}</span> / <span style="color: ${laserConfig.stroke}; font-weight: bold;">⚡ ${laserConfig.name}</span>`;
+    }
   }
 }
 
@@ -4679,6 +4897,37 @@ function drawPlayerJet(cx, h) {
   const custom = getCustomSetting();
   const shipConfig = SHIP_COLORS[custom.ship] || SHIP_COLORS.blue;
   const flameTime = Date.now() * 0.02;
+
+  // 0. オリジナル画像がセットされている場合は画像機体を描画
+  if (customShipImageObj && customShipImageObj.complete && customShipImageObj.naturalWidth > 0) {
+    const targetW = 140;
+    const aspect = customShipImageObj.naturalHeight / customShipImageObj.naturalWidth;
+    const targetH = Math.min(130, targetW * aspect);
+
+    // アフターバーナー推進炎エフェクト
+    const flameH = 20 + Math.sin(flameTime) * 7;
+    ctx.save();
+    ctx.fillStyle = shipConfig.flame;
+    ctx.shadowColor = shipConfig.stroke;
+    ctx.shadowBlur = 15;
+    ctx.beginPath();
+    ctx.moveTo(cx - 24, jetBaseY + targetH * 0.35);
+    ctx.lineTo(cx, jetBaseY + targetH * 0.35 + flameH * 1.2);
+    ctx.lineTo(cx + 24, jetBaseY + targetH * 0.35);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+
+    // 画像本体の描画（影・グロー効果付き）
+    ctx.save();
+    ctx.shadowColor = shipConfig.stroke;
+    ctx.shadowBlur = 16;
+    ctx.drawImage(customShipImageObj, cx - targetW / 2, jetBaseY - targetH / 2, targetW, targetH);
+    ctx.restore();
+
+    ctx.restore();
+    return;
+  }
 
   // 1. ツインアフターバーナー推進炎エフェクト (カスタム炎カラー)
   const flameH = 22 + Math.sin(flameTime) * 8;
@@ -6819,6 +7068,17 @@ function renderCustomModal() {
   const exp = getExp();
   const current = getCustomSetting();
 
+  // オリジナル画像ステータスUI更新
+  const clearBtn = document.getElementById('btn-clear-ship-img');
+  const statusTxt = document.getElementById('custom-ship-img-status');
+  if (customShipImageObj && customShipImageObj.src) {
+    if (clearBtn) clearBtn.style.display = 'inline-block';
+    if (statusTxt) statusTxt.style.display = 'block';
+  } else {
+    if (clearBtn) clearBtn.style.display = 'none';
+    if (statusTxt) statusTxt.style.display = 'none';
+  }
+
   // ジェット機選択リスト
   const shipRow = document.getElementById('custom-ship-row');
   if (shipRow) {
@@ -6890,8 +7150,13 @@ function renderCustomPreview() {
   // ラベル更新
   const shipLabel = document.getElementById('custom-preview-ship-name');
   if (shipLabel) {
-    shipLabel.textContent = shipConfig.name;
-    shipLabel.style.color = shipConfig.stroke;
+    if (customShipImageObj && customShipImageObj.src) {
+      shipLabel.textContent = '🖼️ オリジナル画像機体';
+      shipLabel.style.color = '#00ffaa';
+    } else {
+      shipLabel.textContent = shipConfig.name;
+      shipLabel.style.color = shipConfig.stroke;
+    }
   }
   const laserLabel = document.getElementById('custom-preview-laser-name');
   if (laserLabel) {
@@ -6951,7 +7216,17 @@ function renderCustomPreview() {
   pctx.lineTo(cx + 14, cy + 18);
   pctx.fill();
 
-  // 主翼
+  // オリジナル画像があれば画像を描画
+  if (customShipImageObj && customShipImageObj.complete && customShipImageObj.naturalWidth > 0) {
+    const pw = 80;
+    const aspect = customShipImageObj.naturalHeight / customShipImageObj.naturalWidth;
+    const ph = Math.min(65, pw * aspect);
+    pctx.drawImage(customShipImageObj, cx - pw / 2, cy - ph / 2, pw, ph);
+    pctx.restore();
+    return;
+  }
+
+  // 通常機体
   pctx.fillStyle = shipConfig.fill;
   pctx.strokeStyle = shipConfig.stroke;
   pctx.lineWidth = 2.5;
@@ -6966,14 +7241,13 @@ function renderCustomPreview() {
   pctx.fill();
   pctx.stroke();
 
-  // キャノピー
   pctx.fillStyle = '#00e5ff';
   pctx.beginPath();
-  pctx.ellipse(cx, cy - 8, 6, 12, 0, 0, Math.PI * 2);
+  pctx.ellipse(cx, cy - 8, 5, 12, 0, 0, Math.PI * 2);
   pctx.fill();
-
   pctx.restore();
 }
+
 
 /* === 表彰状（漢字マスター認定証） === */
 const CERT_TABS = [

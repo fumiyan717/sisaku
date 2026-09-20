@@ -334,52 +334,64 @@
       box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.8);
     }
 
-    /* 解答入力ディスプレイ */
+    /* 解答入力ディスプレイ (マス目スロット方式) */
     .answer-display-area {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       width: 100%;
-      max-width: 650px;
+      max-width: 700px;
       margin-bottom: 8px;
     }
 
-    .answer-display-box {
+    .answer-slots-container {
       flex: 1;
-      height: 48px;
-      background: rgba(0, 0, 0, 0.8);
+      min-height: 54px;
+      background: rgba(0, 0, 0, 0.75);
       border: 2px solid var(--primary-cyan);
-      border-radius: 8px;
+      border-radius: 12px;
       box-shadow: inset 0 0 15px rgba(0, 229, 255, 0.4);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 0 15px;
+      padding: 4px 10px;
+      gap: 8px;
       position: relative;
+      cursor: pointer;
     }
 
-    .answer-text {
-      font-size: 30px;
+    .char-slot {
+      width: 44px;
+      height: 44px;
+      background: rgba(14, 25, 45, 0.9);
+      border: 2px solid #204987;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
       font-weight: 900;
       color: var(--neon-yellow);
-      letter-spacing: 8px;
-      text-indent: 8px;
-      text-shadow: 0 0 12px rgba(255, 230, 0, 0.8);
+      text-shadow: 0 0 10px rgba(255, 230, 0, 0.8);
+      box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.6);
+      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    .answer-cursor {
-      display: inline-block;
-      width: 14px;
-      height: 3px;
-      background: var(--neon-yellow);
-      margin-left: 2px;
-      animation: blinkCursor 0.7s infinite;
-      box-shadow: 0 0 6px var(--neon-yellow);
+    .char-slot.filled {
+      border-color: var(--primary-cyan);
+      background: rgba(0, 229, 255, 0.2);
+      box-shadow: 0 0 12px rgba(0, 229, 255, 0.6);
+      transform: scale(1.06);
     }
 
-    @keyframes blinkCursor {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
+    .char-slot.active {
+      border-color: var(--neon-yellow);
+      animation: slotPulse 0.8s infinite alternate;
+    }
+
+    @keyframes slotPulse {
+      0% { box-shadow: 0 0 5px var(--neon-yellow); transform: scale(1.0); }
+      100% { box-shadow: 0 0 16px var(--neon-yellow); transform: scale(1.04); }
     }
 
     .hidden-input {
@@ -394,10 +406,10 @@
     }
 
     .action-btn {
-      height: 48px;
-      padding: 0 20px;
-      border-radius: 8px;
-      font-size: 16px;
+      height: 52px;
+      padding: 0 16px;
+      border-radius: 10px;
+      font-size: 15px;
       font-weight: 900;
       cursor: pointer;
       border: none;
@@ -405,7 +417,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
+      gap: 4px;
       text-shadow: 1px 1px 2px #000;
       letter-spacing: 1px;
     }
@@ -419,11 +431,22 @@
       color: #fff;
       box-shadow: 0 0 15px rgba(255, 60, 0, 0.6);
       border: 1px solid #ff9955;
+      font-size: 17px;
+      padding: 0 20px;
     }
 
     .btn-fire:hover {
       box-shadow: 0 0 25px rgba(255, 80, 0, 0.9);
       filter: brightness(1.1);
+    }
+
+    .btn-fire.ready-fire {
+      animation: firePulse 0.6s infinite alternate;
+    }
+
+    @keyframes firePulse {
+      from { box-shadow: 0 0 15px #ff5500; transform: scale(1); }
+      to { box-shadow: 0 0 28px #ffe600; transform: scale(1.05); }
     }
 
     .btn-backspace {
@@ -440,10 +463,86 @@
       font-size: 13px;
     }
 
-    /* 50音ソフトキーボード（タブレット・スマホ・小学生対応） */
+    /* 入力モード切り替えタブ */
+    .input-mode-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 6px;
+      width: 100%;
+      max-width: 700px;
+    }
+
+    .mode-tab-btn {
+      flex: 1;
+      background: rgba(16, 32, 60, 0.8);
+      border: 1px solid #204987;
+      color: #a4c1e4;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .mode-tab-btn.active {
+      background: linear-gradient(180deg, #1a4d8c 0%, #0e2d56 100%);
+      border-color: var(--primary-cyan);
+      color: #fff;
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+    }
+
+    /* かんたん文字ブロック (小学生が見てすぐわかる大きなカラフル文字) */
+    .char-blocks-container {
+      width: 100%;
+      max-width: 700px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      padding: 2px 0;
+    }
+
+    .char-block-btn {
+      height: 54px;
+      background: linear-gradient(180deg, #1b3866 0%, #0d2140 100%);
+      border: 2px solid var(--primary-cyan);
+      border-radius: 12px;
+      color: #ffffff;
+      font-size: 27px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.6), 0 0 10px rgba(0, 229, 255, 0.2);
+      transition: all 0.12s;
+    }
+
+    .char-block-btn:hover {
+      filter: brightness(1.25);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.7), 0 0 15px rgba(255, 230, 0, 0.5);
+    }
+
+    .char-block-btn:active {
+      transform: scale(0.92);
+      filter: brightness(1.4);
+    }
+
+    .char-block-btn:nth-child(5n+1) { border-color: #00e5ff; color: #e0faff; text-shadow: 0 0 8px #00e5ff; }
+    .char-block-btn:nth-child(5n+2) { border-color: #ffe600; color: #fffde0; text-shadow: 0 0 8px #ffe600; }
+    .char-block-btn:nth-child(5n+3) { border-color: #00ff88; color: #e0fff0; text-shadow: 0 0 8px #00ff88; }
+    .char-block-btn:nth-child(5n+4) { border-color: #ff9900; color: #fff3e0; text-shadow: 0 0 8px #ff9900; }
+    .char-block-btn:nth-child(5n+5) { border-color: #ff3388; color: #ffe6f0; text-shadow: 0 0 8px #ff3388; }
+
+    /* 50音ソフトキーボード */
     .keyboard-container {
       width: 100%;
-      max-width: 680px;
+      max-width: 700px;
       display: flex;
       flex-direction: column;
       gap: 4px;
@@ -460,12 +559,12 @@
     .kb-key {
       flex: 1;
       height: 38px;
-      background: rgba(18, 36, 68, 0.85);
-      border: 1px solid #294d82;
+      background: rgba(18, 36, 68, 0.9);
+      border: 1px solid #355f9c;
       border-radius: 6px;
-      color: #e1efff;
+      color: #ffffff;
       font-size: 16px;
-      font-weight: bold;
+      font-weight: 900;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -474,9 +573,15 @@
       transition: all 0.1s;
     }
 
+    .kb-row:nth-child(1) .kb-key:not(.special) { border-color: #00e5ff; }
+    .kb-row:nth-child(2) .kb-key:not(.special) { border-color: #00ff88; }
+    .kb-row:nth-child(3) .kb-key:not(.special) { border-color: #ffe600; }
+    .kb-row:nth-child(4) .kb-key:not(.special) { border-color: #ff9900; }
+    .kb-row:nth-child(5) .kb-key:not(.special) { border-color: #ff55aa; }
+
     .kb-key:hover {
       background: rgba(30, 65, 120, 0.95);
-      border-color: var(--primary-cyan);
+      border-color: var(--neon-yellow) !important;
       color: #fff;
     }
 
@@ -487,8 +592,8 @@
     }
 
     .kb-key.special {
-      background: rgba(45, 30, 70, 0.85);
-      border-color: #634298;
+      background: rgba(50, 32, 75, 0.9);
+      border-color: #8c55dc;
       font-size: 13px;
       flex: 1.1;
       color: #ffd6ff;
@@ -665,11 +770,13 @@
     @media (max-height: 600px) {
       .hud-top { height: 45px; }
       .timer-container { margin-top: 50px; }
-      .kanji-text { font-size: 44px; }
-      .target-kanji-box { padding: 8px 25px; }
+      .kanji-text { font-size: 40px; }
+      .target-kanji-box { padding: 6px 20px; }
+      .char-slot { width: 36px; height: 36px; font-size: 22px; }
+      .answer-slots-container { min-height: 44px; padding: 2px 8px; }
+      .char-block-btn { height: 42px; font-size: 22px; }
       .kb-key { height: 32px; font-size: 14px; }
-      .answer-display-box { height: 40px; }
-      .action-btn { height: 40px; }
+      .action-btn { height: 44px; font-size: 14px; }
     }
   </style>
 </head>
@@ -707,7 +814,7 @@
     <div class="timer-container">
       <div class="timer-header">
         <span>TIME LIMIT</span>
-        <span id="timer-number">15.0s</span>
+        <span id="timer-number">30.0s</span>
       </div>
       <div class="timer-track">
         <div id="timer-bar" class="timer-bar"></div>
@@ -730,21 +837,33 @@
 
   <!-- 下部操作コンソール & キーボード -->
   <footer class="cockpit-console">
-    <!-- 解答入力バー -->
+    <!-- 解答入力バー (マス目スロット方式) -->
     <div class="answer-display-area">
-      <div class="answer-display-box" onclick="focusHiddenInput()">
-        <span class="answer-text" id="answer-text"></span>
-        <span class="answer-cursor"></span>
-        <!-- キーボード物理入力用の不可視インプット -->
+      <div class="answer-slots-container" id="answer-slots-container" onclick="focusHiddenInput()">
         <input type="text" id="hidden-input" class="hidden-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
       </div>
-      <button class="action-btn btn-clear" id="btn-clear">全部消す</button>
+      <button class="action-btn btn-clear" id="btn-clear">ぜんぶ消す</button>
       <button class="action-btn btn-backspace" id="btn-backspace">⌫ 1文字</button>
-      <button class="action-btn btn-fire" id="btn-submit">💥 発射！</button>
+      <button class="action-btn btn-fire" id="btn-submit">💥 はっしゃ！</button>
+    </div>
+
+    <!-- 入力モード切り替えタブ (小学生が見てすぐ選べる) -->
+    <div class="input-mode-tabs">
+      <button class="mode-tab-btn active" id="tab-blocks" onclick="switchInputMode('blocks')">
+        ✨ かんたん文字パネル (おすすめ)
+      </button>
+      <button class="mode-tab-btn" id="tab-keyboard" onclick="switchInputMode('keyboard')">
+        ⌨️ 50音ひょう
+      </button>
+    </div>
+
+    <!-- かんたん文字ブロック (問題ごとに大きくカラフルな候補文字を生成) -->
+    <div class="char-blocks-container" id="char-blocks-container">
+      <!-- JSで動的にボタン生成 -->
     </div>
 
     <!-- 50音ソフトキーボード (タブレット・スマホ対応) -->
-    <div class="keyboard-container" id="soft-keyboard">
+    <div class="keyboard-container" id="soft-keyboard" style="display: none;">
       <!-- 1行目: あ〜お、が〜ご -->
       <div class="kb-row">
         <button class="kb-key" data-char="あ">あ</button>
@@ -1009,6 +1128,23 @@ class SoundEngine {
       osc.start(now + idx * 0.06);
       osc.stop(now + idx * 0.06 + 0.26);
     });
+  }
+
+  playKeyClick() {
+    if (!this.enabled) return;
+    this.init();
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(580, now);
+    osc.frequency.exponentialRampToValueAtTime(290, now + 0.05);
+    gain.gain.setValueAtTime(0.08, now);
+    gain.gain.linearRampToValueAtTime(0.001, now + 0.05);
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.06);
   }
 
   playWrong() {
@@ -1358,10 +1494,11 @@ let currentQuestionList = [];
 let currentQuestionIndex = 0;
 let currentAnswer = "";
 let crewLives = 5;
-let timerSeconds = 15.0;
+let timerSeconds = 30.0;
 let timerInterval = null;
 let isAnswerLocked = false;
 let solvedHistory = [];
+let currentInputMode = 'blocks';
 
 // DOM要素
 const elStageText = document.getElementById('stage-text');
@@ -1371,7 +1508,12 @@ const elTargetHint = document.getElementById('target-hint');
 const elTargetCharsCount = document.getElementById('target-chars-count');
 const elTargetLabel = document.getElementById('target-label');
 const elKanjiPanel = document.getElementById('kanji-panel');
-const elAnswerText = document.getElementById('answer-text');
+const elSlotsContainer = document.getElementById('answer-slots-container');
+const elCharBlocksContainer = document.getElementById('char-blocks-container');
+const elSoftKeyboard = document.getElementById('soft-keyboard');
+const elTabBlocks = document.getElementById('tab-blocks');
+const elTabKeyboard = document.getElementById('tab-keyboard');
+const elBtnSubmit = document.getElementById('btn-submit');
 const elTimerBar = document.getElementById('timer-bar');
 const elTimerNumber = document.getElementById('timer-number');
 const elFlashOverlay = document.getElementById('flash-overlay');
@@ -1382,6 +1524,22 @@ function selectMode(mode) {
   document.querySelectorAll('.mode-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.mode === mode);
   });
+}
+
+function switchInputMode(mode) {
+  currentInputMode = mode;
+  if (mode === 'blocks') {
+    elTabBlocks.classList.add('active');
+    elTabKeyboard.classList.remove('active');
+    elCharBlocksContainer.style.display = 'grid';
+    elSoftKeyboard.style.display = 'none';
+  } else {
+    elTabBlocks.classList.remove('active');
+    elTabKeyboard.classList.add('active');
+    elCharBlocksContainer.style.display = 'none';
+    elSoftKeyboard.style.display = 'flex';
+  }
+  focusHiddenInput();
 }
 
 function buildQuestionList() {
@@ -1433,6 +1591,80 @@ function updateCrewDisplay() {
   }
 }
 
+// ひらがなダミープール (小学生向けによく使われるひらがな)
+const DUMMY_CHARS = [
+  "あ", "い", "う", "え", "お",
+  "か", "き", "く", "け", "こ",
+  "さ", "し", "す", "せ", "そ",
+  "た", "ち", "つ", "て", "と",
+  "な", "に", "ぬ", "ね", "の",
+  "は", "ひ", "ふ", "へ", "ほ",
+  "ま", "み", "む", "め", "も",
+  "や", "ゆ", "よ", "ら", "り",
+  "る", "れ", "ろ", "わ", "ん"
+];
+
+function renderCharBlocks(q) {
+  elCharBlocksContainer.innerHTML = "";
+  const targetChars = q.kana.split('');
+  
+  // ダミー文字を正解に含まれないものからランダム抽出
+  const availableDummies = DUMMY_CHARS.filter(c => !targetChars.includes(c));
+  const shuffledDummies = [...availableDummies].sort(() => Math.random() - 0.5);
+  
+  // 合計10個（2行×5列）の押しやすい候補ボタンを作成
+  const dummyCount = Math.max(4, 10 - targetChars.length);
+  const selectedDummies = shuffledDummies.slice(0, dummyCount);
+  
+  const candidateList = [...targetChars, ...selectedDummies].sort(() => Math.random() - 0.5);
+  
+  candidateList.forEach(char => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'char-block-btn';
+    btn.textContent = char;
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      sound.playKeyClick();
+      appendAnswerChar(char);
+      focusHiddenInput();
+    });
+    elCharBlocksContainer.appendChild(btn);
+  });
+}
+
+function updateAnswerDisplay() {
+  const currentQ = currentQuestionList[currentQuestionIndex];
+  if (!currentQ) return;
+  const targetLen = currentQ.kana.length;
+
+  // input要素以外のスロット要素を取得・生成
+  let slots = elSlotsContainer.querySelectorAll('.char-slot');
+  if (slots.length !== targetLen) {
+    slots.forEach(s => s.remove());
+    for (let i = 0; i < targetLen; i++) {
+      const slot = document.createElement('div');
+      slot.className = 'char-slot';
+      elSlotsContainer.appendChild(slot);
+    }
+    slots = elSlotsContainer.querySelectorAll('.char-slot');
+  }
+
+  for (let i = 0; i < targetLen; i++) {
+    const char = currentAnswer[i] || "";
+    slots[i].textContent = char;
+    slots[i].classList.toggle('filled', !!char);
+    slots[i].classList.toggle('active', i === currentAnswer.length);
+  }
+
+  // 必要な文字数が揃ったら発射ボタンを強調
+  if (currentAnswer.length >= targetLen) {
+    elBtnSubmit.classList.add('ready-fire');
+  } else {
+    elBtnSubmit.classList.remove('ready-fire');
+  }
+}
+
 function loadQuestion(index) {
   if (index >= currentQuestionList.length) {
     // 全問クリア！
@@ -1442,7 +1674,6 @@ function loadQuestion(index) {
 
   isAnswerLocked = false;
   currentAnswer = "";
-  updateAnswerDisplay();
   elHiddenInput.value = "";
 
   const q = currentQuestionList[index];
@@ -1466,6 +1697,10 @@ function loadQuestion(index) {
   elTargetHint.textContent = `学年: ${q.grade} | ${q.hint}`;
   elTargetCharsCount.textContent = `${q.kana.length}もじ`;
 
+  // 解答マス目と文字ブロックの生成
+  updateAnswerDisplay();
+  renderCharBlocks(q);
+
   // ターゲットアニメーションリセット
   targetVisual.scale = 0.1;
   targetVisual.targetScale = 1.0;
@@ -1473,8 +1708,8 @@ function loadQuestion(index) {
 
   elKanjiPanel.style.transform = "translate(-50%, -50%) scale(1)";
 
-  // タイマースタート
-  startTimer(15.0);
+  // タイマースタート (30秒)
+  startTimer(30.0);
 }
 
 function startTimer(seconds) {
@@ -1496,7 +1731,8 @@ function startTimer(seconds) {
       handleTimeOut();
     } else {
       updateTimerUI();
-      if (timerSeconds <= 4.0 && Math.floor(timerSeconds * 10) % 10 === 0) {
+      // 残り8秒以下でピピ警告音
+      if (timerSeconds <= 8.0 && Math.floor(timerSeconds * 10) % 10 === 0) {
         sound.playWarningBeep();
       }
     }
@@ -1504,24 +1740,22 @@ function startTimer(seconds) {
 }
 
 function updateTimerUI() {
-  const percent = Math.max(0, (timerSeconds / 15.0) * 100);
+  const percent = Math.max(0, (timerSeconds / 30.0) * 100);
   elTimerBar.style.width = `${percent}%`;
   elTimerNumber.textContent = `${timerSeconds.toFixed(1)}s`;
 
-  if (timerSeconds <= 4.0) {
+  if (timerSeconds <= 8.0) {
     elTimerBar.classList.add('warning');
   } else {
     elTimerBar.classList.remove('warning');
   }
 }
 
-function updateAnswerDisplay() {
-  elAnswerText.textContent = currentAnswer;
-}
-
 function appendAnswerChar(char) {
   if (isAnswerLocked) return;
-  if (currentAnswer.length >= 8) return;
+  const currentQ = currentQuestionList[currentQuestionIndex];
+  if (!currentQ) return;
+  if (currentAnswer.length >= currentQ.kana.length) return;
   currentAnswer += char;
   updateAnswerDisplay();
 }
@@ -1547,7 +1781,7 @@ const DAKUTEN_MAP = {
   'ば': 'ぱ', 'び': 'ぴ', 'ぶ': 'ぷ', 'べ': 'ぺ', 'ほ': 'ぽ',
   'が': 'か', 'ぎ': 'き', 'ぐ': 'く', 'げ': 'け', 'ご': 'こ',
   'ざ': 'さ', 'じ': 'し', 'ず': 'す', 'ぜ': 'せ', 'ぞ': 'そ',
-  'だ': 'た', 'ぢ': 'ち', 'づ': 'つ', 'で': 'て', 'ど': 'と',
+  'だ': 'た', 'ぢ': 'ち', 'づ': 'つ', 'デ': 'で', 'ど': 'と',
   'ぱ': 'は', 'ぴ': 'ひ', 'ぷ': 'ふ', 'ぺ': 'へ', 'ぽ': 'ほ',
   'う': 'ゔ', 'ゔ': 'う'
 };
@@ -1628,10 +1862,12 @@ function handleWrongAnswer() {
   sound.playWrong();
   triggerFlash('wrong');
 
-  // パネル振動
+  // パネルと解答スロット振動
   elKanjiPanel.style.animation = "shakePanel 0.4s ease-in-out";
+  elSlotsContainer.style.animation = "shakePanel 0.4s ease-in-out";
   setTimeout(() => {
     elKanjiPanel.style.animation = "";
+    elSlotsContainer.style.animation = "";
   }, 400);
 }
 
@@ -1654,19 +1890,29 @@ function handleTimeOut() {
     success: false
   });
 
-  // 正解を表示して次の問題へ
-  elAnswerText.textContent = `正解: ${currentQ.kana}`;
-  elAnswerText.style.color = "var(--neon-red)";
+  // 正解をマス目に赤色で表示して教える
+  const slots = elSlotsContainer.querySelectorAll('.char-slot');
+  for (let i = 0; i < currentQ.kana.length; i++) {
+    if (slots[i]) {
+      slots[i].textContent = currentQ.kana[i];
+      slots[i].style.color = "var(--neon-red)";
+      slots[i].style.borderColor = "var(--neon-red)";
+      slots[i].classList.add('filled');
+    }
+  }
 
   setTimeout(() => {
-    elAnswerText.style.color = "var(--neon-yellow)";
+    slots.forEach(s => {
+      s.style.color = "";
+      s.style.borderColor = "";
+    });
     if (crewLives <= 0) {
       showGameResult(false);
     } else {
       currentQuestionIndex++;
       loadQuestion(currentQuestionIndex);
     }
-  }, 1600);
+  }, 1800);
 }
 
 function triggerFlash(type) {

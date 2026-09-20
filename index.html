@@ -1,0 +1,1884 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ファイブツアーズジェット 漢字バトル - 小学校の漢字をマスターせよ！</title>
+  <style>
+    :root {
+      --primary-cyan: #00e5ff;
+      --neon-yellow: #ffe600;
+      --neon-red: #ff3366;
+      --neon-orange: #ff9900;
+      --neon-green: #00ff88;
+      --cockpit-bg: #0b111e;
+      --cockpit-panel: rgba(14, 25, 45, 0.9);
+      --cockpit-border: #1a3c6e;
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #030712;
+      color: #fff;
+      font-family: 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #game-container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      max-width: 1200px;
+      max-height: 800px;
+      display: flex;
+      flex-direction: column;
+      background: radial-gradient(circle at 50% 40%, #0d1b2a 0%, #050b14 100%);
+      box-shadow: 0 0 50px rgba(0, 229, 255, 0.2);
+      border: 1px solid #1a2f4d;
+      overflow: hidden;
+    }
+
+    /* 上部HUDステータスバー */
+    .hud-top {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: linear-gradient(180deg, rgba(5, 12, 24, 0.95) 0%, rgba(5, 12, 24, 0.4) 100%);
+      border-bottom: 2px solid var(--primary-cyan);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+      z-index: 20;
+    }
+
+    .stage-badge {
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--neon-yellow);
+      text-shadow: 0 0 10px rgba(255, 230, 0, 0.6);
+      letter-spacing: 2px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .stage-sub {
+      font-size: 13px;
+      color: var(--primary-cyan);
+      font-weight: normal;
+      background: rgba(0, 229, 255, 0.15);
+      padding: 3px 10px;
+      border-radius: 12px;
+      border: 1px solid var(--primary-cyan);
+    }
+
+    /* 搭乗員（ライフ：5人） */
+    .crew-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .crew-label {
+      font-size: 11px;
+      color: #7b9bb8;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    .crew-slot {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2px solid var(--primary-cyan);
+      background: rgba(0, 229, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      box-shadow: 0 0 8px rgba(0, 229, 255, 0.5);
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .crew-slot.lost {
+      border-color: #555;
+      background: rgba(40, 40, 40, 0.6);
+      box-shadow: none;
+      filter: grayscale(1);
+      opacity: 0.4;
+    }
+
+    .crew-slot.lost::after {
+      content: "✕";
+      color: var(--neon-red);
+      font-weight: bold;
+      font-size: 18px;
+      position: absolute;
+    }
+
+    .top-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon-btn {
+      background: rgba(26, 60, 110, 0.7);
+      border: 1px solid var(--primary-cyan);
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+
+    .icon-btn:hover {
+      background: var(--primary-cyan);
+      color: #000;
+    }
+
+    /* ゲーム描画用 Canvas (3Dジェット・宇宙・敵) */
+    #game-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 5;
+    }
+
+    /* コックピットオーバーレイ UI */
+    .cockpit-hud {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* タイマーバー */
+    .timer-container {
+      margin-top: 65px;
+      padding: 0 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .timer-header {
+      width: 100%;
+      max-width: 650px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: bold;
+      color: var(--primary-cyan);
+      margin-bottom: 4px;
+      text-shadow: 0 0 5px rgba(0, 229, 255, 0.7);
+    }
+
+    .timer-track {
+      width: 100%;
+      max-width: 650px;
+      height: 14px;
+      background: rgba(10, 20, 35, 0.8);
+      border: 1px solid #1a3c6e;
+      border-radius: 7px;
+      overflow: hidden;
+      box-shadow: inset 0 0 8px #000;
+      position: relative;
+    }
+
+    .timer-bar {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, #00ff88, #ffe600);
+      box-shadow: 0 0 10px #00ff88;
+      transition: width 0.1s linear, background 0.3s;
+    }
+
+    .timer-bar.warning {
+      background: linear-gradient(90deg, #ff9900, #ff3366);
+      box-shadow: 0 0 12px #ff3366;
+      animation: pulseWarning 0.5s infinite alternate;
+    }
+
+    @keyframes pulseWarning {
+      from { opacity: 0.7; }
+      to { opacity: 1; }
+    }
+
+    /* 漢字ターゲット表示パネル (宇宙空間に浮かぶ) */
+    .kanji-display-panel {
+      position: absolute;
+      top: 36%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 12;
+      pointer-events: none;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .target-badge {
+      background: rgba(255, 51, 102, 0.9);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      padding: 3px 18px;
+      border-radius: 20px;
+      box-shadow: 0 0 15px rgba(255, 51, 102, 0.8);
+      margin-bottom: 10px;
+      border: 1px solid #fff;
+      animation: pulseBadge 1.2s infinite;
+    }
+
+    @keyframes pulseBadge {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+
+    .target-kanji-box {
+      background: radial-gradient(circle, rgba(14, 29, 60, 0.92) 0%, rgba(5, 10, 25, 0.95) 100%);
+      border: 3px solid var(--primary-cyan);
+      box-shadow: 0 0 35px rgba(0, 229, 255, 0.6), inset 0 0 20px rgba(0, 229, 255, 0.3);
+      border-radius: 16px;
+      padding: 12px 35px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 240px;
+      backdrop-filter: blur(6px);
+      position: relative;
+    }
+
+    .target-kanji-box::before {
+      content: "";
+      position: absolute;
+      top: -4px; left: -4px; right: -4px; bottom: -4px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 230, 0, 0.4);
+      pointer-events: none;
+    }
+
+    .kanji-text {
+      font-size: 58px;
+      font-weight: 900;
+      color: #ffffff;
+      letter-spacing: 12px;
+      text-indent: 12px; /* 水平中央配置補正 */
+      text-shadow: 0 0 20px rgba(0, 229, 255, 0.9), 0 0 40px rgba(0, 229, 255, 0.5), 2px 2px 0 #000;
+      font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
+      line-height: 1.2;
+    }
+
+    .kanji-hint {
+      font-size: 13px;
+      color: #b2d5f8;
+      margin-top: 6px;
+      font-weight: bold;
+    }
+
+    .kanji-chars-count {
+      position: absolute;
+      bottom: -12px;
+      background: var(--neon-yellow);
+      color: #000;
+      font-size: 11px;
+      font-weight: 900;
+      padding: 2px 10px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(255, 230, 0, 0.8);
+    }
+
+    /* 下部コックピット操縦コンソール & キーボード */
+    .cockpit-console {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(180deg, rgba(8, 16, 32, 0.85) 0%, rgba(3, 7, 18, 0.98) 100%);
+      border-top: 2px solid #204987;
+      padding: 10px 15px 15px;
+      z-index: 25;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.8);
+    }
+
+    /* 解答入力ディスプレイ */
+    .answer-display-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      max-width: 650px;
+      margin-bottom: 8px;
+    }
+
+    .answer-display-box {
+      flex: 1;
+      height: 48px;
+      background: rgba(0, 0, 0, 0.8);
+      border: 2px solid var(--primary-cyan);
+      border-radius: 8px;
+      box-shadow: inset 0 0 15px rgba(0, 229, 255, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 15px;
+      position: relative;
+    }
+
+    .answer-text {
+      font-size: 30px;
+      font-weight: 900;
+      color: var(--neon-yellow);
+      letter-spacing: 8px;
+      text-indent: 8px;
+      text-shadow: 0 0 12px rgba(255, 230, 0, 0.8);
+    }
+
+    .answer-cursor {
+      display: inline-block;
+      width: 14px;
+      height: 3px;
+      background: var(--neon-yellow);
+      margin-left: 2px;
+      animation: blinkCursor 0.7s infinite;
+      box-shadow: 0 0 6px var(--neon-yellow);
+    }
+
+    @keyframes blinkCursor {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .hidden-input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: auto;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      cursor: default;
+    }
+
+    .action-btn {
+      height: 48px;
+      padding: 0 20px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 900;
+      cursor: pointer;
+      border: none;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      text-shadow: 1px 1px 2px #000;
+      letter-spacing: 1px;
+    }
+
+    .action-btn:active {
+      transform: scale(0.95);
+    }
+
+    .btn-fire {
+      background: linear-gradient(180deg, #ff5500 0%, #cc0033 100%);
+      color: #fff;
+      box-shadow: 0 0 15px rgba(255, 60, 0, 0.6);
+      border: 1px solid #ff9955;
+    }
+
+    .btn-fire:hover {
+      box-shadow: 0 0 25px rgba(255, 80, 0, 0.9);
+      filter: brightness(1.1);
+    }
+
+    .btn-backspace {
+      background: linear-gradient(180deg, #32476b 0%, #1e2c45 100%);
+      color: #b8d2f5;
+      border: 1px solid #4a6c9e;
+    }
+
+    .btn-clear {
+      background: linear-gradient(180deg, #5c202e 0%, #3a111a 100%);
+      color: #ff99aa;
+      border: 1px solid #8e2b40;
+      padding: 0 12px;
+      font-size: 13px;
+    }
+
+    /* 50音ソフトキーボード（タブレット・スマホ・小学生対応） */
+    .keyboard-container {
+      width: 100%;
+      max-width: 680px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: 2px;
+    }
+
+    .kb-row {
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      width: 100%;
+    }
+
+    .kb-key {
+      flex: 1;
+      height: 38px;
+      background: rgba(18, 36, 68, 0.85);
+      border: 1px solid #294d82;
+      border-radius: 6px;
+      color: #e1efff;
+      font-size: 16px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+      transition: all 0.1s;
+    }
+
+    .kb-key:hover {
+      background: rgba(30, 65, 120, 0.95);
+      border-color: var(--primary-cyan);
+      color: #fff;
+    }
+
+    .kb-key:active {
+      transform: scale(0.92);
+      background: var(--primary-cyan);
+      color: #000;
+    }
+
+    .kb-key.special {
+      background: rgba(45, 30, 70, 0.85);
+      border-color: #634298;
+      font-size: 13px;
+      flex: 1.1;
+      color: #ffd6ff;
+    }
+
+    /* モーダル・ダイアログ (タイトル・結果・ゲームオーバー) */
+    .modal-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(3, 7, 18, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    .modal-card {
+      background: linear-gradient(180deg, #0c182b 0%, #060e1c 100%);
+      border: 2px solid var(--primary-cyan);
+      border-radius: 20px;
+      box-shadow: 0 0 50px rgba(0, 229, 255, 0.4);
+      padding: 30px 40px;
+      max-width: 580px;
+      width: 90%;
+      text-align: center;
+      animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes modalPop {
+      0% { transform: scale(0.7); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-title {
+      font-size: 32px;
+      font-weight: 900;
+      color: var(--neon-yellow);
+      text-shadow: 0 0 15px rgba(255, 230, 0, 0.7);
+      margin-bottom: 8px;
+      letter-spacing: 2px;
+    }
+
+    .modal-subtitle {
+      font-size: 15px;
+      color: #7b9bb8;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .mode-select-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+
+    .mode-btn {
+      background: rgba(16, 32, 60, 0.8);
+      border: 2px solid #204987;
+      border-radius: 12px;
+      padding: 15px 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: #fff;
+    }
+
+    .mode-btn:hover, .mode-btn.active {
+      border-color: var(--primary-cyan);
+      background: rgba(0, 229, 255, 0.15);
+      box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .mode-name {
+      font-size: 16px;
+      font-weight: 900;
+      color: var(--neon-yellow);
+    }
+
+    .mode-desc {
+      font-size: 11px;
+      color: #a4c1e4;
+    }
+
+    .start-btn {
+      background: linear-gradient(90deg, #ff0055 0%, #ff5500 50%, #ffbb00 100%);
+      color: #fff;
+      font-size: 24px;
+      font-weight: 900;
+      padding: 14px 45px;
+      border-radius: 35px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 0 25px rgba(255, 50, 0, 0.7);
+      letter-spacing: 3px;
+      transition: all 0.2s;
+    }
+
+    .start-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 35px rgba(255, 80, 0, 0.9);
+    }
+
+    /* 正解・不正解のフラッシュ演出 */
+    .flash-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 50;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+
+    .flash-correct {
+      background: radial-gradient(circle, rgba(0, 255, 136, 0.45) 0%, transparent 80%);
+    }
+
+    .flash-wrong {
+      background: radial-gradient(circle, rgba(255, 51, 102, 0.5) 0%, transparent 80%);
+    }
+
+    @keyframes shakePanel {
+      0%, 100% { transform: translate(-50%, -50%); }
+      20%, 60% { transform: translate(-54%, -50%); }
+      40%, 80% { transform: translate(-46%, -50%); }
+    }
+
+    .result-list {
+      max-height: 200px;
+      overflow-y: auto;
+      margin: 15px 0;
+      text-align: left;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 8px;
+      padding: 10px 15px;
+      border: 1px solid #1a3c6e;
+    }
+
+    .result-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 14px;
+    }
+
+    .result-item:last-child {
+      border-bottom: none;
+    }
+
+    .result-kanji {
+      font-weight: bold;
+      color: var(--neon-yellow);
+    }
+
+    .result-reading {
+      color: var(--primary-cyan);
+    }
+
+    /* レスポンシブ対応 */
+    @media (max-height: 600px) {
+      .hud-top { height: 45px; }
+      .timer-container { margin-top: 50px; }
+      .kanji-text { font-size: 44px; }
+      .target-kanji-box { padding: 8px 25px; }
+      .kb-key { height: 32px; font-size: 14px; }
+      .answer-display-box { height: 40px; }
+      .action-btn { height: 40px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="game-container">
+  <!-- 上部ステータスバー -->
+  <header class="hud-top">
+    <div class="stage-badge">
+      <span id="stage-text">STAGE 1</span>
+      <span id="level-badge" class="stage-sub">LEVEL 1 / 3</span>
+    </div>
+
+    <!-- 搭乗員ライフ (5機) -->
+    <div class="crew-container">
+      <span class="crew-label">CREW</span>
+      <div class="crew-slot" id="crew-0">🧑‍🚀</div>
+      <div class="crew-slot" id="crew-1">👩‍🚀</div>
+      <div class="crew-slot" id="crew-2">🧑‍✈️</div>
+      <div class="crew-slot" id="crew-3">🦸</div>
+      <div class="crew-slot" id="crew-4">🤖</div>
+    </div>
+
+    <div class="top-controls">
+      <button class="icon-btn" id="sound-toggle-btn">🔊 BGM/SE</button>
+    </div>
+  </header>
+
+  <!-- ゲームグラフィック Canvas (宇宙空間・飛行ジェット・レーザー・爆発) -->
+  <canvas id="game-canvas"></canvas>
+
+  <!-- コックピットHUD -->
+  <div class="cockpit-hud">
+    <!-- タイマー -->
+    <div class="timer-container">
+      <div class="timer-header">
+        <span>TIME LIMIT</span>
+        <span id="timer-number">15.0s</span>
+      </div>
+      <div class="timer-track">
+        <div id="timer-bar" class="timer-bar"></div>
+      </div>
+    </div>
+
+    <!-- ターゲット漢字パネル -->
+    <div class="kanji-display-panel" id="kanji-panel">
+      <div class="target-badge" id="target-label">TARGET 01</div>
+      <div class="target-kanji-box">
+        <div class="kanji-text" id="target-kanji">青空</div>
+        <div class="kanji-hint" id="target-hint">学年: 1・2年生</div>
+        <div class="kanji-chars-count" id="target-chars-count">4もじ</div>
+      </div>
+    </div>
+
+    <!-- ダミー余白 -->
+    <div></div>
+  </div>
+
+  <!-- 下部操作コンソール & キーボード -->
+  <footer class="cockpit-console">
+    <!-- 解答入力バー -->
+    <div class="answer-display-area">
+      <div class="answer-display-box" onclick="focusHiddenInput()">
+        <span class="answer-text" id="answer-text"></span>
+        <span class="answer-cursor"></span>
+        <!-- キーボード物理入力用の不可視インプット -->
+        <input type="text" id="hidden-input" class="hidden-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+      </div>
+      <button class="action-btn btn-clear" id="btn-clear">全部消す</button>
+      <button class="action-btn btn-backspace" id="btn-backspace">⌫ 1文字</button>
+      <button class="action-btn btn-fire" id="btn-submit">💥 発射！</button>
+    </div>
+
+    <!-- 50音ソフトキーボード (タブレット・スマホ対応) -->
+    <div class="keyboard-container" id="soft-keyboard">
+      <!-- 1行目: あ〜お、が〜ご -->
+      <div class="kb-row">
+        <button class="kb-key" data-char="あ">あ</button>
+        <button class="kb-key" data-char="い">い</button>
+        <button class="kb-key" data-char="う">う</button>
+        <button class="kb-key" data-char="え">え</button>
+        <button class="kb-key" data-char="お">お</button>
+        <button class="kb-key" data-char="か">か</button>
+        <button class="kb-key" data-char="き">き</button>
+        <button class="kb-key" data-char="く">く</button>
+        <button class="kb-key" data-char="け">け</button>
+        <button class="kb-key" data-char="こ">こ</button>
+      </div>
+      <!-- 2行目: さ〜と -->
+      <div class="kb-row">
+        <button class="kb-key" data-char="さ">さ</button>
+        <button class="kb-key" data-char="し">し</button>
+        <button class="kb-key" data-char="す">す</button>
+        <button class="kb-key" data-char="せ">せ</button>
+        <button class="kb-key" data-char="そ">そ</button>
+        <button class="kb-key" data-char="た">た</button>
+        <button class="kb-key" data-char="ち">ち</button>
+        <button class="kb-key" data-char="つ">つ</button>
+        <button class="kb-key" data-char="て">て</button>
+        <button class="kb-key" data-char="と">と</button>
+      </div>
+      <!-- 3行目: な〜ほ -->
+      <div class="kb-row">
+        <button class="kb-key" data-char="な">な</button>
+        <button class="kb-key" data-char="に">に</button>
+        <button class="kb-key" data-char="ぬ">ぬ</button>
+        <button class="kb-key" data-char="ね">ね</button>
+        <button class="kb-key" data-char="の">の</button>
+        <button class="kb-key" data-char="は">は</button>
+        <button class="kb-key" data-char="ひ">ひ</button>
+        <button class="kb-key" data-char="ふ">ふ</button>
+        <button class="kb-key" data-char="へ">へ</button>
+        <button class="kb-key" data-char="ほ">ほ</button>
+      </div>
+      <!-- 4行目: ま〜よ -->
+      <div class="kb-row">
+        <button class="kb-key" data-char="ま">ま</button>
+        <button class="kb-key" data-char="み">み</button>
+        <button class="kb-key" data-char="む">む</button>
+        <button class="kb-key" data-char="め">め</button>
+        <button class="kb-key" data-char="も">も</button>
+        <button class="kb-key" data-char="や">や</button>
+        <button class="kb-key" data-char="ゆ">ゆ</button>
+        <button class="kb-key" data-char="よ">よ</button>
+        <button class="kb-key" data-char="ー">ー</button>
+        <button class="kb-key special" id="btn-dakuten">゛゜濁点</button>
+      </div>
+      <!-- 5行目: ら〜ん、小文字 -->
+      <div class="kb-row">
+        <button class="kb-key" data-char="ら">ら</button>
+        <button class="kb-key" data-char="り">り</button>
+        <button class="kb-key" data-char="る">る</button>
+        <button class="kb-key" data-char="れ">れ</button>
+        <button class="kb-key" data-char="ろ">ろ</button>
+        <button class="kb-key" data-char="わ">わ</button>
+        <button class="kb-key" data-char="を">を</button>
+        <button class="kb-key" data-char="ん">ん</button>
+        <button class="kb-key special" id="btn-komoji">小文字 ゃゅょっ</button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 正解・被弾フラッシュエフェクト -->
+  <div class="flash-overlay" id="flash-overlay"></div>
+
+  <!-- スタート画面モーダル -->
+  <div class="modal-overlay" id="start-modal">
+    <div class="modal-card">
+      <div style="font-size: 40px; margin-bottom: 5px;">🚀✨</div>
+      <h1 class="modal-title">ファイブツアーズ<br>JET 漢字バトル</h1>
+      <p class="modal-subtitle">ジェット機で宇宙を進み、迫り来る漢字の「よみ」を答えてビームで撃破せよ！</p>
+
+      <div class="mode-select-grid">
+        <div class="mode-btn active" data-mode="all" onclick="selectMode('all')">
+          <div class="mode-name">🌟 全ステージ挑戦</div>
+          <div class="mode-desc">1年生〜FINALまで全10問の完全制覇ツアー！</div>
+        </div>
+        <div class="mode-btn" data-mode="low" onclick="selectMode('low')">
+          <div class="mode-name">🌱 低学年ツアー</div>
+          <div class="mode-desc">1・2年生で学習する漢字を中心に出題！</div>
+        </div>
+        <div class="mode-btn" data-mode="mid" onclick="selectMode('mid')">
+          <div class="mode-name">⚡ 中学年ツアー</div>
+          <div class="mode-desc">3・4年生で学習する漢字を中心に出題！</div>
+        </div>
+        <div class="mode-btn" data-mode="high" onclick="selectMode('high')">
+          <div class="mode-name">🔥 高学年・難関</div>
+          <div class="mode-desc">5・6年生と卒業レベルの最強漢字ツアー！</div>
+        </div>
+      </div>
+
+      <button class="start-btn" id="start-game-btn">発進する！ (START)</button>
+    </div>
+  </div>
+
+  <!-- 結果発表モーダル -->
+  <div class="modal-overlay" id="result-modal" style="display: none;">
+    <div class="modal-card">
+      <div id="result-icon" style="font-size: 48px; margin-bottom: 5px;">🏆</div>
+      <h2 class="modal-title" id="result-title">MISSION COMPLETE!</h2>
+      <p class="modal-subtitle" id="result-message">全問撃破！宇宙の平和は守られた！</p>
+
+      <div style="display: flex; justify-content: space-around; margin-bottom: 15px; font-weight: bold;">
+        <div>撃破数: <span id="res-score" style="color: var(--neon-yellow); font-size: 22px;">10</span> 問</div>
+        <div>生存クルー: <span id="res-crew" style="color: var(--neon-green); font-size: 22px;">5</span> 人</div>
+      </div>
+
+      <div class="result-list" id="result-list">
+        <!-- 復習リスト -->
+      </div>
+
+      <button class="start-btn" onclick="returnToTitle()" style="margin-top: 10px;">もう一度挑戦！</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ==========================================================================
+   漢字データベース (小学校1年生〜6年生 配当漢字)
+   ========================================================================== */
+const KANJI_DATABASE = {
+  // STAGE 1: 小学校1〜2年生レベル
+  stage1: [
+    { kanji: "青空", kana: "あおぞら", grade: "1・2年", hint: "晴れた日の空" },
+    { kanji: "雨水", kana: "あまみず", grade: "1年", hint: "空から降る水" },
+    { kanji: "川原", kana: "かわら", grade: "1・2年", hint: "川のほとりの平らな所" },
+    { kanji: "花火", kana: "はなび", grade: "1・2年", hint: "夜空に咲く光の花" },
+    { kanji: "黄色", kana: "きいろ", grade: "2年", hint: "バナナやレモンの色" },
+    { kanji: "親指", kana: "おやゆび", grade: "2年", hint: "手で一番太い指" },
+    { kanji: "海辺", kana: "うみべ", grade: "2年", hint: "海の近くの場所" },
+    { kanji: "兄弟", kana: "きょうだい", grade: "2年", hint: "兄や弟、姉や妹" },
+    { kanji: "朝日", kana: "あさひ", grade: "1年", hint: "朝に昇る太陽" },
+    { kanji: "大風", kana: "おおかぜ", grade: "1・2年", hint: "激しく吹く風" }
+  ],
+  // STAGE 2: 小学校3〜4年生レベル
+  stage2: [
+    { kanji: "平和", kana: "へいわ", grade: "3年", hint: "争いがなく穏やかなこと" },
+    { kanji: "昔話", kana: "むかしばなし", grade: "3年", hint: "昔から伝わるお話" },
+    { kanji: "祭り", kana: "まつり", grade: "3年", hint: "神社やお寺のにぎやかな行事" },
+    { kanji: "健康", kana: "けんこう", grade: "4年", hint: "体に病気がなく元気なこと" },
+    { kanji: "信号", kana: "しんごう", grade: "3・4年", hint: "青・黄・赤の交通の合図" },
+    { kanji: "固い", kana: "かたい", grade: "4年", hint: "力を加えても形がくずれない" },
+    { kanji: "鏡", kana: "かがみ", grade: "4年", hint: "姿を映すもの" },
+    { kanji: "勇気", kana: "ゆうき", grade: "4年", hint: "恐れずに立ち向かう心" },
+    { kanji: "係員", kana: "かかりいん", grade: "3年", hint: "仕事を担当する人" },
+    { kanji: "秒針", kana: "びょうしん", grade: "3年", hint: "時計の秒を示す針" }
+  ],
+  // STAGE 3: 小学校5〜6年生レベル
+  stage3: [
+    { kanji: "宇宙", kana: "うちゅう", grade: "6年", hint: "地球をとりまく空間" },
+    { kanji: "複雑", kana: "ふくざつ", grade: "5年", hint: "入り組んでいて難しいこと" },
+    { kanji: "砂糖", kana: "さとう", grade: "6年", hint: "甘い調味料" },
+    { kanji: "尊敬", kana: "そんけい", grade: "6年", hint: "相手を尊びうやまうこと" },
+    { kanji: "憲法", kana: "けんぽう", grade: "6年", hint: "国の基本となる最高法規" },
+    { kanji: "障子", kana: "しょうじ", grade: "6年", hint: "和室の明かり取りの建具" },
+    { kanji: "貧しい", kana: "まずしい", grade: "5年", hint: "お金や物が乏しいこと" },
+    { kanji: "素直", kana: "すなお", grade: "5年", hint: "心がひねくれていないこと" },
+    { kanji: "模範", kana: "もはん", grade: "6年", hint: "見習うべき手本" },
+    { kanji: "呼吸", kana: "こきゅう", grade: "6年", hint: "息を吸ったり吐いたりすること" }
+  ],
+  // FINAL BOSS: 最難関・卒業レベル
+  final: [
+    { kanji: "桜桃", kana: "おうとう", grade: "6年", hint: "さくらんぼのこと" },
+    { kanji: "縦横", kana: "じゅうおう", grade: "6年", hint: "たてとよこ、四方八方" },
+    { kanji: "厳重", kana: "げんじゅう", grade: "6年", hint: "少しの油断もないよう厳しいこと" },
+    { kanji: "親孝行", kana: "おやこうこう", grade: "6年", hint: "両親を大切にして尽くすこと" },
+    { kanji: "処置", kana: "しょち", grade: "6年", hint: "事態に対処して始末をつけること" }
+  ]
+};
+
+/* ==========================================================================
+   Web Audio API による効果音 & シンセBGM生成エンジン
+   ========================================================================== */
+class SoundEngine {
+  constructor() {
+    this.ctx = null;
+    this.enabled = true;
+    this.bgmTimer = null;
+    this.bgmStep = 0;
+  }
+
+  init() {
+    if (!this.ctx) {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      this.ctx = new AudioContext();
+    }
+    if (this.ctx.state === 'suspended') {
+      this.ctx.resume();
+    }
+  }
+
+  playLaser() {
+    if (!this.enabled) return;
+    this.init();
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(950, now);
+    osc.frequency.exponentialRampToValueAtTime(80, now + 0.22);
+
+    gain.gain.setValueAtTime(0.3, now);
+    gain.gain.linearRampToValueAtTime(0.01, now + 0.22);
+
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.23);
+  }
+
+  playExplosion() {
+    if (!this.enabled) return;
+    this.init();
+    const now = this.ctx.currentTime;
+    const bufferSize = this.ctx.sampleRate * 0.6;
+    const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = Math.random() * 2 - 1;
+    }
+
+    const noise = this.ctx.createBufferSource();
+    noise.buffer = buffer;
+
+    const filter = this.ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(800, now);
+    filter.frequency.exponentialRampToValueAtTime(50, now + 0.55);
+
+    const gain = this.ctx.createGain();
+    gain.gain.setValueAtTime(0.5, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.55);
+
+    noise.connect(filter);
+    filter.connect(gain);
+    gain.connect(this.ctx.destination);
+
+    noise.start(now);
+  }
+
+  playCorrect() {
+    if (!this.enabled) return;
+    this.init();
+    const now = this.ctx.currentTime;
+    const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+    notes.forEach((freq, idx) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.18, now + idx * 0.06);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.25);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(now + idx * 0.06);
+      osc.stop(now + idx * 0.06 + 0.26);
+    });
+  }
+
+  playWrong() {
+    if (!this.enabled) return;
+    this.init();
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(140, now);
+    osc.frequency.setValueAtTime(110, now + 0.12);
+
+    gain.gain.setValueAtTime(0.25, now);
+    gain.gain.linearRampToValueAtTime(0.01, now + 0.35);
+
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.36);
+  }
+
+  playWarningBeep() {
+    if (!this.enabled) return;
+    this.init();
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(880, now);
+    gain.gain.setValueAtTime(0.12, now);
+    gain.gain.linearRampToValueAtTime(0.01, now + 0.08);
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.09);
+  }
+
+  startBgm() {
+    if (!this.enabled) return;
+    this.stopBgm();
+    this.init();
+    this.bgmStep = 0;
+    // 近未来的なSF高速ベースライン
+    const bassline = [110, 110, 130.8, 110, 146.8, 110, 164.8, 146.8];
+    this.bgmTimer = setInterval(() => {
+      if (!this.enabled || !this.ctx) return;
+      const now = this.ctx.currentTime;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(bassline[this.bgmStep % bassline.length], now);
+      gain.gain.setValueAtTime(0.08, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.17);
+      this.bgmStep++;
+    }, 180);
+  }
+
+  stopBgm() {
+    if (this.bgmTimer) {
+      clearInterval(this.bgmTimer);
+      this.bgmTimer = null;
+    }
+  }
+
+  toggleSound() {
+    this.enabled = !this.enabled;
+    if (!this.enabled) {
+      this.stopBgm();
+    } else {
+      this.startBgm();
+    }
+    return this.enabled;
+  }
+}
+
+const sound = new SoundEngine();
+
+/* ==========================================================================
+   Canvas 3D風 宇宙・ジェット機・エフェクト描画
+   ========================================================================== */
+const canvas = document.getElementById('game-canvas');
+const ctx = canvas.getContext('2d');
+
+let stars = [];
+let particles = [];
+let lasers = [];
+let targetVisual = {
+  scale: 0.2,
+  targetScale: 1.0,
+  x: 0,
+  y: 0,
+  rotation: 0,
+  defeated: false
+};
+
+function resizeCanvas() {
+  canvas.width = canvas.parentElement.clientWidth;
+  canvas.height = canvas.parentElement.clientHeight;
+  initStars();
+}
+
+function initStars() {
+  stars = [];
+  const count = 120;
+  for (let i = 0; i < count; i++) {
+    stars.push({
+      x: (Math.random() - 0.5) * canvas.width * 2,
+      y: (Math.random() - 0.5) * canvas.height * 2,
+      z: Math.random() * 1000,
+      size: Math.random() * 2 + 1
+    });
+  }
+}
+
+function spawnLaserBeam() {
+  sound.playLaser();
+  lasers.push({
+    startX1: canvas.width * 0.35,
+    startY1: canvas.height * 0.82,
+    startX2: canvas.width * 0.65,
+    startY2: canvas.height * 0.82,
+    targetX: canvas.width * 0.5,
+    targetY: canvas.height * 0.36,
+    progress: 0,
+    life: 1.0
+  });
+}
+
+function spawnExplosion(x, y) {
+  sound.playExplosion();
+  for (let i = 0; i < 45; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = Math.random() * 8 + 3;
+    particles.push({
+      x: x,
+      y: y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      life: 1.0,
+      decay: Math.random() * 0.03 + 0.02,
+      size: Math.random() * 8 + 4,
+      color: ['#00e5ff', '#ff3366', '#ffe600', '#ffffff'][Math.floor(Math.random() * 4)]
+    });
+  }
+}
+
+let screenShake = 0;
+
+function renderLoop() {
+  requestAnimationFrame(renderLoop);
+
+  // 画面シェイク処理
+  ctx.save();
+  if (screenShake > 0) {
+    const sx = (Math.random() - 0.5) * screenShake * 12;
+    const sy = (Math.random() - 0.5) * screenShake * 12;
+    ctx.translate(sx, sy);
+    screenShake -= 0.05;
+    if (screenShake < 0) screenShake = 0;
+  }
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  const cx = canvas.width / 2;
+  const cy = canvas.height / 2;
+
+  // 1. 星屑ワープスクロール描画
+  for (let s of stars) {
+    s.z -= 18;
+    if (s.z <= 0) {
+      s.z = 1000;
+      s.x = (Math.random() - 0.5) * canvas.width * 2;
+      s.y = (Math.random() - 0.5) * canvas.height * 2;
+    }
+    const k = 300 / s.z;
+    const px = cx + s.x * k;
+    const py = cy + s.y * k;
+    const pSize = s.size * k;
+
+    if (px >= 0 && px <= canvas.width && py >= 0 && py <= canvas.height) {
+      ctx.fillStyle = s.z < 300 ? '#00e5ff' : '#ffffff';
+      ctx.beginPath();
+      ctx.arc(px, py, Math.max(0.5, pSize), 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  // 2. 敵ターゲット(隕石 / 宇宙要塞コア)の描画
+  if (!targetVisual.defeated) {
+    targetVisual.scale += (targetVisual.targetScale - targetVisual.scale) * 0.1;
+    targetVisual.rotation += 0.015;
+
+    ctx.save();
+    const tx = cx;
+    const ty = canvas.height * 0.36;
+    ctx.translate(tx, ty);
+    ctx.scale(targetVisual.scale, targetVisual.scale);
+    ctx.rotate(targetVisual.rotation);
+
+    // 要塞コア外周リング
+    ctx.strokeStyle = '#00e5ff';
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.arc(0, 0, 130, 0, Math.PI * 2);
+    ctx.stroke();
+
+    ctx.strokeStyle = 'rgba(255, 230, 0, 0.7)';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([15, 10]);
+    ctx.beginPath();
+    ctx.arc(0, 0, 145, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.restore();
+  }
+
+  // 3. レーザービーム描画
+  for (let i = lasers.length - 1; i >= 0; i--) {
+    const l = lasers[i];
+    ctx.save();
+    ctx.strokeStyle = '#00e5ff';
+    ctx.lineWidth = 7 * l.life;
+    ctx.shadowColor = '#00e5ff';
+    ctx.shadowBlur = 20;
+
+    ctx.beginPath();
+    ctx.moveTo(l.startX1, l.startY1);
+    ctx.lineTo(l.targetX, l.targetY);
+    ctx.moveTo(l.startX2, l.startY2);
+    ctx.lineTo(l.targetX, l.targetY);
+    ctx.stroke();
+
+    // 内側のホワイトコア
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 3 * l.life;
+    ctx.stroke();
+    ctx.restore();
+
+    l.life -= 0.12;
+    if (l.life <= 0) {
+      lasers.splice(i, 1);
+    }
+  }
+
+  // 4. 爆発パーティクル描画
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.x += p.vx;
+    p.y += p.vy;
+    p.life -= p.decay;
+
+    if (p.life <= 0) {
+      particles.splice(i, 1);
+      continue;
+    }
+
+    ctx.save();
+    ctx.globalAlpha = p.life;
+    ctx.fillStyle = p.color;
+    ctx.shadowColor = p.color;
+    ctx.shadowBlur = 10;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // 5. プレイヤーのジェット機 (コックピット視点の手前翼・レーザーポッド)
+  drawPlayerJet(cx, canvas.height);
+
+  ctx.restore();
+}
+
+function drawPlayerJet(cx, h) {
+  ctx.save();
+  const jetBaseY = h * 0.85;
+
+  // 左翼
+  ctx.fillStyle = '#0e1d38';
+  ctx.strokeStyle = '#00e5ff';
+  ctx.lineWidth = 2;
+
+  ctx.beginPath();
+  ctx.moveTo(cx - 220, h);
+  ctx.lineTo(cx - 80, jetBaseY);
+  ctx.lineTo(cx - 40, h);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  // 右翼
+  ctx.beginPath();
+  ctx.moveTo(cx + 220, h);
+  ctx.lineTo(cx + 80, jetBaseY);
+  ctx.lineTo(cx + 40, h);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  // レーザーキャノン砲身 (左 & 右)
+  ctx.fillStyle = '#ffaa00';
+  ctx.fillRect(cx - 95, jetBaseY - 15, 12, 25);
+  ctx.fillRect(cx + 83, jetBaseY - 15, 12, 25);
+
+  // コックピット窓枠・HUDフレーム
+  ctx.strokeStyle = 'rgba(0, 229, 255, 0.3)';
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.arc(cx, jetBaseY + 60, 180, Math.PI * 1.1, Math.PI * 1.9);
+  ctx.stroke();
+
+  // ジェット推進炎エフェクト
+  const flameTime = Date.now() * 0.02;
+  const flameH = 20 + Math.sin(flameTime) * 6;
+  ctx.fillStyle = 'rgba(0, 229, 255, 0.8)';
+  ctx.beginPath();
+  ctx.moveTo(cx - 89, jetBaseY + 10);
+  ctx.lineTo(cx - 83, jetBaseY + 10 + flameH);
+  ctx.lineTo(cx - 95, jetBaseY + 10 + flameH);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.moveTo(cx + 89, jetBaseY + 10);
+  ctx.lineTo(cx + 95, jetBaseY + 10 + flameH);
+  ctx.lineTo(cx + 83, jetBaseY + 10 + flameH);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.restore();
+}
+
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+requestAnimationFrame(renderLoop);
+
+/* ==========================================================================
+   ゲーム進行・ステート管理ロジック
+   ========================================================================== */
+let gameMode = 'all';
+let currentQuestionList = [];
+let currentQuestionIndex = 0;
+let currentAnswer = "";
+let crewLives = 5;
+let timerSeconds = 15.0;
+let timerInterval = null;
+let isAnswerLocked = false;
+let solvedHistory = [];
+
+// DOM要素
+const elStageText = document.getElementById('stage-text');
+const elLevelBadge = document.getElementById('level-badge');
+const elTargetKanji = document.getElementById('target-kanji');
+const elTargetHint = document.getElementById('target-hint');
+const elTargetCharsCount = document.getElementById('target-chars-count');
+const elTargetLabel = document.getElementById('target-label');
+const elKanjiPanel = document.getElementById('kanji-panel');
+const elAnswerText = document.getElementById('answer-text');
+const elTimerBar = document.getElementById('timer-bar');
+const elTimerNumber = document.getElementById('timer-number');
+const elFlashOverlay = document.getElementById('flash-overlay');
+const elHiddenInput = document.getElementById('hidden-input');
+
+function selectMode(mode) {
+  gameMode = mode;
+  document.querySelectorAll('.mode-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.mode === mode);
+  });
+}
+
+function buildQuestionList() {
+  let list = [];
+  const shuffle = (arr) => [...arr].sort(() => Math.random() - 0.5);
+
+  if (gameMode === 'low') {
+    list = shuffle(KANJI_DATABASE.stage1).slice(0, 6);
+  } else if (gameMode === 'mid') {
+    list = shuffle(KANJI_DATABASE.stage2).slice(0, 6);
+  } else if (gameMode === 'high') {
+    list = [...shuffle(KANJI_DATABASE.stage3).slice(0, 5), ...shuffle(KANJI_DATABASE.final).slice(0, 2)];
+  } else {
+    // 全問ツアーズモード: Stage1(3問) -> Stage2(3問) -> Stage3(3問) -> FINAL(1問)
+    list = [
+      ...shuffle(KANJI_DATABASE.stage1).slice(0, 3),
+      ...shuffle(KANJI_DATABASE.stage2).slice(0, 3),
+      ...shuffle(KANJI_DATABASE.stage3).slice(0, 3),
+      ...shuffle(KANJI_DATABASE.final).slice(0, 1)
+    ];
+  }
+  return list;
+}
+
+function startGame() {
+  document.getElementById('start-modal').style.display = 'none';
+  document.getElementById('result-modal').style.display = 'none';
+
+  crewLives = 5;
+  currentQuestionIndex = 0;
+  solvedHistory = [];
+  updateCrewDisplay();
+
+  currentQuestionList = buildQuestionList();
+  sound.startBgm();
+
+  loadQuestion(currentQuestionIndex);
+  focusHiddenInput();
+}
+
+function updateCrewDisplay() {
+  for (let i = 0; i < 5; i++) {
+    const slot = document.getElementById(`crew-${i}`);
+    if (i < crewLives) {
+      slot.classList.remove('lost');
+    } else {
+      slot.classList.add('lost');
+    }
+  }
+}
+
+function loadQuestion(index) {
+  if (index >= currentQuestionList.length) {
+    // 全問クリア！
+    showGameResult(true);
+    return;
+  }
+
+  isAnswerLocked = false;
+  currentAnswer = "";
+  updateAnswerDisplay();
+  elHiddenInput.value = "";
+
+  const q = currentQuestionList[index];
+  const total = currentQuestionList.length;
+
+  // ステージラベル判定
+  if (index === total - 1 && (gameMode === 'all' || gameMode === 'high')) {
+    elStageText.textContent = "FINAL STAGE";
+    elStageText.style.color = "var(--neon-red)";
+    elLevelBadge.textContent = "BOSS BATTLE";
+  } else {
+    const stageNum = Math.floor(index / 3) + 1;
+    const subNum = (index % 3) + 1;
+    elStageText.textContent = `STAGE ${stageNum}`;
+    elStageText.style.color = "var(--neon-yellow)";
+    elLevelBadge.textContent = `LEVEL ${subNum} / 3`;
+  }
+
+  elTargetLabel.textContent = `TARGET 0${index + 1}`;
+  elTargetKanji.textContent = q.kanji;
+  elTargetHint.textContent = `学年: ${q.grade} | ${q.hint}`;
+  elTargetCharsCount.textContent = `${q.kana.length}もじ`;
+
+  // ターゲットアニメーションリセット
+  targetVisual.scale = 0.1;
+  targetVisual.targetScale = 1.0;
+  targetVisual.defeated = false;
+
+  elKanjiPanel.style.transform = "translate(-50%, -50%) scale(1)";
+
+  // タイマースタート
+  startTimer(15.0);
+}
+
+function startTimer(seconds) {
+  clearInterval(timerInterval);
+  timerSeconds = seconds;
+  updateTimerUI();
+
+  let lastTick = performance.now();
+  timerInterval = setInterval(() => {
+    const now = performance.now();
+    const dt = (now - lastTick) / 1000;
+    lastTick = now;
+
+    timerSeconds -= dt;
+    if (timerSeconds <= 0) {
+      timerSeconds = 0;
+      updateTimerUI();
+      clearInterval(timerInterval);
+      handleTimeOut();
+    } else {
+      updateTimerUI();
+      if (timerSeconds <= 4.0 && Math.floor(timerSeconds * 10) % 10 === 0) {
+        sound.playWarningBeep();
+      }
+    }
+  }, 100);
+}
+
+function updateTimerUI() {
+  const percent = Math.max(0, (timerSeconds / 15.0) * 100);
+  elTimerBar.style.width = `${percent}%`;
+  elTimerNumber.textContent = `${timerSeconds.toFixed(1)}s`;
+
+  if (timerSeconds <= 4.0) {
+    elTimerBar.classList.add('warning');
+  } else {
+    elTimerBar.classList.remove('warning');
+  }
+}
+
+function updateAnswerDisplay() {
+  elAnswerText.textContent = currentAnswer;
+}
+
+function appendAnswerChar(char) {
+  if (isAnswerLocked) return;
+  if (currentAnswer.length >= 8) return;
+  currentAnswer += char;
+  updateAnswerDisplay();
+}
+
+function removeLastChar() {
+  if (isAnswerLocked) return;
+  currentAnswer = currentAnswer.slice(0, -1);
+  updateAnswerDisplay();
+}
+
+function clearAnswer() {
+  if (isAnswerLocked) return;
+  currentAnswer = "";
+  updateAnswerDisplay();
+}
+
+// 濁点・半濁点の変換ロジック
+const DAKUTEN_MAP = {
+  'か': 'が', 'き': 'ぎ', 'く': 'ぐ', 'け': 'げ', 'こ': 'ご',
+  'さ': 'ざ', 'し': 'じ', 'す': 'ず', 'せ': 'ぜ', 'そ': 'ぞ',
+  'た': 'だ', 'ち': 'ぢ', 'つ': 'づ', 'て': 'で', 'と': 'ど',
+  'は': 'ば', 'ひ': 'び', 'ふ': 'ぶ', 'へ': 'べ', 'ほ': 'ぼ',
+  'ば': 'ぱ', 'び': 'ぴ', 'ぶ': 'ぷ', 'べ': 'ぺ', 'ほ': 'ぽ',
+  'が': 'か', 'ぎ': 'き', 'ぐ': 'く', 'げ': 'け', 'ご': 'こ',
+  'ざ': 'さ', 'じ': 'し', 'ず': 'す', 'ぜ': 'せ', 'ぞ': 'そ',
+  'だ': 'た', 'ぢ': 'ち', 'づ': 'つ', 'で': 'て', 'ど': 'と',
+  'ぱ': 'は', 'ぴ': 'ひ', 'ぷ': 'ふ', 'ぺ': 'へ', 'ぽ': 'ほ',
+  'う': 'ゔ', 'ゔ': 'う'
+};
+
+function toggleDakuten() {
+  if (isAnswerLocked || currentAnswer.length === 0) return;
+  const last = currentAnswer[currentAnswer.length - 1];
+  if (DAKUTEN_MAP[last]) {
+    currentAnswer = currentAnswer.slice(0, -1) + DAKUTEN_MAP[last];
+    updateAnswerDisplay();
+  }
+}
+
+// 小文字変換ロジック
+const KOMOJI_MAP = {
+  'あ': 'ぁ', 'い': 'ぃ', 'う': 'ぅ', 'え': 'ぇ', 'お': 'ぉ',
+  'つ': 'っ', 'や': 'ゃ', 'ゆ': 'ゅ', 'よ': 'ょ', 'わ': 'ゎ',
+  'ぁ': 'あ', 'ぃ': 'い', 'ぅ': 'う', 'ぇ': 'え', 'ぉ': 'お',
+  'っ': 'つ', 'ゃ': 'や', 'ゅ': 'ゆ', 'ょ': 'よ', 'ゎ': 'わ'
+};
+
+function toggleKomoji() {
+  if (isAnswerLocked || currentAnswer.length === 0) return;
+  const last = currentAnswer[currentAnswer.length - 1];
+  if (KOMOJI_MAP[last]) {
+    currentAnswer = currentAnswer.slice(0, -1) + KOMOJI_MAP[last];
+    updateAnswerDisplay();
+  }
+}
+
+/* 解答判定 (発射！) */
+function submitAnswer() {
+  if (isAnswerLocked) return;
+  if (currentAnswer.trim() === "") return;
+
+  const currentQ = currentQuestionList[currentQuestionIndex];
+  const isCorrect = (currentAnswer === currentQ.kana);
+
+  if (isCorrect) {
+    handleCorrectAnswer(currentQ);
+  } else {
+    handleWrongAnswer();
+  }
+}
+
+function handleCorrectAnswer(q) {
+  isAnswerLocked = true;
+  clearInterval(timerInterval);
+
+  solvedHistory.push({
+    kanji: q.kanji,
+    kana: q.kana,
+    hint: q.hint,
+    success: true
+  });
+
+  // レーザー発射 & 大爆発
+  spawnLaserBeam();
+  setTimeout(() => {
+    targetVisual.defeated = true;
+    screenShake = 1.2;
+    spawnExplosion(canvas.width * 0.5, canvas.height * 0.36);
+    sound.playCorrect();
+
+    // フラッシュ
+    triggerFlash('correct');
+
+    elKanjiPanel.style.transform = "translate(-50%, -50%) scale(0)";
+  }, 200);
+
+  setTimeout(() => {
+    currentQuestionIndex++;
+    loadQuestion(currentQuestionIndex);
+  }, 1400);
+}
+
+function handleWrongAnswer() {
+  sound.playWrong();
+  triggerFlash('wrong');
+
+  // パネル振動
+  elKanjiPanel.style.animation = "shakePanel 0.4s ease-in-out";
+  setTimeout(() => {
+    elKanjiPanel.style.animation = "";
+  }, 400);
+}
+
+function handleTimeOut() {
+  if (isAnswerLocked) return;
+  isAnswerLocked = true;
+
+  sound.playWrong();
+  triggerFlash('wrong');
+  screenShake = 0.8;
+
+  crewLives--;
+  updateCrewDisplay();
+
+  const currentQ = currentQuestionList[currentQuestionIndex];
+  solvedHistory.push({
+    kanji: currentQ.kanji,
+    kana: currentQ.kana,
+    hint: currentQ.hint,
+    success: false
+  });
+
+  // 正解を表示して次の問題へ
+  elAnswerText.textContent = `正解: ${currentQ.kana}`;
+  elAnswerText.style.color = "var(--neon-red)";
+
+  setTimeout(() => {
+    elAnswerText.style.color = "var(--neon-yellow)";
+    if (crewLives <= 0) {
+      showGameResult(false);
+    } else {
+      currentQuestionIndex++;
+      loadQuestion(currentQuestionIndex);
+    }
+  }, 1600);
+}
+
+function triggerFlash(type) {
+  elFlashOverlay.className = `flash-overlay ${type === 'correct' ? 'flash-correct' : 'flash-wrong'}`;
+  elFlashOverlay.style.opacity = '1';
+  setTimeout(() => {
+    elFlashOverlay.style.opacity = '0';
+  }, 300);
+}
+
+function showGameResult(isWin) {
+  clearInterval(timerInterval);
+  sound.stopBgm();
+
+  const modal = document.getElementById('result-modal');
+  const icon = document.getElementById('result-icon');
+  const title = document.getElementById('result-title');
+  const msg = document.getElementById('result-message');
+  const scoreSpan = document.getElementById('res-score');
+  const crewSpan = document.getElementById('res-crew');
+  const list = document.getElementById('result-list');
+
+  const winCount = solvedHistory.filter(h => h.success).length;
+  scoreSpan.textContent = `${winCount} / ${currentQuestionList.length}`;
+  crewSpan.textContent = `${crewLives}`;
+
+  list.innerHTML = "";
+  solvedHistory.forEach(item => {
+    const row = document.createElement('div');
+    row.className = 'result-item';
+    row.innerHTML = `
+      <span class="result-kanji">${item.kanji}</span>
+      <span class="result-reading">${item.kana} (${item.hint})</span>
+      <span>${item.success ? '⭕ 撃破' : '❌ 被弾'}</span>
+    `;
+    list.appendChild(row);
+  });
+
+  if (isWin) {
+    icon.textContent = "🏆";
+    title.textContent = "MISSION COMPLETE!";
+    title.style.color = "var(--neon-yellow)";
+    msg.textContent = "おめでとう！全ターゲットの撃破に成功した！";
+    sound.playCorrect();
+  } else {
+    icon.textContent = "💥";
+    title.textContent = "MISSION FAILED...";
+    title.style.color = "var(--neon-red)";
+    msg.textContent = "全機撃墜...！漢字をマスターして再挑戦せよ！";
+  }
+
+  modal.style.display = 'flex';
+}
+
+function returnToTitle() {
+  document.getElementById('result-modal').style.display = 'none';
+  document.getElementById('start-modal').style.display = 'flex';
+  sound.stopBgm();
+}
+
+/* ==========================================================================
+   入力・イベントハンドリング
+   ========================================================================== */
+function focusHiddenInput() {
+  elHiddenInput.focus();
+}
+
+// 物理キーボード / IME入力 / ローマ字自動変換
+let isComposing = false;
+let romajiBuffer = "";
+
+elHiddenInput.addEventListener('compositionstart', () => {
+  isComposing = true;
+});
+
+elHiddenInput.addEventListener('compositionend', () => {
+  isComposing = false;
+  const val = elHiddenInput.value;
+  const h = toHiragana(val);
+  if (h) {
+    currentAnswer = h.slice(0, 10);
+    updateAnswerDisplay();
+  }
+});
+
+elHiddenInput.addEventListener('input', (e) => {
+  if (isComposing) return;
+  const val = elHiddenInput.value;
+  const h = toHiragana(val);
+  if (h && /^[ぁ-んー]+$/.test(h)) {
+    currentAnswer = h.slice(0, 10);
+    updateAnswerDisplay();
+  }
+});
+
+// PCキーボード用：直接キー入力 (ローマ字自動ひらがな変換)
+const ROMAJI_TABLE = {
+  a: "あ", i: "い", u: "う", e: "え", o: "お",
+  ka: "か", ki: "き", ku: "く", ke: "け", ko: "こ",
+  sa: "さ", si: "し", shi: "し", su: "す", se: "せ", so: "そ",
+  ta: "た", ti: "ち", chi: "ち", tu: "つ", tsu: "つ", te: "て", to: "と",
+  na: "な", ni: "に", nu: "ぬ", ne: "ね", no: "の",
+  ha: "は", hi: "ひ", hu: "ふ", fu: "ふ", he: "へ", ho: "ほ",
+  ma: "ま", mi: "み", mu: "む", me: "め", mo: "も",
+  ya: "や", yu: "ゆ", yo: "よ",
+  ra: "ら", ri: "り", ru: "る", re: "れ", ro: "ろ",
+  wa: "わ", wo: "を", nn: "ん",
+  ga: "が", gi: "ぎ", gu: "ぐ", ge: "げ", go: "ご",
+  za: "ざ", zi: "じ", ji: "じ", zu: "ず", ze: "ぜ", zo: "ぞ",
+  da: "だ", di: "ぢ", du: "づ", de: "で", do: "ど",
+  ba: "ば", bi: "び", bu: "ぶ", be: "べ", bo: "ぼ",
+  pa: "ぱ", pi: "ぴ", pu: "ぷ", pe: "ぺ", po: "ぽ",
+  kya: "きゃ", kyu: "きゅ", kyo: "きょ",
+  sha: "しゃ", shu: "しゅ", sho: "しょ",
+  cha: "ちゃ", chu: "ちゅ", cho: "ちょ",
+  nya: "にゃ", nyu: "にゅ", nyo: "にょ",
+  hya: "ひゃ", hyu: "ひゅ", hyo: "ひょ",
+  mya: "みゃ", myu: "みゅ", myo: "みょ",
+  rya: "りゃ", ryu: "りゅ", ryo: "りょ",
+  gya: "ぎゃ", gyu: "ぎゅ", gyo: "ぎょ",
+  ja: "じゃ", ju: "じゅ", jo: "じょ",
+  bya: "びゃ", byu: "びゅ", byo: "びょ",
+  pya: "ぴゃ", pyu: "ぴゅ", pyo: "ぴょ"
+};
+
+function processRomajiKey(key) {
+  if (key === '-') {
+    appendAnswerChar('ー');
+    romajiBuffer = "";
+    return;
+  }
+  if (!/^[a-z]$/i.test(key)) return;
+  key = key.toLowerCase();
+  romajiBuffer += key;
+
+  // 促音 (っ) の処理: 子音が2回続く場合 (例: kk -> っk, tt -> っt)
+  if (romajiBuffer.length >= 2 && romajiBuffer[0] === romajiBuffer[1] && romajiBuffer[0] !== 'n') {
+    appendAnswerChar('っ');
+    romajiBuffer = romajiBuffer.slice(1);
+  }
+
+  // 撥音 (ん)
+  if (romajiBuffer === 'nn') {
+    appendAnswerChar('ん');
+    romajiBuffer = "";
+    return;
+  }
+
+  // テーブル照合
+  if (ROMAJI_TABLE[romajiBuffer]) {
+    appendAnswerChar(ROMAJI_TABLE[romajiBuffer]);
+    romajiBuffer = "";
+    return;
+  }
+
+  // 3文字以上マッチしない場合
+  if (romajiBuffer.length >= 3) {
+    romajiBuffer = romajiBuffer.slice(-1);
+  }
+}
+
+elHiddenInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    submitAnswer();
+  } else if (e.key === 'Backspace') {
+    if (romajiBuffer.length > 0) {
+      romajiBuffer = romajiBuffer.slice(0, -1);
+      e.preventDefault();
+      return;
+    }
+    removeLastChar();
+  } else if (!isComposing && e.key.length === 1 && /^[a-zA-Z\-]$/.test(e.key)) {
+    processRomajiKey(e.key);
+    e.preventDefault();
+  }
+});
+
+function toHiragana(str) {
+  // カタカナをひらがなに変換
+  let result = str.replace(/[\u30a1-\u30f6]/g, function(match) {
+    return String.fromCharCode(match.charCodeAt(0) - 0x60);
+  });
+  return result;
+}
+
+// 画面上ソフトキーボードのクリックイベント
+document.querySelectorAll('.kb-key[data-char]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    appendAnswerChar(btn.dataset.char);
+    focusHiddenInput();
+  });
+});
+
+document.getElementById('btn-dakuten').addEventListener('click', toggleDakuten);
+document.getElementById('btn-komoji').addEventListener('click', toggleKomoji);
+document.getElementById('btn-backspace').addEventListener('click', removeLastChar);
+document.getElementById('btn-clear').addEventListener('click', clearAnswer);
+document.getElementById('btn-submit').addEventListener('click', submitAnswer);
+document.getElementById('start-game-btn').addEventListener('click', startGame);
+
+document.getElementById('sound-toggle-btn').addEventListener('click', () => {
+  const isEnabled = sound.toggleSound();
+  document.getElementById('sound-toggle-btn').textContent = isEnabled ? '🔊 BGM/SE' : '🔇 MUTE';
+});
+
+// ゲーム画面クリックで常にフォーカス
+document.getElementById('game-container').addEventListener('click', (e) => {
+  if (!e.target.closest('button')) {
+    focusHiddenInput();
+  }
+});
+</script>
+</body>
+</html>

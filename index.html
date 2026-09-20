@@ -687,21 +687,21 @@
     .mode-select-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 20px;
+      gap: 8px;
+      margin-bottom: 14px;
     }
 
     .mode-btn {
       background: rgba(16, 32, 60, 0.85);
       border: 2px solid #204987;
       border-radius: 12px;
-      padding: 10px 8px;
+      padding: 10px 8px 8px 8px;
       cursor: pointer;
       transition: all 0.2s;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
+      gap: 3px;
       color: #fff;
       position: relative;
     }
@@ -713,9 +713,35 @@
       transform: translateY(-2px);
     }
 
+    .card-kakijun-shortcut {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: rgba(2, 132, 199, 0.35);
+      border: 1px solid #38bdf8;
+      color: #e0f2fe;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 999px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      transition: all 0.15s;
+      z-index: 2;
+    }
+
+    .card-kakijun-shortcut:hover {
+      background: #0284c7;
+      color: #fff;
+      transform: scale(1.08);
+      box-shadow: 0 0 8px rgba(56, 189, 248, 0.8);
+    }
+
     .mode-btn.full-width {
       grid-column: 1 / -1;
-      padding: 12px 14px;
+      padding: 10px 14px;
       flex-direction: row;
       justify-content: center;
       gap: 15px;
@@ -1333,27 +1359,58 @@
       transform: scale(1.05);
     }
 
-    .home-nav-row {
+    /* === ホーム画面 整理されたナビゲーションメニュー === */
+    .home-nav-container {
       display: flex;
+      flex-direction: column;
       gap: 8px;
-      justify-content: center;
-      flex-wrap: wrap;
       margin-top: 14px;
+      background: rgba(10, 20, 40, 0.6);
+      border: 1px solid rgba(26, 60, 110, 0.7);
+      border-radius: 14px;
+      padding: 10px 12px;
+    }
+
+    .home-nav-row-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .home-nav-label {
+      font-size: 11px;
+      font-weight: 800;
+      color: #7b9bb8;
+      min-width: 65px;
+      text-align: left;
+    }
+
+    .home-nav-btns {
+      display: flex;
+      flex: 1;
+      gap: 6px;
+      flex-wrap: wrap;
     }
 
     .home-nav-btn {
+      flex: 1;
+      min-width: 100px;
       background: rgba(16, 32, 60, 0.85);
       border: 1px solid #2a5a9e;
       color: #b5d5ff;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: bold;
-      padding: 8px 14px;
-      border-radius: 20px;
+      padding: 7px 10px;
+      border-radius: 10px;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.15s;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      justify-content: center;
+      gap: 4px;
+      text-decoration: none;
+      white-space: nowrap;
     }
 
     .home-nav-btn:hover {
@@ -1361,6 +1418,13 @@
       color: #fff;
       background: rgba(0, 229, 255, 0.25);
       transform: translateY(-2px);
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+    }
+
+    .home-nav-btn.highlight {
+      border-color: #ffe600;
+      color: #ffe600;
+      background: rgba(255, 230, 0, 0.12);
     }
 
     .special-modes-row {
@@ -2535,72 +2599,53 @@
         </div>
       </div>
 
-      <!-- 学年コース選択グリッド (ルビ・進捗バッジ・クイックスタート付き) -->
+      <!-- 学年コース選択グリッド (スッキリ整理・筆順ショートカット付き) -->
       <div class="mode-select-grid">
         <div class="mode-btn active" data-mode="grade1" onclick="selectMode('grade1')">
+          <a href="kakijun.html?grade=1" class="card-kakijun-shortcut" onclick="event.stopPropagation();" title="1年生の書き順を見る・練習する">✏️ 筆順</a>
           <span class="grade-badge g1">1ねんせい</span>
           <div class="mode-name">🌱 １年生</div>
           <span class="mode-progress-badge" id="badge-g1">0/80字 (0%)</span>
           <div class="mode-desc"><ruby>配当<rt>はいとう</rt></ruby>80<ruby>字<rt>じ</rt></ruby>・きほんの <ruby>読<rt>よ</rt></ruby>み</div>
-          <div style="display: flex; gap: 4px; width: 100%;">
-            <button class="mode-quick-start" style="flex: 1;" onclick="event.stopPropagation(); quickStart('grade1')">🚀 すぐ発進!</button>
-            <a href="kakijun.html?grade=1" class="mode-quick-start" style="flex: 1; background: linear-gradient(135deg, #0284c7, #0369a1); border-color: #38bdf8; text-decoration: none; color: #fff; text-align: center; display: flex; align-items: center; justify-content: center;" onclick="event.stopPropagation();">✏️ 書き順</a>
-          </div>
         </div>
         <div class="mode-btn" data-mode="grade2" onclick="selectMode('grade2')">
+          <a href="kakijun.html?grade=2" class="card-kakijun-shortcut" onclick="event.stopPropagation();" title="2年生の書き順を見る・練習する">✏️ 筆順</a>
           <span class="grade-badge g2">2ねんせい</span>
           <div class="mode-name">🌿 ２年生</div>
           <span class="mode-progress-badge" id="badge-g2">0/160字 (0%)</span>
           <div class="mode-desc"><ruby>日常<rt>にちじょう</rt></ruby>の かん<ruby>字<rt>じ</rt></ruby> (160<ruby>字<rt>じ</rt></ruby>)</div>
-          <div style="display: flex; gap: 4px; width: 100%;">
-            <button class="mode-quick-start" style="flex: 1;" onclick="event.stopPropagation(); quickStart('grade2')">🚀 すぐ発進!</button>
-            <a href="kakijun.html?grade=2" class="mode-quick-start" style="flex: 1; background: linear-gradient(135deg, #0284c7, #0369a1); border-color: #38bdf8; text-decoration: none; color: #fff; text-align: center; display: flex; align-items: center; justify-content: center;" onclick="event.stopPropagation();">✏️ 書き順</a>
-          </div>
         </div>
         <div class="mode-btn" data-mode="grade3" onclick="selectMode('grade3')">
+          <a href="kakijun.html?grade=3" class="card-kakijun-shortcut" onclick="event.stopPropagation();" title="3年生の書き順を見る・練習する">✏️ 筆順</a>
           <span class="grade-badge g3">3年生</span>
           <div class="mode-name">🌸 ３年生</div>
           <span class="mode-progress-badge" id="badge-g3">0/200字 (0%)</span>
           <div class="mode-desc">身近な熟語 (200字)</div>
-          <div style="display: flex; gap: 4px; width: 100%;">
-            <button class="mode-quick-start" style="flex: 1;" onclick="event.stopPropagation(); quickStart('grade3')">🚀 すぐ発進!</button>
-            <a href="kakijun.html?grade=3" class="mode-quick-start" style="flex: 1; background: linear-gradient(135deg, #0284c7, #0369a1); border-color: #38bdf8; text-decoration: none; color: #fff; text-align: center; display: flex; align-items: center; justify-content: center;" onclick="event.stopPropagation();">✏️ 書き順</a>
-          </div>
         </div>
         <div class="mode-btn" data-mode="grade4" onclick="selectMode('grade4')">
+          <a href="kakijun.html?grade=4" class="card-kakijun-shortcut" onclick="event.stopPropagation();" title="4年生の書き順を見る・練習する">✏️ 筆順</a>
           <span class="grade-badge g4">4年生</span>
           <div class="mode-name">🍁 ４年生</div>
           <span class="mode-progress-badge" id="badge-g4">0/202字 (0%)</span>
           <div class="mode-desc">発展の言葉 (202字)</div>
-          <div style="display: flex; gap: 4px; width: 100%;">
-            <button class="mode-quick-start" style="flex: 1;" onclick="event.stopPropagation(); quickStart('grade4')">🚀 すぐ発進!</button>
-            <a href="kakijun.html?grade=4" class="mode-quick-start" style="flex: 1; background: linear-gradient(135deg, #0284c7, #0369a1); border-color: #38bdf8; text-decoration: none; color: #fff; text-align: center; display: flex; align-items: center; justify-content: center;" onclick="event.stopPropagation();">✏️ 書き順</a>
-          </div>
         </div>
         <div class="mode-btn" data-mode="grade5" onclick="selectMode('grade5')">
+          <a href="kakijun.html?grade=5" class="card-kakijun-shortcut" onclick="event.stopPropagation();" title="5年生の書き順を見る・練習する">✏️ 筆順</a>
           <span class="grade-badge g5">5年生</span>
           <div class="mode-name">⚡ ５年生</div>
           <span class="mode-progress-badge" id="badge-g5">0/193字 (0%)</span>
           <div class="mode-desc">少し難しい熟語 (193字)</div>
-          <div style="display: flex; gap: 4px; width: 100%;">
-            <button class="mode-quick-start" style="flex: 1;" onclick="event.stopPropagation(); quickStart('grade5')">🚀 すぐ発進!</button>
-            <a href="kakijun.html?grade=5" class="mode-quick-start" style="flex: 1; background: linear-gradient(135deg, #0284c7, #0369a1); border-color: #38bdf8; text-decoration: none; color: #fff; text-align: center; display: flex; align-items: center; justify-content: center;" onclick="event.stopPropagation();">✏️ 書き順</a>
-          </div>
         </div>
         <div class="mode-btn" data-mode="grade6" onclick="selectMode('grade6')">
+          <a href="kakijun.html?grade=6" class="card-kakijun-shortcut" onclick="event.stopPropagation();" title="6年生の書き順を見る・練習する">✏️ 筆順</a>
           <span class="grade-badge g6">6年生</span>
           <div class="mode-name">🔥 ６年生</div>
           <span class="mode-progress-badge" id="badge-g6">0/191字 (0%)</span>
           <div class="mode-desc">総仕上げレベル (191字)</div>
-          <div style="display: flex; gap: 4px; width: 100%;">
-            <button class="mode-quick-start" style="flex: 1;" onclick="event.stopPropagation(); quickStart('grade6')">🚀 すぐ発進!</button>
-            <a href="kakijun.html?grade=6" class="mode-quick-start" style="flex: 1; background: linear-gradient(135deg, #0284c7, #0369a1); border-color: #38bdf8; text-decoration: none; color: #fff; text-align: center; display: flex; align-items: center; justify-content: center;" onclick="event.stopPropagation();">✏️ 書き順</a>
-          </div>
         </div>
         <div class="mode-btn full-width" data-mode="all" onclick="selectMode('all')">
           <div class="mode-name">👑 全学年チャレンジ</div>
           <div class="mode-desc">1年生〜6年生の全範囲からバランス良く出題！全10問の完全制覇ツアー！</div>
-          <button class="mode-quick-start" onclick="event.stopPropagation(); quickStart('all')">🚀 すぐ発進!</button>
         </div>
       </div>
 
@@ -2609,15 +2654,25 @@
         <button class="start-btn" id="start-game-btn" onclick="startGame()">🌱 １年生コースで発進！ (START)</button>
       </div>
 
-      <!-- 下部ナビゲーションメニュー -->
-      <div class="home-nav-row">
-        <button class="home-nav-btn" onclick="openHowToModal()">❓ あそびかた</button>
-        <button class="home-nav-btn" onclick="openHandwriteModal()">✍️ 手書き特訓</button>
-        <a href="kakijun.html" class="home-nav-btn" style="text-decoration: none; color: #ffe600; border-color: #ffe600;">✏️ 書き順マスター</a>
-        <button class="home-nav-btn" onclick="openAiReportModal()">📊 AI学習分析</button>
-        <button class="home-nav-btn" onclick="openCustomModal()">🚀 機体カスタム</button>
-        <button class="home-nav-btn" onclick="openKanjiRoom()">🏛️ 漢字の部屋</button>
-        <button class="home-nav-btn" onclick="openCertModal()">🎖️ 認定証</button>
+      <!-- 下部整理されたナビゲーションメニュー -->
+      <div class="home-nav-container">
+        <div class="home-nav-row-group">
+          <span class="home-nav-label">✏️ まなぶ:</span>
+          <div class="home-nav-btns">
+            <a href="kakijun.html" class="home-nav-btn highlight" title="小学校全1026字の書き順アニメ＆なぞり書き">✏️ 筆順マスター</a>
+            <button class="home-nav-btn" onclick="openHandwriteModal()">✍️ 手書き特訓</button>
+            <button class="home-nav-btn" onclick="openKanjiRoom()">🏛️ 漢字の部屋</button>
+          </div>
+        </div>
+        <div class="home-nav-row-group">
+          <span class="home-nav-label">🏆 きろく他:</span>
+          <div class="home-nav-btns">
+            <button class="home-nav-btn" onclick="openCertModal()">🎖️ 認定証</button>
+            <button class="home-nav-btn" onclick="openAiReportModal()">📊 AI学習分析</button>
+            <button class="home-nav-btn" onclick="openCustomModal()">🚀 機体カスタム</button>
+            <button class="home-nav-btn" onclick="openHowToModal()">❓ あそびかた</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -5331,7 +5386,16 @@ function updateHomeUI() {
   }
 }
 
+let lastSelectModeTime = 0;
+let lastSelectedModeName = null;
+
 function selectMode(mode) {
+  const now = Date.now();
+  if (gameMode === mode && (now - lastSelectModeTime < 650)) {
+    startGame();
+    return;
+  }
+  lastSelectModeTime = now;
   gameMode = mode;
   document.querySelectorAll('.mode-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.mode === mode);

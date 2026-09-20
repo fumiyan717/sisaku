@@ -7,24 +7,19 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✏️</text></svg>">
   <style>
     :root {
-      --primary-color: #0284c7;
+      --primary: #0284c7;
       --primary-dark: #0369a1;
-      --stroke-p1: #e6007e; /* 1画目: ピンク */
-      --stroke-p2: #00a0e9; /* 2画目: 水色 */
-      --stroke-p3: #8fc31f; /* 3画目: 黄緑 */
-      --stroke-p4: #f39800; /* 4画目: 橙色 */
-      --stroke-p5: #8957a1; /* 5画目: 紫色 */
-      --stroke-p6: #707070; /* 6画目以降: 灰色 */
-      --instruction-pink: #e6007e;
-      --kun-bg: #e0f2fe;
-      --kun-border: #38bdf8;
-      --kun-badge: #0284c7;
-      --on-bg: #ffedd5;
-      --on-border: #fb923c;
-      --on-badge: #ea580c;
-      --card-bg: #ffffff;
-      --app-bg: #f8fafc;
-      --text-dark: #1e293b;
+      --primary-light: #e0f2fe;
+      --accent-pink: #e6007e;
+      --accent-orange: #ea580c;
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --text-dark: #0f172a;
+      --text-sub: #475569;
+      --border-color: #e2e8f0;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
     }
 
     * {
@@ -37,7 +32,7 @@
     }
 
     body {
-      background-color: var(--app-bg);
+      background-color: var(--bg-main);
       color: var(--text-dark);
       font-family: 'Hiragino Maru Gothic ProN', 'BIZ UDPGothic', 'Rounded Mplus 1c', 'Meiryo', sans-serif;
       min-height: 100vh;
@@ -45,33 +40,33 @@
       flex-direction: column;
     }
 
-    /* === トップナビゲーション === */
+    /* === トップヘッダー === */
     .top-header {
       background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
       color: #fff;
-      padding: 10px 16px;
+      padding: 8px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+      box-shadow: 0 2px 10px rgba(2, 132, 199, 0.25);
       position: sticky;
       top: 0;
       z-index: 100;
     }
 
-    .header-title-group {
+    .header-left {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
-    .header-title-group h1 {
+    .header-logo {
       font-size: 1.15rem;
-      font-weight: 800;
-      letter-spacing: 0.5px;
+      font-weight: 900;
       display: flex;
       align-items: center;
       gap: 6px;
+      letter-spacing: 0.5px;
     }
 
     .header-badge {
@@ -81,18 +76,17 @@
       font-weight: 800;
       padding: 2px 8px;
       border-radius: 999px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
 
-    .nav-btn {
+    .header-btn {
       background: rgba(255, 255, 255, 0.2);
-      border: 1px solid rgba(255, 255, 255, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.35);
       color: #fff;
       padding: 6px 12px;
       border-radius: 8px;
@@ -101,150 +95,155 @@
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      transition: all 0.2s;
+      gap: 4px;
+      transition: all 0.15s;
       text-decoration: none;
     }
 
-    .nav-btn:hover {
+    .header-btn:hover {
       background: rgba(255, 255, 255, 0.35);
-      transform: translateY(-1px);
     }
 
-    .nav-btn.btn-jet {
+    .header-btn.btn-return-jet {
       background: linear-gradient(135deg, #ec4899, #f43f5e);
       border-color: #fda4af;
-      box-shadow: 0 2px 6px rgba(236, 72, 153, 0.4);
+      box-shadow: 0 2px 8px rgba(236, 72, 153, 0.4);
     }
 
-    /* === 学年セレクターバー === */
-    .grade-bar-wrapper {
-      background: #ffffff;
-      border-bottom: 2px solid #e2e8f0;
-      padding: 8px 16px;
+    /* === 学年タブバー === */
+    .grade-bar {
+      background: #fff;
+      border-bottom: 2px solid var(--border-color);
+      padding: 6px 12px;
       display: flex;
       justify-content: center;
+      gap: 6px;
       overflow-x: auto;
-      gap: 8px;
+      white-space: nowrap;
       position: sticky;
-      top: 56px;
+      top: 49px;
       z-index: 90;
     }
 
-    .grade-chip {
+    .grade-tab {
       background: #f1f5f9;
-      border: 2px solid #cbd5e1;
-      padding: 6px 14px;
+      border: 1.5px solid #cbd5e1;
+      padding: 5px 12px;
       border-radius: 999px;
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       font-weight: 800;
       color: #475569;
       cursor: pointer;
-      white-space: nowrap;
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
       transition: all 0.15s;
     }
 
-    .grade-chip:hover {
+    .grade-tab:hover {
       background: #e2e8f0;
       color: #0f172a;
     }
 
-    .grade-chip.active {
-      background: #0284c7;
-      border-color: #0284c7;
-      color: #ffffff;
-      box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);
+    .grade-tab.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.35);
     }
 
-    .grade-count-tag {
+    .grade-tab .count {
       font-size: 0.75rem;
       opacity: 0.85;
       font-weight: normal;
     }
 
-    /* === メインコンテナ === */
-    .app-main {
+    /* === メインレイアウト === */
+    .main-container {
       flex: 1;
-      max-width: 1320px;
+      max-width: 1240px;
       width: 100%;
       margin: 0 auto;
-      padding: 16px;
+      padding: 12px 16px;
       display: grid;
-      grid-template-columns: minmax(380px, 520px) 1fr;
-      gap: 20px;
+      grid-template-columns: minmax(360px, 480px) 1fr;
+      gap: 16px;
       align-items: start;
     }
 
-    @media (max-width: 960px) {
-      .app-main {
+    @media (max-width: 900px) {
+      .main-container {
         grid-template-columns: 1fr;
+        padding: 10px;
       }
     }
 
-    /* === 左カラム: カード & 操作エリア === */
-    .card-workspace {
+    /* === 左側：メイン学習ワークスペース === */
+    .workspace-left {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
 
-    /* 漢字切替バー */
-    .kanji-nav-bar {
+    /* 漢字送りナビバー */
+    .kanji-switch-bar {
       background: #fff;
-      padding: 8px 12px;
+      padding: 6px 12px;
       border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-color);
     }
 
-    .nav-arrow-btn {
+    .switch-arrow-btn {
       background: #f1f5f9;
       border: 1px solid #cbd5e1;
       border-radius: 8px;
-      padding: 6px 14px;
-      font-size: 1rem;
-      font-weight: bold;
+      padding: 6px 12px;
+      font-size: 0.9rem;
+      font-weight: 800;
       color: #334155;
       cursor: pointer;
       transition: all 0.15s;
     }
 
-    .nav-arrow-btn:hover:not(:disabled) {
+    .switch-arrow-btn:hover:not(:disabled) {
       background: #e2e8f0;
       color: #0f172a;
     }
 
-    .nav-arrow-btn:disabled {
-      opacity: 0.4;
+    .switch-arrow-btn:disabled {
+      opacity: 0.35;
       cursor: not-allowed;
     }
 
-    .current-kanji-info {
+    .switch-title-center {
       text-align: center;
     }
 
-    .current-kanji-num {
-      font-size: 0.8rem;
+    .switch-sub-no {
+      font-size: 0.75rem;
       color: #64748b;
       font-weight: bold;
     }
 
-    .current-kanji-lead {
-      font-size: 1.35rem;
+    .switch-main-char {
+      font-size: 1.25rem;
       font-weight: 900;
-      color: #0f172a;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
     }
 
-    /* モード切替タブ */
-    .mode-tab-group {
+    /* モード切替タブ（アニメ／てがき） */
+    .mode-switch-tabs {
       display: flex;
       background: #e2e8f0;
-      padding: 4px;
+      padding: 3px;
       border-radius: 10px;
       gap: 4px;
     }
@@ -253,43 +252,43 @@
       flex: 1;
       border: none;
       background: transparent;
-      padding: 10px 8px;
+      padding: 8px 10px;
       border-radius: 8px;
-      font-size: 0.92rem;
-      font-weight: bold;
+      font-size: 0.9rem;
+      font-weight: 800;
       color: #64748b;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
-      transition: all 0.2s;
+      transition: all 0.15s;
     }
 
     .mode-tab-btn.active {
       background: #fff;
-      color: #0284c7;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      color: var(--primary);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.06);
     }
 
-    /* === 教材カードフレーム === */
-    .shingakusha-card {
+    /* === 漢字カード === */
+    .kanji-card {
       background: #fff;
       border-radius: 16px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.04);
-      border: 3px solid #e2e8f0;
+      box-shadow: var(--shadow-md);
+      border: 2px solid var(--border-color);
       overflow: hidden;
       display: flex;
       flex-direction: column;
       position: relative;
     }
 
-    /* カード上部：漢字マス（十字リーダー線） */
-    .card-top-canvas-area {
+    /* 漢字マス（十字リーダー線） */
+    .kanji-canvas-box {
       position: relative;
       width: 100%;
       aspect-ratio: 1 / 1;
-      background: #fff;
+      background: #ffffff;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -297,21 +296,19 @@
     }
 
     /* 十字リーダー線 */
-    .cross-grid-line {
+    .leader-line-h, .leader-line-v {
       position: absolute;
       pointer-events: none;
       z-index: 2;
     }
-
-    .cross-grid-h {
+    .leader-line-h {
       top: 50%;
       left: 0;
       right: 0;
       height: 1px;
       border-top: 1.5px dashed #cbd5e1;
     }
-
-    .cross-grid-v {
+    .leader-line-v {
       left: 50%;
       top: 0;
       bottom: 0;
@@ -319,7 +316,7 @@
       border-left: 1.5px dashed #cbd5e1;
     }
 
-    /* アニメーションSVGビュー */
+    /* SVG ビュー */
     #kanji-svg-view {
       position: absolute;
       top: 0;
@@ -327,6 +324,7 @@
       width: 100%;
       height: 100%;
       z-index: 3;
+      pointer-events: none;
     }
 
     /* 手書き Canvas */
@@ -339,311 +337,90 @@
       z-index: 4;
       touch-action: none;
       cursor: crosshair;
+      display: none;
     }
 
-    /* 始点・終点ガイドピン */
-    .stroke-guide-pin {
+    /* 始点ガイドピン */
+    .pin-marker {
       position: absolute;
-      width: 30px;
-      height: 30px;
+      width: 28px;
+      height: 28px;
       border-radius: 50%;
-      background: #e6007e;
+      background: var(--accent-pink);
       color: #fff;
       font-weight: 900;
-      font-size: 15px;
+      font-size: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
       transform: translate(-50%, -50%);
-      box-shadow: 0 0 12px rgba(230, 0, 126, 0.7);
+      box-shadow: 0 0 10px rgba(230, 0, 126, 0.65);
       z-index: 10;
       pointer-events: none;
-      animation: pulsePin 1.5s infinite;
+      animation: pinBounce 1.2s infinite ease-in-out;
     }
 
-    @keyframes pulsePin {
+    @keyframes pinBounce {
       0%, 100% { transform: translate(-50%, -50%) scale(1); }
-      50% { transform: translate(-50%, -50%) scale(1.18); }
+      50% { transform: translate(-50%, -50%) scale(1.15); }
     }
 
-    /* 筆使い注記バッジ（とめる・はらう・はねる） */
-    .instruction-label {
+    /* 筆使いラベル（とめ・はね・はらい） */
+    .brush-pill-label {
       position: absolute;
-      color: #e6007e;
-      font-size: 18px;
+      background: var(--accent-pink);
+      color: #fff;
+      font-size: 13px;
       font-weight: 900;
+      padding: 3px 8px;
+      border-radius: 999px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
       pointer-events: none;
-      z-index: 8;
-      writing-mode: vertical-rl;
-      text-orientation: upright;
-      letter-spacing: 2px;
-      filter: drop-shadow(0 1px 2px rgba(255,255,255,0.9));
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-
-    .instruction-label.show {
-      opacity: 1;
-    }
-
-    /* 終点丸印（とめる） */
-    .endpoint-dot {
-      position: absolute;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background: #e6007e;
+      z-index: 12;
       transform: translate(-50%, -50%);
-      pointer-events: none;
-      z-index: 8;
-      box-shadow: 0 0 6px rgba(230, 0, 126, 0.5);
       opacity: 0;
-      transition: opacity 0.3s;
-    }
-
-    .endpoint-dot.show {
-      opacity: 1;
-    }
-
-    /* カード下部：音読み・訓読みエリア */
-    .card-bottom-info-area {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      padding: 12px 14px 14px 14px;
-      gap: 12px;
-      background: #fafbfc;
-      border-top: 2px solid #e2e8f0;
-    }
-
-    .reading-box {
-      border-radius: 12px;
-      padding: 12px 14px;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      min-height: 110px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.03);
-    }
-
-    .kun-box {
-      background: var(--kun-bg);
-      border: 2.5px solid var(--kun-border);
-    }
-
-    .on-box {
-      background: var(--on-bg);
-      border: 2.5px solid var(--on-border);
-    }
-
-    .reading-header-badge {
-      position: absolute;
-      top: -11px;
-      right: 14px;
-      padding: 3px 12px;
-      border-radius: 8px;
-      font-size: 0.8rem;
-      font-weight: 900;
-      color: #fff;
-      letter-spacing: 1px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.12);
-    }
-
-    .kun-badge { background: var(--kun-badge); }
-    .on-badge { background: var(--on-badge); }
-
-    .reading-list {
-      margin-top: 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .reading-item {
-      font-size: 1.35rem;
-      font-weight: 800;
-      color: #1e293b;
-      letter-spacing: 2px;
-      line-height: 1.4;
-      font-family: 'Hiragino Maru Gothic ProN', 'Yu Gothic', sans-serif;
-    }
-
-    .reading-item .okurigana {
-      color: #e6007e;
-      font-weight: bold;
-    }
-
-    /* 最下部メタ情報バー */
-    .card-footer-meta {
-      padding: 8px 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #fff;
-      border-top: 1px solid #e2e8f0;
-      font-size: 0.82rem;
-      color: #64748b;
-    }
-
-    .brand-tag {
-      font-weight: 800;
-      color: #0369a1;
-      border: 1px solid #bae6fd;
-      padding: 2px 10px;
-      border-radius: 6px;
-      background: #f0f9ff;
-      letter-spacing: 0.5px;
-    }
-
-    .strokes-meta-tag {
-      font-weight: 900;
-      color: #0284c7;
-      background: #e0f2fe;
-      padding: 4px 12px;
-      border-radius: 999px;
-      font-size: 0.85rem;
-    }
-
-    /* === アクション・操作コントロール === */
-    .controls-panel {
-      background: #fff;
-      border-radius: 12px;
-      padding: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .step-guide-box {
-      background: #f0f9ff;
-      border-left: 4px solid #0284c7;
-      padding: 10px 14px;
-      border-radius: 0 8px 8px 0;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .step-guide-text {
-      font-size: 0.98rem;
-      font-weight: 800;
-      color: #0c4a6e;
-    }
-
-    .step-count-badge {
-      background: #0284c7;
-      color: #fff;
-      padding: 3px 10px;
-      border-radius: 999px;
-      font-size: 0.82rem;
-      font-weight: bold;
+      transition: opacity 0.25s, transform 0.25s;
       white-space: nowrap;
     }
 
-    .btn-row {
-      display: flex;
-      gap: 8px;
+    .brush-pill-label.show {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1.05);
     }
 
-    .ctrl-btn {
-      flex: 1;
-      border: none;
-      background: #f1f5f9;
-      color: #334155;
-      padding: 10px 8px;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      font-weight: bold;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      transition: all 0.15s;
+    /* 終点ドット */
+    .brush-end-dot {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--accent-pink);
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 11;
+      box-shadow: 0 0 6px rgba(230, 0, 126, 0.6);
+      opacity: 0;
+      transition: opacity 0.25s;
     }
 
-    .ctrl-btn:hover {
-      background: #e2e8f0;
-      color: #0f172a;
+    .brush-end-dot.show {
+      opacity: 1;
     }
 
-    .ctrl-btn.primary {
-      background: #0284c7;
-      color: #fff;
-    }
-
-    .ctrl-btn.primary:hover {
-      background: #0369a1;
-    }
-
-    .ctrl-btn.accent {
-      background: #e6007e;
-      color: #fff;
-    }
-
-    .ctrl-btn.accent:hover {
-      background: #c2006a;
-    }
-
-    .speed-selector {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.85rem;
-      font-weight: bold;
-      color: #64748b;
-    }
-
-    .speed-btn {
-      border: 1px solid #cbd5e1;
-      background: #fff;
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-size: 0.82rem;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .speed-btn.active {
-      background: #0284c7;
-      color: #fff;
-      border-color: #0284c7;
-    }
-
-    /* === なぞり書き専用コントロール === */
-    .trace-controls {
-      display: none;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .trace-status-box {
-      background: #ecfdf5;
-      border: 1px solid #a7f3d0;
-      color: #065f46;
-      padding: 10px 14px;
-      border-radius: 8px;
-      font-weight: bold;
-      font-size: 0.95rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    /* 花丸合格オーバーレイ */
+    /* 合格花丸オーバーレイ */
     .hanamaru-overlay {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(255, 255, 255, 0.9);
-      z-index: 20;
+      background: rgba(255, 255, 255, 0.92);
+      z-index: 25;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 14px;
+      gap: 12px;
       pointer-events: none;
       opacity: 0;
       transition: opacity 0.3s;
@@ -655,167 +432,387 @@
     }
 
     .hanamaru-stamp {
-      font-size: 5.5rem;
-      animation: stampPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      font-size: 5rem;
+      animation: stampPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
     @keyframes stampPop {
-      0% { transform: scale(0.2) rotate(-20deg); opacity: 0; }
-      70% { transform: scale(1.15) rotate(5deg); }
+      0% { transform: scale(0.2) rotate(-15deg); opacity: 0; }
       100% { transform: scale(1) rotate(0deg); opacity: 1; }
     }
 
-    .hanamaru-text {
-      font-size: 1.5rem;
+    .hanamaru-msg {
+      font-size: 1.4rem;
       font-weight: 900;
       color: #e11d48;
       text-shadow: 0 2px 4px rgba(225, 29, 72, 0.2);
     }
 
-    /* === 右カラム: 漢字一覧 & 検索・フィルタ === */
-    .list-workspace {
-      background: #fff;
-      border-radius: 16px;
-      padding: 16px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    .hanamaru-actions {
       display: flex;
-      flex-direction: column;
-      gap: 14px;
-      max-height: calc(100vh - 120px);
-      position: sticky;
-      top: 130px;
+      gap: 8px;
     }
 
-    @media (max-width: 960px) {
-      .list-workspace {
+    /* 下部：音読み・訓読みエリア */
+    .card-readings-area {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding: 10px 12px;
+      gap: 8px;
+      background: #fafbfc;
+      border-top: 1.5px solid var(--border-color);
+    }
+
+    .read-col {
+      background: #fff;
+      border: 1.5px solid var(--border-color);
+      border-radius: 10px;
+      padding: 8px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .read-col.kun { border-color: #7dd3fc; background: #f0f9ff; }
+    .read-col.on { border-color: #fed7aa; background: #fff7ed; }
+
+    .read-label {
+      font-size: 0.72rem;
+      font-weight: 900;
+      padding: 2px 8px;
+      border-radius: 6px;
+      align-self: flex-start;
+      color: #fff;
+    }
+    .read-label.kun { background: #0284c7; }
+    .read-label.on { background: #ea580c; }
+
+    .read-text-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 8px;
+      align-items: baseline;
+    }
+
+    .read-item {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #1e293b;
+      letter-spacing: 1px;
+    }
+
+    .read-item .okuri {
+      color: var(--accent-pink);
+      font-weight: bold;
+    }
+
+    /* 最下部メタ情報バー */
+    .card-meta-bar {
+      padding: 6px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff;
+      border-top: 1px solid var(--border-color);
+      font-size: 0.8rem;
+      color: #64748b;
+    }
+
+    .badge-grade-curriculum {
+      font-weight: 800;
+      color: #0369a1;
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    .badge-stroke-count {
+      font-weight: 900;
+      color: #0284c7;
+      background: #e0f2fe;
+      padding: 2px 10px;
+      border-radius: 999px;
+    }
+
+    /* === 操作コントロールパネル === */
+    .control-panel {
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px 12px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .status-guide-banner {
+      background: #f0f9ff;
+      border-left: 4px solid var(--primary);
+      padding: 8px 12px;
+      border-radius: 0 8px 8px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-weight: 800;
+      font-size: 0.92rem;
+      color: #0c4a6e;
+    }
+
+    .step-pill {
+      background: var(--primary);
+      color: #fff;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      white-space: nowrap;
+    }
+
+    /* ボタン群 */
+    .btn-action-row {
+      display: flex;
+      gap: 6px;
+    }
+
+    .act-btn {
+      flex: 1;
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      color: #334155;
+      padding: 9px 6px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: all 0.15s;
+    }
+
+    .act-btn:hover:not(:disabled) {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .act-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .act-btn.primary {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.3);
+    }
+
+    .act-btn.primary:hover:not(:disabled) {
+      background: var(--primary-dark);
+    }
+
+    .act-btn.accent {
+      background: var(--accent-pink);
+      border-color: var(--accent-pink);
+      color: #fff;
+    }
+
+    .act-btn.accent:hover {
+      background: #c2006a;
+    }
+
+    /* 速度コントロールバー */
+    .speed-sound-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 0.82rem;
+      color: #64748b;
+      font-weight: bold;
+    }
+
+    .speed-btn-group {
+      display: inline-flex;
+      background: #f1f5f9;
+      padding: 2px;
+      border-radius: 6px;
+      gap: 2px;
+    }
+
+    .speed-opt {
+      border: none;
+      background: transparent;
+      padding: 4px 8px;
+      border-radius: 5px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #475569;
+      cursor: pointer;
+    }
+
+    .speed-opt.active {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    /* === 右側：漢字一覧＆検索パネル === */
+    .workspace-right {
+      background: #fff;
+      border-radius: 14px;
+      padding: 12px 14px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: calc(100vh - 110px);
+      position: sticky;
+      top: 105px;
+    }
+
+    @media (max-width: 900px) {
+      .workspace-right {
         position: static;
         max-height: none;
       }
     }
 
-    .list-header {
+    .list-head-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 6px;
     }
 
-    .list-title {
-      font-size: 1.1rem;
+    .list-title-text {
+      font-size: 0.98rem;
       font-weight: 900;
-      color: #0f172a;
+      color: var(--text-dark);
       display: flex;
       align-items: center;
       gap: 6px;
     }
 
-    .search-input-wrapper {
-      position: relative;
-      width: 100%;
+    .list-count-label {
+      font-size: 0.78rem;
+      color: #64748b;
+      font-weight: normal;
     }
 
-    .search-input {
-      width: 100%;
-      padding: 10px 14px 10px 36px;
-      border: 2px solid #e2e8f0;
-      border-radius: 10px;
-      font-size: 0.95rem;
-      font-family: inherit;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .search-input:focus {
-      border-color: #0284c7;
-    }
-
-    .search-icon {
-      position: absolute;
-      left: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #94a3b8;
-      font-size: 1rem;
-    }
-
-    .filter-tabs {
+    /* ソートタブ */
+    .sort-tabs-bar {
       display: flex;
-      gap: 6px;
+      gap: 4px;
       overflow-x: auto;
-      padding-bottom: 4px;
     }
 
-    .filter-tab-btn {
+    .sort-tab {
       background: #f1f5f9;
-      border: none;
-      padding: 6px 12px;
+      border: 1px solid #e2e8f0;
+      padding: 4px 10px;
       border-radius: 999px;
-      font-size: 0.8rem;
-      font-weight: bold;
+      font-size: 0.75rem;
+      font-weight: 800;
       color: #64748b;
       cursor: pointer;
       white-space: nowrap;
       transition: all 0.15s;
     }
 
-    .filter-tab-btn.active {
-      background: #0284c7;
+    .sort-tab.active {
+      background: var(--primary);
       color: #fff;
+      border-color: var(--primary);
+    }
+
+    /* 検索入力 */
+    .search-box-wrap {
+      position: relative;
+      width: 100%;
+    }
+
+    .search-input-field {
+      width: 100%;
+      padding: 8px 12px 8px 32px;
+      border: 1.5px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-input-field:focus {
+      border-color: var(--primary);
+    }
+
+    .search-icon-mark {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      font-size: 0.9rem;
     }
 
     /* 漢字グリッド */
-    .kanji-grid-scroll {
+    .kanji-grid-view {
       flex: 1;
       overflow-y: auto;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(68px, 1fr));
-      gap: 8px;
-      padding: 4px;
+      grid-template-columns: repeat(auto-fill, minmax(62px, 1fr));
+      gap: 6px;
+      padding: 2px;
+      max-height: 520px;
     }
 
-    .grid-kanji-item {
+    .grid-item-cell {
       aspect-ratio: 1 / 1;
       background: #f8fafc;
-      border: 2px solid #e2e8f0;
-      border-radius: 10px;
+      border: 1.5px solid var(--border-color);
+      border-radius: 8px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       position: relative;
-      transition: all 0.15s;
+      transition: all 0.12s;
     }
 
-    .grid-kanji-item:hover {
+    .grid-item-cell:hover {
       background: #f0f9ff;
       border-color: #38bdf8;
       transform: translateY(-2px);
-      box-shadow: 0 4px 10px rgba(2, 132, 199, 0.15);
+      box-shadow: 0 3px 8px rgba(2, 132, 199, 0.15);
     }
 
-    .grid-kanji-item.active {
+    .grid-item-cell.active {
       background: #e0f2fe;
-      border-color: #0284c7;
-      box-shadow: 0 0 0 2.5px #0284c7;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px var(--primary);
     }
 
-    .grid-kanji-char {
-      font-size: 1.7rem;
+    .cell-char {
+      font-size: 1.6rem;
       font-weight: 900;
-      color: #0f172a;
+      color: var(--text-dark);
       line-height: 1;
     }
 
-    .grid-kanji-sub {
+    .cell-strokes {
       font-size: 0.65rem;
       color: #64748b;
       font-weight: bold;
       margin-top: 2px;
     }
 
-    .grid-kanji-stamp {
+    .cell-stamp {
       position: absolute;
       top: 2px;
       right: 2px;
@@ -823,11 +820,11 @@
       display: none;
     }
 
-    .grid-kanji-item.cleared .grid-kanji-stamp {
+    .grid-item-cell.cleared .cell-stamp {
       display: block;
     }
 
-    /* SVG Stroke Styles */
+    /* SVG Stroke & Badge Styles */
     .kvg-stroke {
       fill: none;
       stroke-width: 8;
@@ -839,7 +836,7 @@
     .kvg-stroke-bg {
       fill: none;
       stroke: #f1f5f9;
-      stroke-width: 16;
+      stroke-width: 15;
       stroke-linecap: round;
       stroke-linejoin: round;
     }
@@ -847,36 +844,36 @@
     .kvg-number-badge {
       font-size: 9.5px;
       font-weight: 900;
-      fill: #e6007e;
+      fill: var(--accent-pink);
       dominant-baseline: central;
       text-anchor: middle;
       font-family: Arial, sans-serif;
     }
 
-    /* フッタークレジット */
-    .app-footer-credit {
+    /* フッター */
+    .app-footer {
       text-align: center;
-      padding: 16px;
-      font-size: 0.78rem;
+      padding: 14px;
+      font-size: 0.75rem;
       color: #94a3b8;
-      border-top: 1px solid #e2e8f0;
+      border-top: 1px solid var(--border-color);
       background: #fff;
     }
 
-    .app-footer-credit a {
-      color: #0284c7;
+    .app-footer a {
+      color: var(--primary);
       text-decoration: none;
     }
 
     /* 印刷スタイル */
     @media print {
       body { background: #fff; }
-      .top-header, .grade-bar-wrapper, .mode-tab-group, .controls-panel, .list-workspace, .kanji-nav-bar, .app-footer-credit { display: none !important; }
-      .app-main { display: block; padding: 0; }
-      .shingakusha-card { border: 2px solid #000; box-shadow: none; width: 100%; max-width: 600px; margin: 0 auto; }
+      .top-header, .grade-bar, .kanji-switch-bar, .mode-switch-tabs, .control-panel, .workspace-right, .app-footer { display: none !important; }
+      .main-container { display: block; padding: 0; }
+      .kanji-card { border: 2px solid #000; box-shadow: none; width: 100%; max-width: 580px; margin: 0 auto; }
       #trace-canvas { display: none !important; }
       #kanji-svg-view { display: block !important; }
-      .kvg-stroke { stroke: #cbd5e1 !important; }
+      .kvg-stroke { stroke: #cbd5e1 !important; stroke-dashoffset: 0 !important; }
     }
   </style>
 </head>
@@ -884,288 +881,275 @@
 
   <!-- トップヘッダー -->
   <header class="top-header">
-    <div class="header-title-group">
-      <h1>✏️ 漢字の書き順マスター</h1>
-      <span class="header-badge" id="header-grade-badge">小学校全学年 1,026字</span>
+    <div class="header-left">
+      <div class="header-logo">✏️ かきじゅんマスター</div>
+      <span class="header-badge" id="header-badge-grade">小学校全学年 1,026字</span>
     </div>
     <div class="header-actions">
-      <button class="nav-btn" id="btn-audio-toggle" onclick="toggleAudio()" title="音声をきりかえ">
+      <button class="header-btn" id="btn-audio-toggle" onclick="toggleAudio()" title="音声をきりかえ">
         <span id="audio-icon">🔊</span> <span id="audio-text">おと ON</span>
       </button>
-      <button class="nav-btn" onclick="window.print()" title="練習プリントを印刷">
-        🖨️ いんさつ
+      <button class="header-btn" onclick="window.print()" title="練習プリントを印刷">
+        🖨️ 印刷
       </button>
-      <a href="index.html" class="nav-btn btn-jet" title="ゲームに戻る">
-        🚀 ジェットにもどる
+      <a href="index.html" class="header-btn btn-return-jet" title="ゲームに戻る">
+        🚀 JETにもどる
       </a>
     </div>
   </header>
 
-  <!-- 学年切り替えバー (全学年対応) -->
-  <div class="grade-bar-wrapper">
-    <button class="grade-chip active" data-grade="1" onclick="switchGrade(1)">
-      🌱 1年生 <span class="grade-count-tag" id="grade-badge-1">(80字)</span>
+  <!-- 学年切り替えバー (1〜6年) -->
+  <nav class="grade-bar" id="grade-bar">
+    <button class="grade-tab active" data-grade="1" onclick="switchGrade(1)">
+      🌱 1年生 <span class="count" id="grade-count-1">(80字)</span>
     </button>
-    <button class="grade-chip" data-grade="2" onclick="switchGrade(2)">
-      🌿 2年生 <span class="grade-count-tag" id="grade-badge-2">(160字)</span>
+    <button class="grade-tab" data-grade="2" onclick="switchGrade(2)">
+      🌿 2年生 <span class="count" id="grade-count-2">(160字)</span>
     </button>
-    <button class="grade-chip" data-grade="3" onclick="switchGrade(3)">
-      🌸 3年生 <span class="grade-count-tag" id="grade-badge-3">(200字)</span>
+    <button class="grade-tab" data-grade="3" onclick="switchGrade(3)">
+      🌸 3年生 <span class="count" id="grade-count-3">(200字)</span>
     </button>
-    <button class="grade-chip" data-grade="4" onclick="switchGrade(4)">
-      🍁 4年生 <span class="grade-count-tag" id="grade-badge-4">(202字)</span>
+    <button class="grade-tab" data-grade="4" onclick="switchGrade(4)">
+      🍁 4年生 <span class="count" id="grade-count-4">(202字)</span>
     </button>
-    <button class="grade-chip" data-grade="5" onclick="switchGrade(5)">
-      ⚡ 5年生 <span class="grade-count-tag" id="grade-badge-5">(193字)</span>
+    <button class="grade-tab" data-grade="5" onclick="switchGrade(5)">
+      ⚡ 5年生 <span class="count" id="grade-count-5">(193字)</span>
     </button>
-    <button class="grade-chip" data-grade="6" onclick="switchGrade(6)">
-      🔥 6年生 <span class="grade-count-tag" id="grade-badge-6">(191字)</span>
+    <button class="grade-tab" data-grade="6" onclick="switchGrade(6)">
+      🔥 6年生 <span class="count" id="grade-count-6">(191字)</span>
     </button>
-  </div>
+  </nav>
 
   <!-- メインコンテンツ -->
-  <main class="app-main">
+  <main class="main-container">
 
-    <!-- 左カラム: カード & アクション -->
-    <div class="card-workspace">
+    <!-- 左カラム：学習エリア -->
+    <div class="workspace-left">
 
-      <!-- 前後移動ナビ -->
-      <div class="kanji-nav-bar">
-        <button class="nav-arrow-btn" id="btn-prev-kanji" onclick="navigateKanji(-1)">◀ まえ</button>
-        <div class="current-kanji-info">
-          <div class="current-kanji-num" id="current-card-no">1年生 No. 1 / 80</div>
-          <div class="current-kanji-lead" id="current-kanji-title">木 (き)</div>
+      <!-- 前後ナビ -->
+      <div class="kanji-switch-bar">
+        <button class="switch-arrow-btn" id="btn-prev" onclick="navigateKanji(-1)">◀ まえ</button>
+        <div class="switch-title-center">
+          <div class="switch-sub-no" id="card-sub-no">1年生 No. 1 / 80</div>
+          <div class="switch-main-char" id="card-main-char">木 (き)</div>
         </div>
-        <button class="nav-arrow-btn" id="btn-next-kanji" onclick="navigateKanji(1)">つぎ ▶</button>
+        <button class="switch-arrow-btn" id="btn-next" onclick="navigateKanji(1)">つぎ ▶</button>
       </div>
 
       <!-- モード切替タブ -->
-      <div class="mode-tab-group">
-        <button class="mode-tab-btn active" id="tab-anim" onclick="switchMode('anim')">
+      <div class="mode-switch-tabs">
+        <button class="mode-tab-btn active" id="tab-mode-anim" onclick="switchMode('anim')">
           🎬 かきじゅん アニメ
         </button>
-        <button class="mode-tab-btn" id="tab-trace" onclick="switchMode('trace')">
+        <button class="mode-tab-btn" id="tab-mode-trace" onclick="switchMode('trace')">
           ✍️ てがき なぞり書き
         </button>
       </div>
 
-      <!-- 教材カードフレーム -->
-      <div class="shingakusha-card" id="main-kanji-card">
+      <!-- 漢字カード -->
+      <div class="kanji-card" id="kanji-card">
 
-        <!-- 上部：漢字マス（十字リーダー線） -->
-        <div class="card-top-canvas-area" id="canvas-wrapper">
-          <div class="cross-grid-line cross-grid-h"></div>
-          <div class="cross-grid-line cross-grid-v"></div>
+        <!-- 漢字マス -->
+        <div class="kanji-canvas-box" id="canvas-box">
+          <div class="leader-line-h"></div>
+          <div class="leader-line-v"></div>
 
           <!-- SVG 書き順ビュー -->
           <svg id="kanji-svg-view" viewBox="0 0 109 109"></svg>
 
           <!-- 手書き Canvas -->
-          <canvas id="trace-canvas" width="450" height="450"></canvas>
+          <canvas id="trace-canvas"></canvas>
 
-          <!-- 筆使い注記ラベル（「とめる」「はらう」「はねる」動的配置） -->
-          <div id="instruction-label" class="instruction-label">とめる</div>
-          <div id="endpoint-dot" class="endpoint-dot"></div>
+          <!-- 始点ピン -->
+          <div id="pin-marker" class="pin-marker" style="display: none;">1</div>
 
-          <!-- 始点ガイドピン -->
-          <div id="stroke-pin" class="stroke-guide-pin" style="display: none;">1</div>
+          <!-- 筆使い指示（とめ・はね・はらい） -->
+          <div id="brush-pill-label" class="brush-pill-label">とめる</div>
+          <div id="brush-end-dot" class="brush-end-dot"></div>
 
           <!-- 合格花丸スタンプ -->
           <div class="hanamaru-overlay" id="hanamaru-overlay">
             <div class="hanamaru-stamp">💮</div>
-            <div class="hanamaru-text">たいへんよくできました！</div>
-            <button class="ctrl-btn primary" onclick="replayTrace()" style="padding: 10px 20px; font-size: 1rem;">
-              🔄 もういちど書く
-            </button>
-          </div>
-        </div>
-
-        <!-- 下部：音読み・訓読みエリア -->
-        <div class="card-bottom-info-area">
-          <!-- 訓読み -->
-          <div class="reading-box kun-box">
-            <span class="reading-header-badge kun-badge">くんよみ</span>
-            <div class="reading-list" id="kunyomi-container">
-              <span class="reading-item">き</span>
-              <span class="reading-item">こ</span>
-            </div>
-          </div>
-
-          <!-- 音読み -->
-          <div class="reading-box on-box">
-            <span class="reading-header-badge on-badge">おんよみ</span>
-            <div class="reading-list" id="onyomi-container">
-              <span class="reading-item">ぼく</span>
-              <span class="reading-item">もく</span>
+            <div class="hanamaru-msg">たいへんよくできました！</div>
+            <div class="hanamaru-actions">
+              <button class="act-btn" onclick="retryCurrentTrace()">🔄 もう一度かく</button>
+              <button class="act-btn primary" onclick="navigateKanji(1)">つぎの漢字へ ▶</button>
             </div>
           </div>
         </div>
 
-        <!-- 最下部メタ情報 -->
-        <div class="card-footer-meta">
-          <span class="brand-tag" id="current-grade-tag">文部科学省 1年生配当</span>
-          <span class="strokes-meta-tag" id="stroke-count-tag">全 4 画</span>
+        <!-- 音読み・訓読み -->
+        <div class="card-readings-area">
+          <div class="read-col kun">
+            <span class="read-label kun">くんよみ</span>
+            <div class="read-text-list" id="kun-list-container">
+              <span class="read-item">き</span>
+            </div>
+          </div>
+          <div class="read-col on">
+            <span class="read-label on">おんよみ</span>
+            <div class="read-text-list" id="on-list-container">
+              <span class="read-item">もく</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- カード下部メタ -->
+        <div class="card-meta-bar">
+          <span class="badge-grade-curriculum" id="meta-grade-tag">小学校1年生 配当漢字</span>
+          <span class="badge-stroke-count" id="meta-stroke-tag">全 4 画</span>
         </div>
       </div>
 
-      <!-- アニメーション用コントロールパネル -->
-      <div class="controls-panel" id="anim-controls">
-        <div class="step-guide-box">
-          <span class="step-guide-text" id="anim-stroke-hint">1画目: よこ（横画・とめる）</span>
-          <span class="step-count-badge" id="anim-step-badge">1 / 4 画</span>
+      <!-- アニメーション用コントロール -->
+      <div class="control-panel" id="panel-anim">
+        <div class="status-guide-banner">
+          <span id="anim-guide-text">1画目: よこ（横画・とめる）</span>
+          <span class="step-pill" id="anim-step-badge">1 / 4 画</span>
         </div>
 
-        <div class="btn-row">
-          <button class="ctrl-btn" onclick="stepStroke(-1)">⏮ まえの画</button>
-          <button class="ctrl-btn primary" id="btn-play-pause" onclick="togglePlayPause()">
+        <div class="btn-action-row">
+          <button class="act-btn" onclick="stepAnim(-1)">⏮ まえの画</button>
+          <button class="act-btn primary" id="btn-play-pause" onclick="togglePlayPause()">
             <span id="play-icon">▶</span> <span id="play-text">さいせい</span>
           </button>
-          <button class="ctrl-btn" onclick="stepStroke(1)">⏭ つぎの画</button>
-          <button class="ctrl-btn" onclick="restartAnimation()">🔄 さいしょから</button>
+          <button class="act-btn" onclick="stepAnim(1)">⏭ つぎの画</button>
+          <button class="act-btn" onclick="restartAnim()">🔄 さいしょから</button>
         </div>
 
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px; flex-wrap: wrap; gap: 8px;">
-          <div class="speed-selector">
+        <div class="speed-sound-row">
+          <div style="display: flex; align-items: center; gap: 4px;">
             <span>はやさ:</span>
-            <button class="speed-btn" onclick="setSpeed(0.5, this)">🐢 ゆっくり</button>
-            <button class="speed-btn active" onclick="setSpeed(1.0, this)">🚶 ふつう</button>
-            <button class="speed-btn" onclick="setSpeed(2.0, this)">🚀 はやい</button>
+            <div class="speed-btn-group">
+              <button class="speed-opt" onclick="setAnimSpeed(0.6, this)">🐢 ゆっくり</button>
+              <button class="speed-opt active" onclick="setAnimSpeed(1.0, this)">🚶 ふつう</button>
+              <button class="speed-opt" onclick="setAnimSpeed(1.8, this)">🚀 はやい</button>
+            </div>
           </div>
-          <button class="ctrl-btn accent" style="flex: none; padding: 6px 14px; font-size: 0.85rem;" onclick="speakCurrentKanji()">
-            🔊 音声ガイド
+          <button class="act-btn accent" style="flex: none; padding: 4px 10px; font-size: 0.8rem;" onclick="speakCurrentKanji()">
+            🔊 よみあげ
           </button>
         </div>
       </div>
 
-      <!-- なぞり書き用コントロールパネル -->
-      <div class="controls-panel trace-controls" id="trace-controls">
-        <div class="trace-status-box">
-          <span id="trace-status-text">👉 1画目を なぞってみよう！</span>
-          <span class="step-count-badge" id="trace-step-badge">1 / 4 画</span>
+      <!-- なぞり書き用コントロール -->
+      <div class="control-panel" id="panel-trace" style="display: none;">
+        <div class="status-guide-banner">
+          <span id="trace-guide-text">👉 ①の始点から なぞってみよう！</span>
+          <span class="step-pill" id="trace-step-badge">1 / 4 画</span>
         </div>
 
-        <div class="btn-row">
-          <button class="ctrl-btn" onclick="clearCurrentStroke()">↩ 1画やりなおし</button>
-          <button class="ctrl-btn" onclick="replayTrace()">🔄 ぜんぶけす</button>
-          <button class="ctrl-btn" id="btn-toggle-guide" onclick="toggleTraceGuide()">
-            👁️ お手本ON
-          </button>
+        <div class="btn-action-row">
+          <button class="act-btn" onclick="undoTraceStroke()">↩ 1画もどす</button>
+          <button class="act-btn" onclick="retryCurrentTrace()">🔄 ぜんぶ消す</button>
+          <button class="act-btn" id="btn-toggle-guide" onclick="toggleTraceGuide()">👁️ お手本ON</button>
         </div>
       </div>
 
     </div>
 
-    <!-- 右カラム: 漢字一覧 & 検索 -->
-    <div class="list-workspace">
-      <div class="list-header">
-        <div class="list-title">
-          📚 <span id="list-grade-title">1年生の漢字リスト</span> <span style="font-size: 0.85rem; color: #64748b; font-weight: normal;" id="list-count-badge">(全80字)</span>
+    <!-- 右カラム：漢字一覧＆検索 -->
+    <div class="workspace-right">
+      <div class="list-head-row">
+        <div class="list-title-text">
+          📚 <span id="list-grade-name">1年生の漢字</span>
+          <span class="list-count-label" id="list-progress-label">(全80字 / 💮0字)</span>
         </div>
-        <div class="filter-tabs">
-          <button class="filter-tab-btn active" onclick="sortKanjiList('order', this)">教科書順</button>
-          <button class="filter-tab-btn" onclick="sortKanjiList('aiueo', this)">50音順</button>
-          <button class="filter-tab-btn" onclick="sortKanjiList('strokes', this)">画数順</button>
-          <button class="filter-tab-btn" onclick="sortKanjiList('cleared', this)">💮合格順</button>
+        <div class="sort-tabs-bar">
+          <button class="sort-tab active" onclick="changeSortOrder('order', this)">標準順</button>
+          <button class="sort-tab" onclick="changeSortOrder('aiueo', this)">50音順</button>
+          <button class="sort-tab" onclick="changeSortOrder('strokes', this)">画数順</button>
+          <button class="sort-tab" onclick="changeSortOrder('cleared', this)">💮合格順</button>
         </div>
       </div>
 
-      <!-- 検索入力バー -->
-      <div class="search-input-wrapper">
-        <span class="search-icon">🔍</span>
-        <input type="text" id="kanji-search-input" class="search-input" placeholder="漢字・よみ（例: き、おお、4画）でさがす" oninput="filterKanjiList()">
+      <!-- 検索窓 -->
+      <div class="search-box-wrap">
+        <span class="search-icon-mark">🔍</span>
+        <input type="text" id="kanji-search-input" class="search-input-field" placeholder="漢字・よみ（例: き、おお、4画）で検索" oninput="handleSearchInput()">
       </div>
 
-      <!-- 漢字グリッドスクロール -->
-      <div class="kanji-grid-scroll" id="kanji-grid-container">
+      <!-- 漢字グリッド一覧 -->
+      <div class="kanji-grid-view" id="kanji-grid-view">
         <!-- JSで動的生成 -->
       </div>
     </div>
 
   </main>
 
-  <!-- フッターライセンス表記 -->
-  <footer class="app-footer-credit">
-    文部科学省 小学校学習指導要領配当漢字（全1,026字）準拠 ｜ ストロークデータ: <a href="https://kanjivg.tagaini.net/" target="_blank" rel="noopener">KanjiVG</a> (CC BY-SA 3.0 Ulrich Apel) ｜ 完全オリジナル開発
+  <!-- クレジットフッター -->
+  <footer class="app-footer">
+    文部科学省 小学校学習指導要領配当漢字（全1,026字）完全準拠 ｜ ストロークデータ: <a href="https://kanjivg.tagaini.net/" target="_blank" rel="noopener">KanjiVG</a> (CC BY-SA 3.0 Ulrich Apel)
   </footer>
 
-  <!-- 書き順データ読み込み (全学年1026字統合データ) -->
+  <!-- 漢字データ読み込み -->
   <script src="kakijun_data.js"></script>
 
-  <!-- 書き順マスター メインロジック -->
+  <!-- メインスクリプト -->
   <script>
     /* ==========================================================================
-       カラーパレット
-       1: ピンク, 2: 水色, 3: 黄緑, 4: 橙色, 5: 紫色, 6+: 灰色
+       色・筆使い定義
        ========================================================================== */
-    const STROKE_COLORS = [
+    const STROKE_PALETTE = [
       '#e6007e', // 1: ピンク
       '#00a0e9', // 2: 水色
       '#8fc31f', // 3: 黄緑
       '#f39800', // 4: 橙色
       '#8957a1', // 5: 紫色
-      '#707070'  // 6+: 灰色
+      '#64748b'  // 6+: 灰色
     ];
 
-    function getStrokeColor(index) {
-      const idx = Math.max(0, index - 1);
-      return idx < 5 ? STROKE_COLORS[idx] : STROKE_COLORS[5];
+    function getStrokeColor(num) {
+      const idx = Math.max(0, num - 1);
+      return idx < 5 ? STROKE_PALETTE[idx] : STROKE_PALETTE[5];
     }
 
-    function getInstructionInfo(kvgType) {
-      if (!kvgType) return { action: 'とめる', type: 'dot' };
-      if (kvgType.includes('㇒')) return { action: 'はらう', type: 'arrow' };
-      if (kvgType.includes('㇏')) return { action: 'はらう', type: 'arrow' };
-      if (kvgType.includes('㇚')) return { action: 'はねる', type: 'hook' };
-      if (kvgType.includes('㇈')) return { action: 'はねる', type: 'hook' };
-      if (kvgType.includes('㇂') || kvgType.includes('㇁')) return { action: 'はねる', type: 'hook' };
-      return { action: 'とめる', type: 'dot' };
+    function getBrushInstruction(typeStr) {
+      if (!typeStr) return { label: 'とめる', kind: 'dot' };
+      if (typeStr.includes('㇒') || typeStr.includes('㇏')) return { label: 'はらう', kind: 'slash' };
+      if (typeStr.includes('㇚') || typeStr.includes('㇈') || typeStr.includes('㇂') || typeStr.includes('㇁')) {
+        return { label: 'はねる', kind: 'hook' };
+      }
+      return { label: 'とめる', kind: 'dot' };
     }
 
     /* ==========================================================================
        状態管理
        ========================================================================== */
-    const allDataByGrade = window.KAKIJUN_DATA_BY_GRADE || { 1: window.KAKIJUN_DATA || [] };
-    let currentGrade = 1; // 1〜6
-    let currentKanjiList = allDataByGrade[1] || [];
-    let currentIndex = 0; // 学年内インデックス
-    let currentMode = 'anim'; // 'anim', 'trace'
+    const dataByGrade = window.KAKIJUN_DATA_BY_GRADE || { 1: window.KAKIJUN_DATA || [] };
+    let currentGrade = 1;
+    let currentGradeList = dataByGrade[1] || [];
+    let currentIndex = 0;
+    let currentMode = 'anim'; // 'anim' or 'trace'
+
+    // アニメーション状態管理（競合防止トークン付き）
+    let animToken = 0;
+    let animFrameId = null;
+    let animTimeoutId = null;
     let isPlaying = false;
     let animSpeed = 1.0;
-    let animTimeout = null;
-    let currentStep = 0;
-    let isAudioEnabled = true;
-    let showTraceGuide = true;
+    let currentStep = 0; // 0: 未開始, 1..N: 各画
 
     // なぞり書き状態
-    let traceCanvas, traceCtx;
-    let traceCurrentStrokeIdx = 0;
-    let userDrawnStrokes = [];
-    let isDrawing = false;
-    let currentPathPoints = [];
+    let traceCanvas = null;
+    let traceCtx = null;
+    let traceCurrentIdx = 0;
+    let userDrawnStrokes = []; // 確定した画
+    let currentTracePoints = []; // 描画中の画
+    let isTracing = false;
+    let showTraceGuide = true;
 
-    // ローカルストレージ合格管理
-    function getClearedKanji() {
-      try {
-        const d = localStorage.getItem('kakijun_cleared_kanji');
-        return d ? JSON.parse(d) : {};
-      } catch(e) {
-        return {};
-      }
-    }
-
-    function saveClearedKanji(kanji) {
-      try {
-        const cleared = getClearedKanji();
-        cleared[kanji] = true;
-        localStorage.setItem('kakijun_cleared_kanji', JSON.stringify(cleared));
-      } catch(e) {}
-    }
-
-    /* ==========================================================================
-       Web Audio API サウンド効果
-       ========================================================================== */
+    // 音声
+    let isAudioEnabled = true;
     let audioCtx = null;
 
+    // ソート・検索
+    let currentSortOrder = 'order';
+    let currentSearchQuery = '';
+
+    /* ==========================================================================
+       Web Audio API
+       ========================================================================== */
     function initAudio() {
       if (!audioCtx) {
         const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -1188,41 +1172,41 @@
           const gain = audioCtx.createGain();
           osc.type = 'sine';
           osc.frequency.setValueAtTime(320, now);
-          osc.frequency.exponentialRampToValueAtTime(540, now + 0.12);
-          gain.gain.setValueAtTime(0.12, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+          osc.frequency.exponentialRampToValueAtTime(540, now + 0.1);
+          gain.gain.setValueAtTime(0.1, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
           osc.connect(gain);
           gain.connect(audioCtx.destination);
           osc.start(now);
-          osc.stop(now + 0.12);
+          osc.stop(now + 0.1);
         } else if (type === 'step') {
           const osc = audioCtx.createOscillator();
           const gain = audioCtx.createGain();
           osc.type = 'triangle';
-          osc.frequency.setValueAtTime(660, now);
-          gain.gain.setValueAtTime(0.18, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+          osc.frequency.setValueAtTime(620, now);
+          gain.gain.setValueAtTime(0.15, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
           osc.connect(gain);
           gain.connect(audioCtx.destination);
           osc.start(now);
-          osc.stop(now + 0.18);
+          osc.stop(now + 0.15);
         } else if (type === 'fanfare') {
           const notes = [523.25, 659.25, 783.99, 1046.50];
           notes.forEach((freq, idx) => {
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
-            const startT = now + idx * 0.1;
+            const startT = now + idx * 0.09;
             osc.type = 'sine';
             osc.frequency.setValueAtTime(freq, startT);
-            gain.gain.setValueAtTime(0.2, startT);
-            gain.gain.exponentialRampToValueAtTime(0.001, startT + 0.28);
+            gain.gain.setValueAtTime(0.18, startT);
+            gain.gain.exponentialRampToValueAtTime(0.001, startT + 0.25);
             osc.connect(gain);
             gain.connect(audioCtx.destination);
             osc.start(startT);
-            osc.stop(startT + 0.28);
+            osc.stop(startT + 0.25);
           });
         }
-      } catch(e) {}
+      } catch (e) {}
     }
 
     function toggleAudio() {
@@ -1232,50 +1216,60 @@
       if (isAudioEnabled) initAudio();
     }
 
-    /* ==========================================================================
-       Web Speech API (音声読み上げ)
-       ========================================================================== */
-    function speakText(text) {
+    function speakCurrentKanji() {
       if (!isAudioEnabled || !('speechSynthesis' in window)) return;
       window.speechSynthesis.cancel();
+      const data = currentGradeList[currentIndex];
+      if (!data) return;
+      let text = `${data.kanji}。`;
+      if (data.kunyomi && data.kunyomi !== '—') text += `訓読み、${data.kunyomi}。`;
+      if (data.onyomi && data.onyomi !== '—') text += `音読み、${data.onyomi}。`;
+      text += `全部で ${data.strokesCount} 画。`;
+
       const ut = new SpeechSynthesisUtterance(text);
       ut.lang = 'ja-JP';
       ut.rate = 1.0;
       window.speechSynthesis.speak(ut);
     }
 
-    function speakCurrentKanji() {
-      const data = currentKanjiList[currentIndex];
-      if (!data) return;
-      let speech = `${data.kanji}。`;
-      if (data.kunyomi && data.kunyomi !== '—') {
-        speech += `くんよみ、${data.kunyomi}。`;
+    /* ==========================================================================
+       ローカルストレージ（合格記録）
+       ========================================================================== */
+    function getClearedMap() {
+      try {
+        const d = localStorage.getItem('kakijun_cleared_kanji');
+        return d ? JSON.parse(d) : {};
+      } catch (e) {
+        return {};
       }
-      if (data.onyomi && data.onyomi !== '—') {
-        speech += `おんよみ、${data.onyomi}。`;
-      }
-      speech += `ぜんぶで ${data.strokesCount} 画。`;
-      speakText(speech);
+    }
+
+    function markKanjiCleared(kanji) {
+      try {
+        const map = getClearedMap();
+        map[kanji] = true;
+        localStorage.setItem('kakijun_cleared_kanji', JSON.stringify(map));
+      } catch (e) {}
     }
 
     /* ==========================================================================
-       初期化 & 学年切替
+       初期化
        ========================================================================== */
     window.addEventListener('DOMContentLoaded', () => {
       initTraceCanvas();
 
-      const urlParams = new URLSearchParams(window.location.search);
-      const qKanji = urlParams.get('kanji');
-      const qGrade = parseInt(urlParams.get('grade'), 10);
-      const qId = parseInt(urlParams.get('id'), 10);
+      // URLパラメータ解析
+      const params = new URLSearchParams(window.location.search);
+      const qKanji = params.get('kanji');
+      const qGrade = parseInt(params.get('grade'), 10);
+      const qId = parseInt(params.get('id'), 10);
 
       let targetGrade = 1;
       let targetIndex = 0;
 
-      // 漢字名から学年とインデックスを自動検出
       if (qKanji) {
         for (let g = 1; g <= 6; g++) {
-          const list = allDataByGrade[g] || [];
+          const list = dataByGrade[g] || [];
           const idx = list.findIndex(k => k.kanji === qKanji);
           if (idx !== -1) {
             targetGrade = g;
@@ -1292,70 +1286,79 @@
 
       switchGrade(targetGrade, targetIndex);
 
+      // キーボード操作
       window.addEventListener('keydown', (e) => {
+        if (e.target.tagName === 'INPUT') return;
         if (e.key === 'ArrowLeft') navigateKanji(-1);
         if (e.key === 'ArrowRight') navigateKanji(1);
         if (e.key === ' ') {
           e.preventDefault();
-          togglePlayPause();
+          if (currentMode === 'anim') togglePlayPause();
         }
       });
     });
 
-    function switchGrade(grade, initialIndex = 0) {
+    /* ==========================================================================
+       学年切替・漢字読み込み
+       ========================================================================== */
+    function switchGrade(grade, targetIndex = 0) {
       currentGrade = grade;
-      currentKanjiList = allDataByGrade[grade] || [];
+      currentGradeList = dataByGrade[grade] || [];
 
-      // 学年チップのUI更新
-      document.querySelectorAll('.grade-chip').forEach(chip => {
-        const g = parseInt(chip.dataset.grade, 10);
-        chip.classList.toggle('active', g === currentGrade);
+      // タブアクティブ更新
+      document.querySelectorAll('.grade-tab').forEach(tab => {
+        const g = parseInt(tab.dataset.grade, 10);
+        tab.classList.toggle('active', g === currentGrade);
       });
 
-      document.getElementById('header-grade-badge').textContent = `${currentGrade}年生 (${currentKanjiList.length}字)`;
-      document.getElementById('list-grade-title').textContent = `${currentGrade}年生の漢字リスト`;
-      document.getElementById('current-grade-tag').textContent = `文部科学省 ${currentGrade}年生配当`;
+      document.getElementById('header-badge-grade').textContent = `${currentGrade}年生 (${currentGradeList.length}字)`;
+      document.getElementById('list-grade-name').textContent = `${currentGrade}年生の漢字`;
+      document.getElementById('meta-grade-tag').textContent = `文部科学省 ${currentGrade}年生配当`;
 
       renderKanjiGrid();
-      loadKanji(Math.min(initialIndex, currentKanjiList.length - 1));
+      loadKanji(Math.min(targetIndex, Math.max(0, currentGradeList.length - 1)));
     }
 
-    function loadKanji(idx) {
-      if (idx < 0 || idx >= currentKanjiList.length) return;
-      currentIndex = idx;
-      const data = currentKanjiList[currentIndex];
+    function loadKanji(index) {
+      if (index < 0 || index >= currentGradeList.length) return;
+      currentIndex = index;
+      const data = currentGradeList[currentIndex];
 
-      document.getElementById('current-card-no').textContent = `${currentGrade}年生 No. ${data.id} / ${currentKanjiList.length}`;
+      // 前後ボタン
+      document.getElementById('btn-prev').disabled = (currentIndex === 0);
+      document.getElementById('btn-next').disabled = (currentIndex === currentGradeList.length - 1);
+
+      // ナビバー
+      document.getElementById('card-sub-no').textContent = `${currentGrade}年生 No. ${data.id} / ${currentGradeList.length}`;
       const firstKun = (data.kunyomi && data.kunyomi !== '—') ? data.kunyomi.split('、')[0] : '';
       const firstOn = (data.onyomi && data.onyomi !== '—') ? data.onyomi.split('、')[0] : '';
       const readingDisp = firstKun || firstOn;
-      document.getElementById('current-kanji-title').textContent = `${data.kanji} (${readingDisp})`;
+      document.getElementById('card-main-char').textContent = `${data.kanji} (${readingDisp})`;
 
-      document.getElementById('btn-prev-kanji').disabled = (currentIndex === 0);
-      document.getElementById('btn-next-kanji').disabled = (currentIndex === currentKanjiList.length - 1);
-
+      // 読み・メタ
       renderReadings(data);
-      document.getElementById('stroke-count-tag').textContent = `全 ${data.strokesCount} 画`;
+      document.getElementById('meta-stroke-tag').textContent = `全 ${data.strokesCount} 画`;
 
+      // モードに応じたビュー初期化
       if (currentMode === 'anim') {
-        initSvgAnimation(data);
-      } else if (currentMode === 'trace') {
+        initAnimMode(data);
+      } else {
         initTraceMode(data);
       }
 
-      updateGridSelection();
+      updateGridActiveCell();
     }
 
     function navigateKanji(delta) {
       const next = currentIndex + delta;
-      if (next >= 0 && next < currentKanjiList.length) {
+      if (next >= 0 && next < currentGradeList.length) {
         loadKanji(next);
       }
     }
 
     function renderReadings(data) {
-      const kunContainer = document.getElementById('kunyomi-container');
-      const onContainer = document.getElementById('onyomi-container');
+      const kunContainer = document.getElementById('kun-list-container');
+      const onContainer = document.getElementById('on-list-container');
       kunContainer.innerHTML = '';
       onContainer.innerHTML = '';
 
@@ -1363,24 +1366,24 @@
       if (kunList.length > 0 && kunList[0] !== '—') {
         kunList.forEach(item => {
           const span = document.createElement('span');
-          span.className = 'reading-item';
+          span.className = 'read-item';
           span.innerHTML = item;
           kunContainer.appendChild(span);
         });
       } else {
-        kunContainer.innerHTML = '<span class="reading-item" style="color:#94a3b8;">—</span>';
+        kunContainer.innerHTML = '<span class="read-item" style="color:#94a3b8;">—</span>';
       }
 
       const onList = data.onyomi_list || (data.onyomi && data.onyomi !== '—' ? data.onyomi.split('、') : []);
       if (onList.length > 0 && onList[0] !== '—') {
         onList.forEach(item => {
           const span = document.createElement('span');
-          span.className = 'reading-item';
+          span.className = 'read-item';
           span.textContent = item;
           onContainer.appendChild(span);
         });
       } else {
-        onContainer.innerHTML = '<span class="reading-item" style="color:#94a3b8;">—</span>';
+        onContainer.innerHTML = '<span class="read-item" style="color:#94a3b8;">—</span>';
       }
     }
 
@@ -1389,48 +1392,66 @@
        ========================================================================== */
     function switchMode(mode) {
       currentMode = mode;
-      document.getElementById('tab-anim').classList.toggle('active', mode === 'anim');
-      document.getElementById('tab-trace').classList.toggle('active', mode === 'trace');
+      document.getElementById('tab-mode-anim').classList.toggle('active', mode === 'anim');
+      document.getElementById('tab-mode-trace').classList.toggle('active', mode === 'trace');
 
       const svgView = document.getElementById('kanji-svg-view');
-      const traceCanvas = document.getElementById('trace-canvas');
-      const animCtrl = document.getElementById('anim-controls');
-      const traceCtrl = document.getElementById('trace-controls');
-      const pin = document.getElementById('stroke-pin');
-      const hanamaru = document.getElementById('hanamaru-overlay');
-      const instLabel = document.getElementById('instruction-label');
-      const endDot = document.getElementById('endpoint-dot');
+      const canvas = document.getElementById('trace-canvas');
+      const animPanel = document.getElementById('panel-anim');
+      const tracePanel = document.getElementById('panel-trace');
 
-      hanamaru.classList.remove('show');
-      instLabel.classList.remove('show');
-      endDot.classList.remove('show');
-      pauseAnimation();
+      stopAnimation();
+      hideBrushIndicators();
+      document.getElementById('hanamaru-overlay').classList.remove('show');
 
       if (mode === 'anim') {
         svgView.style.display = 'block';
-        traceCanvas.style.display = 'none';
-        animCtrl.style.display = 'flex';
-        traceCtrl.style.display = 'none';
-        initSvgAnimation(currentKanjiList[currentIndex]);
-      } else if (mode === 'trace') {
+        canvas.style.display = 'none';
+        animPanel.style.display = 'flex';
+        tracePanel.style.display = 'none';
+        initAnimMode(currentGradeList[currentIndex]);
+      } else {
         svgView.style.display = 'block';
-        traceCanvas.style.display = 'block';
-        animCtrl.style.display = 'none';
-        traceCtrl.style.display = 'flex';
-        initTraceMode(currentKanjiList[currentIndex]);
+        canvas.style.display = 'block';
+        animPanel.style.display = 'none';
+        tracePanel.style.display = 'flex';
+        // キャンバスサイズを確実に同期
+        setTimeout(syncCanvasSize, 20);
+        initTraceMode(currentGradeList[currentIndex]);
       }
     }
 
     /* ==========================================================================
-       SVG アニメーション書き順システム
+       アニメーション機能（競合完全防止）
        ========================================================================== */
-    function initSvgAnimation(data) {
-      pauseAnimation();
+    function stopAnimation() {
+      isPlaying = false;
+      animToken++; // 世代カウンターを更新して既存フレームを無効化
+      if (animFrameId) {
+        cancelAnimationFrame(animFrameId);
+        animFrameId = null;
+      }
+      if (animTimeoutId) {
+        clearTimeout(animTimeoutId);
+        animTimeoutId = null;
+      }
+      updatePlayButtonUI(false);
+    }
+
+    function updatePlayButtonUI(playing) {
+      document.getElementById('play-icon').textContent = playing ? '⏸' : '▶';
+      document.getElementById('play-text').textContent = playing ? '一時停止' : 'さいせい';
+    }
+
+    function initAnimMode(data) {
+      stopAnimation();
       currentStep = 0;
+      hideBrushIndicators();
+
       const svg = document.getElementById('kanji-svg-view');
       svg.innerHTML = '';
 
-      // 背景薄グレーガイド
+      // 背景グレーガイド
       data.strokes.forEach(s => {
         const bgPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         bgPath.setAttribute('d', s.d);
@@ -1438,14 +1459,13 @@
         svg.appendChild(bgPath);
       });
 
-      // カラフルな書き順ストローク
+      // 各ストローク（初期状態: strokeDashoffset = len で隠す）
       data.strokes.forEach((s, idx) => {
         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         path.setAttribute('d', s.d);
-        path.setAttribute('id', `stroke-path-${idx}`);
+        path.setAttribute('id', `anim-stroke-${idx}`);
         path.setAttribute('class', 'kvg-stroke');
         path.setAttribute('stroke', getStrokeColor(idx + 1));
-
         svg.appendChild(path);
 
         const len = path.getTotalLength();
@@ -1455,96 +1475,162 @@
 
       // 画番号バッジ
       data.numbers.forEach((num, idx) => {
-        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-        g.setAttribute('id', `stroke-num-${idx}`);
-        g.style.opacity = '0';
-        g.style.transition = 'opacity 0.2s';
-
-        if (idx === 0) {
-          const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-          circle.setAttribute('cx', num.x);
-          circle.setAttribute('cy', num.y);
-          circle.setAttribute('r', '6');
-          circle.setAttribute('fill', '#e6007e');
-          g.appendChild(circle);
-
-          const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-          text.setAttribute('x', num.x);
-          text.setAttribute('y', num.y + 0.5);
-          text.setAttribute('fill', '#fff');
-          text.setAttribute('font-size', '8');
-          text.setAttribute('font-weight', '900');
-          text.setAttribute('text-anchor', 'middle');
-          text.setAttribute('dominant-baseline', 'central');
-          text.textContent = '1';
-          g.appendChild(text);
-        } else {
-          const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-          text.setAttribute('x', num.x);
-          text.setAttribute('y', num.y);
-          text.setAttribute('class', 'kvg-number-badge');
-          text.textContent = num.text;
-          g.appendChild(text);
-        }
-
-        svg.appendChild(g);
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('id', `anim-num-${idx}`);
+        text.setAttribute('x', num.x);
+        text.setAttribute('y', num.y);
+        text.setAttribute('class', 'kvg-number-badge');
+        text.textContent = num.text;
+        text.style.opacity = '0';
+        svg.appendChild(text);
       });
 
-      updateAnimUI();
+      updateAnimGuideUI();
       startAnimation();
     }
 
-    function updateAnimUI() {
-      const data = currentKanjiList[currentIndex];
+    function startAnimation() {
+      stopAnimation();
+      isPlaying = true;
+      updatePlayButtonUI(true);
+
+      const data = currentGradeList[currentIndex];
+      if (currentStep >= data.strokesCount) {
+        setAnimStepDirect(0);
+      }
+      runAnimNextStep(animToken);
+    }
+
+    function togglePlayPause() {
+      if (isPlaying) {
+        stopAnimation();
+      } else {
+        startAnimation();
+      }
+    }
+
+    function restartAnim() {
+      stopAnimation();
+      setAnimStepDirect(0);
+      startAnimation();
+    }
+
+    function stepAnim(delta) {
+      stopAnimation();
+      const data = currentGradeList[currentIndex];
+      const target = Math.max(0, Math.min(data.strokesCount, currentStep + delta));
+      setAnimStepDirect(target);
+    }
+
+    function setAnimStepDirect(step) {
+      currentStep = step;
+      const data = currentGradeList[currentIndex];
+
+      for (let i = 0; i < data.strokesCount; i++) {
+        const path = document.getElementById(`anim-stroke-${i}`);
+        const num = document.getElementById(`anim-num-${i}`);
+        if (!path) continue;
+        const len = path.getTotalLength();
+
+        if (i < step) {
+          path.style.strokeDashoffset = 0;
+          if (num) num.style.opacity = '1';
+        } else {
+          path.style.strokeDashoffset = len;
+          if (num) num.style.opacity = '0';
+        }
+      }
+
+      updateAnimGuideUI();
+    }
+
+    function runAnimNextStep(token) {
+      if (!isPlaying || token !== animToken) return;
+      const data = currentGradeList[currentIndex];
+
+      // すべての画を描き終えた場合
+      if (currentStep >= data.strokesCount) {
+        updateAnimGuideUI();
+        playSound('step');
+        stopAnimation(); // 自動でループせず完了状態で停止
+        return;
+      }
+
+      const strokeIdx = currentStep;
+      const path = document.getElementById(`anim-stroke-${strokeIdx}`);
+      const num = document.getElementById(`anim-num-${strokeIdx}`);
+      if (!path) return;
+
+      if (num) num.style.opacity = '1';
+      playSound('stroke');
+
+      const len = path.getTotalLength();
+      const duration = 600 / animSpeed;
+      const startTime = performance.now();
+
+      function drawFrame(now) {
+        if (!isPlaying || token !== animToken) return;
+        const elapsed = now - startTime;
+        const progress = Math.min(1, elapsed / duration);
+        const ease = 1 - Math.pow(1 - progress, 3);
+        path.style.strokeDashoffset = len * (1 - ease);
+
+        if (progress < 1) {
+          animFrameId = requestAnimationFrame(drawFrame);
+        } else {
+          path.style.strokeDashoffset = 0;
+          currentStep++;
+          updateAnimGuideUI();
+          playSound('step');
+
+          // 次の画へ
+          animTimeoutId = setTimeout(() => {
+            runAnimNextStep(token);
+          }, 350 / animSpeed);
+        }
+      }
+
+      animFrameId = requestAnimationFrame(drawFrame);
+    }
+
+    function updateAnimGuideUI() {
+      const data = currentGradeList[currentIndex];
+      const hint = document.getElementById('anim-guide-text');
       const badge = document.getElementById('anim-step-badge');
-      const hint = document.getElementById('anim-stroke-hint');
-      const pin = document.getElementById('stroke-pin');
-      const instLabel = document.getElementById('instruction-label');
-      const endDot = document.getElementById('endpoint-dot');
+      const pin = document.getElementById('pin-marker');
 
       badge.textContent = `${Math.min(currentStep, data.strokesCount)} / ${data.strokesCount} 画`;
 
       if (currentStep > 0 && currentStep <= data.strokesCount) {
         const s = data.strokes[currentStep - 1];
-        hint.textContent = `${currentStep}画目: ${s.typeName}`;
+        const inst = getBrushInstruction(s.type);
+        hint.textContent = `${currentStep}画目: ${s.typeName} (${inst.label})`;
 
-        const curPath = document.getElementById(`stroke-path-${currentStep - 1}`);
+        // 終点インジケーター表示
+        const curPath = document.getElementById(`anim-stroke-${currentStep - 1}`);
         if (curPath) {
           const len = curPath.getTotalLength();
           const endPt = curPath.getPointAtLength(len);
-          const inst = getInstructionInfo(s.type);
-
-          endDot.style.left = `${(endPt.x / 109) * 100}%`;
-          endDot.style.top = `${(endPt.y / 109) * 100}%`;
-          endDot.classList.add('show');
-
-          let labelX = (endPt.x / 109) * 100;
-          let labelY = (endPt.y / 109) * 100;
-          if (labelX > 75) labelX -= 12; else labelX += 4;
-          if (labelY > 80) labelY -= 15; else labelY += 2;
-
-          instLabel.style.left = `${labelX}%`;
-          instLabel.style.top = `${labelY}%`;
-          instLabel.textContent = inst.action;
-          instLabel.classList.add('show');
+          showBrushIndicator(endPt.x, endPt.y, inst.label);
         }
       } else if (currentStep === 0) {
         hint.textContent = `準備完了 (再生ボタンを押してね)`;
-        instLabel.classList.remove('show');
-        endDot.classList.remove('show');
+        hideBrushIndicators();
       } else {
-        hint.textContent = `全${data.strokesCount}画 完成！`;
+        hint.textContent = `全 ${data.strokesCount} 画 完成！`;
+        hideBrushIndicators();
       }
 
+      // 次の画の始点ピン表示
       if (currentStep < data.strokesCount) {
-        const nextPath = document.getElementById(`stroke-path-${currentStep}`);
+        const nextPath = document.getElementById(`anim-stroke-${currentStep}`);
         if (nextPath) {
           const pt = nextPath.getPointAtLength(0);
           pin.style.left = `${(pt.x / 109) * 100}%`;
           pin.style.top = `${(pt.y / 109) * 100}%`;
           pin.textContent = (currentStep + 1);
-          pin.style.display = 'flex';
           pin.style.background = getStrokeColor(currentStep + 1);
+          pin.style.display = 'flex';
         } else {
           pin.style.display = 'none';
         }
@@ -1553,317 +1639,309 @@
       }
     }
 
-    function togglePlayPause() {
-      if (isPlaying) {
-        pauseAnimation();
-      } else {
-        startAnimation();
-      }
+    function showBrushIndicator(svgX, svgY, label) {
+      const pill = document.getElementById('brush-pill-label');
+      const dot = document.getElementById('brush-end-dot');
+
+      // 0〜109 の座標をパーセントに変換し、はみ出ないように clamp
+      let pctX = Math.max(8, Math.min(92, (svgX / 109) * 100));
+      let pctY = Math.max(8, Math.min(92, (svgY / 109) * 100));
+
+      dot.style.left = `${pctX}%`;
+      dot.style.top = `${pctY}%`;
+      dot.classList.add('show');
+
+      // ラベル位置は少しずらす
+      let labelX = pctX > 75 ? pctX - 12 : pctX + 10;
+      let labelY = pctY > 80 ? pctY - 8 : pctY + 5;
+      pill.style.left = `${labelX}%`;
+      pill.style.top = `${labelY}%`;
+      pill.textContent = label;
+      pill.classList.add('show');
     }
 
-    function startAnimation() {
-      isPlaying = true;
-      document.getElementById('play-icon').textContent = '⏸';
-      document.getElementById('play-text').textContent = '一時停止';
-      animateNextStep();
+    function hideBrushIndicators() {
+      document.getElementById('brush-pill-label').classList.remove('show');
+      document.getElementById('brush-end-dot').classList.remove('show');
     }
 
-    function pauseAnimation() {
-      isPlaying = false;
-      if (animTimeout) clearTimeout(animTimeout);
-      document.getElementById('play-icon').textContent = '▶';
-      document.getElementById('play-text').textContent = 'さいせい';
-    }
-
-    function restartAnimation() {
-      pauseAnimation();
-      initSvgAnimation(currentKanjiList[currentIndex]);
-    }
-
-    function stepStroke(delta) {
-      pauseAnimation();
-      const data = currentKanjiList[currentIndex];
-      const target = Math.max(0, Math.min(data.strokesCount, currentStep + delta));
-      setStepDirect(target);
-    }
-
-    function setStepDirect(step) {
-      const data = currentKanjiList[currentIndex];
-      currentStep = step;
-
-      for (let i = 0; i < data.strokesCount; i++) {
-        const p = document.getElementById(`stroke-path-${i}`);
-        const n = document.getElementById(`stroke-num-${i}`);
-        if (!p) continue;
-        const len = p.getTotalLength();
-        if (i < step) {
-          p.style.strokeDashoffset = 0;
-          if (n) n.style.opacity = '1';
-        } else {
-          p.style.strokeDashoffset = len;
-          if (n) n.style.opacity = '0';
-        }
-      }
-      updateAnimUI();
-    }
-
-    function animateNextStep() {
-      const data = currentKanjiList[currentIndex];
-      if (currentStep >= data.strokesCount) {
-        animTimeout = setTimeout(() => {
-          if (isPlaying) {
-            setStepDirect(0);
-            animTimeout = setTimeout(animateNextStep, 600 / animSpeed);
-          }
-        }, 1600 / animSpeed);
-        return;
-      }
-
-      const strokeIdx = currentStep;
-      const path = document.getElementById(`stroke-path-${strokeIdx}`);
-      const num = document.getElementById(`stroke-num-${strokeIdx}`);
-      if (!path) return;
-
-      const len = path.getTotalLength();
-      playSound('stroke');
-
-      if (num) num.style.opacity = '1';
-
-      const duration = (650 / animSpeed);
-      const startTime = performance.now();
-
-      function drawFrame(now) {
-        if (!isPlaying) return;
-        const elapsed = now - startTime;
-        const progress = Math.min(1, elapsed / duration);
-        const ease = 1 - Math.pow(1 - progress, 3);
-        path.style.strokeDashoffset = len * (1 - ease);
-
-        if (progress < 1) {
-          requestAnimationFrame(drawFrame);
-        } else {
-          path.style.strokeDashoffset = 0;
-          currentStep++;
-          updateAnimUI();
-          playSound('step');
-          animTimeout = setTimeout(animateNextStep, 400 / animSpeed);
-        }
-      }
-
-      requestAnimationFrame(drawFrame);
-    }
-
-    function setSpeed(sp, btn) {
+    function setAnimSpeed(sp, btn) {
       animSpeed = sp;
-      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.speed-opt').forEach(b => b.classList.remove('active'));
       if (btn) btn.classList.add('active');
     }
 
     /* ==========================================================================
-       なぞり書き（てがきれんしゅう）システム
+       なぞり書き（手書き練習）モード
        ========================================================================== */
     function initTraceCanvas() {
       traceCanvas = document.getElementById('trace-canvas');
       traceCtx = traceCanvas.getContext('2d');
 
-      function resizeCanvas() {
-        const rect = traceCanvas.getBoundingClientRect();
-        const dpr = window.devicePixelRatio || 1;
-        traceCanvas.width = rect.width * dpr;
-        traceCanvas.height = rect.height * dpr;
-        traceCtx.scale(dpr, dpr);
-        redrawTrace();
+      // リサイズオブザーバーで実表示ピクセルに完全同期
+      const box = document.getElementById('canvas-box');
+      if (window.ResizeObserver) {
+        const ro = new ResizeObserver(() => syncCanvasSize());
+        ro.observe(box);
+      } else {
+        window.addEventListener('resize', syncCanvasSize);
       }
-      window.addEventListener('resize', resizeCanvas);
-      setTimeout(resizeCanvas, 50);
 
-      traceCanvas.addEventListener('pointerdown', handlePointerDown);
-      traceCanvas.addEventListener('pointermove', handlePointerMove);
-      traceCanvas.addEventListener('pointerup', handlePointerUp);
-      traceCanvas.addEventListener('pointercancel', handlePointerUp);
+      traceCanvas.addEventListener('pointerdown', handleTraceDown);
+      traceCanvas.addEventListener('pointermove', handleTraceMove);
+      traceCanvas.addEventListener('pointerup', handleTraceUp);
+      traceCanvas.addEventListener('pointercancel', handleTraceCancel);
+    }
+
+    function syncCanvasSize() {
+      if (!traceCanvas) return;
+      const rect = traceCanvas.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
+      const dpr = window.devicePixelRatio || 1;
+
+      traceCanvas.width = Math.round(rect.width * dpr);
+      traceCanvas.height = Math.round(rect.height * dpr);
+      traceCtx.setTransform(1, 0, 0, 1, 0, 0);
+      traceCtx.scale(dpr, dpr);
+      redrawTraceCanvas();
     }
 
     function initTraceMode(data) {
-      traceCurrentStrokeIdx = 0;
+      traceCurrentIdx = 0;
       userDrawnStrokes = [];
-      currentPathPoints = [];
-      document.getElementById('hanamaru-overlay').classList.remove('show');
-      document.getElementById('instruction-label').classList.remove('show');
-      document.getElementById('endpoint-dot').classList.remove('show');
+      currentTracePoints = [];
+      isTracing = false;
 
-      renderTraceSvgGuide(data);
-      updateTraceUI();
-      redrawTrace();
+      hideBrushIndicators();
+      document.getElementById('hanamaru-overlay').classList.remove('show');
+
+      renderTraceGuideSvg(data);
+      updateTraceGuideUI();
+      syncCanvasSize();
     }
 
-    function renderTraceSvgGuide(data) {
+    function renderTraceGuideSvg(data) {
       const svg = document.getElementById('kanji-svg-view');
       svg.innerHTML = '';
 
+      // お手本ストローク
       data.strokes.forEach((s, idx) => {
         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         path.setAttribute('d', s.d);
         path.setAttribute('class', 'kvg-stroke');
         path.setAttribute('stroke', getStrokeColor(idx + 1));
-        path.style.opacity = showTraceGuide ? (idx === traceCurrentStrokeIdx ? '0.75' : '0.22') : '0';
         path.style.strokeDashoffset = '0';
+
+        // ガイド表示切り替え
+        if (!showTraceGuide) {
+          path.style.opacity = '0';
+        } else if (idx < traceCurrentIdx) {
+          path.style.opacity = '0.2';
+        } else if (idx === traceCurrentIdx) {
+          path.style.opacity = '0.7';
+        } else {
+          path.style.opacity = '0.2';
+        }
         svg.appendChild(path);
       });
 
+      // 画番号
       data.numbers.forEach((num, idx) => {
         const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         text.setAttribute('x', num.x);
         text.setAttribute('y', num.y);
         text.setAttribute('class', 'kvg-number-badge');
         text.textContent = num.text;
-        text.style.opacity = showTraceGuide ? (idx === traceCurrentStrokeIdx ? '1' : '0.25') : '0';
+        text.style.opacity = (showTraceGuide && idx === traceCurrentIdx) ? '1' : '0.2';
         svg.appendChild(text);
       });
     }
 
-    function updateTraceUI() {
-      const data = currentKanjiList[currentIndex];
-      const text = document.getElementById('trace-status-text');
-      const badge = document.getElementById('trace-step-badge');
-      const pin = document.getElementById('stroke-pin');
+    function updateTraceGuideUI() {
+      const data = currentGradeList[currentIndex];
+      const guideText = document.getElementById('trace-guide-text');
+      const stepBadge = document.getElementById('trace-step-badge');
+      const pin = document.getElementById('pin-marker');
 
-      badge.textContent = `${Math.min(traceCurrentStrokeIdx + 1, data.strokesCount)} / ${data.strokesCount} 画`;
+      stepBadge.textContent = `${Math.min(traceCurrentIdx + 1, data.strokesCount)} / ${data.strokesCount} 画`;
 
-      if (traceCurrentStrokeIdx < data.strokesCount) {
-        const s = data.strokes[traceCurrentStrokeIdx];
-        text.textContent = `👉 ${traceCurrentStrokeIdx + 1}画目を なぞってみよう！(${s.typeName})`;
+      if (traceCurrentIdx < data.strokesCount) {
+        const s = data.strokes[traceCurrentIdx];
+        const inst = getBrushInstruction(s.type);
+        guideText.textContent = `👉 ${traceCurrentIdx + 1}画目をなぞろう (${s.typeName}・${inst.label})`;
 
-        const tempSvg = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        tempSvg.setAttribute('d', s.d);
-        const pt = tempSvg.getPointAtLength(0);
+        // 始点ピンの配置
+        const tempPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        tempPath.setAttribute('d', s.d);
+        const pt = tempPath.getPointAtLength(0);
         pin.style.left = `${(pt.x / 109) * 100}%`;
         pin.style.top = `${(pt.y / 109) * 100}%`;
-        pin.textContent = (traceCurrentStrokeIdx + 1);
+        pin.textContent = (traceCurrentIdx + 1);
+        pin.style.background = getStrokeColor(traceCurrentIdx + 1);
         pin.style.display = 'flex';
-        pin.style.background = getStrokeColor(traceCurrentStrokeIdx + 1);
       } else {
-        text.textContent = `💮 全て正しく書けました！`;
+        guideText.textContent = `💮 全て正しく書けました！`;
         pin.style.display = 'none';
+        hideBrushIndicators();
       }
 
-      renderTraceSvgGuide(data);
+      renderTraceGuideSvg(data);
     }
 
-    function handlePointerDown(e) {
+    function handleTraceDown(e) {
       e.preventDefault();
+      try {
+        if (traceCanvas.setPointerCapture) traceCanvas.setPointerCapture(e.pointerId);
+      } catch (err) {}
+
       const rect = traceCanvas.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
-      isDrawing = true;
-      currentPathPoints = [{ x, y }];
+
+      isTracing = true;
+      currentTracePoints = [{ x, y }];
       playSound('stroke');
+      redrawTraceCanvas();
     }
 
-    function handlePointerMove(e) {
-      if (!isDrawing) return;
+    function handleTraceMove(e) {
+      if (!isTracing) return;
       e.preventDefault();
       const rect = traceCanvas.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
-      currentPathPoints.push({ x, y });
-      redrawTrace();
-    }
 
-    function handlePointerUp(e) {
-      if (!isDrawing) return;
-      isDrawing = false;
-
-      if (currentPathPoints.length > 3) {
-        validateCurrentStroke();
+      const last = currentTracePoints[currentTracePoints.length - 1];
+      if (!last || Math.hypot(x - last.x, y - last.y) > 2) {
+        currentTracePoints.push({ x, y });
+        redrawTraceCanvas();
       }
-      redrawTrace();
     }
 
-    function validateCurrentStroke() {
-      const data = currentKanjiList[currentIndex];
-      if (traceCurrentStrokeIdx >= data.strokesCount) return;
+    function handleTraceUp(e) {
+      if (!isTracing) return;
+      isTracing = false;
+      try {
+        if (traceCanvas.releasePointerCapture) traceCanvas.releasePointerCapture(e.pointerId);
+      } catch (err) {}
 
-      const expectedStroke = data.strokes[traceCurrentStrokeIdx];
+      if (currentTracePoints.length >= 2) {
+        verifyCurrentStroke();
+      }
+      redrawTraceCanvas();
+    }
+
+    function handleTraceCancel(e) {
+      isTracing = false;
+      currentTracePoints = [];
+      redrawTraceCanvas();
+    }
+
+    /* なぞり書き判定（方向・始点・網羅率） */
+    function verifyCurrentStroke() {
+      const data = currentGradeList[currentIndex];
+      if (traceCurrentIdx >= data.strokesCount) return;
+
+      const expected = data.strokes[traceCurrentIdx];
       const rect = traceCanvas.getBoundingClientRect();
-
-      const tempPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      tempPath.setAttribute('d', expectedStroke.d);
-      const totalLen = tempPath.getTotalLength();
-
       const scaleX = rect.width / 109;
       const scaleY = rect.height / 109;
 
-      const sampleCount = 12;
-      const expectedPoints = [];
+      const tempPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      tempPath.setAttribute('d', expected.d);
+      const totalLen = tempPath.getTotalLength();
+
+      // お手本ストロークのサンプリング（始点〜終点）
+      const sampleCount = 14;
+      const expectedPts = [];
       for (let i = 0; i <= sampleCount; i++) {
         const p = tempPath.getPointAtLength((i / sampleCount) * totalLen);
-        expectedPoints.push({ x: p.x * scaleX, y: p.y * scaleY });
+        expectedPts.push({ x: p.x * scaleX, y: p.y * scaleY });
       }
 
-      const startDist = Math.hypot(currentPathPoints[0].x - expectedPoints[0].x, currentPathPoints[0].y - expectedPoints[0].y);
-      const maxTolerance = Math.max(55, rect.width * 0.24);
+      const pStart = expectedPts[0];
+      const pEnd = expectedPts[expectedPts.length - 1];
+      const uStart = currentTracePoints[0];
+      const uEnd = currentTracePoints[currentTracePoints.length - 1];
 
+      // 許容半径（画面サイズに応じた優しい判定）
+      const tolerance = Math.max(55, rect.width * 0.22);
+      const startDist = Math.hypot(uStart.x - pStart.x, uStart.y - pStart.y);
+      const endDist = Math.hypot(uEnd.x - pEnd.x, uEnd.y - pEnd.y);
+
+      // 逆走チェック（終点から始点へ描いていないか）
+      const reverseStartDist = Math.hypot(uStart.x - pEnd.x, uStart.y - pEnd.y);
+      if (reverseStartDist < tolerance && startDist > tolerance * 1.5) {
+        currentTracePoints = [];
+        const guideText = document.getElementById('trace-guide-text');
+        guideText.textContent = `⚠️ ぎゃく向きだよ！①の始点から矢印のほうへ書こう！`;
+        setTimeout(updateTraceGuideUI, 1400);
+        return;
+      }
+
+      // サンプリング網羅チェック
       let matchedCount = 0;
-      for (const ep of expectedPoints) {
-        const isNear = currentPathPoints.some(up => Math.hypot(up.x - ep.x, up.y - ep.y) < maxTolerance);
+      for (const ep of expectedPts) {
+        const isNear = currentTracePoints.some(up => Math.hypot(up.x - ep.x, up.y - ep.y) < tolerance);
         if (isNear) matchedCount++;
       }
+      const matchRatio = matchedCount / expectedPts.length;
 
-      const matchRatio = matchedCount / expectedPoints.length;
-
-      if (startDist < maxTolerance && matchRatio >= 0.45) {
+      // 判定合格
+      if (startDist <= tolerance && matchRatio >= 0.42) {
         userDrawnStrokes.push({
-          points: [...currentPathPoints],
-          color: getStrokeColor(traceCurrentStrokeIdx + 1)
+          points: [...currentTracePoints],
+          color: getStrokeColor(traceCurrentIdx + 1)
         });
-        currentPathPoints = [];
-        traceCurrentStrokeIdx++;
+        currentTracePoints = [];
+        traceCurrentIdx++;
         playSound('step');
 
-        if (traceCurrentStrokeIdx >= data.strokesCount) {
-          onTraceComplete();
+        if (traceCurrentIdx >= data.strokesCount) {
+          onTraceAllCleared();
         } else {
-          updateTraceUI();
+          updateTraceGuideUI();
         }
       } else {
-        currentPathPoints = [];
-        const status = document.getElementById('trace-status-text');
-        status.textContent = `惜しい！もう一度 始点の①からなぞってみよう！`;
-        setTimeout(updateTraceUI, 1200);
+        currentTracePoints = [];
+        const guideText = document.getElementById('trace-guide-text');
+        guideText.textContent = `惜しい！もう一度 ①の始点から丁寧になぞろう！`;
+        setTimeout(updateTraceGuideUI, 1200);
       }
     }
 
-    function onTraceComplete() {
-      const data = currentKanjiList[currentIndex];
-      saveClearedKanji(data.kanji);
-      updateTraceUI();
+    function onTraceAllCleared() {
+      const data = currentGradeList[currentIndex];
+      markKanjiCleared(data.kanji);
+      updateTraceGuideUI();
       playSound('fanfare');
       document.getElementById('hanamaru-overlay').classList.add('show');
       renderKanjiGrid();
     }
 
-    function redrawTrace() {
+    function redrawTraceCanvas() {
+      if (!traceCtx || !traceCanvas) return;
       const rect = traceCanvas.getBoundingClientRect();
       traceCtx.clearRect(0, 0, rect.width, rect.height);
 
+      // 確定済みストローク
       userDrawnStrokes.forEach(s => {
-        drawSmoothPath(s.points, s.color, 14);
+        drawPathPoints(s.points, s.color, 14);
       });
 
-      if (currentPathPoints.length > 1) {
-        drawSmoothPath(currentPathPoints, getStrokeColor(traceCurrentStrokeIdx + 1), 14);
+      // 描画中ストローク
+      if (currentTracePoints.length > 1) {
+        drawPathPoints(currentTracePoints, getStrokeColor(traceCurrentIdx + 1), 14);
       }
     }
 
-    function drawSmoothPath(points, color, width) {
+    function drawPathPoints(points, color, width) {
       if (points.length < 2) return;
       traceCtx.save();
       traceCtx.strokeStyle = color;
-      traceCtx.fillStyle = color;
       traceCtx.lineWidth = width;
       traceCtx.lineCap = 'round';
       traceCtx.lineJoin = 'round';
-
       traceCtx.beginPath();
       traceCtx.moveTo(points[0].x, points[0].y);
       for (let i = 1; i < points.length; i++) {
@@ -1873,116 +1951,116 @@
       traceCtx.restore();
     }
 
-    function clearCurrentStroke() {
+    function undoTraceStroke() {
       if (userDrawnStrokes.length > 0) {
         userDrawnStrokes.pop();
-        traceCurrentStrokeIdx = Math.max(0, traceCurrentStrokeIdx - 1);
-        currentPathPoints = [];
+        traceCurrentIdx = Math.max(0, traceCurrentIdx - 1);
+        currentTracePoints = [];
         document.getElementById('hanamaru-overlay').classList.remove('show');
-        updateTraceUI();
-        redrawTrace();
+        updateTraceGuideUI();
+        redrawTraceCanvas();
       }
     }
 
-    function replayTrace() {
-      initTraceMode(currentKanjiList[currentIndex]);
+    function retryCurrentTrace() {
+      initTraceMode(currentGradeList[currentIndex]);
     }
 
     function toggleTraceGuide() {
       showTraceGuide = !showTraceGuide;
       document.getElementById('btn-toggle-guide').textContent = showTraceGuide ? '👁️ お手本ON' : '👁️ お手本OFF';
-      renderTraceSvgGuide(currentKanjiList[currentIndex]);
+      renderTraceGuideSvg(currentGradeList[currentIndex]);
     }
 
     /* ==========================================================================
-       漢字一覧グリッド & フィルタ・ソート
+       右側：漢字一覧グリッド・ソート・検索
        ========================================================================== */
-    let currentSort = 'order';
-
     function renderKanjiGrid() {
-      const container = document.getElementById('kanji-grid-container');
+      const container = document.getElementById('kanji-grid-view');
       container.innerHTML = '';
-      const cleared = getClearedKanji();
+      const clearedMap = getClearedMap();
 
-      let displayList = [...currentKanjiList];
-      if (currentSort === 'aiueo') {
-        displayList.sort((a, b) => (a.kunyomi || a.onyomi).localeCompare(b.kunyomi || b.onyomi, 'ja'));
-      } else if (currentSort === 'strokes') {
-        displayList.sort((a, b) => a.strokesCount - b.strokesCount || a.id - b.id);
-      } else if (currentSort === 'cleared') {
-        displayList.sort((a, b) => {
-          const aC = cleared[a.kanji] ? 1 : 0;
-          const bC = cleared[b.kanji] ? 1 : 0;
+      let list = [...currentGradeList];
+
+      // ソート
+      if (currentSortOrder === 'aiueo') {
+        list.sort((a, b) => (a.kunyomi || a.onyomi).localeCompare(b.kunyomi || b.onyomi, 'ja'));
+      } else if (currentSortOrder === 'strokes') {
+        list.sort((a, b) => a.strokesCount - b.strokesCount || a.id - b.id);
+      } else if (currentSortOrder === 'cleared') {
+        list.sort((a, b) => {
+          const aC = clearedMap[a.kanji] ? 1 : 0;
+          const bC = clearedMap[b.kanji] ? 1 : 0;
           return bC - aC || a.id - b.id;
         });
       }
 
-      displayList.forEach(k => {
-        const item = document.createElement('div');
-        item.className = 'grid-kanji-item';
-        item.dataset.id = k.id;
-        item.dataset.kanji = k.kanji;
-        if (cleared[k.kanji]) item.classList.add('cleared');
-        if (k.id === currentKanjiList[currentIndex]?.id) item.classList.add('active');
+      list.forEach(k => {
+        const cell = document.createElement('div');
+        cell.className = 'grid-item-cell';
+        cell.dataset.id = k.id;
+        cell.dataset.kanji = k.kanji;
+        if (clearedMap[k.kanji]) cell.classList.add('cleared');
+        if (k.id === currentGradeList[currentIndex]?.id) cell.classList.add('active');
 
-        item.innerHTML = `
-          <span class="grid-kanji-stamp">💮</span>
-          <span class="grid-kanji-char">${k.kanji}</span>
-          <span class="grid-kanji-sub">${k.strokesCount}画</span>
+        cell.innerHTML = `
+          <span class="cell-stamp">💮</span>
+          <span class="cell-char">${k.kanji}</span>
+          <span class="cell-strokes">${k.strokesCount}画</span>
         `;
 
-        item.addEventListener('click', () => {
-          const targetIdx = currentKanjiList.findIndex(item => item.id === k.id);
-          if (targetIdx !== -1) {
-            loadKanji(targetIdx);
-          }
+        cell.addEventListener('click', () => {
+          const idx = currentGradeList.findIndex(item => item.id === k.id);
+          if (idx !== -1) loadKanji(idx);
         });
 
-        container.appendChild(item);
+        container.appendChild(cell);
       });
 
-      const gradeCleared = currentKanjiList.filter(k => cleared[k.kanji]).length;
-      document.getElementById('list-count-badge').textContent = `(全${currentKanjiList.length}字 / 💮合格 ${gradeCleared}字)`;
+      const total = currentGradeList.length;
+      const clearedCount = currentGradeList.filter(k => clearedMap[k.kanji]).length;
+      document.getElementById('list-progress-label').textContent = `(全${total}字 / 💮${clearedCount}字)`;
+
+      applySearchFilter();
     }
 
-    function updateGridSelection() {
-      const current = currentKanjiList[currentIndex];
-      if (!current) return;
-      document.querySelectorAll('.grid-kanji-item').forEach(item => {
-        const isActive = (item.dataset.kanji === current.kanji);
-        item.classList.toggle('active', isActive);
+    function updateGridActiveCell() {
+      const cur = currentGradeList[currentIndex];
+      if (!cur) return;
+      document.querySelectorAll('.grid-item-cell').forEach(cell => {
+        cell.classList.toggle('active', cell.dataset.kanji === cur.kanji);
       });
     }
 
-    function sortKanjiList(sortType, btn) {
-      currentSort = sortType;
-      document.querySelectorAll('.filter-tab-btn').forEach(b => b.classList.remove('active'));
+    function changeSortOrder(order, btn) {
+      currentSortOrder = order;
+      document.querySelectorAll('.sort-tab').forEach(b => b.classList.remove('active'));
       if (btn) btn.classList.add('active');
       renderKanjiGrid();
-      filterKanjiList();
     }
 
-    function filterKanjiList() {
-      const query = document.getElementById('kanji-search-input').value.trim().toLowerCase();
-      document.querySelectorAll('.grid-kanji-item').forEach(item => {
-        if (!query) {
-          item.style.display = 'flex';
+    function handleSearchInput() {
+      currentSearchQuery = document.getElementById('kanji-search-input').value.trim().toLowerCase();
+      applySearchFilter();
+    }
+
+    function applySearchFilter() {
+      const q = currentSearchQuery;
+      document.querySelectorAll('.grid-item-cell').forEach(cell => {
+        if (!q) {
+          cell.style.display = 'flex';
           return;
         }
-        const ch = item.dataset.kanji;
-        const data = currentKanjiList.find(k => k.kanji === ch);
+        const ch = cell.dataset.kanji;
+        const data = currentGradeList.find(k => k.kanji === ch);
         if (!data) return;
 
-        const matchKanji = data.kanji.includes(query);
-        const matchKun = data.kunyomi && data.kunyomi.toLowerCase().includes(query);
-        const matchOn = data.onyomi && data.onyomi.toLowerCase().includes(query);
-        const matchStroke = query.includes('画') && query.replace('画', '') == data.strokesCount;
+        const matchK = data.kanji.includes(q);
+        const matchKun = data.kunyomi && data.kunyomi.toLowerCase().includes(q);
+        const matchOn = data.onyomi && data.onyomi.toLowerCase().includes(q);
+        const matchSt = q.includes('画') && q.replace('画', '') == data.strokesCount;
 
-        if (matchKanji || matchKun || matchOn || matchStroke) {
-          item.style.display = 'flex';
-        } else {
-          item.style.display = 'none';
-        }
+        cell.style.display = (matchK || matchKun || matchOn || matchSt) ? 'flex' : 'none';
       });
     }
   </script>

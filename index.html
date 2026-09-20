@@ -1201,6 +1201,453 @@
       background: rgba(255, 255, 255, 0.03);
     }
 
+    /* === ホーム画面 拡張UI (ストリーク・称号・進捗) === */
+    .home-status-bar {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 8px 0 16px 0;
+      padding: 8px 14px;
+      background: rgba(0, 20, 50, 0.6);
+      border: 1px solid rgba(0, 229, 255, 0.3);
+      border-radius: 20px;
+    }
+
+    .home-status-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .home-status-item .status-label {
+      color: #8bb5e0;
+      font-size: 11px;
+    }
+
+    .home-status-item .status-val {
+      color: #fff;
+    }
+
+    .streak-val {
+      color: #ff9900 !important;
+      text-shadow: 0 0 8px rgba(255, 153, 0, 0.6);
+    }
+
+    .rank-val {
+      color: var(--neon-yellow) !important;
+      text-shadow: 0 0 8px rgba(255, 230, 0, 0.6);
+    }
+
+    .mode-progress-badge {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.4);
+      color: #00ffaa;
+      font-weight: bold;
+      border: 1px solid rgba(0, 255, 170, 0.3);
+      margin-top: 2px;
+    }
+
+    .mode-quick-start {
+      margin-top: 4px;
+      font-size: 11px;
+      padding: 2px 8px;
+      background: rgba(0, 229, 255, 0.25);
+      border: 1px solid var(--primary-cyan);
+      color: #fff;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .mode-quick-start:hover {
+      background: var(--primary-cyan);
+      color: #000;
+      transform: scale(1.05);
+    }
+
+    .home-nav-row {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .home-nav-btn {
+      background: rgba(16, 32, 60, 0.85);
+      border: 1px solid #2a5a9e;
+      color: #b5d5ff;
+      font-size: 13px;
+      font-weight: bold;
+      padding: 8px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .home-nav-btn:hover {
+      border-color: var(--primary-cyan);
+      color: #fff;
+      background: rgba(0, 229, 255, 0.25);
+      transform: translateY(-2px);
+    }
+
+    .special-modes-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .special-mode-btn {
+      background: linear-gradient(135deg, rgba(20, 40, 80, 0.9) 0%, rgba(30, 20, 60, 0.9) 100%);
+      border: 1.5px solid #a040ff;
+      border-radius: 10px;
+      padding: 8px 10px;
+      color: #fff;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s;
+    }
+
+    .special-mode-btn:hover {
+      border-color: #d080ff;
+      box-shadow: 0 0 12px rgba(160, 64, 255, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .special-mode-title {
+      font-size: 13px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #f0a0ff;
+    }
+
+    .special-mode-desc {
+      font-size: 10px;
+      color: #c4b5fd;
+      margin-top: 2px;
+      line-height: 1.3;
+    }
+
+    /* === コンボ＆スピードボーナス演出 === */
+    .combo-popup {
+      position: absolute;
+      top: 18%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      pointer-events: none;
+      z-index: 95;
+      font-size: 32px;
+      font-weight: 900;
+      color: #ffe600;
+      text-shadow: 0 0 15px rgba(255, 230, 0, 0.9), 0 0 30px rgba(255, 85, 0, 0.8);
+      animation: comboPop 1.1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      white-space: nowrap;
+    }
+
+    @keyframes comboPop {
+      0% { transform: translate(-50%, -50%) scale(0.3); opacity: 0; }
+      20% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+      35% { transform: translate(-50%, -50%) scale(1.0); opacity: 1; }
+      80% { transform: translate(-50%, -60%) scale(1.0); opacity: 1; }
+      100% { transform: translate(-50%, -80%) scale(0.8); opacity: 0; }
+    }
+
+    .speed-bonus-badge {
+      display: inline-block;
+      font-size: 11px;
+      color: #00ffea;
+      background: rgba(0, 234, 255, 0.2);
+      border: 1px solid #00ffea;
+      padding: 2px 6px;
+      border-radius: 10px;
+      animation: flashBonus 0.8s infinite alternate;
+    }
+
+    @keyframes flashBonus {
+      from { opacity: 0.7; }
+      to { opacity: 1; }
+    }
+
+    /* 例文・短文表示 */
+    .target-example-box {
+      font-size: 13px;
+      color: #d8ecff;
+      background: rgba(0, 15, 40, 0.7);
+      padding: 4px 10px;
+      border-radius: 8px;
+      border-left: 3px solid var(--primary-cyan);
+      margin-top: 4px;
+      max-width: 90%;
+      word-break: break-all;
+    }
+
+    /* ワンポイント解説 */
+    .timeout-tip-box {
+      margin-top: 6px;
+      font-size: 12px;
+      color: #ffb380;
+      background: rgba(40, 10, 0, 0.85);
+      border: 1px dashed #ff5500;
+      border-radius: 6px;
+      padding: 4px 8px;
+      text-align: center;
+    }
+
+    /* === 漢字定着度 3段階マスター (銅・銀・金) === */
+    .kanji-tile.bronze {
+      background: linear-gradient(135deg, rgba(205, 127, 50, 0.25) 0%, rgba(139, 69, 19, 0.3) 100%);
+      color: #ffaa66;
+      border: 1.5px solid #cd7f32;
+      box-shadow: 0 0 6px rgba(205, 127, 50, 0.4);
+      font-weight: bold;
+    }
+
+    .kanji-tile.silver {
+      background: linear-gradient(135deg, rgba(192, 192, 192, 0.25) 0%, rgba(128, 160, 192, 0.35) 100%);
+      color: #e0f0ff;
+      border: 1.5px solid #b8cce4;
+      box-shadow: 0 0 8px rgba(184, 204, 228, 0.5);
+      font-weight: 900;
+    }
+
+    .kanji-tile.gold {
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.3) 0%, rgba(255, 140, 0, 0.4) 100%);
+      color: #ffe600;
+      border: 1.5px solid #ffd700;
+      box-shadow: 0 0 12px rgba(255, 215, 0, 0.7);
+      text-shadow: 0 0 6px rgba(255, 215, 0, 0.9);
+      font-weight: 900;
+      position: relative;
+    }
+
+    .kanji-tile.gold::after {
+      content: '★';
+      position: absolute;
+      top: -4px;
+      right: -2px;
+      font-size: 9px;
+      color: #ffe600;
+      text-shadow: 0 0 4px #ff8800;
+    }
+
+    /* リベンジボタン */
+    .btn-revenge {
+      background: linear-gradient(90deg, #ff3300 0%, #ff8800 100%) !important;
+      border: 2px solid #ffe600 !important;
+      color: #fff !important;
+      font-weight: 900;
+      animation: revengePulse 1.2s infinite alternate;
+      box-shadow: 0 0 15px rgba(255, 100, 0, 0.7);
+    }
+
+    @keyframes revengePulse {
+      from { transform: scale(1.0); }
+      to { transform: scale(1.06); box-shadow: 0 0 22px rgba(255, 100, 0, 0.9); }
+    }
+
+    /* === あそびかた ガイドモーダル === */
+    .how-to-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 16px 0;
+      text-align: left;
+    }
+
+    @media (max-width: 600px) {
+      .how-to-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .how-to-card {
+      background: rgba(16, 32, 60, 0.85);
+      border: 1px solid #204987;
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .how-to-num {
+      background: var(--primary-cyan);
+      color: #000;
+      font-weight: 900;
+      font-size: 14px;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .how-to-body h4 {
+      margin: 0 0 4px 0;
+      font-size: 14px;
+      color: var(--neon-yellow);
+    }
+
+    .how-to-body p {
+      margin: 0;
+      font-size: 12px;
+      color: #b0d0f0;
+      line-height: 1.4;
+    }
+
+    /* === カスタマイズモーダル === */
+    .custom-row {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+
+    .custom-card {
+      background: rgba(16, 32, 60, 0.9);
+      border: 2px solid #204987;
+      border-radius: 12px;
+      padding: 10px 14px;
+      cursor: pointer;
+      text-align: center;
+      min-width: 100px;
+      transition: all 0.2s;
+    }
+
+    .custom-card.active {
+      border-color: var(--primary-cyan);
+      background: rgba(0, 229, 255, 0.25);
+      box-shadow: 0 0 12px rgba(0, 229, 255, 0.6);
+    }
+
+    .custom-card.locked {
+      opacity: 0.5;
+      cursor: not-allowed;
+      border-color: #555;
+    }
+
+    .custom-color-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      margin: 0 auto 6px auto;
+      border: 2px solid #fff;
+    }
+
+    /* === 表彰状（漢字マスター認定証） === */
+    .cert-container {
+      background: #fdfbf7;
+      color: #222;
+      border: 10px double #b8860b;
+      padding: 24px;
+      border-radius: 8px;
+      max-width: 650px;
+      margin: 0 auto;
+      text-align: center;
+      box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+      position: relative;
+      font-family: 'Hiragino Mincho ProN', 'Yu Mincho', serif;
+    }
+
+    .cert-title {
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: 6px;
+      color: #8b6508;
+      margin-bottom: 12px;
+      border-bottom: 2px solid #b8860b;
+      display: inline-block;
+      padding-bottom: 4px;
+    }
+
+    .cert-recipient {
+      font-size: 20px;
+      font-weight: bold;
+      margin: 14px 0;
+      border-bottom: 1px dashed #999;
+      display: inline-block;
+      padding: 2px 20px;
+    }
+
+    .cert-name-input {
+      font-size: 20px;
+      font-weight: bold;
+      border: none;
+      background: transparent;
+      text-align: center;
+      border-bottom: 1.5px solid #666;
+      font-family: inherit;
+      outline: none;
+      width: 180px;
+    }
+
+    .cert-text {
+      font-size: 15px;
+      line-height: 1.8;
+      margin: 16px 0;
+      color: #333;
+    }
+
+    .cert-seal {
+      width: 70px;
+      height: 70px;
+      border: 3px solid #c00;
+      color: #c00;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      transform: rotate(-10deg);
+      background: rgba(204, 0, 0, 0.05);
+      margin-top: 10px;
+    }
+
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #cert-modal, #cert-modal * {
+        visibility: visible;
+      }
+      #cert-modal {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100vw;
+        height: 100vh;
+        background: #fff !important;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+      }
+      .cert-container {
+        box-shadow: none !important;
+        border: 8px double #b8860b !important;
+      }
+      .cert-print-hide {
+        display: none !important;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -1252,12 +1699,14 @@
       <div class="target-kanji-box">
         <div class="kanji-text" id="target-kanji">青空</div>
         <div class="kanji-hint" id="target-hint">学年: 1・2年生</div>
+        <div class="target-example-box" id="target-example" style="display: none;"></div>
         <div class="kanji-chars-count" id="target-chars-count">4もじ</div>
+        <div class="timeout-tip-box" id="timeout-tip-box" style="display: none;"></div>
       </div>
     </div>
 
-    <!-- ダミー余白 -->
-    <div></div>
+    <!-- コンボ・スピードボーナス通知用エリア -->
+    <div id="combo-container"></div>
   </div>
 
   <!-- 下部操作コンソール & キーボード -->
@@ -1362,50 +1811,100 @@
   <!-- スタート画面モーダル -->
   <div class="modal-overlay" id="start-modal">
     <div class="modal-card modal-card-start">
-      <div style="font-size: 38px; margin-bottom: 4px;">🚀✨</div>
+      <div style="font-size: 38px; margin-bottom: 2px;">🚀✨</div>
       <h1 class="modal-title">ファイブツアーズ<br>JET 漢字バトル</h1>
-      <p class="modal-subtitle">挑戦する学年コースを選んで発進！迫り来る漢字の「よみ」を答えてビームで撃破せよ！</p>
+      <p class="modal-subtitle">漢字の「よみ」を答えてビームで撃破せよ！目指せ銀河の漢字マスター！</p>
 
+      <!-- 連続記録・称号・EXPステータスバー -->
+      <div class="home-status-bar">
+        <div class="home-status-item">
+          <span class="status-label">まいにち:</span>
+          <span class="status-val streak-val" id="home-streak-display">🔥 1日目</span>
+        </div>
+        <div class="home-status-item">
+          <span class="status-label">しょうごう:</span>
+          <span class="status-val rank-val" id="home-rank-display">🧑‍🚀 みならいパイロット</span>
+        </div>
+        <div class="home-status-item">
+          <span class="status-label">EXP:</span>
+          <span class="status-val" id="home-exp-display" style="color:#00e5ff;">0</span>
+        </div>
+      </div>
+
+      <!-- 特別ミッション (デイリー & にがて特訓) -->
+      <div class="special-modes-row">
+        <div class="special-mode-btn" onclick="startDailyMission()">
+          <div class="special-mode-title">🎯 今日のデイリー (5問)</div>
+          <div class="special-mode-desc">1日1回ボーナスEXP！全学年から厳選出題！</div>
+        </div>
+        <div class="special-mode-btn" onclick="startMistakesMode()" id="btn-mistakes-mode">
+          <div class="special-mode-title">🔁 にがて特訓リベンジ</div>
+          <div class="special-mode-desc" id="mistakes-mode-desc">過去に間違えた漢字に集中挑戦！</div>
+        </div>
+      </div>
+
+      <!-- 学年コース選択グリッド (ルビ・進捗バッジ・クイックスタート付き) -->
       <div class="mode-select-grid">
         <div class="mode-btn active" data-mode="grade1" onclick="selectMode('grade1')">
           <span class="grade-badge g1">1ねんせい</span>
           <div class="mode-name">🌱 １年生</div>
-          <div class="mode-desc">配当80字・基本の読み</div>
+          <span class="mode-progress-badge" id="badge-g1">0/80字 (0%)</span>
+          <div class="mode-desc"><ruby>配当<rt>はいとう</rt></ruby>80<ruby>字<rt>じ</rt></ruby>・きほんの <ruby>読<rt>よ</rt></ruby>み</div>
+          <button class="mode-quick-start" onclick="event.stopPropagation(); quickStart('grade1')">🚀 すぐ発進!</button>
         </div>
         <div class="mode-btn" data-mode="grade2" onclick="selectMode('grade2')">
           <span class="grade-badge g2">2ねんせい</span>
           <div class="mode-name">🌿 ２年生</div>
-          <div class="mode-desc">配当160字・日常の漢字</div>
+          <span class="mode-progress-badge" id="badge-g2">0/160字 (0%)</span>
+          <div class="mode-desc"><ruby>日常<rt>にちじょう</rt></ruby>の かん<ruby>字<rt>じ</rt></ruby> (160<ruby>字<rt>じ</rt></ruby>)</div>
+          <button class="mode-quick-start" onclick="event.stopPropagation(); quickStart('grade2')">🚀 すぐ発進!</button>
         </div>
         <div class="mode-btn" data-mode="grade3" onclick="selectMode('grade3')">
           <span class="grade-badge g3">3年生</span>
           <div class="mode-name">🌸 ３年生</div>
-          <div class="mode-desc">配当200字・身近な熟語</div>
+          <span class="mode-progress-badge" id="badge-g3">0/200字 (0%)</span>
+          <div class="mode-desc">身近な熟語 (200字)</div>
+          <button class="mode-quick-start" onclick="event.stopPropagation(); quickStart('grade3')">🚀 すぐ発進!</button>
         </div>
         <div class="mode-btn" data-mode="grade4" onclick="selectMode('grade4')">
           <span class="grade-badge g4">4年生</span>
           <div class="mode-name">🍁 ４年生</div>
-          <div class="mode-desc">配当202字・発展の言葉</div>
+          <span class="mode-progress-badge" id="badge-g4">0/202字 (0%)</span>
+          <div class="mode-desc">発展の言葉 (202字)</div>
+          <button class="mode-quick-start" onclick="event.stopPropagation(); quickStart('grade4')">🚀 すぐ発進!</button>
         </div>
         <div class="mode-btn" data-mode="grade5" onclick="selectMode('grade5')">
           <span class="grade-badge g5">5年生</span>
           <div class="mode-name">⚡ ５年生</div>
-          <div class="mode-desc">配当193字・少し難しい熟語</div>
+          <span class="mode-progress-badge" id="badge-g5">0/193字 (0%)</span>
+          <div class="mode-desc">少し難しい熟語 (193字)</div>
+          <button class="mode-quick-start" onclick="event.stopPropagation(); quickStart('grade5')">🚀 すぐ発進!</button>
         </div>
         <div class="mode-btn" data-mode="grade6" onclick="selectMode('grade6')">
           <span class="grade-badge g6">6年生</span>
           <div class="mode-name">🔥 ６年生</div>
-          <div class="mode-desc">配当191字・総仕上げレベル</div>
+          <span class="mode-progress-badge" id="badge-g6">0/191字 (0%)</span>
+          <div class="mode-desc">総仕上げレベル (191字)</div>
+          <button class="mode-quick-start" onclick="event.stopPropagation(); quickStart('grade6')">🚀 すぐ発進!</button>
         </div>
         <div class="mode-btn full-width" data-mode="all" onclick="selectMode('all')">
           <div class="mode-name">👑 全学年チャレンジ</div>
           <div class="mode-desc">1年生〜6年生の全範囲からバランス良く出題！全10問の完全制覇ツアー！</div>
+          <button class="mode-quick-start" onclick="event.stopPropagation(); quickStart('all')">🚀 すぐ発進!</button>
         </div>
       </div>
 
+      <!-- メイン発進ボタン -->
       <div style="display: flex; gap: 12px; justify-content: center; align-items: center; flex-wrap: wrap;">
-        <button class="start-btn" id="start-game-btn">発進する！ (START)</button>
-        <button class="action-sub-btn" onclick="openKanjiRoom()" style="padding: 12px 20px; font-size: 16px;">🏛️ 漢字の部屋</button>
+        <button class="start-btn" id="start-game-btn" onclick="startGame()">🌱 １年生コースで発進！ (START)</button>
+      </div>
+
+      <!-- 下部ナビゲーションメニュー -->
+      <div class="home-nav-row">
+        <button class="home-nav-btn" onclick="openHowToModal()">❓ あそびかた</button>
+        <button class="home-nav-btn" onclick="openCustomModal()">🚀 機体カスタム</button>
+        <button class="home-nav-btn" onclick="openKanjiRoom()">🏛️ 漢字の部屋</button>
+        <button class="home-nav-btn" onclick="openCertModal()">🎖️ 認定証</button>
       </div>
     </div>
   </div>
@@ -1417,9 +1916,18 @@
       <h2 class="modal-title" id="result-title">MISSION COMPLETE!</h2>
       <p class="modal-subtitle" id="result-message">全問撃破！宇宙の平和は守られた！</p>
 
-      <div style="display: flex; justify-content: space-around; margin-bottom: 15px; font-weight: bold;">
-        <div>撃破数: <span id="res-score" style="color: var(--neon-yellow); font-size: 22px;">10</span> 問</div>
-        <div>生存クルー: <span id="res-crew" style="color: var(--neon-green); font-size: 22px;">5</span> 人</div>
+      <div style="display: flex; justify-content: space-around; margin-bottom: 12px; font-weight: bold; flex-wrap: wrap; gap: 8px;">
+        <div>撃破: <span id="res-score" style="color: var(--neon-yellow); font-size: 20px;">10</span> 問</div>
+        <div>クルー: <span id="res-crew" style="color: var(--neon-green); font-size: 20px;">5</span> 人</div>
+        <div>コンボ: <span id="res-combo" style="color: #ff9900; font-size: 20px;">0</span> 連続</div>
+        <div>獲得: <span id="res-exp" style="color: #00e5ff; font-size: 20px;">+100</span> EXP</div>
+      </div>
+
+      <!-- まちがえた問題だけ即座にリベンジするボタン (間違いがある時のみ表示) -->
+      <div id="revenge-container" style="display: none; margin-bottom: 12px;">
+        <button class="start-btn btn-revenge" id="btn-revenge-start" onclick="startRevengeMode()" style="font-size: 17px; padding: 10px 20px; width: 100%;">
+          💥 まちがえた漢字だけリベンジ！（再挑戦）
+        </button>
       </div>
 
       <div class="result-list" id="result-list">
@@ -1427,9 +1935,10 @@
       </div>
 
       <div id="result-mastery-summary" style="font-size: 13px; color: #00ffaa; margin-bottom: 10px; font-weight: bold;"></div>
-      <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 10px;">
-        <button class="start-btn" onclick="returnToTitle()" style="padding: 12px 30px; font-size: 18px;">もう一度挑戦！</button>
-        <button class="action-sub-btn" onclick="openKanjiRoom()" style="padding: 12px 20px; font-size: 16px;">🏛️ 漢字の部屋を見る</button>
+      <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 10px;">
+        <button class="start-btn" onclick="returnToTitle()" style="padding: 10px 24px; font-size: 16px;">もう一度挑戦！</button>
+        <button class="action-sub-btn" onclick="openKanjiRoom()" style="padding: 10px 18px; font-size: 15px;">🏛️ 漢字の部屋</button>
+        <button class="action-sub-btn" id="btn-result-cert" onclick="openCertModal()" style="display: none; padding: 10px 18px; font-size: 15px; border-color: #ffd700; color: #ffd700;">🎖️ 認定証を見る</button>
       </div>
     </div>
   </div>
@@ -1440,12 +1949,12 @@
       <div class="room-header">
         <div class="room-title-box">
           <h2 class="room-title">🏛️ 漢字の部屋 (学習進捗)</h2>
-          <p class="room-desc">ゲームで正解した漢字が光るよ！目指せ全1026字コンプリート！</p>
+          <p class="room-desc">正解した漢字がランク別に光るよ！目指せ全1026字ゴールドマスター！</p>
         </div>
         <button class="room-close-btn" onclick="closeKanjiRoom()">✕ とじる</button>
       </div>
 
-      <!-- 全体進捗バー -->
+      <!-- 全体進捗バー & ランク内訳 -->
       <div class="room-total-progress">
         <div class="progress-info">
           <span>🌟 小学校6年間の全漢字進捗</span>
@@ -1453,6 +1962,11 @@
         </div>
         <div class="progress-bar-bg">
           <div class="progress-bar-fill" id="room-total-bar" style="width: 0%;"></div>
+        </div>
+        <div style="display: flex; justify-content: center; gap: 14px; margin-top: 6px; font-size: 11px; font-weight: bold;">
+          <span style="color: #ffd700;">🥇 金マスター(5回+): <span id="room-gold-count">0</span>字</span>
+          <span style="color: #b8cce4;">🥈 銀マスター(3回+): <span id="room-silver-count">0</span>字</span>
+          <span style="color: #ffaa66;">🥉 銅マスター(1回+): <span id="room-bronze-count">0</span>字</span>
         </div>
       </div>
 
@@ -1466,12 +1980,13 @@
         <button class="room-tab" data-grade="6" onclick="switchRoomGrade(6)">6年生</button>
       </div>
 
-      <!-- 選択学年の進捗バー & 音訓表ボタン -->
+      <!-- 選択学年の進捗バー & 音訓表ボタン & 認定証ボタン -->
       <div class="room-grade-progress">
-        <div class="progress-info" style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="progress-info" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
           <span id="room-current-grade-label">🌱 1年生の漢字</span>
-          <div style="display: flex; gap: 10px; align-items: center;">
-            <button id="btn-show-g1-table" class="room-table-btn" onclick="openGradeTableModal()">📋 音読み・訓読み一覧表</button>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <button id="btn-show-g1-table" class="room-table-btn" onclick="openGradeTableModal()">📋 音訓一覧表</button>
+            <button class="room-table-btn" onclick="openGradeCertificate()" style="border-color: #ffd700; color: #ffd700; background: rgba(255, 215, 0, 0.15);">🎖️ 表彰状を見る</button>
             <span id="room-grade-stats">0 / 80 字 (0%)</span>
           </div>
         </div>
@@ -1492,10 +2007,14 @@
           <div class="detail-title-row">
             <span class="detail-grade-tag" id="detail-grade-tag">🌱 1年生</span>
             <span class="detail-status-tag" id="detail-status-tag">⭕ 撃破済み (3回)</span>
+            <span id="detail-tier-badge" style="font-size: 12px; font-weight: bold; color: #ffd700;">🥇 ゴールド</span>
           </div>
           <div class="detail-readings-row">
             <div><span class="reading-label">音読み:</span><span class="reading-text" id="detail-on-text">カ</span></div>
             <div><span class="reading-label">訓読み:</span><span class="reading-text" id="detail-kun-text">はな</span></div>
+          </div>
+          <div id="detail-example-row" style="margin-top: 4px; font-size: 12px; color: #a4c8e0;">
+            <span class="reading-label">例文:</span> <span id="detail-example-text">きれいな花が咲く。</span>
           </div>
         </div>
         <button class="detail-close-btn" onclick="closeKanjiDetail()">✕</button>
@@ -1503,14 +2022,13 @@
 
       <!-- フッター操作 -->
       <div class="room-footer">
-        <span class="room-hint">💡 緑色に光っている漢字は正解できた漢字です！端末に自動保存されます。</span>
+        <span class="room-hint">💡 🥉銅(1回) 🥈銀(3回) 🥇金(5回以上)！何度も復習して完全制覇しよう！</span>
         <button class="room-reset-btn" onclick="resetKanjiProgress()">進捗をリセット</button>
       </div>
     </div>
   </div>
 
-
-  <!-- 1年生 音読み・訓読み一覧モーダル -->
+  <!-- 音読み・訓読み一覧モーダル -->
   <div class="modal-overlay" id="g1-table-modal" style="display: none; z-index: 120;">
     <div class="modal-card modal-card-room" style="max-width: 780px;">
       <div class="room-header">
@@ -1533,6 +2051,114 @@
             <!-- JSで動的生成 -->
           </tbody>
         </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- あそびかたガイド モーダル -->
+  <div class="modal-overlay" id="how-to-modal" style="display: none; z-index: 125;">
+    <div class="modal-card" style="max-width: 650px;">
+      <div class="room-header">
+        <div class="room-title-box">
+          <h2 class="room-title">❓ あそびかたガイド</h2>
+          <p class="room-desc">ルールはかんたん！漢字の「よみ」を入力してビームで撃破！</p>
+        </div>
+        <button class="room-close-btn" onclick="closeHowToModal()">✕ とじる</button>
+      </div>
+      <div class="how-to-grid">
+        <div class="how-to-card">
+          <div class="how-to-num">1</div>
+          <div class="how-to-body">
+            <h4>迫り来る漢字を見る！</h4>
+            <p>画面中央に漢字とヒントが出現！何文字の言葉かもスロットで分かるよ。</p>
+          </div>
+        </div>
+        <div class="how-to-card">
+          <div class="how-to-num">2</div>
+          <div class="how-to-body">
+            <h4>「ひらがな」を入力！</h4>
+            <p>下の「かんたん文字パネル」または「50音表」「キーボード」で読みを入力しよう！</p>
+          </div>
+        </div>
+        <div class="how-to-card">
+          <div class="how-to-num">3</div>
+          <div class="how-to-body">
+            <h4>💥 はっしゃ！でビーム！</h4>
+            <p>正解すると強力レーザー発射＆大爆発！連続正解（コンボ）でボーナスEXPもアップ！</p>
+          </div>
+        </div>
+        <div class="how-to-card">
+          <div class="how-to-num">4</div>
+          <div class="how-to-body">
+            <h4>漢字の部屋で集める！</h4>
+            <p>正解した漢字は自動で記録！1回で🥉銅、3回で🥈銀、5回で🥇金マスターになるよ！</p>
+          </div>
+        </div>
+      </div>
+      <button class="start-btn" onclick="closeHowToModal()" style="padding: 10px 30px; font-size: 16px;">わかった！発進準備完了！</button>
+    </div>
+  </div>
+
+  <!-- ジェット機＆レーザー カスタマイズ モーダル -->
+  <div class="modal-overlay" id="custom-modal" style="display: none; z-index: 125;">
+    <div class="modal-card" style="max-width: 650px;">
+      <div class="room-header">
+        <div class="room-title-box">
+          <h2 class="room-title">🚀 機体＆レーザー カスタマイズ</h2>
+          <p class="room-desc">漢字をたくさん撃破して、かっこいい機体とビームを解放しよう！</p>
+        </div>
+        <button class="room-close-btn" onclick="closeCustomModal()">✕ とじる</button>
+      </div>
+
+      <h3 style="font-size: 15px; color: var(--neon-yellow); margin: 12px 0 6px 0; text-align: left;">✈️ ジェット機のカラー</h3>
+      <div class="custom-row" id="custom-ship-row">
+        <!-- JS動的生成 -->
+      </div>
+
+      <h3 style="font-size: 15px; color: var(--primary-cyan); margin: 16px 0 6px 0; text-align: left;">⚡ レーザービームのカラー</h3>
+      <div class="custom-row" id="custom-laser-row">
+        <!-- JS動的生成 -->
+      </div>
+
+      <button class="start-btn" onclick="closeCustomModal()" style="margin-top: 15px; padding: 10px 30px; font-size: 16px;">決定して戻る</button>
+    </div>
+  </div>
+
+  <!-- 漢字マスター認定証（表彰状）モーダル -->
+  <div class="modal-overlay" id="cert-modal" style="display: none; z-index: 130;">
+    <div class="modal-card" style="max-width: 720px; background: rgba(10, 15, 25, 0.95);">
+      <div class="cert-print-hide" style="display: flex; justify-content: flex-end; margin-bottom: 8px;">
+        <button class="room-close-btn" onclick="closeCertModal()">✕ とじる</button>
+      </div>
+
+      <!-- 印刷対応の賞状本体 -->
+      <div class="cert-container" id="cert-print-area">
+        <div class="cert-title">表　彰　状</div>
+        <div class="cert-recipient">
+          <input type="text" id="cert-user-name" class="cert-name-input" value="みらいのパイロット" placeholder="おなまえ"> 殿
+        </div>
+        <div class="cert-text" id="cert-text-body">
+          あなたは「ファイブツアーズJET 漢字バトル」において<br>
+          <strong id="cert-grade-title" style="color: #b8860b; font-size: 18px;">第１学年 配当漢字 全80字</strong> の<br>
+          読みと意味を完全に見極め、宇宙の平和に大きく貢献しました。<br>
+          よってここに「銀河漢字マスター」として認定し、その栄誉を讃えます。
+        </div>
+        <div style="display: flex; justify-content: space-around; align-items: center; margin-top: 20px;">
+          <div style="font-size: 14px; text-align: left; color: #555;">
+            <div id="cert-date-display">2026年 9月 20日</div>
+            <div style="font-weight: bold; margin-top: 4px;">宇宙連合 漢字防衛軍 司令部</div>
+          </div>
+          <div class="cert-seal">
+            認　定<br>司令官印
+          </div>
+        </div>
+      </div>
+
+      <div class="cert-print-hide" style="display: flex; gap: 12px; justify-content: center; margin-top: 16px;">
+        <button class="start-btn" onclick="window.print()" style="padding: 10px 24px; font-size: 16px; background: linear-gradient(90deg, #b8860b 0%, #ffd700 100%); color: #000;">
+          🖨️ いんさつする（PDF保存）
+        </button>
+        <button class="action-sub-btn" onclick="closeCertModal()" style="padding: 10px 20px; font-size: 15px;">とじる</button>
       </div>
     </div>
   </div>
@@ -1972,6 +2598,61 @@ class SoundEngine {
     osc.stop(now + 0.09);
   }
 
+  playCombo(combo) {
+    if (!this.enabled) return;
+    this.init();
+    const now = this.ctx.currentTime;
+    const baseFreq = Math.min(1000, 500 + combo * 80);
+    [baseFreq, baseFreq * 1.25, baseFreq * 1.5].forEach((freq, i) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.15, now + i * 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.05 + 0.2);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(now + i * 0.05);
+      osc.stop(now + i * 0.05 + 0.22);
+    });
+  }
+
+  playSpeedBonus() {
+    if (!this.enabled) return;
+    this.init();
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(1200, now);
+    osc.frequency.exponentialRampToValueAtTime(2400, now + 0.15);
+    gain.gain.setValueAtTime(0.2, now);
+    gain.gain.linearRampToValueAtTime(0.001, now + 0.18);
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.19);
+  }
+
+  playRankUp() {
+    if (!this.enabled) return;
+    this.init();
+    const now = this.ctx.currentTime;
+    const notes = [440, 554.37, 659.25, 880];
+    notes.forEach((freq, idx) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.25, now + idx * 0.1);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.1 + 0.4);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(now + idx * 0.1);
+      osc.stop(now + idx * 0.1 + 0.45);
+    });
+  }
+
   startBgm() {
     if (!this.enabled) return;
     this.stopBgm();
@@ -2053,8 +2734,42 @@ function initStars() {
   }
 }
 
+/* === 機体＆レーザー カスタマイズ用パレット === */
+const SHIP_COLORS = {
+  blue: { name: "ブルーホーク", fill: "#0e1d38", stroke: "#00e5ff", flame: "rgba(0, 229, 255, 0.8)", reqExp: 0 },
+  red: { name: "フレイムレッド", fill: "#3a0e14", stroke: "#ff3344", flame: "rgba(255, 68, 68, 0.8)", reqExp: 30 },
+  green: { name: "エメラルド", fill: "#0e3020", stroke: "#00ff88", flame: "rgba(0, 255, 136, 0.8)", reqExp: 80 },
+  gold: { name: "ゴールドスター", fill: "#3a300e", stroke: "#ffd700", flame: "rgba(255, 215, 0, 0.8)", reqExp: 150 },
+  rainbow: { name: "ギャラクシー", fill: "#1a1238", stroke: "#ff88ff", flame: "rgba(255, 100, 255, 0.8)", reqExp: 300 }
+};
+
+const LASER_COLORS = {
+  cyan: { name: "蒼光シアン", stroke: "#00e5ff", core: "#ffffff", reqExp: 0 },
+  red: { name: "紅蓮レッド", stroke: "#ff3300", core: "#ffea00", reqExp: 40 },
+  yellow: { name: "雷光イエロー", stroke: "#ffe600", core: "#ffffff", reqExp: 100 },
+  rainbow: { name: "レインボー", stroke: "#ff00ea", core: "#00ffff", reqExp: 250 }
+};
+
+function getCustomSetting() {
+  try {
+    const data = localStorage.getItem('kanji_jet_custom');
+    return data ? JSON.parse(data) : { ship: 'blue', laser: 'cyan' };
+  } catch (e) {
+    return { ship: 'blue', laser: 'cyan' };
+  }
+}
+
+function saveCustomSetting(ship, laser) {
+  try {
+    localStorage.setItem('kanji_jet_custom', JSON.stringify({ ship, laser }));
+  } catch (e) {}
+}
+
 function spawnLaserBeam() {
   sound.playLaser();
+  const custom = getCustomSetting();
+  const laserConfig = LASER_COLORS[custom.laser] || LASER_COLORS.cyan;
+
   lasers.push({
     startX1: canvas.width * 0.35,
     startY1: canvas.height * 0.82,
@@ -2063,7 +2778,9 @@ function spawnLaserBeam() {
     targetX: canvas.width * 0.5,
     targetY: canvas.height * 0.36,
     progress: 0,
-    life: 1.0
+    life: 1.0,
+    color: laserConfig.stroke,
+    coreColor: laserConfig.core
   });
 }
 
@@ -2156,13 +2873,13 @@ function renderLoop() {
     ctx.restore();
   }
 
-  // 3. レーザービーム描画
+  // 3. レーザービーム描画 (カスタムカラー反映)
   for (let i = lasers.length - 1; i >= 0; i--) {
     const l = lasers[i];
     ctx.save();
-    ctx.strokeStyle = '#00e5ff';
+    ctx.strokeStyle = l.color || '#00e5ff';
     ctx.lineWidth = 7 * l.life;
-    ctx.shadowColor = '#00e5ff';
+    ctx.shadowColor = l.color || '#00e5ff';
     ctx.shadowBlur = 20;
 
     ctx.beginPath();
@@ -2172,8 +2889,8 @@ function renderLoop() {
     ctx.lineTo(l.targetX, l.targetY);
     ctx.stroke();
 
-    // 内側のホワイトコア
-    ctx.strokeStyle = '#ffffff';
+    // 内側のコア光
+    ctx.strokeStyle = l.coreColor || '#ffffff';
     ctx.lineWidth = 3 * l.life;
     ctx.stroke();
     ctx.restore();
@@ -2207,7 +2924,7 @@ function renderLoop() {
     ctx.restore();
   }
 
-  // 5. プレイヤーのジェット機 (コックピット視点の手前翼・レーザーポッド)
+  // 5. プレイヤーのジェット機 (カスタムカラー反映)
   drawPlayerJet(cx, canvas.height);
 
   ctx.restore();
@@ -2216,11 +2933,13 @@ function renderLoop() {
 function drawPlayerJet(cx, h) {
   ctx.save();
   const jetBaseY = h * 0.85;
+  const custom = getCustomSetting();
+  const shipConfig = SHIP_COLORS[custom.ship] || SHIP_COLORS.blue;
 
   // 左翼
-  ctx.fillStyle = '#0e1d38';
-  ctx.strokeStyle = '#00e5ff';
-  ctx.lineWidth = 2;
+  ctx.fillStyle = shipConfig.fill;
+  ctx.strokeStyle = shipConfig.stroke;
+  ctx.lineWidth = 2.5;
 
   ctx.beginPath();
   ctx.moveTo(cx - 220, h);
@@ -2251,10 +2970,10 @@ function drawPlayerJet(cx, h) {
   ctx.arc(cx, jetBaseY + 60, 180, Math.PI * 1.1, Math.PI * 1.9);
   ctx.stroke();
 
-  // ジェット推進炎エフェクト
+  // ジェット推進炎エフェクト (カスタム炎カラー)
   const flameTime = Date.now() * 0.02;
   const flameH = 20 + Math.sin(flameTime) * 6;
-  ctx.fillStyle = 'rgba(0, 229, 255, 0.8)';
+  ctx.fillStyle = shipConfig.flame;
   ctx.beginPath();
   ctx.moveTo(cx - 89, jetBaseY + 10);
   ctx.lineTo(cx - 83, jetBaseY + 10 + flameH);
@@ -2290,6 +3009,16 @@ let isAnswerLocked = false;
 let solvedHistory = [];
 let currentInputMode = 'blocks';
 
+// コンボ・スピードボーナス・リベンジ管理
+let currentCombo = 0;
+let maxComboInRun = 0;
+let questionStartTime = 0;
+let lastRunMistakes = [];
+let isRevengeRun = false;
+let isDailyRun = false;
+let isMistakesRun = false;
+let runEarnedExp = 0;
+
 const COURSE_NAMES = {
   grade1: "🌱 １年生コース",
   grade2: "🌿 ２年生コース",
@@ -2297,14 +3026,148 @@ const COURSE_NAMES = {
   grade4: "🍁 ４年生コース",
   grade5: "⚡ ５年生コース",
   grade6: "🔥 ６年生コース",
-  all: "👑 全学年チャレンジ"
+  all: "👑 全学年チャレンジ",
+  daily: "🎯 デイリーミッション",
+  mistakes: "🔁 にがて特訓リベンジ",
+  revenge: "💥 間違いリベンジ"
 };
+
+/* === 称号・ランク定義 === */
+const RANKS = [
+  { minExp: 0, title: "みならいパイロット", icon: "🧑‍🚀" },
+  { minExp: 20, title: "ルーキー操縦士", icon: "🚀" },
+  { minExp: 60, title: "スペースパイロット", icon: "✈️" },
+  { minExp: 120, title: "ベテラン操縦士", icon: "🎖️" },
+  { minExp: 200, title: "スペースキャプテン", icon: "💫" },
+  { minExp: 350, title: "銀河のエース", icon: "🌟" },
+  { minExp: 550, title: "漢字コマンダー", icon: "👑" },
+  { minExp: 800, title: "漢字マスター提督", icon: "🌌" }
+];
+
+function getExp() {
+  return parseInt(localStorage.getItem('kanji_jet_exp') || '0', 10);
+}
+
+function addExp(amount) {
+  const current = getExp();
+  const next = current + amount;
+  localStorage.setItem('kanji_jet_exp', next.toString());
+  
+  const oldRank = getCurrentRank(current);
+  const newRank = getCurrentRank(next);
+  if (newRank.title !== oldRank.title) {
+    sound.playRankUp();
+    showComboEffect(`🎖️ 昇格！${newRank.title}`);
+  }
+  updateHomeUI();
+  return next;
+}
+
+function getCurrentRank(exp) {
+  for (let i = RANKS.length - 1; i >= 0; i--) {
+    if (exp >= RANKS[i].minExp) return RANKS[i];
+  }
+  return RANKS[0];
+}
+
+/* === まいにちストリーク（連続プレイ） === */
+function getStreakData() {
+  try {
+    const raw = localStorage.getItem('kanji_jet_streak');
+    return raw ? JSON.parse(raw) : { lastDate: "", count: 0 };
+  } catch (e) {
+    return { lastDate: "", count: 0 };
+  }
+}
+
+function updateStreak() {
+  const now = new Date();
+  const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+  const data = getStreakData();
+
+  if (data.lastDate === todayStr) {
+    return data.count; // 今日すでにプレイ済み
+  }
+
+  const yesterday = new Date(now);
+  yesterday.setDate(yesterday.getDate() - 1);
+  const yesterdayStr = `${yesterday.getFullYear()}-${String(yesterday.getMonth() + 1).padStart(2, '0')}-${String(yesterday.getDate()).padStart(2, '0')}`;
+
+  let newCount = 1;
+  if (data.lastDate === yesterdayStr) {
+    newCount = (data.count || 0) + 1;
+  }
+  localStorage.setItem('kanji_jet_streak', JSON.stringify({ lastDate: todayStr, count: newCount }));
+  return newCount;
+}
+
+/* === にがて（間違い）漢字記録 === */
+function getMistakes() {
+  try {
+    const raw = localStorage.getItem('kanji_jet_mistakes');
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) {
+    return {};
+  }
+}
+
+function recordMistake(kanji) {
+  const m = getMistakes();
+  m[kanji] = (m[kanji] || 0) + 1;
+  try {
+    localStorage.setItem('kanji_jet_mistakes', JSON.stringify(m));
+  } catch (e) {}
+}
+
+function resolveMistake(kanji) {
+  const m = getMistakes();
+  if (m[kanji]) {
+    delete m[kanji];
+    try {
+      localStorage.setItem('kanji_jet_mistakes', JSON.stringify(m));
+    } catch (e) {}
+  }
+}
+
+/* === 例文辞書 & 生成 === */
+const SAMPLE_SENTENCES = {
+  "青空": "青空を ジェット機が気持ちよく飛ぶ。",
+  "雨水": "雨水が コップの中にたまっている。",
+  "花火": "夜空に きれいな大花火が上がる。",
+  "先生": "学校で 優しい先生に質問する。",
+  "手足": "運動の前に 手足をしっかり動かす。",
+  "山川": "大自然の 美しい山川をながめる。",
+  "森林": "森林の中で 鳥の歌声をきく。",
+  "草木": "雨を浴びて 草木が元気に育つ。",
+  "夕日": "西の空に 赤い夕日が沈む。",
+  "水中": "水中を 色とりどりの魚が泳ぐ。",
+  "車": "安全運転で 車を走らせる。",
+  "学校": "朝 元気よく学校に登校する。",
+  "時計": "時計を見て 時間を守って行動する。",
+  "新聞": "お父さんが 朝の新聞を読む。",
+  "算数": "算数の 計算問題に挑戦する。",
+  "公園": "放課後 公園で友達と鬼ごっこをする。",
+  "夜空": "星がいっぱいに広がる夜空を見上げる。",
+  "元気": "毎日ごはんを食べて元気にすごす。",
+  "走る": "グラウンドを 全力で走る。"
+};
+
+function getQuestionExample(q) {
+  if (SAMPLE_SENTENCES[q.kanji]) return `例文: ${SAMPLE_SENTENCES[q.kanji]}`;
+  return `例文: 【${q.kanji}】(${q.kana}) : ${q.hint}`;
+}
+
+function getTimeoutAdvice(q) {
+  return `💡 正解は「${q.kana}」！${q.hint}`;
+}
 
 // DOM要素
 const elStageText = document.getElementById('stage-text');
 const elLevelBadge = document.getElementById('level-badge');
 const elTargetKanji = document.getElementById('target-kanji');
 const elTargetHint = document.getElementById('target-hint');
+const elTargetExample = document.getElementById('target-example');
+const elTimeoutTipBox = document.getElementById('timeout-tip-box');
 const elTargetCharsCount = document.getElementById('target-chars-count');
 const elTargetLabel = document.getElementById('target-label');
 const elKanjiPanel = document.getElementById('kanji-panel');
@@ -2319,11 +3182,88 @@ const elTimerNumber = document.getElementById('timer-number');
 const elFlashOverlay = document.getElementById('flash-overlay');
 const elHiddenInput = document.getElementById('hidden-input');
 
+function updateHomeUI() {
+  // ストリーク
+  const sData = getStreakData();
+  const streakEl = document.getElementById('home-streak-display');
+  if (streakEl) streakEl.textContent = `🔥 ${sData.count || 1}日連続`;
+
+  // 称号 & EXP
+  const exp = getExp();
+  const rank = getCurrentRank(exp);
+  const rankEl = document.getElementById('home-rank-display');
+  if (rankEl) rankEl.textContent = `${rank.icon} ${rank.title}`;
+  const expEl = document.getElementById('home-exp-display');
+  if (expEl) expEl.textContent = `${exp} pts`;
+
+  // 学年ごとの進捗バッジ
+  const mastered = getMasteredKanji();
+  for (let g = 1; g <= 6; g++) {
+    const list = ALL_GRADE_KANJI[g] || [];
+    let count = 0;
+    list.forEach(ch => { if (mastered[ch]) count++; });
+    const badge = document.getElementById(`badge-g${g}`);
+    if (badge) {
+      const pct = list.length > 0 ? Math.floor((count / list.length) * 100) : 0;
+      if (count >= list.length && list.length > 0) {
+        badge.innerHTML = `👑 制覇 (${count}/${list.length}字)`;
+        badge.style.color = '#ffd700';
+      } else {
+        badge.textContent = `⭐ ${count}/${list.length}字 (${pct}%)`;
+      }
+    }
+  }
+
+  // にがて特訓の残り件数
+  const m = getMistakes();
+  const mCount = Object.keys(m).length;
+  const mDesc = document.getElementById('mistakes-mode-desc');
+  if (mDesc) {
+    mDesc.textContent = mCount > 0 ? `未克服の漢字: ${mCount}問！集中特訓せよ！` : "現在にがて漢字はありません！";
+  }
+
+  // 発進ボタン文言
+  const startBtn = document.getElementById('start-game-btn');
+  if (startBtn) {
+    startBtn.textContent = `${COURSE_NAMES[gameMode] || "コース"}で発進！ (START)`;
+  }
+}
+
 function selectMode(mode) {
   gameMode = mode;
   document.querySelectorAll('.mode-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.mode === mode);
   });
+  const startBtn = document.getElementById('start-game-btn');
+  if (startBtn) {
+    startBtn.textContent = `${COURSE_NAMES[gameMode] || "コース"}で発進！ (START)`;
+  }
+}
+
+function quickStart(mode) {
+  selectMode(mode);
+  startGame();
+}
+
+function startDailyMission() {
+  gameMode = 'daily';
+  startGame();
+}
+
+function startMistakesMode() {
+  const m = getMistakes();
+  if (Object.keys(m).length === 0) {
+    alert("現在、まちがえた漢字はありません！学年コースで腕試ししよう！");
+    return;
+  }
+  gameMode = 'mistakes';
+  startGame();
+}
+
+function startRevengeMode() {
+  if (lastRunMistakes.length === 0) return;
+  gameMode = 'revenge';
+  startGame();
 }
 
 function switchInputMode(mode) {
@@ -2345,21 +3285,33 @@ function switchInputMode(mode) {
 function buildQuestionList() {
   let list = [];
   const shuffle = (arr) => [...arr].sort(() => Math.random() - 0.5);
+  const mistakes = getMistakes();
 
-  if (gameMode === 'grade1') {
-    list = shuffle(KANJI_DATABASE.grade1).slice(0, 10);
-  } else if (gameMode === 'grade2') {
-    list = shuffle(KANJI_DATABASE.grade2).slice(0, 10);
-  } else if (gameMode === 'grade3') {
-    list = shuffle(KANJI_DATABASE.grade3).slice(0, 10);
-  } else if (gameMode === 'grade4') {
-    list = shuffle(KANJI_DATABASE.grade4).slice(0, 10);
-  } else if (gameMode === 'grade5') {
-    list = shuffle(KANJI_DATABASE.grade5).slice(0, 10);
-  } else if (gameMode === 'grade6') {
-    list = shuffle(KANJI_DATABASE.grade6).slice(0, 10);
-  } else {
-    // 全学年チャレンジ: 1年(1問) -> 2年(1問) -> 3年(2問) -> 4年(2問) -> 5年(2問) -> 6年(2問)
+  if (gameMode === 'revenge') {
+    return [...lastRunMistakes];
+  }
+
+  if (gameMode === 'mistakes') {
+    const mistakeWords = [];
+    for (let g = 1; g <= 6; g++) {
+      (KANJI_DATABASE[`grade${g}`] || []).forEach(q => {
+        if (mistakes[q.kanji]) mistakeWords.push(q);
+      });
+    }
+    return shuffle(mistakeWords).slice(0, 10);
+  }
+
+  if (gameMode === 'daily') {
+    const allQ = [];
+    for (let g = 1; g <= 6; g++) {
+      allQ.push(...(KANJI_DATABASE[`grade${g}`] || []));
+    }
+    return shuffle(allQ).slice(0, 5);
+  }
+
+  // 通常学年コース: にがて漢字があれば優先的に最大3問混合
+  let basePool = KANJI_DATABASE[gameMode] || KANJI_DATABASE.grade1;
+  if (gameMode === 'all') {
     list = [
       ...shuffle(KANJI_DATABASE.grade1).slice(0, 1),
       ...shuffle(KANJI_DATABASE.grade2).slice(0, 1),
@@ -2368,6 +3320,12 @@ function buildQuestionList() {
       ...shuffle(KANJI_DATABASE.grade5).slice(0, 2),
       ...shuffle(KANJI_DATABASE.grade6).slice(0, 2)
     ];
+  } else {
+    const mistakeCandidates = basePool.filter(q => mistakes[q.kanji]);
+    const normalCandidates = basePool.filter(q => !mistakes[q.kanji]);
+    const pickedMistakes = shuffle(mistakeCandidates).slice(0, 3);
+    const pickedNormal = shuffle(normalCandidates).slice(0, 10 - pickedMistakes.length);
+    list = shuffle([...pickedMistakes, ...pickedNormal]);
   }
   return list;
 }
@@ -2376,12 +3334,21 @@ function startGame() {
   document.getElementById('start-modal').style.display = 'none';
   document.getElementById('result-modal').style.display = 'none';
 
+  updateStreak();
+
   crewLives = 5;
   currentQuestionIndex = 0;
   solvedHistory = [];
+  currentCombo = 0;
+  maxComboInRun = 0;
+  runEarnedExp = 0;
+  lastRunMistakes = [];
   updateCrewDisplay();
 
   currentQuestionList = buildQuestionList();
+  if (currentQuestionList.length === 0) {
+    currentQuestionList = (KANJI_DATABASE.grade1 || []).slice(0, 5);
+  }
   sound.startBgm();
 
   loadQuestion(currentQuestionIndex);
@@ -2416,11 +3383,9 @@ function renderCharBlocks(q) {
   elCharBlocksContainer.innerHTML = "";
   const targetChars = q.kana.split('');
   
-  // ダミー文字を正解に含まれないものからランダム抽出
   const availableDummies = DUMMY_CHARS.filter(c => !targetChars.includes(c));
   const shuffledDummies = [...availableDummies].sort(() => Math.random() - 0.5);
   
-  // 合計10個（2行×5列）の押しやすい候補ボタンを作成
   const dummyCount = Math.max(4, 10 - targetChars.length);
   const selectedDummies = shuffledDummies.slice(0, dummyCount);
   
@@ -2446,7 +3411,6 @@ function updateAnswerDisplay() {
   if (!currentQ) return;
   const targetLen = currentQ.kana.length;
 
-  // input要素以外のスロット要素を取得・生成
   let slots = elSlotsContainer.querySelectorAll('.char-slot');
   if (slots.length !== targetLen) {
     slots.forEach(s => s.remove());
@@ -2465,7 +3429,6 @@ function updateAnswerDisplay() {
     slots[i].classList.toggle('active', i === currentAnswer.length);
   }
 
-  // 必要な文字数が揃ったら発射ボタンを強調
   if (currentAnswer.length >= targetLen) {
     elBtnSubmit.classList.add('ready-fire');
   } else {
@@ -2475,7 +3438,6 @@ function updateAnswerDisplay() {
 
 function loadQuestion(index) {
   if (index >= currentQuestionList.length) {
-    // 全問クリア！
     showGameResult(true);
     return;
   }
@@ -2483,17 +3445,16 @@ function loadQuestion(index) {
   isAnswerLocked = false;
   currentAnswer = "";
   elHiddenInput.value = "";
+  questionStartTime = performance.now();
 
   const q = currentQuestionList[index];
   const total = currentQuestionList.length;
 
-  // コースバッジ更新
   const elStageCourse = document.getElementById('stage-course');
   if (elStageCourse) {
     elStageCourse.textContent = COURSE_NAMES[gameMode] || "ツアー";
   }
 
-  // ステージラベル判定 (全10問: STAGE 1 (1-3), STAGE 2 (4-6), STAGE 3 (7-9), FINAL (10))
   if (index === total - 1) {
     elStageText.textContent = "FINAL STAGE";
     elStageText.style.color = "var(--neon-red)";
@@ -2509,20 +3470,29 @@ function loadQuestion(index) {
   elTargetLabel.textContent = `TARGET 0${index + 1}`;
   elTargetKanji.textContent = q.kanji;
   elTargetHint.textContent = `学年: ${q.grade} | ${q.hint}`;
+
+  // 例文表示
+  if (elTargetExample) {
+    elTargetExample.textContent = getQuestionExample(q);
+    elTargetExample.style.display = 'block';
+  }
+
+  // ワンポイント解説を非表示にリセット
+  if (elTimeoutTipBox) {
+    elTimeoutTipBox.style.display = 'none';
+  }
+
   elTargetCharsCount.textContent = `${q.kana.length}もじ`;
 
-  // 解答マス目と文字ブロックの生成
   updateAnswerDisplay();
   renderCharBlocks(q);
 
-  // ターゲットアニメーションリセット
   targetVisual.scale = 0.1;
   targetVisual.targetScale = 1.0;
   targetVisual.defeated = false;
 
   elKanjiPanel.style.transform = "translate(-50%, -50%) scale(1)";
 
-  // タイマースタート (30秒)
   startTimer(30.0);
 }
 
@@ -2545,7 +3515,6 @@ function startTimer(seconds) {
       handleTimeOut();
     } else {
       updateTimerUI();
-      // 残り8秒以下でピピ警告音
       if (timerSeconds <= 8.0 && Math.floor(timerSeconds * 10) % 10 === 0) {
         sound.playWarningBeep();
       }
@@ -2586,7 +3555,7 @@ function clearAnswer() {
   updateAnswerDisplay();
 }
 
-// 濁点・半濁点の変換ロジック
+// 濁点・半濁点
 const DAKUTEN_MAP = {
   'か': 'が', 'き': 'ぎ', 'く': 'ぐ', 'け': 'げ', 'こ': 'ご',
   'さ': 'ざ', 'し': 'じ', 'す': 'ず', 'せ': 'ぜ', 'そ': 'ぞ',
@@ -2609,7 +3578,7 @@ function toggleDakuten() {
   }
 }
 
-// 小文字変換ロジック
+// 小文字変換
 const KOMOJI_MAP = {
   'あ': 'ぁ', 'い': 'ぃ', 'う': 'ぅ', 'え': 'ぇ', 'お': 'ぉ',
   'つ': 'っ', 'や': 'ゃ', 'ゆ': 'ゅ', 'よ': 'ょ', 'わ': 'ゎ',
@@ -2624,6 +3593,28 @@ function toggleKomoji() {
     currentAnswer = currentAnswer.slice(0, -1) + KOMOJI_MAP[last];
     updateAnswerDisplay();
   }
+}
+
+/* === コンボ & スピードボーナス演出 === */
+function showComboEffect(text) {
+  const container = document.getElementById('combo-container');
+  if (!container) return;
+  const pop = document.createElement('div');
+  pop.className = 'combo-popup';
+  pop.textContent = text;
+  container.appendChild(pop);
+  setTimeout(() => pop.remove(), 1200);
+}
+
+function showSpeedBonusEffect() {
+  const container = document.getElementById('combo-container');
+  if (!container) return;
+  const pop = document.createElement('div');
+  pop.className = 'combo-popup';
+  pop.style.color = '#00ffff';
+  pop.textContent = '⚡ SPEED BONUS! +10';
+  container.appendChild(pop);
+  setTimeout(() => pop.remove(), 1200);
 }
 
 /* 解答判定 (発射！) */
@@ -2645,6 +3636,30 @@ function handleCorrectAnswer(q) {
   isAnswerLocked = true;
   clearInterval(timerInterval);
 
+  const elapsedSec = (performance.now() - questionStartTime) / 1000;
+
+  // コンボ加算
+  currentCombo++;
+  if (currentCombo > maxComboInRun) maxComboInRun = currentCombo;
+
+  // EXP計算
+  let earned = 10;
+  if (currentCombo >= 2) {
+    earned += currentCombo * 2;
+    showComboEffect(`🔥 ${currentCombo} COMBO!`);
+    sound.playCombo(currentCombo);
+  }
+  if (elapsedSec <= 5.0) {
+    earned += 10;
+    showSpeedBonusEffect();
+    sound.playSpeedBonus();
+  }
+  runEarnedExp += earned;
+  addExp(earned);
+
+  // にがて克服ならリストから削除
+  resolveMistake(q.kanji);
+
   solvedHistory.push({
     kanji: q.kanji,
     kana: q.kana,
@@ -2652,7 +3667,7 @@ function handleCorrectAnswer(q) {
     success: true
   });
 
-  // 漢字の部屋に正解した漢字を記録・保存
+  // 漢字の部屋に記録
   recordMasteredKanji(q.kanji);
 
   // レーザー発射 & 大爆発
@@ -2663,9 +3678,7 @@ function handleCorrectAnswer(q) {
     spawnExplosion(canvas.width * 0.5, canvas.height * 0.36);
     sound.playCorrect();
 
-    // フラッシュ
     triggerFlash('correct');
-
     elKanjiPanel.style.transform = "translate(-50%, -50%) scale(0)";
   }, 200);
 
@@ -2678,8 +3691,8 @@ function handleCorrectAnswer(q) {
 function handleWrongAnswer() {
   sound.playWrong();
   triggerFlash('wrong');
+  currentCombo = 0;
 
-  // パネルと解答スロット振動
   elKanjiPanel.style.animation = "shakePanel 0.4s ease-in-out";
   elSlotsContainer.style.animation = "shakePanel 0.4s ease-in-out";
   setTimeout(() => {
@@ -2691,6 +3704,7 @@ function handleWrongAnswer() {
 function handleTimeOut() {
   if (isAnswerLocked) return;
   isAnswerLocked = true;
+  currentCombo = 0;
 
   sound.playWrong();
   triggerFlash('wrong');
@@ -2700,6 +3714,9 @@ function handleTimeOut() {
   updateCrewDisplay();
 
   const currentQ = currentQuestionList[currentQuestionIndex];
+  recordMistake(currentQ.kanji);
+  lastRunMistakes.push(currentQ);
+
   solvedHistory.push({
     kanji: currentQ.kanji,
     kana: currentQ.kana,
@@ -2707,7 +3724,7 @@ function handleTimeOut() {
     success: false
   });
 
-  // 正解をマス目に赤色で表示して教える
+  // 正解を赤色で表示
   const slots = elSlotsContainer.querySelectorAll('.char-slot');
   for (let i = 0; i < currentQ.kana.length; i++) {
     if (slots[i]) {
@@ -2716,6 +3733,12 @@ function handleTimeOut() {
       slots[i].style.borderColor = "var(--neon-red)";
       slots[i].classList.add('filled');
     }
+  }
+
+  // ワンポイント解説表示
+  if (elTimeoutTipBox) {
+    elTimeoutTipBox.textContent = getTimeoutAdvice(currentQ);
+    elTimeoutTipBox.style.display = 'block';
   }
 
   setTimeout(() => {
@@ -2729,7 +3752,7 @@ function handleTimeOut() {
       currentQuestionIndex++;
       loadQuestion(currentQuestionIndex);
     }
-  }, 1800);
+  }, 2200);
 }
 
 function triggerFlash(type) {
@@ -2750,11 +3773,33 @@ function showGameResult(isWin) {
   const msg = document.getElementById('result-message');
   const scoreSpan = document.getElementById('res-score');
   const crewSpan = document.getElementById('res-crew');
+  const comboSpan = document.getElementById('res-combo');
+  const expSpan = document.getElementById('res-exp');
   const list = document.getElementById('result-list');
 
   const winCount = solvedHistory.filter(h => h.success).length;
   scoreSpan.textContent = `${winCount} / ${currentQuestionList.length}`;
   crewSpan.textContent = `${crewLives}`;
+  if (comboSpan) comboSpan.textContent = `${maxComboInRun}`;
+  if (expSpan) expSpan.textContent = `+${runEarnedExp}`;
+
+  // リベンジボタン表示制御
+  const revengeBox = document.getElementById('revenge-container');
+  const revengeBtn = document.getElementById('btn-revenge-start');
+  if (revengeBox && revengeBtn) {
+    if (lastRunMistakes.length > 0) {
+      revengeBox.style.display = 'block';
+      revengeBtn.textContent = `💥 まちがえた漢字だけリベンジ！（${lastRunMistakes.length}問）`;
+    } else {
+      revengeBox.style.display = 'none';
+    }
+  }
+
+  // 認定証ボタン表示制御（全問クリア時に表示）
+  const certBtn = document.getElementById('btn-result-cert');
+  if (certBtn) {
+    certBtn.style.display = isWin ? 'inline-block' : 'none';
+  }
 
   // 漢字の部屋の進捗サマリーを表示
   const mastered = getMasteredKanji();
@@ -2795,6 +3840,7 @@ function showGameResult(isWin) {
     msg.textContent = `【${courseTitle}】全機撃墜...！復習してもう一度挑戦せよ！`;
   }
 
+  updateHomeUI();
   modal.style.display = 'flex';
 }
 
@@ -2802,6 +3848,7 @@ function returnToTitle() {
   document.getElementById('result-modal').style.display = 'none';
   document.getElementById('start-modal').style.display = 'flex';
   sound.stopBgm();
+  updateHomeUI();
 }
 
 /* ==========================================================================
@@ -3053,19 +4100,45 @@ function switchRoomGrade(grade) {
   renderKanjiRoom();
 }
 
+function getMasteryTier(count) {
+  if (count >= 5) return 'gold';
+  if (count >= 3) return 'silver';
+  if (count >= 1) return 'bronze';
+  return null;
+}
+
 function renderKanjiRoom() {
   const mastered = getMasteredKanji();
 
-  // 1. 全体進捗計算 (全1026字)
+  // 1. 全体進捗 & 金銀銅集計 (全1026字)
   let totalMastered = 0;
+  let totalGold = 0;
+  let totalSilver = 0;
+  let totalBronze = 0;
+
   for (let g = 1; g <= 6; g++) {
     for (const ch of ALL_GRADE_KANJI[g]) {
-      if (mastered[ch]) totalMastered++;
+      const cnt = mastered[ch] || 0;
+      if (cnt > 0) {
+        totalMastered++;
+        const tier = getMasteryTier(cnt);
+        if (tier === 'gold') totalGold++;
+        else if (tier === 'silver') totalSilver++;
+        else if (tier === 'bronze') totalBronze++;
+      }
     }
   }
+
   const totalPercent = ((totalMastered / 1026) * 100).toFixed(1);
   document.getElementById('room-total-stats').textContent = `${totalMastered} / 1026 字 (${totalPercent}%)`;
   document.getElementById('room-total-bar').style.width = `${totalPercent}%`;
+
+  const elGold = document.getElementById('room-gold-count');
+  const elSilver = document.getElementById('room-silver-count');
+  const elBronze = document.getElementById('room-bronze-count');
+  if (elGold) elGold.textContent = totalGold;
+  if (elSilver) elSilver.textContent = totalSilver;
+  if (elBronze) elBronze.textContent = totalBronze;
 
   // 2. 学年タブのラベル更新 (各学年の正解数表示)
   document.querySelectorAll('.room-tab').forEach(tab => {
@@ -3095,19 +4168,22 @@ function renderKanjiRoom() {
     g1Btn.textContent = `📋 ${currentRoomGrade}年生の音読み・訓読み表`;
   }
 
-  // 4. 漢字タイルの描画
+  // 4. 漢字タイルの描画 (定着度クラス金・銀・銅付与)
   const grid = document.getElementById('room-kanji-grid');
   grid.innerHTML = "";
   currList.forEach(ch => {
     const tile = document.createElement('div');
     tile.className = 'kanji-tile';
     tile.textContent = ch;
-    const isMastered = !!mastered[ch];
-    if (isMastered) {
-      tile.classList.add('mastered');
-      tile.title = `【${ch}】 正解数: ${mastered[ch]}回 (クリックで音訓表示)`;
+    const count = mastered[ch] || 0;
+    const tier = getMasteryTier(count);
+
+    if (tier) {
+      tile.classList.add('mastered', tier);
+      const tierLabel = tier === 'gold' ? '🥇金マスター' : (tier === 'silver' ? '🥈銀マスター' : '🥉銅マスター');
+      tile.title = `【${ch}】 ${tierLabel} (正解: ${count}回) クリックで詳細`;
     } else {
-      tile.title = `【${ch}】 未正解 (クリックで音訓表示)`;
+      tile.title = `【${ch}】 未正解 (クリックで詳細)`;
     }
     tile.addEventListener('click', () => {
       selectKanjiTile(ch, currentRoomGrade);
@@ -3121,6 +4197,7 @@ function resetKanjiProgress() {
     try {
       localStorage.removeItem('kanji_jet_mastered');
       renderKanjiRoom();
+      updateHomeUI();
       alert("進捗をリセットしました。新たな気持ちで挑戦しよう！");
     } catch (e) {
       console.warn(e);
@@ -3129,27 +4206,44 @@ function resetKanjiProgress() {
 }
 
 
-const ALL_KANJI_READINGS_DATA = {"一": {"on": "イチ、イツ", "kun": "ひと"}, "右": {"on": "ウ、ユウ", "kun": "みぎ"}, "雨": {"on": "ウ", "kun": "あめ、あま"}, "円": {"on": "エン", "kun": "まる"}, "王": {"on": "オウ", "kun": "—"}, "音": {"on": "オン", "kun": "おと、ね"}, "下": {"on": "カ、ゲ", "kun": "した、しも、さ、だ、お"}, "火": {"on": "カ", "kun": "ひ"}, "花": {"on": "カ", "kun": "はな"}, "貝": {"on": "—", "kun": "かい"}, "気": {"on": "キ、ケ", "kun": "—"}, "九": {"on": "キュウ、ク", "kun": "ここの"}, "休": {"on": "キュウ", "kun": "やす"}, "玉": {"on": "ギョク", "kun": "たま"}, "金": {"on": "キン、コン", "kun": "かね、かな"}, "空": {"on": "クウ", "kun": "そら、あ、から"}, "月": {"on": "ゲツ、ガツ", "kun": "つき"}, "犬": {"on": "ケン", "kun": "いぬ"}, "見": {"on": "ケン", "kun": "み"}, "五": {"on": "ゴ", "kun": "いつ"}, "口": {"on": "コウ、ク", "kun": "くち"}, "校": {"on": "コウ", "kun": "—"}, "左": {"on": "サ", "kun": "ひだり"}, "三": {"on": "サン", "kun": "み"}, "山": {"on": "サン", "kun": "やま"}, "子": {"on": "シ、ス", "kun": "こ"}, "四": {"on": "シ", "kun": "よ、よん"}, "糸": {"on": "シ", "kun": "いと"}, "字": {"on": "ジ", "kun": "—"}, "耳": {"on": "—", "kun": "みみ"}, "七": {"on": "シチ", "kun": "なな、の"}, "車": {"on": "シャ", "kun": "くるま"}, "手": {"on": "シュ", "kun": "て"}, "十": {"on": "ジュウ、ジッ", "kun": "と"}, "出": {"on": "シュツ", "kun": "で、だ"}, "女": {"on": "ジョ", "kun": "おんな"}, "小": {"on": "ショウ", "kun": "ちい、こ、お"}, "上": {"on": "ジョウ", "kun": "うえ、うわ、かみ、あ、のぼ"}, "森": {"on": "シン", "kun": "もり"}, "人": {"on": "ジン、ニン", "kun": "ひと"}, "水": {"on": "スイ", "kun": "みず"}, "正": {"on": "セイ、ショウ", "kun": "ただ、まさ"}, "生": {"on": "セイ、ショウ", "kun": "い、う、は、な"}, "青": {"on": "セイ", "kun": "あお"}, "夕": {"on": "—", "kun": "ゆう"}, "石": {"on": "セキ、シャク", "kun": "いし"}, "赤": {"on": "セキ", "kun": "あか"}, "千": {"on": "セン", "kun": "ち"}, "川": {"on": "—", "kun": "かわ"}, "先": {"on": "セン", "kun": "さき"}, "早": {"on": "ソウ", "kun": "はや"}, "草": {"on": "ソウ", "kun": "クサ"}, "足": {"on": "ソク", "kun": "あし、た"}, "村": {"on": "ソン", "kun": "むら"}, "大": {"on": "ダイ、タイ", "kun": "おお"}, "男": {"on": "ダン、ナン", "kun": "おとこ"}, "竹": {"on": "チク", "kun": "たけ"}, "中": {"on": "チュウ", "kun": "なか"}, "虫": {"on": "チュウ", "kun": "むし"}, "町": {"on": "チョウ", "kun": "まち"}, "天": {"on": "テン", "kun": "あま"}, "田": {"on": "デン", "kun": "た"}, "土": {"on": "ド、ト", "kun": "つち"}, "二": {"on": "ニ", "kun": "ふた"}, "日": {"on": "ニチ、ジツ", "kun": "ひ、か"}, "入": {"on": "ニュウ", "kun": "い、はい"}, "学": {"on": "ガク", "kun": "まな"}, "年": {"on": "ネン", "kun": "とし"}, "白": {"on": "ハク", "kun": "しろ、しら"}, "八": {"on": "ハチ", "kun": "や、よ"}, "百": {"on": "ヒャク", "kun": "—"}, "文": {"on": "ブン、モン", "kun": "—"}, "木": {"on": "ボク、モク", "kun": "き、こ"}, "本": {"on": "ホン", "kun": "もと"}, "名": {"on": "メイ、ミョウ", "kun": "な"}, "目": {"on": "モク", "kun": "め"}, "立": {"on": "リツ", "kun": "た"}, "力": {"on": "リョク、リキ", "kun": "ちから"}, "林": {"on": "リン", "kun": "はやし"}, "六": {"on": "ロク", "kun": "む"}, "引": {"on": "イン", "kun": "ひ"}, "羽": {"on": "—", "kun": "は、わ、はね"}, "雲": {"on": "ウン", "kun": "くも"}, "園": {"on": "エン", "kun": "—"}, "遠": {"on": "エン", "kun": "とお"}, "何": {"on": "カ", "kun": "なに、なん"}, "科": {"on": "カ", "kun": "—"}, "夏": {"on": "カ", "kun": "なつ"}, "家": {"on": "カ、ケ", "kun": "いえ、や"}, "歌": {"on": "カ", "kun": "うた"}, "画": {"on": "ガ、カク", "kun": "—"}, "回": {"on": "カイ", "kun": "まわ"}, "会": {"on": "カイ", "kun": "あ"}, "海": {"on": "カイ", "kun": "うみ"}, "絵": {"on": "カイ", "kun": "え"}, "外": {"on": "ガイ", "kun": "そと、ほか、はず"}, "角": {"on": "カク", "kun": "かど、つの"}, "楽": {"on": "ガク、ラク", "kun": "たの"}, "活": {"on": "カツ", "kun": "—"}, "間": {"on": "カン、ケン", "kun": "あいだ、ま"}, "丸": {"on": "ガン", "kun": "まる"}, "岩": {"on": "ガン", "kun": "いわ"}, "顔": {"on": "ガン", "kun": "かお"}, "汽": {"on": "キ", "kun": "—"}, "記": {"on": "キ", "kun": "しる"}, "帰": {"on": "キ", "kun": "かえ"}, "弓": {"on": "—", "kun": "ゆみ"}, "牛": {"on": "ギュウ", "kun": "うし"}, "魚": {"on": "ギョ", "kun": "うお、さかな"}, "京": {"on": "キョウ", "kun": "—"}, "強": {"on": "キョウ", "kun": "つよ"}, "教": {"on": "キョウ", "kun": "おし、おそ"}, "近": {"on": "キン", "kun": "ちか"}, "兄": {"on": "キョウ", "kun": "あに"}, "形": {"on": "ケイ、ギョウ", "kun": "かた、かたち"}, "計": {"on": "ケイ", "kun": "はか"}, "元": {"on": "ゲン、ガン", "kun": "もと"}, "言": {"on": "ゲン、ゴン", "kun": "い、こと"}, "原": {"on": "ゲン", "kun": "はら"}, "戸": {"on": "コ", "kun": "と"}, "古": {"on": "コ", "kun": "ふる"}, "午": {"on": "ゴ", "kun": "—"}, "後": {"on": "ゴ、コウ", "kun": "うしろ、のち、あと"}, "語": {"on": "ゴ", "kun": "かた"}, "工": {"on": "コウ", "kun": "く"}, "公": {"on": "コウ", "kun": "—"}, "広": {"on": "コウ", "kun": "ひろ"}, "交": {"on": "コウ", "kun": "まじ"}, "光": {"on": "コウ", "kun": "ひか"}, "考": {"on": "コウ", "kun": "かんが"}, "行": {"on": "コウ、ギョウ", "kun": "い、ゆ、おこな"}, "高": {"on": "コウ", "kun": "たか"}, "黄": {"on": "オウ", "kun": "き"}, "合": {"on": "ゴウ", "kun": "あ"}, "谷": {"on": "—", "kun": "たに"}, "国": {"on": "コク", "kun": "くに"}, "黒": {"on": "コク", "kun": "くろ"}, "今": {"on": "コン", "kun": "いま"}, "才": {"on": "サイ", "kun": "—"}, "細": {"on": "サイ", "kun": "ほそ、こま"}, "作": {"on": "サク", "kun": "つく"}, "算": {"on": "サン", "kun": "—"}, "止": {"on": "シ", "kun": "と"}, "市": {"on": "シ", "kun": "い"}, "矢": {"on": "—", "kun": "や"}, "姉": {"on": "シ", "kun": "あね"}, "思": {"on": "シ", "kun": "おも"}, "紙": {"on": "シ", "kun": "かみ"}, "寺": {"on": "ジ", "kun": "てら"}, "自": {"on": "ジ、シ", "kun": "みずか"}, "時": {"on": "ジ", "kun": "とき"}, "室": {"on": "シツ", "kun": "—"}, "社": {"on": "シャ", "kun": "やしろ"}, "弱": {"on": "ジャク", "kun": "よわ"}, "首": {"on": "シュ", "kun": "くび"}, "秋": {"on": "シュウ", "kun": "あき"}, "週": {"on": "シュウ", "kun": "—"}, "春": {"on": "シュン", "kun": "はる"}, "書": {"on": "ショ", "kun": "か"}, "少": {"on": "ショウ", "kun": "すくな、すこ"}, "場": {"on": "ジョウ", "kun": "ば"}, "色": {"on": "ショク、シキ", "kun": "いろ"}, "食": {"on": "ショク", "kun": "く、たべ"}, "心": {"on": "シン", "kun": "こころ"}, "新": {"on": "シン", "kun": "にい、あたら、あら"}, "親": {"on": "シン", "kun": "おや、した"}, "図": {"on": "ズ、ト", "kun": "—"}, "数": {"on": "スウ", "kun": "かず、かぞ"}, "西": {"on": "セイ、サイ", "kun": "にし"}, "声": {"on": "セイ", "kun": "こえ"}, "星": {"on": "セイ", "kun": "ほし"}, "晴": {"on": "セイ", "kun": "は"}, "切": {"on": "セツ", "kun": "き"}, "雪": {"on": "セツ", "kun": "ゆき"}, "船": {"on": "セン", "kun": "ふね、ふな"}, "線": {"on": "セン", "kun": "—"}, "前": {"on": "ゼン", "kun": "まえ"}, "組": {"on": "ソ", "kun": "く、くみ"}, "走": {"on": "ソウ", "kun": "はし"}, "多": {"on": "タ", "kun": "おお"}, "太": {"on": "タ", "kun": "ふと"}, "体": {"on": "タイ", "kun": "からだ"}, "台": {"on": "ダイ、タイ", "kun": "—"}, "地": {"on": "チ、ジ", "kun": "—"}, "池": {"on": "チ", "kun": "いけ"}, "知": {"on": "チ", "kun": "し"}, "茶": {"on": "チャ", "kun": "—"}, "昼": {"on": "チュウ", "kun": "ひる"}, "長": {"on": "チョウ", "kun": "なが"}, "鳥": {"on": "チョウ", "kun": "とり"}, "朝": {"on": "チョウ", "kun": "あさ"}, "直": {"on": "チョク、ジキ", "kun": "ただ、なお"}, "通": {"on": "ツウ", "kun": "とお、かよ"}, "弟": {"on": "ダイ", "kun": "おとうと"}, "店": {"on": "テン", "kun": "みせ"}, "点": {"on": "テン", "kun": "—"}, "電": {"on": "デン", "kun": "—"}, "刀": {"on": "トウ", "kun": "かたな"}, "冬": {"on": "トウ", "kun": "ふゆ"}, "当": {"on": "トウ", "kun": "あ"}, "東": {"on": "トウ", "kun": "ひがし"}, "答": {"on": "トウ", "kun": "こた"}, "頭": {"on": "トウ、ズ", "kun": "あたま"}, "同": {"on": "ドウ", "kun": "おな"}, "道": {"on": "ドウ", "kun": "みち"}, "読": {"on": "ドク、トク、トウ", "kun": "よ"}, "内": {"on": "ナイ", "kun": "うち"}, "南": {"on": "ナン", "kun": "みなみ"}, "肉": {"on": "ニク", "kun": "—"}, "馬": {"on": "バ", "kun": "うま"}, "売": {"on": "バイ", "kun": "う"}, "買": {"on": "バイ", "kun": "か"}, "麦": {"on": "—", "kun": "むぎ"}, "半": {"on": "ハン", "kun": "なか"}, "番": {"on": "バン", "kun": "—"}, "父": {"on": "フ", "kun": "ちち"}, "風": {"on": "フウ", "kun": "かぜ、かざ"}, "分": {"on": "ブン、フン、ブ", "kun": "わ"}, "聞": {"on": "ブン", "kun": "き"}, "米": {"on": "ベイ", "kun": "まい、こめ"}, "歩": {"on": "ホ", "kun": "ある、あゆ"}, "母": {"on": "ボ", "kun": "はは"}, "方": {"on": "ホウ", "kun": "かた"}, "北": {"on": "ホク", "kun": "きた"}, "毎": {"on": "マイ", "kun": "—"}, "妹": {"on": "マイ", "kun": "いもうと"}, "万": {"on": "マン", "kun": "—"}, "明": {"on": "メイ、ミョウ", "kun": "あ、あき"}, "鳴": {"on": "メイ", "kun": "な"}, "毛": {"on": "モウ", "kun": "け"}, "門": {"on": "モン", "kun": "—"}, "夜": {"on": "ヤ", "kun": "よ、よる"}, "野": {"on": "ヤ", "kun": "の"}, "友": {"on": "ユウ", "kun": "とも"}, "用": {"on": "ヨウ", "kun": "もち"}, "曜": {"on": "ヨウ", "kun": "—"}, "来": {"on": "ライ", "kun": "く"}, "里": {"on": "リ", "kun": "さと"}, "理": {"on": "リ", "kun": "—"}, "話": {"on": "ワ", "kun": "はな"}, "悪": {"on": "アク", "kun": "わる"}, "安": {"on": "アン", "kun": "やす"}, "暗": {"on": "アン", "kun": "くら"}, "医": {"on": "イ", "kun": "—"}, "委": {"on": "イ", "kun": "ゆだ"}, "意": {"on": "イ", "kun": "—"}, "育": {"on": "イク", "kun": "そだ、はぐく"}, "員": {"on": "イン", "kun": "—"}, "院": {"on": "イン", "kun": "—"}, "飲": {"on": "イン", "kun": "の"}, "運": {"on": "ウン", "kun": "はこ"}, "泳": {"on": "エイ", "kun": "およ"}, "駅": {"on": "エキ", "kun": "—"}, "央": {"on": "オウ", "kun": "—"}, "横": {"on": "オウ", "kun": "よこ"}, "屋": {"on": "オク", "kun": "や"}, "温": {"on": "オン", "kun": "あたた"}, "化": {"on": "カ", "kun": "ば"}, "荷": {"on": "ニ", "kun": "—"}, "界": {"on": "カイ", "kun": "—"}, "開": {"on": "カイ", "kun": "ひら、あ"}, "階": {"on": "カイ", "kun": "—"}, "寒": {"on": "カン", "kun": "さむ"}, "感": {"on": "カン", "kun": "—"}, "漢": {"on": "カン", "kun": "—"}, "館": {"on": "カン", "kun": "やかた"}, "岸": {"on": "ガン", "kun": "きし"}, "起": {"on": "キ", "kun": "お"}, "期": {"on": "キ", "kun": "—"}, "客": {"on": "キャク", "kun": "—"}, "究": {"on": "キュウ", "kun": "—"}, "急": {"on": "キュウ", "kun": "いそ"}, "級": {"on": "キュウ", "kun": "—"}, "宮": {"on": "キュウ", "kun": "や"}, "球": {"on": "キュウ", "kun": "たま"}, "去": {"on": "キョ", "kun": "さ"}, "橋": {"on": "キョウ", "kun": "はし"}, "業": {"on": "ギョウ", "kun": "—"}, "曲": {"on": "キョク", "kun": "ま"}, "局": {"on": "キョク", "kun": "—"}, "銀": {"on": "ギン", "kun": "—"}, "区": {"on": "ク", "kun": "—"}, "苦": {"on": "ク", "kun": "くる、にが"}, "具": {"on": "グ", "kun": "—"}, "君": {"on": "クン", "kun": "きみ"}, "係": {"on": "ケイ", "kun": "か、かか"}, "軽": {"on": "ケイ", "kun": "かる"}, "血": {"on": "ケツ", "kun": "ち"}, "決": {"on": "ケツ", "kun": "き"}, "研": {"on": "ケン", "kun": "—"}, "県": {"on": "ケン", "kun": "—"}, "庫": {"on": "コ", "kun": "—"}, "湖": {"on": "コ", "kun": "みずうみ"}, "向": {"on": "コウ", "kun": "む"}, "幸": {"on": "コウ", "kun": "さいわ、しあわ"}, "港": {"on": "コウ", "kun": "みなと"}, "号": {"on": "ゴウ", "kun": "—"}, "根": {"on": "コン", "kun": "ね"}, "祭": {"on": "サイ", "kun": "まつ"}, "皿": {"on": "—", "kun": "さら"}, "仕": {"on": "シ", "kun": "つか"}, "死": {"on": "シ", "kun": "し"}, "使": {"on": "シ", "kun": "つか"}, "始": {"on": "シ", "kun": "はじ"}, "指": {"on": "シ", "kun": "ゆび、さ"}, "歯": {"on": "シ", "kun": "は"}, "詩": {"on": "シ", "kun": "—"}, "次": {"on": "ジ", "kun": "つ、つぎ"}, "事": {"on": "ジ", "kun": "こと"}, "持": {"on": "ジ", "kun": "も"}, "式": {"on": "シキ", "kun": "—"}, "実": {"on": "ジツ", "kun": "み、みの"}, "写": {"on": "シャ", "kun": "うつ"}, "者": {"on": "シャ", "kun": "もの"}, "主": {"on": "シュ", "kun": "ぬし、おモ"}, "守": {"on": "シュ、ス", "kun": "まも"}, "取": {"on": "シュ", "kun": "と"}, "酒": {"on": "シュ", "kun": "さけ、さか"}, "受": {"on": "ジュ", "kun": "う"}, "州": {"on": "シュウ", "kun": "—"}, "拾": {"on": "—", "kun": "ひろ"}, "終": {"on": "シュウ", "kun": "お"}, "習": {"on": "シュウ", "kun": "なら"}, "集": {"on": "シュウ", "kun": "あつ"}, "住": {"on": "ジュウ", "kun": "す"}, "重": {"on": "ジュウ、チョウ", "kun": "え、おも、かさ"}, "宿": {"on": "シュク", "kun": "やど"}, "所": {"on": "ショ", "kun": "ところ"}, "暑": {"on": "ショ", "kun": "あつ"}, "助": {"on": "ジョ", "kun": "たす"}, "昭": {"on": "ショウ", "kun": "—"}, "消": {"on": "ショウ", "kun": "き、け"}, "商": {"on": "ショウ", "kun": "—"}, "章": {"on": "ショウ", "kun": "—"}, "勝": {"on": "ショウ", "kun": "か"}, "乗": {"on": "ジョウ", "kun": "の"}, "植": {"on": "ショク", "kun": "う"}, "申": {"on": "—", "kun": "もう"}, "身": {"on": "シン", "kun": "み"}, "神": {"on": "シン、ジン", "kun": "かみ"}, "真": {"on": "シン", "kun": "ま"}, "深": {"on": "シン", "kun": "ふか"}, "進": {"on": "シン", "kun": "すす"}, "世": {"on": "セ、セイ", "kun": "よ"}, "整": {"on": "セイ", "kun": "ととの"}, "昔": {"on": "—", "kun": "むかし"}, "全": {"on": "ゼン", "kun": "まった、すべ"}, "相": {"on": "ソウ", "kun": "あい"}, "送": {"on": "ソウ", "kun": "おく"}, "想": {"on": "ソウ", "kun": "—"}, "息": {"on": "ソク", "kun": "いき"}, "速": {"on": "ソク", "kun": "はや"}, "族": {"on": "ゾク", "kun": "—"}, "他": {"on": "タ", "kun": "ほか"}, "打": {"on": "ダ", "kun": "う"}, "対": {"on": "タイ", "kun": "—"}, "待": {"on": "タイ", "kun": "ま"}, "代": {"on": "タイ、ダイ", "kun": "か、よ"}, "第": {"on": "ダイ", "kun": "—"}, "題": {"on": "ダイ", "kun": "—"}, "炭": {"on": "タン", "kun": "すみ"}, "短": {"on": "タン", "kun": "みじか"}, "談": {"on": "ダン", "kun": "—"}, "着": {"on": "チャク", "kun": "き、つ"}, "注": {"on": "チュウ", "kun": "そそ"}, "柱": {"on": "チュウ", "kun": "はしら"}, "丁": {"on": "チョウ", "kun": "—"}, "帳": {"on": "チョウ", "kun": "—"}, "調": {"on": "チョウ", "kun": "しら"}, "追": {"on": "ツイ", "kun": "お"}, "定": {"on": "テイ、ジョウ", "kun": "さだ"}, "庭": {"on": "テイ", "kun": "にわ"}, "笛": {"on": "テキ", "kun": "ふえ"}, "鉄": {"on": "テツ", "kun": "—"}, "転": {"on": "テン", "kun": "ころ"}, "都": {"on": "ト、ツ", "kun": "みやこ"}, "度": {"on": "ド", "kun": "—"}, "投": {"on": "トウ", "kun": "な"}, "豆": {"on": "トウ、ズ", "kun": "まめ"}, "島": {"on": "トウ", "kun": "しま"}, "湯": {"on": "トウ", "kun": "ゆ"}, "登": {"on": "トウ、ト", "kun": "のぼ"}, "等": {"on": "トウ", "kun": "ひと"}, "動": {"on": "ドウ", "kun": "うご"}, "童": {"on": "ドウ", "kun": "—"}, "農": {"on": "ノウ", "kun": "—"}, "波": {"on": "ハ", "kun": "なみ"}, "配": {"on": "ハイ", "kun": "くば"}, "倍": {"on": "バイ", "kun": "—"}, "箱": {"on": "—", "kun": "はこ"}, "畑": {"on": "—", "kun": "はた、はたけ"}, "発": {"on": "ハツ", "kun": "—"}, "反": {"on": "ハン", "kun": "そ"}, "坂": {"on": "—", "kun": "さか"}, "板": {"on": "ハン、バン", "kun": "いた"}, "皮": {"on": "ヒ", "kun": "かわ"}, "悲": {"on": "ヒ", "kun": "かな"}, "美": {"on": "ビ", "kun": "うつく"}, "鼻": {"on": "—", "kun": "はな"}, "筆": {"on": "ヒツ", "kun": "ふで"}, "氷": {"on": "ヒョウ", "kun": "こおり"}, "表": {"on": "ヒョウ", "kun": "おもて、あらわ"}, "秒": {"on": "ビョウ", "kun": "—"}, "病": {"on": "ビョウ", "kun": "やまい"}, "品": {"on": "ヒン", "kun": "しな"}, "負": {"on": "フ", "kun": "ま、お"}, "部": {"on": "ブ", "kun": "—"}, "服": {"on": "フク", "kun": "—"}, "福": {"on": "フク", "kun": "—"}, "物": {"on": "ブツ、モツ", "kun": "もの"}, "平": {"on": "ヘイ、ビョウ", "kun": "たい、ひら"}, "返": {"on": "ヘン", "kun": "かえ"}, "勉": {"on": "ベン", "kun": "—"}, "放": {"on": "ホウ", "kun": "はな、ほう"}, "味": {"on": "ミ", "kun": "あじ"}, "命": {"on": "メイ", "kun": "いのち"}, "面": {"on": "メン", "kun": "—"}, "問": {"on": "モン", "kun": "と、とい"}, "役": {"on": "ヤク", "kun": "—"}, "薬": {"on": "ヤク", "kun": "くすり"}, "由": {"on": "ユ、ユウ", "kun": "—"}, "油": {"on": "ユ", "kun": "あぶら"}, "有": {"on": "ユウ", "kun": "あ"}, "遊": {"on": "ユウ", "kun": "あそ"}, "予": {"on": "ヨ", "kun": "—"}, "羊": {"on": "ヨウ", "kun": "ひつじ"}, "洋": {"on": "ヨウ", "kun": "—"}, "葉": {"on": "ヨウ", "kun": "は"}, "陽": {"on": "ヨウ", "kun": "—"}, "様": {"on": "ヨウ", "kun": "さま"}, "落": {"on": "ラク", "kun": "お"}, "流": {"on": "リュウ", "kun": "なが"}, "旅": {"on": "リョ", "kun": "たび"}, "両": {"on": "リョウ", "kun": "—"}, "緑": {"on": "リョク", "kun": "みどり"}, "礼": {"on": "レイ", "kun": "—"}, "列": {"on": "レツ", "kun": "—"}, "練": {"on": "レン", "kun": "ね"}, "路": {"on": "ロ", "kun": "じ"}, "和": {"on": "ワ", "kun": "わ"}, "愛": {"on": "アイ", "kun": "—"}, "案": {"on": "アン", "kun": "—"}, "以": {"on": "イ", "kun": "—"}, "衣": {"on": "イ", "kun": "—"}, "位": {"on": "イ", "kun": "くらい"}, "茨": {"on": "—", "kun": "いばら"}, "印": {"on": "イン", "kun": "しるし"}, "英": {"on": "エイ", "kun": "—"}, "栄": {"on": "エイ", "kun": "え"}, "媛": {"on": "エン", "kun": "—"}, "塩": {"on": "エン", "kun": "しお"}, "岡": {"on": "—", "kun": "おか"}, "億": {"on": "オク", "kun": "—"}, "加": {"on": "カ", "kun": "くわ"}, "果": {"on": "カ", "kun": "は"}, "貨": {"on": "カ", "kun": "—"}, "課": {"on": "カ", "kun": "—"}, "芽": {"on": "ガ", "kun": "め"}, "賀": {"on": "ガ", "kun": "—"}, "改": {"on": "カイ", "kun": "あらた"}, "械": {"on": "カイ", "kun": "—"}, "害": {"on": "ガイ", "kun": "—"}, "街": {"on": "ガイ、カイ", "kun": "まち"}, "各": {"on": "カク", "kun": "—"}, "覚": {"on": "カク", "kun": "おぼ、さ"}, "潟": {"on": "—", "kun": "かた"}, "完": {"on": "カン", "kun": "—"}, "官": {"on": "カン", "kun": "—"}, "管": {"on": "カン", "kun": "くだ"}, "関": {"on": "カン", "kun": "せき、かか"}, "観": {"on": "カン", "kun": "—"}, "願": {"on": "ガン", "kun": "ねが"}, "岐": {"on": "キ", "kun": "—"}, "希": {"on": "キ", "kun": "—"}, "季": {"on": "キ", "kun": "—"}, "旗": {"on": "キ", "kun": "はた"}, "器": {"on": "キ", "kun": "—"}, "機": {"on": "キ", "kun": "—"}, "議": {"on": "ギ", "kun": "—"}, "求": {"on": "キュウ", "kun": "もと"}, "泣": {"on": "キュウ", "kun": "な"}, "給": {"on": "キュウ", "kun": "—"}, "挙": {"on": "キョ", "kun": "あ"}, "漁": {"on": "ギョ、リョウ", "kun": "—"}, "共": {"on": "キョウ", "kun": "とも"}, "協": {"on": "キョウ", "kun": "—"}, "鏡": {"on": "キョウ", "kun": "かがみ"}, "競": {"on": "キョウ、ケイ", "kun": "—"}, "極": {"on": "キョク", "kun": "—"}, "熊": {"on": "—", "kun": "くま"}, "訓": {"on": "クン", "kun": "—"}, "軍": {"on": "グン", "kun": "—"}, "郡": {"on": "グン", "kun": "—"}, "群": {"on": "グン", "kun": "む、むれ"}, "径": {"on": "ケイ", "kun": "—"}, "景": {"on": "ケイ", "kun": "—"}, "芸": {"on": "ゲイ", "kun": "—"}, "欠": {"on": "ケツ", "kun": "か"}, "結": {"on": "ケツ", "kun": "むす"}, "建": {"on": "ケン", "kun": "た"}, "健": {"on": "ケン", "kun": "—"}, "験": {"on": "ケン", "kun": "—"}, "固": {"on": "コ", "kun": "かた"}, "功": {"on": "コウ", "kun": "—"}, "好": {"on": "コウ", "kun": "この、す"}, "香": {"on": "—", "kun": "か、かお"}, "候": {"on": "コウ", "kun": "—"}, "康": {"on": "コウ", "kun": "—"}, "佐": {"on": "サ", "kun": "—"}, "差": {"on": "サ", "kun": "さ"}, "菜": {"on": "サイ", "kun": "な"}, "最": {"on": "サイ", "kun": "もっと"}, "埼": {"on": "サイ", "kun": "—"}, "材": {"on": "ザイ", "kun": "—"}, "崎": {"on": "—", "kun": "さき"}, "昨": {"on": "サク", "kun": "—"}, "札": {"on": "サツ", "kun": "ふだ"}, "刷": {"on": "サツ", "kun": "す"}, "察": {"on": "サツ", "kun": "—"}, "参": {"on": "サン", "kun": "まい"}, "産": {"on": "サン", "kun": "う"}, "散": {"on": "サン", "kun": "ち"}, "残": {"on": "ザン", "kun": "のこ"}, "氏": {"on": "シ", "kun": "—"}, "司": {"on": "シ", "kun": "—"}, "試": {"on": "シ", "kun": "こころ"}, "児": {"on": "ジ", "kun": "—"}, "治": {"on": "ジ、チ", "kun": "なお、おさ"}, "滋": {"on": "ジ", "kun": "—"}, "辞": {"on": "ジ", "kun": "—"}, "鹿": {"on": "—", "kun": "しか"}, "失": {"on": "シツ", "kun": "うしな"}, "借": {"on": "シャク", "kun": "か"}, "種": {"on": "シュ", "kun": "たね"}, "周": {"on": "シュウ", "kun": "まわ"}, "祝": {"on": "シュク", "kun": "いわ"}, "順": {"on": "ジュン", "kun": "—"}, "初": {"on": "ショ", "kun": "はじ、はつ、うい"}, "松": {"on": "ショウ", "kun": "まつ"}, "笑": {"on": "—", "kun": "わら"}, "唱": {"on": "ショウ", "kun": "とな"}, "焼": {"on": "—", "kun": "や"}, "照": {"on": "ショウ", "kun": "て"}, "城": {"on": "ジョウ", "kun": "しろ"}, "縄": {"on": "ジョウ", "kun": "わ"}, "臣": {"on": "シン", "kun": "—"}, "信": {"on": "シン", "kun": "—"}, "井": {"on": "—", "kun": "い"}, "成": {"on": "セイ", "kun": "な"}, "省": {"on": "セイ、ショウ", "kun": "はぶ"}, "清": {"on": "セイ", "kun": "きよ"}, "静": {"on": "セイ", "kun": "しず"}, "席": {"on": "セキ", "kun": "—"}, "積": {"on": "セキ", "kun": "つ"}, "折": {"on": "セツ", "kun": "お"}, "節": {"on": "セツ", "kun": "ふし"}, "説": {"on": "セツ", "kun": "と"}, "浅": {"on": "セン", "kun": "あさ"}, "戦": {"on": "セン", "kun": "たたか"}, "選": {"on": "セン", "kun": "えら"}, "然": {"on": "ゼン、ネン", "kun": "—"}, "争": {"on": "ソウ", "kun": "あらそ"}, "倉": {"on": "ソウ", "kun": "くら"}, "巣": {"on": "ソウ", "kun": "す"}, "束": {"on": "ソク", "kun": "たば"}, "側": {"on": "ソク", "kun": "がわ"}, "続": {"on": "ゾク", "kun": "つづ"}, "卒": {"on": "ソツ", "kun": "—"}, "孫": {"on": "ソン", "kun": "まご"}, "帯": {"on": "タイ", "kun": "お"}, "隊": {"on": "タイ", "kun": "—"}, "達": {"on": "タツ", "kun": "—"}, "単": {"on": "タン", "kun": "—"}, "置": {"on": "チ", "kun": "お"}, "仲": {"on": "チュウ", "kun": "なか"}, "沖": {"on": "—", "kun": "おき"}, "兆": {"on": "チョウ", "kun": "—"}, "低": {"on": "テイ", "kun": "ひく"}, "底": {"on": "テイ", "kun": "そこ"}, "的": {"on": "テキ", "kun": "まと"}, "典": {"on": "テン", "kun": "—"}, "伝": {"on": "デン", "kun": "つた"}, "徒": {"on": "ト", "kun": "—"}, "努": {"on": "ド", "kun": "つと"}, "灯": {"on": "トウ", "kun": "—"}, "働": {"on": "ドウ", "kun": "はたら"}, "特": {"on": "トク", "kun": "—"}, "徳": {"on": "トク", "kun": "—"}, "栃": {"on": "—", "kun": "とち"}, "奈": {"on": "ナ", "kun": "—"}, "梨": {"on": "—", "kun": "なし"}, "熱": {"on": "ネツ", "kun": "あつ"}, "念": {"on": "ネン", "kun": "—"}, "敗": {"on": "ハイ", "kun": "やぶ"}, "梅": {"on": "バイ", "kun": "うめ"}, "博": {"on": "ハク、バク", "kun": "—"}, "阪": {"on": "ハン", "kun": "—"}, "飯": {"on": "ハン", "kun": "めし"}, "飛": {"on": "ヒ", "kun": "と"}, "必": {"on": "ヒツ", "kun": "かなら"}, "票": {"on": "ヒョウ", "kun": "—"}, "標": {"on": "ヒョウ", "kun": "—"}, "不": {"on": "フ、ブ", "kun": "—"}, "夫": {"on": "フ", "kun": "おっと"}, "付": {"on": "フ", "kun": "つ"}, "府": {"on": "フ", "kun": "—"}, "阜": {"on": "フ", "kun": "—"}, "富": {"on": "フ", "kun": "と、とむ"}, "副": {"on": "フク", "kun": "—"}, "兵": {"on": "ヘイ、ヒョウ", "kun": "—"}, "別": {"on": "ベツ", "kun": "わか"}, "辺": {"on": "ヘン", "kun": "あた"}, "変": {"on": "ヘン", "kun": "か"}, "便": {"on": "ベン、ビン", "kun": "たよ"}, "包": {"on": "ホウ", "kun": "つつつ"}, "法": {"on": "ホウ", "kun": "—"}, "望": {"on": "ボウ", "kun": "のぞ"}, "牧": {"on": "ボク", "kun": "—"}, "末": {"on": "マツ", "kun": "すえ"}, "満": {"on": "マン", "kun": "み"}, "未": {"on": "ミ", "kun": "—"}, "民": {"on": "ミン", "kun": "—"}, "無": {"on": "ム、ブ", "kun": "な"}, "約": {"on": "ヤク", "kun": "—"}, "勇": {"on": "ユウ", "kun": "いさ"}, "要": {"on": "ヨウ", "kun": "かなめ"}, "養": {"on": "ヨウ", "kun": "やしな"}, "浴": {"on": "ヨク", "kun": "あ"}, "利": {"on": "リ", "kun": "—"}, "陸": {"on": "リク", "kun": "—"}, "良": {"on": "リョウ", "kun": "よ"}, "料": {"on": "リョウ", "kun": "—"}, "量": {"on": "リョウ", "kun": "はか"}, "輪": {"on": "リン", "kun": "わ"}, "類": {"on": "ルイ", "kun": "たぐ"}, "令": {"on": "レイ", "kun": "—"}, "冷": {"on": "レイ", "kun": "つめ、ひ、さ"}, "例": {"on": "レイ", "kun": "たと"}, "連": {"on": "レン", "kun": "つら、つ"}, "老": {"on": "ロウ", "kun": "お"}, "労": {"on": "ロウ", "kun": "—"}, "録": {"on": "ロク", "kun": "—"}, "圧": {"on": "アツ", "kun": "—"}, "囲": {"on": "イ", "kun": "かこ"}, "移": {"on": "イ", "kun": "うつ"}, "因": {"on": "イン", "kun": "—"}, "永": {"on": "エイ", "kun": "なが"}, "営": {"on": "エイ", "kun": "いとな"}, "衛": {"on": "エイ", "kun": "—"}, "易": {"on": "エキ、イ", "kun": "やさ"}, "益": {"on": "エキ", "kun": "—"}, "液": {"on": "エキ", "kun": "—"}, "演": {"on": "エン", "kun": "—"}, "応": {"on": "オウ", "kun": "こた"}, "往": {"on": "オウ", "kun": "—"}, "桜": {"on": "—", "kun": "さくら"}, "可": {"on": "カ", "kun": "—"}, "仮": {"on": "カ", "kun": "か"}, "価": {"on": "カ", "kun": "—"}, "河": {"on": "カ", "kun": "かわ"}, "過": {"on": "カ", "kun": "す"}, "快": {"on": "カイ", "kun": "こころよ"}, "解": {"on": "カイ", "kun": "と"}, "格": {"on": "カク", "kun": "—"}, "確": {"on": "カク", "kun": "たし"}, "額": {"on": "ガク", "kun": "ひたい"}, "刊": {"on": "カン", "kun": "—"}, "幹": {"on": "カン", "kun": "みき"}, "慣": {"on": "カン", "kun": "な"}, "眼": {"on": "ガン", "kun": "—"}, "紀": {"on": "キ", "kun": "—"}, "基": {"on": "キ", "kun": "—"}, "寄": {"on": "キ", "kun": "よ"}, "規": {"on": "キ", "kun": "—"}, "喜": {"on": "キ", "kun": "よろこ"}, "技": {"on": "ギ", "kun": "—"}, "義": {"on": "ギ", "kun": "—"}, "逆": {"on": "ギャク", "kun": "さか"}, "久": {"on": "キュウ", "kun": "ひさ"}, "旧": {"on": "キュウ", "kun": "—"}, "救": {"on": "キュウ", "kun": "すく"}, "居": {"on": "キョ", "kun": "い"}, "許": {"on": "キョ", "kun": "ゆる"}, "境": {"on": "キョウ", "kun": "さかい"}, "均": {"on": "キン", "kun": "—"}, "禁": {"on": "キン", "kun": "—"}, "句": {"on": "ク", "kun": "—"}, "型": {"on": "ケイ", "kun": "かた"}, "経": {"on": "ケイ", "kun": "へ"}, "潔": {"on": "ケツ", "kun": "—"}, "件": {"on": "ケン", "kun": "—"}, "険": {"on": "ケン", "kun": "けわ"}, "検": {"on": "ケン", "kun": "—"}, "限": {"on": "ゲン", "kun": "かぎ"}, "現": {"on": "ゲン", "kun": "あらわ"}, "減": {"on": "ゲン", "kun": "へ"}, "故": {"on": "コ", "kun": "—"}, "個": {"on": "コ", "kun": "—"}, "護": {"on": "ゴ", "kun": "—"}, "効": {"on": "コウ", "kun": "き"}, "厚": {"on": "コウ", "kun": "あつ"}, "耕": {"on": "コウ", "kun": "たがや"}, "航": {"on": "コウ", "kun": "—"}, "鉱": {"on": "コウ", "kun": "—"}, "構": {"on": "コウ", "kun": "かま"}, "興": {"on": "コウ、キョウ", "kun": "—"}, "講": {"on": "コウ", "kun": "—"}, "告": {"on": "コク", "kun": "つ"}, "混": {"on": "コン", "kun": "ま、こ"}, "査": {"on": "サ", "kun": "—"}, "再": {"on": "サイ", "kun": "ふたた"}, "災": {"on": "サイ", "kun": "—"}, "妻": {"on": "サイ", "kun": "つま"}, "採": {"on": "サイ", "kun": "と"}, "際": {"on": "サイ", "kun": "—"}, "在": {"on": "ザイ", "kun": "あ"}, "財": {"on": "ザイ", "kun": "—"}, "罪": {"on": "ザイ", "kun": "つみ"}, "殺": {"on": "サツ", "kun": "ころ"}, "雑": {"on": "ザツ、ゾウ", "kun": "—"}, "酸": {"on": "サン", "kun": "—"}, "賛": {"on": "サン", "kun": "—"}, "士": {"on": "シ", "kun": "—"}, "支": {"on": "シ", "kun": "ささ"}, "史": {"on": "シ", "kun": "—"}, "志": {"on": "シ", "kun": "こころざ"}, "枝": {"on": "シ", "kun": "えだ"}, "師": {"on": "シ", "kun": "—"}, "資": {"on": "シ", "kun": "—"}, "飼": {"on": "シ", "kun": "か"}, "示": {"on": "ジ", "kun": "しめ"}, "似": {"on": "—", "kun": "に"}, "識": {"on": "シキ", "kun": "—"}, "質": {"on": "シツ", "kun": "—"}, "舎": {"on": "シャ", "kun": "—"}, "謝": {"on": "シャ", "kun": "—"}, "授": {"on": "ジュ", "kun": "—"}, "修": {"on": "シュ", "kun": "おさ"}, "述": {"on": "ジュツ", "kun": "の"}, "術": {"on": "ジュツ", "kun": "—"}, "準": {"on": "ジュン", "kun": "—"}, "序": {"on": "ジョ", "kun": "—"}, "招": {"on": "ショウ", "kun": "まね"}, "証": {"on": "ショウ", "kun": "—"}, "象": {"on": "ショウ、ゾウ", "kun": "—"}, "賞": {"on": "ショウ", "kun": "—"}, "条": {"on": "ジョウ", "kun": "—"}, "状": {"on": "ジョウ", "kun": "—"}, "常": {"on": "ジョウ", "kun": "つね"}, "情": {"on": "ジョウ", "kun": "なさ"}, "織": {"on": "シキ", "kun": "お"}, "職": {"on": "ショク", "kun": "—"}, "制": {"on": "セイ", "kun": "—"}, "性": {"on": "セイ", "kun": "—"}, "政": {"on": "セイ", "kun": "—"}, "勢": {"on": "セイ", "kun": "いきお"}, "精": {"on": "セイ", "kun": "—"}, "製": {"on": "セイ", "kun": "—"}, "税": {"on": "ゼイ", "kun": "—"}, "責": {"on": "セキ", "kun": "せ"}, "績": {"on": "セキ", "kun": "—"}, "接": {"on": "セツ", "kun": "—"}, "設": {"on": "セツ", "kun": "もう"}, "絶": {"on": "ゼツ", "kun": "た"}, "祖": {"on": "ソ", "kun": "—"}, "素": {"on": "ソ", "kun": "—"}, "総": {"on": "ソウ", "kun": "—"}, "造": {"on": "ゾウ", "kun": "つつく"}, "像": {"on": "ゾウ", "kun": "—"}, "増": {"on": "ゾウ", "kun": "ま、ふ"}, "則": {"on": "ソク", "kun": "—"}, "測": {"on": "ソク", "kun": "はか"}, "属": {"on": "ゾク", "kun": "—"}, "率": {"on": "リツ", "kun": "ひき"}, "損": {"on": "ソン", "kun": "—"}, "貸": {"on": "タイ", "kun": "か"}, "態": {"on": "タイ", "kun": "—"}, "団": {"on": "ダン", "kun": "—"}, "断": {"on": "ダン", "kun": "ことわ"}, "築": {"on": "チク", "kun": "きず"}, "貯": {"on": "チョ", "kun": "—"}, "張": {"on": "チョウ", "kun": "は"}, "停": {"on": "テイ", "kun": "—"}, "提": {"on": "テイ", "kun": "—"}, "程": {"on": "テイ", "kun": "—"}, "適": {"on": "テキ", "kun": "—"}, "統": {"on": "トウ", "kun": "—"}, "堂": {"on": "ドウ", "kun": "—"}, "銅": {"on": "ドウ", "kun": "—"}, "導": {"on": "ドウ", "kun": "みちび"}, "得": {"on": "トク", "kun": "え"}, "毒": {"on": "ドク", "kun": "—"}, "独": {"on": "ドク", "kun": "ひと"}, "任": {"on": "ニン", "kun": "まか"}, "燃": {"on": "ネン", "kun": "も"}, "能": {"on": "ノウ", "kun": "—"}, "破": {"on": "ハ", "kun": "やぶ"}, "犯": {"on": "ハン", "kun": "—"}, "判": {"on": "ハン、バン", "kun": "—"}, "版": {"on": "ハン", "kun": "—"}, "比": {"on": "ヒ", "kun": "くら"}, "肥": {"on": "ヒ", "kun": "こ"}, "非": {"on": "ヒ", "kun": "—"}, "費": {"on": "ヒ", "kun": "—"}, "備": {"on": "ビ", "kun": "そな"}, "評": {"on": "ヒョウ", "kun": "—"}, "貧": {"on": "ビン", "kun": "まず"}, "布": {"on": "フ", "kun": "ぬの"}, "婦": {"on": "フ", "kun": "—"}, "武": {"on": "ブ、ム", "kun": "—"}, "復": {"on": "フ", "kun": "—"}, "複": {"on": "フク", "kun": "—"}, "仏": {"on": "ブツ", "kun": "ほとけ"}, "粉": {"on": "フン", "kun": "こ、こな"}, "編": {"on": "ヘン", "kun": "あ"}, "弁": {"on": "ベン", "kun": "—"}, "保": {"on": "ホ", "kun": "たも"}, "墓": {"on": "ボ", "kun": "はか"}, "報": {"on": "ホウ", "kun": "—"}, "豊": {"on": "ホウ", "kun": "ゆた"}, "防": {"on": "ボウ", "kun": "ふせ"}, "貿": {"on": "ボウ", "kun": "—"}, "暴": {"on": "ボウ", "kun": "あば"}, "脈": {"on": "ミャク", "kun": "—"}, "務": {"on": "ム", "kun": "つと"}, "夢": {"on": "ム", "kun": "ゆめ"}, "迷": {"on": "—", "kun": "まよ"}, "綿": {"on": "メン", "kun": "わた"}, "輸": {"on": "ユ", "kun": "—"}, "余": {"on": "ヨ", "kun": "あ"}, "容": {"on": "ヨウ", "kun": "—"}, "略": {"on": "リャク", "kun": "—"}, "留": {"on": "リュウ、ル", "kun": "と"}, "領": {"on": "リョウ", "kun": "—"}, "歴": {"on": "レキ", "kun": "—"}, "胃": {"on": "イ", "kun": "—"}, "異": {"on": "イ", "kun": "こと"}, "遺": {"on": "イ", "kun": "—"}, "域": {"on": "イキ", "kun": "—"}, "宇": {"on": "ウ", "kun": "—"}, "映": {"on": "エイ", "kun": "うつ"}, "延": {"on": "エン", "kun": "の"}, "沿": {"on": "エン", "kun": "そ"}, "恩": {"on": "オン", "kun": "—"}, "我": {"on": "—", "kun": "われ"}, "灰": {"on": "—", "kun": "はい"}, "拡": {"on": "カク", "kun": "—"}, "革": {"on": "カク", "kun": "—"}, "閣": {"on": "カク", "kun": "—"}, "割": {"on": "—", "kun": "わり、わ"}, "株": {"on": "—", "kun": "かぶ"}, "干": {"on": "カン", "kun": "ほ"}, "巻": {"on": "カン", "kun": "ま"}, "看": {"on": "カン", "kun": "—"}, "簡": {"on": "カン", "kun": "—"}, "危": {"on": "キ", "kun": "あぶ"}, "机": {"on": "—", "kun": "つくえ"}, "揮": {"on": "キ", "kun": "—"}, "貴": {"on": "キ", "kun": "—"}, "疑": {"on": "ギ", "kun": "うたが"}, "吸": {"on": "キュウ", "kun": "す"}, "供": {"on": "キョウ", "kun": "そな、とも"}, "胸": {"on": "キョウ", "kun": "むね"}, "郷": {"on": "キョウ", "kun": "—"}, "勤": {"on": "キン", "kun": "つと"}, "筋": {"on": "キン", "kun": "すじ"}, "系": {"on": "ケイ", "kun": "—"}, "敬": {"on": "ケイ", "kun": "うやま"}, "警": {"on": "ケイ", "kun": "—"}, "劇": {"on": "ゲキ", "kun": "—"}, "激": {"on": "ゲキ", "kun": "はげ"}, "穴": {"on": "—", "kun": "あな"}, "券": {"on": "ケン", "kun": "—"}, "絹": {"on": "—", "kun": "きぬ"}, "権": {"on": "ケン", "kun": "—"}, "憲": {"on": "ケン", "kun": "—"}, "源": {"on": "ゲン", "kun": "みなもと"}, "厳": {"on": "ゲン", "kun": "きび"}, "己": {"on": "コ", "kun": "—"}, "呼": {"on": "コ", "kun": "よ"}, "誤": {"on": "ゴ", "kun": "あやま"}, "后": {"on": "コウ", "kun": "—"}, "孝": {"on": "コウ", "kun": "—"}, "皇": {"on": "コウ、オウ", "kun": "—"}, "紅": {"on": "コウ", "kun": "べに"}, "降": {"on": "コウ", "kun": "お、ふ"}, "鋼": {"on": "コウ", "kun": "—"}, "刻": {"on": "コク", "kun": "きざ"}, "穀": {"on": "コク", "kun": "—"}, "骨": {"on": "コツ", "kun": "ほね"}, "困": {"on": "コン", "kun": "こま"}, "砂": {"on": "サ", "kun": "すな"}, "座": {"on": "ザ", "kun": "—"}, "済": {"on": "サイ", "kun": "す"}, "裁": {"on": "サイ", "kun": "さば"}, "策": {"on": "サク", "kun": "—"}, "冊": {"on": "サツ", "kun": "—"}, "蚕": {"on": "サン", "kun": "かいこ"}, "至": {"on": "シ", "kun": "いた"}, "私": {"on": "シ", "kun": "わたくし、わたし"}, "姿": {"on": "シ", "kun": "すがた"}, "視": {"on": "シ", "kun": "—"}, "詞": {"on": "シ", "kun": "—"}, "誌": {"on": "シ", "kun": "—"}, "磁": {"on": "ジ", "kun": "—"}, "射": {"on": "シャ", "kun": "い"}, "捨": {"on": "シャ", "kun": "す"}, "尺": {"on": "シャク", "kun": "—"}, "若": {"on": "—", "kun": "わか"}, "樹": {"on": "ジュ", "kun": "—"}, "収": {"on": "シュウ", "kun": "おさ"}, "宗": {"on": "シュウ", "kun": "—"}, "就": {"on": "シュウ", "kun": "—"}, "衆": {"on": "シュウ", "kun": "—"}, "従": {"on": "ジュウ", "kun": "したた"}, "縦": {"on": "ジュウ", "kun": "たて"}, "縮": {"on": "シュク", "kun": "ちぢ"}, "熟": {"on": "ジュク", "kun": "—"}, "純": {"on": "ジュン", "kun": "—"}, "処": {"on": "ショ", "kun": "—"}, "署": {"on": "ショ", "kun": "—"}, "諸": {"on": "ショ", "kun": "—"}, "除": {"on": "ジョ", "kun": "のぞ"}, "承": {"on": "ショウ", "kun": "—"}, "将": {"on": "ショウ", "kun": "—"}, "傷": {"on": "ショウ", "kun": "きず"}, "障": {"on": "ショウ", "kun": "—"}, "蒸": {"on": "ジョウ", "kun": "—"}, "針": {"on": "シン", "kun": "はり"}, "仁": {"on": "ジン", "kun": "—"}, "垂": {"on": "スイ", "kun": "た"}, "推": {"on": "スイ", "kun": "—"}, "寸": {"on": "スン", "kun": "—"}, "盛": {"on": "—", "kun": "も"}, "聖": {"on": "セイ", "kun": "—"}, "誠": {"on": "セイ", "kun": "—"}, "舌": {"on": "—", "kun": "した"}, "宣": {"on": "セン", "kun": "—"}, "専": {"on": "セン", "kun": "—"}, "泉": {"on": "セン", "kun": "いずみ"}, "洗": {"on": "セン", "kun": "あら"}, "染": {"on": "—", "kun": "そ"}, "銭": {"on": "セン", "kun": "—"}, "善": {"on": "ゼン", "kun": "よ"}, "奏": {"on": "ソウ", "kun": "—"}, "窓": {"on": "ソウ", "kun": "まど"}, "創": {"on": "ソウ", "kun": "つく"}, "装": {"on": "ソウ", "kun": "—"}, "層": {"on": "ソウ", "kun": "—"}, "操": {"on": "ソウ", "kun": "—"}, "蔵": {"on": "ゾウ", "kun": "—"}, "臓": {"on": "ゾウ", "kun": "—"}, "存": {"on": "ソン", "kun": "—"}, "尊": {"on": "ソン", "kun": "たっと、とうと"}, "退": {"on": "タイ", "kun": "しりぞ"}, "宅": {"on": "タク", "kun": "—"}, "担": {"on": "タン", "kun": "—"}, "探": {"on": "タン", "kun": "さが"}, "誕": {"on": "タン", "kun": "—"}, "段": {"on": "ダン", "kun": "—"}, "暖": {"on": "ダン", "kun": "あたた"}, "値": {"on": "—", "kun": "ね"}, "宙": {"on": "チュウ", "kun": "—"}, "忠": {"on": "チュウ", "kun": "—"}, "著": {"on": "チョ", "kun": "—"}, "庁": {"on": "チョウ", "kun": "—"}, "頂": {"on": "チョウ", "kun": "いただ"}, "腸": {"on": "チョウ", "kun": "—"}, "潮": {"on": "チョウ", "kun": "しお"}, "賃": {"on": "チン", "kun": "—"}, "痛": {"on": "ツウ", "kun": "いた"}, "敵": {"on": "テキ", "kun": "—"}, "展": {"on": "テン", "kun": "—"}, "討": {"on": "トウ", "kun": "—"}, "党": {"on": "トウ", "kun": "—"}, "糖": {"on": "トウ", "kun": "—"}, "届": {"on": "—", "kun": "とど"}, "難": {"on": "ナン", "kun": "むずか"}, "乳": {"on": "ニュウ", "kun": "ちち"}, "認": {"on": "—", "kun": "みと"}, "納": {"on": "ノウ", "kun": "おさ"}, "脳": {"on": "ノウ", "kun": "—"}, "派": {"on": "ハ", "kun": "—"}, "拝": {"on": "ハイ", "kun": "おが"}, "背": {"on": "ハイ", "kun": "せ"}, "肺": {"on": "ハイ", "kun": "—"}, "俳": {"on": "ハイ", "kun": "—"}, "班": {"on": "ハン", "kun": "—"}, "晩": {"on": "バン", "kun": "—"}, "否": {"on": "ヒ", "kun": "—"}, "批": {"on": "ヒ", "kun": "—"}, "秘": {"on": "ヒ", "kun": "—"}, "俵": {"on": "ヒョウ", "kun": "たわら"}, "腹": {"on": "フク", "kun": "はら"}, "奮": {"on": "フン", "kun": "ふる"}, "並": {"on": "—", "kun": "なみ、なら"}, "陛": {"on": "ヘイ", "kun": "—"}, "閉": {"on": "ヘイ", "kun": "し、と"}, "片": {"on": "—", "kun": "かた"}, "補": {"on": "ホ", "kun": "おぎな"}, "暮": {"on": "—", "kun": "く、くら"}, "宝": {"on": "ホウ", "kun": "たから"}, "訪": {"on": "ホウ", "kun": "たず"}, "亡": {"on": "ボウ", "kun": "—"}, "忘": {"on": "—", "kun": "わす"}, "棒": {"on": "ボウ", "kun": "—"}, "枚": {"on": "マイ", "kun": "—"}, "幕": {"on": "マク、バク", "kun": "—"}, "密": {"on": "ミツ", "kun": "—"}, "盟": {"on": "メイ", "kun": "—"}, "模": {"on": "モ、ボ", "kun": "—"}, "訳": {"on": "ヤク", "kun": "わけ"}, "郵": {"on": "ユウ", "kun": "—"}, "優": {"on": "ユウ", "kun": "—"}, "預": {"on": "ヨ", "kun": "あず"}, "幼": {"on": "ヨウ", "kun": "おさな"}, "欲": {"on": "ヨク", "kun": "—"}, "翌": {"on": "ヨク", "kun": "—"}, "乱": {"on": "ラン", "kun": "みだ"}, "卵": {"on": "—", "kun": "たまご"}, "覧": {"on": "ラン", "kun": "—"}, "裏": {"on": "—", "kun": "うら"}, "律": {"on": "リツ", "kun": "—"}, "臨": {"on": "リン", "kun": "—"}, "朗": {"on": "ロウ", "kun": "—"}, "論": {"on": "ロン", "kun": "—"}};
+const ALL_KANJI_READINGS_DATA = {"一": {"on": "イチ、イツ", "kun": "ひと"}, "右": {"on": "ウ、ユウ", "kun": "みぎ"}, "雨": {"on": "ウ", "kun": "あめ、あま"}, "円": {"on": "エン", "kun": "まる"}, "王": {"on": "オウ", "kun": "—"}, "音": {"on": "オン", "kun": "おと、ね"}, "下": {"on": "カ、ゲ", "kun": "した、しも、さ、だ、お"}, "火": {"on": "カ", "kun": "ひ"}, "花": {"on": "カ", "kun": "はな"}, "貝": {"on": "—", "kun": "かい"}, "気": {"on": "キ、ケ", "kun": "—"}, "九": {"on": "キュウ、ク", "kun": "ここの"}, "休": {"on": "キュウ", "kun": "やす"}, "玉": {"on": "ギョク", "kun": "たま"}, "金": {"on": "キン、コン", "kun": "かね、かな"}, "空": {"on": "クウ", "kun": "そら、あ、から"}, "月": {"on": "ゲツ、ガツ", "kun": "つき"}, "犬": {"on": "ケン", "kun": "いぬ"}, "見": {"on": "ケン", "kun": "み"}, "五": {"on": "ゴ", "kun": "いつ"}, "口": {"on": "コウ、ク", "kun": "くち"}, "校": {"on": "コウ", "kun": "—"}, "左": {"on": "サ", "kun": "ひだり"}, "三": {"on": "サン", "kun": "み"}, "山": {"on": "サン", "kun": "やま"}, "子": {"on": "シ、ス", "kun": "こ"}, "四": {"on": "シ", "kun": "よ、よん"}, "糸": {"on": "シ", "kun": "いと"}, "字": {"on": "ジ", "kun": "—"}, "耳": {"on": "—", "kun": "みみ"}, "七": {"on": "シチ", "kun": "なな、の"}, "車": {"on": "シャ", "kun": "くるま"}, "手": {"on": "シュ", "kun": "て"}, "十": {"on": "ジュウ、ジッ", "kun": "と"}, "出": {"on": "シュツ", "kun": "で、だ"}, "女": {"on": "ジョ", "kun": "おんな"}, "小": {"on": "ショウ", "kun": "ちい、こ、お"}, "上": {"on": "ジョウ", "kun": "うえ、うわ、かみ、あ、のぼ"}, "森": {"on": "シン", "kun": "もり"}, "人": {"on": "ジン、ニン", "kun": "ひと"}, "水": {"on": "スイ", "kun": "みず"}, "正": {"on": "セイ、ショウ", "kun": "ただ、まさ"}, "生": {"on": "セイ、ショウ", "kun": "い、う、は、な"}, "青": {"on": "セイ", "kun": "あお"}, "夕": {"on": "—", "kun": "ゆう"}, "石": {"on": "セキ、シャク", "kun": "いし"}, "赤": {"on": "セキ", "kun": "あか"}, "千": {"on": "セン", "kun": "ち"}, "川": {"on": "—", "kun": "かわ"}, "先": {"on": "セン", "kun": "さき"}, "早": {"on": "ソウ", "kun": "はや"}, "草": {"on": "ソウ", "kun": "クサ"}, "足": {"on": "ソク", "kun": "あし、た"}, "村": {"on": "ソン", "kun": "むら"}, "大": {"on": "ダイ、タイ", "kun": "おお"}, "男": {"on": "ダン、ナン", "kun": "おとこ"}, "竹": {"on": "チク", "kun": "たけ"}, "中": {"on": "チュウ", "kun": "なか"}, "虫": {"on": "チュウ", "kun": "むし"}, "町": {"on": "チョウ", "kun": "まち"}, "天": {"on": "テン", "kun": "あま"}, "田": {"on": "デン", "kun": "た"}, "土": {"on": "ド、ト", "kun": "つち"}, "二": {"on": "ニ", "kun": "ふた"}, "日": {"on": "ニチ、ジツ", "kun": "ひ、か"}, "入": {"on": "ニュウ", "kun": "い、はい"}, "学": {"on": "ガク", "kun": "まな"}, "年": {"on": "ネン", "kun": "とし"}, "白": {"on": "ハク", "kun": "しろ、しら"}, "八": {"on": "ハチ", "kun": "や、よ"}, "百": {"on": "ヒャク", "kun": "—"}, "文": {"on": "ブン、モン", "kun": "—"}, "木": {"on": "ボク、モク", "kun": "き、こ"}, "本": {"on": "ホン", "kun": "もと"}, "名": {"on": "メイ、ミョウ", "kun": "な"}, "目": {"on": "モク", "kun": "め"}, "立": {"on": "リツ", "kun": "た"}, "力": {"on": "リョク、リキ", "kun": "ち力"}, "林": {"on": "リン", "kun": "はやし"}, "六": {"on": "ロク", "kun": "む"}, "引": {"on": "イン", "kun": "ひ"}, "羽": {"on": "—", "kun": "は、わ、はね"}, "雲": {"on": "ウン", "kun": "くも"}, "園": {"on": "エン", "kun": "—"}, "遠": {"on": "エン", "kun": "とお"}, "何": {"on": "カ", "kun": "なに、なん"}, "科": {"on": "カ", "kun": "—"}, "夏": {"on": "カ", "kun": "なつ"}, "家": {"on": "カ、ケ", "kun": "いえ、や"}, "歌": {"on": "カ", "kun": "うた"}, "画": {"on": "ガ、カク", "kun": "—"}, "回": {"on": "カイ", "kun": "まわ"}, "会": {"on": "カイ", "kun": "あ"}, "海": {"on": "カイ", "kun": "うみ"}, "絵": {"on": "カイ", "kun": "え"}, "外": {"on": "ガイ", "kun": "そと、ほか、はず"}, "角": {"on": "カク", "kun": "かど、つの"}, "楽": {"on": "ガク、ラク", "kun": "たの"}, "活": {"on": "カツ", "kun": "—"}, "間": {"on": "カン、ケン", "kun": "あいだ、ま"}, "丸": {"on": "ガン", "kun": "まる"}, "岩": {"on": "ガン", "kun": "いわ"}, "顔": {"on": "ガン", "kun": "かお"}, "汽": {"on": "キ", "kun": "—"}, "記": {"on": "キ", "kun": "しる"}, "帰": {"on": "キ", "kun": "かえ"}, "弓": {"on": "—", "kun": "ゆみ"}, "牛": {"on": "ギュウ", "kun": "うし"}, "魚": {"on": "ギョ", "kun": "うお、さかな"}, "京": {"on": "キョウ", "kun": "—"}, "強": {"on": "キョウ", "kun": "つよ"}, "教": {"on": "キョウ", "kun": "おし、おそ"}, "近": {"on": "キン", "kun": "ちか"}, "兄": {"on": "キョウ", "kun": "あに"}, "形": {"on": "ケイ、ギョウ", "kun": "かた、かたち"}, "計": {"on": "ケイ", "kun": "はか"}, "元": {"on": "ゲン、ガン", "kun": "もと"}, "言": {"on": "ゲン、ゴン", "kun": "い、こと"}, "原": {"on": "ゲン", "kun": "はら"}, "戸": {"on": "コ", "kun": "と"}, "古": {"on": "コ", "kun": "ふる"}, "午": {"on": "ゴ", "kun": "—"}, "後": {"on": "ゴ、コウ", "kun": "うしろ、のち、あと"}, "語": {"on": "ゴ", "kun": "かた"}, "工": {"on": "コウ", "kun": "く"}, "公": {"on": "コウ", "kun": "—"}, "広": {"on": "コウ", "kun": "ひろ"}, "交": {"on": "コウ", "kun": "まじ"}, "光": {"on": "コウ", "kun": "ひか"}, "考": {"on": "コウ", "kun": "かんが"}, "行": {"on": "コウ、ギョウ", "kun": "い、ゆ、おこな"}, "高": {"on": "コウ", "kun": "たか"}, "黄": {"on": "オウ", "kun": "き"}, "合": {"on": "ゴウ", "kun": "あ"}, "谷": {"on": "—", "kun": "たに"}, "国": {"on": "コク", "kun": "くに"}, "黒": {"on": "コク", "kun": "くろ"}, "今": {"on": "コン", "kun": "いま"}, "才": {"on": "サイ", "kun": "—"}, "細": {"on": "サイ", "kun": "ほそ、こま"}, "作": {"on": "サク", "kun": "つく"}, "算": {"on": "サン", "kun": "—"}, "止": {"on": "シ", "kun": "と"}, "市": {"on": "シ", "kun": "い"}, "矢": {"on": "—", "kun": "や"}, "姉": {"on": "シ", "kun": "あね"}, "思": {"on": "シ", "kun": "おも"}, "紙": {"on": "シ", "kun": "かみ"}, "寺": {"on": "ジ", "kun": "てら"}, "自": {"on": "ジ、シ", "kun": "みずか"}, "時": {"on": "ジ", "kun": "とき"}, "室": {"on": "シツ", "kun": "—"}, "社": {"on": "シャ", "kun": "やしろ"}, "弱": {"on": "ジャク", "kun": "よわ"}, "首": {"on": "シュ", "kun": "くび"}, "秋": {"on": "シュウ", "kun": "あき"}, "週": {"on": "シュウ", "kun": "—"}, "春": {"on": "シュン", "kun": "はる"}, "書": {"on": "ショ", "kun": "か"}, "少": {"on": "ショウ", "kun": "すくな、すこ"}, "場": {"on": "ジョウ", "kun": "ば"}, "色": {"on": "ショク、シキ", "kun": "いろ"}, "食": {"on": "ショク", "kun": "く、たべ"}, "心": {"on": "シン", "kun": "こころ"}, "新": {"on": "シン", "kun": "にい、あたら、あら"}, "親": {"on": "シン", "kun": "おや、した"}, "図": {"on": "ズ、ト", "kun": "—"}, "数": {"on": "スウ", "kun": "かず、かぞ"}, "西": {"on": "セイ、サイ", "kun": "にし"}, "声": {"on": "セイ", "kun": "こえ"}, "星": {"on": "セイ", "kun": "ほし"}, "晴": {"on": "セイ", "kun": "は"}, "切": {"on": "セツ", "kun": "き"}, "雪": {"on": "セツ", "kun": "ゆき"}, "船": {"on": "セン", "kun": "ふね、ふな"}, "線": {"on": "セン", "kun": "—"}, "前": {"on": "ゼン", "kun": "まえ"}, "組": {"on": "ソ", "kun": "く、くみ"}, "走": {"on": "ソウ", "kun": "はし"}, "多": {"on": "タ", "kun": "おお"}, "太": {"on": "タ", "kun": "ふと"}, "体": {"on": "タイ", "kun": "からだ"}, "台": {"on": "ダイ、タイ", "kun": "—"}, "地": {"on": "チ、ジ", "kun": "—"}, "池": {"on": "チ", "kun": "いけ"}, "知": {"on": "チ", "kun": "し"}, "茶": {"on": "チャ", "kun": "—"}, "昼": {"on": "チュウ", "kun": "ひる"}, "長": {"on": "チョウ", "kun": "なが"}, "鳥": {"on": "チョウ", "kun": "とり"}, "朝": {"on": "チョウ", "kun": "あさ"}, "直": {"on": "チョク、ジキ", "kun": "ただ、なお"}, "通": {"on": "ツウ", "kun": "とお、かよ"}, "弟": {"on": "ダイ", "kun": "おとうと"}, "店": {"on": "テン", "kun": "みせ"}, "点": {"on": "テン", "kun": "—"}, "電": {"on": "デン", "kun": "—"}, "刀": {"on": "トウ", "kun": "かたな"}, "冬": {"on": "トウ", "kun": "ふゆ"}, "当": {"on": "トウ", "kun": "あ"}, "東": {"on": "トウ", "kun": "ひがし"}, "答": {"on": "トウ", "kun": "こた"}, "頭": {"on": "トウ、ズ", "kun": "あたま"}, "同": {"on": "ドウ", "kun": "おな"}, "道": {"on": "ドウ", "kun": "みち"}, "読": {"on": "ドク、トク、トウ", "kun": "よ"}, "内": {"on": "ナイ", "kun": "うち"}, "南": {"on": "ナン", "kun": "みなみ"}, "肉": {"on": "ニク", "kun": "—"}, "馬": {"on": "バ", "kun": "うま"}, "売": {"on": "バイ", "kun": "う"}, "買": {"on": "バイ", "kun": "か"}, "麦": {"on": "—", "kun": "むぎ"}, "半": {"on": "ハン", "kun": "なか"}, "番": {"on": "バン", "kun": "—"}, "父": {"on": "フ", "kun": "ちち"}, "風": {"on": "フウ", "kun": "かぜ、かざ"}, "分": {"on": "ブン、フン、ブ", "kun": "わ"}, "聞": {"on": "ブン", "kun": "き"}, "米": {"on": "ベイ", "kun": "まい、こめ"}, "歩": {"on": "ホ", "kun": "ある、あゆ"}, "母": {"on": "ボ", "kun": "はは"}, "方": {"on": "ホウ", "kun": "かた"}, "北": {"on": "ホク", "kun": "きた"}, "毎": {"on": "マイ", "kun": "—"}, "妹": {"on": "マイ", "kun": "いもうと"}, "万": {"on": "マン", "kun": "—"}, "明": {"on": "メイ、ミョウ", "kun": "あ、あき"}, "鳴": {"on": "メイ", "kun": "な"}, "毛": {"on": "モウ", "kun": "け"}, "門": {"on": "モン", "kun": "—"}, "夜": {"on": "ヤ", "kun": "よ、よる"}, "野": {"on": "ヤ", "kun": "の"}, "友": {"on": "ユウ", "kun": "とも"}, "用": {"on": "ヨウ", "kun": "もち"}, "曜": {"on": "ヨウ", "kun": "—"}, "来": {"on": "ライ", "kun": "く"}, "里": {"on": "リ", "kun": "さと"}, "理": {"on": "リ", "kun": "—"}, "話": {"on": "ワ", "kun": "はな"}, "悪": {"on": "アク", "kun": "わる"}, "安": {"on": "アン", "kun": "やす"}, "暗": {"on": "アン", "kun": "くら"}, "医": {"on": "イ", "kun": "—"}, "委": {"on": "イ", "kun": "ゆだ"}, "意": {"on": "イ", "kun": "—"}, "育": {"on": "イク", "kun": "そだ、はぐく"}, "員": {"on": "イン", "kun": "—"}, "院": {"on": "イン", "kun": "—"}, "飲": {"on": "イン", "kun": "の"}, "運": {"on": "ウン", "kun": "はこ"}, "泳": {"on": "エイ", "kun": "およ"}, "駅": {"on": "エキ", "kun": "—"}, "央": {"on": "オウ", "kun": "—"}, "横": {"on": "オウ", "kun": "よこ"}, "屋": {"on": "オク", "kun": "や"}, "温": {"on": "オン", "kun": "あたた"}, "化": {"on": "カ", "kun": "ば"}, "荷": {"on": "ニ", "kun": "—"}, "界": {"on": "カイ", "kun": "—"}, "開": {"on": "カイ", "kun": "ひら、あ"}, "階": {"on": "カイ", "kun": "—"}, "寒": {"on": "カン", "kun": "さむ"}, "感": {"on": "カン", "kun": "—"}, "漢": {"on": "カン", "kun": "—"}, "館": {"on": "カン", "kun": "やかた"}, "岸": {"on": "ガン", "kun": "きし"}, "起": {"on": "キ", "kun": "お"}, "期": {"on": "キ", "kun": "—"}, "客": {"on": "キャク", "kun": "—"}, "究": {"on": "キュウ", "kun": "—"}, "急": {"on": "キュウ", "kun": "いそ"}, "級": {"on": "キュウ", "kun": "—"}, "宮": {"on": "キュウ", "kun": "や"}, "球": {"on": "キュウ", "kun": "たま"}, "去": {"on": "キョ", "kun": "さ"}, "橋": {"on": "キョウ", "kun": "はし"}, "業": {"on": "ギョウ", "kun": "—"}, "曲": {"on": "キョク", "kun": "ま"}, "局": {"on": "キョク", "kun": "—"}, "銀": {"on": "ギン", "kun": "—"}, "区": {"on": "ク", "kun": "—"}, "苦": {"on": "ク", "kun": "くる、にが"}, "具": {"on": "グ", "kun": "—"}, "君": {"on": "クン", "kun": "きみ"}, "係": {"on": "ケイ", "kun": "か、かか"}, "軽": {"on": "ケイ", "kun": "かる"}, "血": {"on": "ケツ", "kun": "ち"}, "決": {"on": "ケツ", "kun": "き"}, "研": {"on": "ケン", "kun": "—"}, "県": {"on": "ケン", "kun": "—"}, "庫": {"on": "コ", "kun": "—"}, "湖": {"on": "コ", "kun": "みずうみ"}, "向": {"on": "コウ", "kun": "む"}, "幸": {"on": "コウ", "kun": "さいわ、しあわ"}, "港": {"on": "コウ", "kun": "みなと"}, "号": {"on": "ゴウ", "kun": "—"}, "根": {"on": "コン", "kun": "ね"}, "祭": {"on": "サイ", "kun": "まつ"}, "皿": {"on": "—", "kun": "さら"}, "仕": {"on": "シ", "kun": "つか"}, "死": {"on": "シ", "kun": "し"}, "使": {"on": "シ", "kun": "つか"}, "始": {"on": "シ", "kun": "はじ"}, "指": {"on": "シ", "kun": "ゆび、さ"}, "歯": {"on": "シ", "kun": "は"}, "詩": {"on": "シ", "kun": "—"}, "次": {"on": "ジ", "kun": "つ、つぎ"}, "事": {"on": "ジ", "kun": "こと"}, "持": {"on": "ジ", "kun": "も"}, "式": {"on": "シキ", "kun": "—"}, "実": {"on": "ジツ", "kun": "み、みの"}, "写": {"on": "シャ", "kun": "うつ"}, "者": {"on": "シャ", "kun": "もの"}, "主": {"on": "シュ", "kun": "ぬし、おモ"}, "守": {"on": "シュ、ス", "kun": "まも"}, "取": {"on": "シュ", "kun": "と"}, "酒": {"on": "シュ", "kun": "さけ、さか"}, "受": {"on": "ジュ", "kun": "う"}, "州": {"on": "シュウ", "kun": "—"}, "拾": {"on": "—", "kun": "ひろ"}, "終": {"on": "シュウ", "kun": "お"}, "習": {"on": "シュウ", "kun": "なら"}, "集": {"on": "シュウ", "kun": "あつ"}, "住": {"on": "ジュウ", "kun": "す"}, "重": {"on": "ジュウ、チョウ", "kun": "え、おも、かさ"}, "宿": {"on": "シュク", "kun": "やど"}, "所": {"on": "ショ", "kun": "ところ"}, "暑": {"on": "ショ", "kun": "あつ"}, "助": {"on": "ジョ", "kun": "たす"}, "昭": {"on": "ショウ", "kun": "—"}, "消": {"on": "ショウ", "kun": "き、け"}, "商": {"on": "ショウ", "kun": "—"}, "章": {"on": "ショウ", "kun": "—"}, "勝": {"on": "ショウ", "kun": "か"}, "乗": {"on": "ジョウ", "kun": "の"}, "植": {"on": "ショク", "kun": "う"}, "申": {"on": "—", "kun": "もう"}, "身": {"on": "シン", "kun": "み"}, "神": {"on": "シン、ジン", "kun": "かみ"}, "真": {"on": "シン", "kun": "ま"}, "深": {"on": "シン", "kun": "ふか"}, "進": {"on": "シン", "kun": "すす"}, "世": {"on": "セ、セイ", "kun": "よ"}, "整": {"on": "セイ", "kun": "ととの"}, "昔": {"on": "—", "kun": "むかし"}, "全": {"on": "ゼン", "kun": "まった、すべ"}, "相": {"on": "ソウ", "kun": "あい"}, "送": {"on": "ソウ", "kun": "おく"}, "想": {"on": "ソウ", "kun": "—"}, "息": {"on": "ソク", "kun": "いき"}, "速": {"on": "ソク", "kun": "はや"}, "族": {"on": "ゾク", "kun": "—"}, "他": {"on": "タ", "kun": "ほか"}, "打": {"on": "ダ", "kun": "う"}, "対": {"on": "タイ", "kun": "—"}, "待": {"on": "タイ", "kun": "ま"}, "代": {"on": "タイ、ダイ", "kun": "か、よ"}, "第": {"on": "ダイ", "kun": "—"}, "題": {"on": "ダイ", "kun": "—"}, "炭": {"on": "タン", "kun": "すみ"}, "短": {"on": "タン", "kun": "みじか"}, "談": {"on": "ダン", "kun": "—"}, "着": {"on": "チャク", "kun": "き、つ"}, "注": {"on": "チュウ", "kun": "そそ"}, "柱": {"on": "チュウ", "kun": "はしら"}, "丁": {"on": "チョウ", "kun": "—"}, "帳": {"on": "チョウ", "kun": "—"}, "調": {"on": "チョウ", "kun": "しら"}, "追": {"on": "ツイ", "kun": "お"}, "定": {"on": "テイ、ジョウ", "kun": "さだ"}, "庭": {"on": "テイ", "kun": "にわ"}, "笛": {"on": "テキ", "kun": "ふえ"}, "鉄": {"on": "テツ", "kun": "—"}, "転": {"on": "テン", "kun": "ころ"}, "都": {"on": "ト、ツ", "kun": "みやこ"}, "度": {"on": "ド", "kun": "—"}, "投": {"on": "トウ", "kun": "な"}, "豆": {"on": "トウ、ズ", "kun": "まめ"}, "島": {"on": "トウ", "kun": "しま"}, "湯": {"on": "トウ", "kun": "ゆ"}, "登": {"on": "トウ、ト", "kun": "のぼ"}, "等": {"on": "トウ", "kun": "ひと"}, "動": {"on": "ドウ", "kun": "うご"}, "童": {"on": "ドウ", "kun": "—"}, "農": {"on": "ノウ", "kun": "—"}, "波": {"on": "ハ", "kun": "なみ"}, "配": {"on": "ハイ", "kun": "くば"}, "倍": {"on": "バイ", "kun": "—"}, "箱": {"on": "—", "kun": "はこ"}, "畑": {"on": "—", "kun": "はた、はたけ"}, "発": {"on": "ハツ", "kun": "—"}, "反": {"on": "ハン", "kun": "そ"}, "坂": {"on": "—", "kun": "さか"}, "板": {"on": "ハン、バン", "kun": "いた"}, "皮": {"on": "ヒ", "kun": "かわ"}, "悲": {"on": "ヒ", "kun": "かな"}, "美": {"on": "ビ", "kun": "うつく"}, "鼻": {"on": "—", "kun": "はな"}, "筆": {"on": "ヒツ", "kun": "ふで"}, "氷": {"on": "ヒョウ", "kun": "こおり"}, "表": {"on": "ヒョウ", "kun": "おもて、あらわ"}, "秒": {"on": "ビョウ", "kun": "—"}, "病": {"on": "ビョウ", "kun": "やまい"}, "品": {"on": "ヒン", "kun": "しな"}, "負": {"on": "フ", "kun": "ま、お"}, "部": {"on": "ブ", "kun": "—"}, "服": {"on": "フク", "kun": "—"}, "福": {"on": "フク", "kun": "—"}, "物": {"on": "ブツ、モツ", "kun": "もの"}, "平": {"on": "ヘイ、ビョウ", "kun": "たい、ひら"}, "返": {"on": "ヘン", "kun": "かえ"}, "勉": {"on": "ベン", "kun": "—"}, "放": {"on": "ホウ", "kun": "はな、ほう"}, "味": {"on": "ミ", "kun": "あじ"}, "命": {"on": "メイ", "kun": "いのち"}, "面": {"on": "メン", "kun": "—"}, "問": {"on": "モン", "kun": "と、とい"}, "役": {"on": "ヤク", "kun": "—"}, "薬": {"on": "ヤク", "kun": "くすり"}, "由": {"on": "ユ、ユウ", "kun": "—"}, "油": {"on": "ユ", "kun": "あぶら"}, "有": {"on": "ユウ", "kun": "あ"}, "遊": {"on": "ユウ", "kun": "あそ"}, "予": {"on": "ヨ", "kun": "—"}, "羊": {"on": "ヨウ", "kun": "ひつじ"}, "洋": {"on": "ヨウ", "kun": "—"}, "葉": {"on": "ヨウ", "kun": "は"}, "陽": {"on": "ヨウ", "kun": "—"}, "様": {"on": "ヨウ", "kun": "さま"}, "落": {"on": "ラク", "kun": "お"}, "流": {"on": "リュウ", "kun": "なが"}, "旅": {"on": "リョ", "kun": "たび"}, "両": {"on": "リョウ", "kun": "—"}, "緑": {"on": "リョク", "kun": "みどり"}, "礼": {"on": "レイ", "kun": "—"}, "列": {"on": "レツ", "kun": "—"}, "練": {"on": "レン", "kun": "ね"}, "路": {"on": "ロ", "kun": "じ"}, "和": {"on": "ワ", "kun": "わ"}, "愛": {"on": "アイ", "kun": "—"}, "案": {"on": "アン", "kun": "—"}, "以": {"on": "イ", "kun": "—"}, "衣": {"on": "イ", "kun": "—"}, "位": {"on": "イ", "kun": "くらい"}, "茨": {"on": "—", "kun": "いばら"}, "印": {"on": "イン", "kun": "しるし"}, "英": {"on": "エイ", "kun": "—"}, "栄": {"on": "エイ", "kun": "え"}, "媛": {"on": "エン", "kun": "—"}, "塩": {"on": "エン", "kun": "しお"}, "岡": {"on": "—", "kun": "おか"}, "億": {"on": "オク", "kun": "—"}, "加": {"on": "カ", "kun": "くわ"}, "果": {"on": "カ", "kun": "は"}, "貨": {"on": "カ", "kun": "—"}, "課": {"on": "カ", "kun": "—"}, "芽": {"on": "ガ", "kun": "め"}, "賀": {"on": "ガ", "kun": "—"}, "改": {"on": "カイ", "kun": "あらた"}, "械": {"on": "カイ", "kun": "—"}, "害": {"on": "ガイ", "kun": "—"}, "街": {"on": "ガイ、カイ", "kun": "まち"}, "各": {"on": "カク", "kun": "—"}, "覚": {"on": "カク", "kun": "おぼ、さ"}, "潟": {"on": "—", "kun": "かた"}, "完": {"on": "カン", "kun": "—"}, "官": {"on": "カン", "kun": "—"}, "管": {"on": "カン", "kun": "くだ"}, "関": {"on": "カン", "kun": "せき、かか"}, "観": {"on": "カン", "kun": "—"}, "願": {"on": "ガン", "kun": "ねが"}, "岐": {"on": "キ", "kun": "—"}, "希": {"on": "キ", "kun": "—"}, "季": {"on": "キ", "kun": "—"}, "旗": {"on": "キ", "kun": "はた"}, "器": {"on": "キ", "kun": "—"}, "機": {"on": "キ", "kun": "—"}, "議": {"on": "ギ", "kun": "—"}, "求": {"on": "キュウ", "kun": "もと"}, "泣": {"on": "キュウ", "kun": "な"}, "給": {"on": "キュウ", "kun": "—"}, "挙": {"on": "キョ", "kun": "あ"}, "漁": {"on": "ギョ、リョウ", "kun": "—"}, "共": {"on": "キョウ", "kun": "とも"}, "協": {"on": "キョウ", "kun": "—"}, "鏡": {"on": "キョウ", "kun": "かがみ"}, "競": {"on": "キョウ、ケイ", "kun": "—"}, "極": {"on": "キョク", "kun": "—"}, "熊": {"on": "—", "kun": "くま"}, "訓": {"on": "クン", "kun": "—"}, "軍": {"on": "グン", "kun": "—"}, "郡": {"on": "グン", "kun": "—"}, "群": {"on": "グン", "kun": "む、むれ"}, "径": {"on": "ケイ", "kun": "—"}, "景": {"on": "ケイ", "kun": "—"}, "芸": {"on": "ゲイ", "kun": "—"}, "欠": {"on": "ケツ", "kun": "か"}, "結": {"on": "ケツ", "kun": "むす"}, "建": {"on": "ケン", "kun": "た"}, "健": {"on": "ケン", "kun": "—"}, "験": {"on": "ケン", "kun": "—"}, "固": {"on": "コ", "kun": "かた"}, "功": {"on": "コウ", "kun": "—"}, "好": {"on": "コウ", "kun": "この、す"}, "香": {"on": "—", "kun": "か、かお"}, "候": {"on": "コウ", "kun": "—"}, "康": {"on": "コウ", "kun": "—"}, "佐": {"on": "サ", "kun": "—"}, "差": {"on": "サ", "kun": "さ"}, "菜": {"on": "サイ", "kun": "な"}, "最": {"on": "サイ", "kun": "もっと"}, "埼": {"on": "サイ", "kun": "—"}, "材": {"on": "ザイ", "kun": "—"}, "崎": {"on": "—", "kun": "さき"}, "昨": {"on": "サク", "kun": "—"}, "札": {"on": "サツ", "kun": "ふだ"}, "刷": {"on": "サツ", "kun": "す"}, "察": {"on": "サツ", "kun": "—"}, "参": {"on": "サン", "kun": "まい"}, "産": {"on": "サン", "kun": "う"}, "散": {"on": "サン", "kun": "ち"}, "残": {"on": "ザン", "kun": "のこ"}, "氏": {"on": "シ", "kun": "—"}, "司": {"on": "シ", "kun": "—"}, "試": {"on": "シ", "kun": "こころ"}, "児": {"on": "ジ", "kun": "—"}, "治": {"on": "ジ、チ", "kun": "なお、おさ"}, "滋": {"on": "ジ", "kun": "—"}, "辞": {"on": "ジ", "kun": "—"}, "鹿": {"on": "—", "kun": "しか"}, "失": {"on": "シツ", "kun": "うしな"}, "借": {"on": "シャク", "kun": "か"}, "種": {"on": "シュ", "kun": "たね"}, "周": {"on": "シュウ", "kun": "まわ"}, "祝": {"on": "シュク", "kun": "いわ"}, "順": {"on": "ジュン", "kun": "—"}, "初": {"on": "ショ", "kun": "はじ、はつ、うい"}, "松": {"on": "ショウ", "kun": "まつ"}, "笑": {"on": "—", "kun": "わら"}, "唱": {"on": "ショウ", "kun": "とな"}, "焼": {"on": "—", "kun": "や"}, "照": {"on": "ショウ", "kun": "て"}, "城": {"on": "ジョウ", "kun": "しろ"}, "縄": {"on": "ジョウ", "kun": "わ"}, "臣": {"on": "シン", "kun": "—"}, "信": {"on": "シン", "kun": "—"}, "井": {"on": "—", "kun": "い"}, "成": {"on": "セイ", "kun": "な"}, "省": {"on": "セイ、ショウ", "kun": "はぶ"}, "清": {"on": "セイ", "kun": "きよ"}, "静": {"on": "セイ", "kun": "しず"}, "席": {"on": "セキ", "kun": "—"}, "積": {"on": "セキ", "kun": "つ"}, "折": {"on": "セツ", "kun": "お"}, "節": {"on": "セツ", "kun": "ふし"}, "説": {"on": "セツ", "kun": "と"}, "浅": {"on": "セン", "kun": "あさ"}, "戦": {"on": "セン", "kun": "たたか"}, "選": {"on": "セン", "kun": "えら"}, "然": {"on": "ゼン、ネン", "kun": "—"}, "争": {"on": "ソウ", "kun": "あらそ"}, "倉": {"on": "ソウ", "kun": "くら"}, "巣": {"on": "ソウ", "kun": "す"}, "束": {"on": "ソク", "kun": "たば"}, "側": {"on": "ソク", "kun": "がわ"}, "続": {"on": "ゾク", "kun": "つづ"}, "卒": {"on": "ソツ", "kun": "—"}, "孫": {"on": "ソン", "kun": "まご"}, "帯": {"on": "タイ", "kun": "お"}, "隊": {"on": "タイ", "kun": "—"}, "達": {"on": "タツ", "kun": "—"}, "単": {"on": "タン", "kun": "—"}, "置": {"on": "チ", "kun": "お"}, "仲": {"on": "チュウ", "kun": "なか"}, "沖": {"on": "—", "kun": "おき"}, "兆": {"on": "チョウ", "kun": "—"}, "低": {"on": "テイ", "kun": "ひく"}, "底": {"on": "テイ", "kun": "そこ"}, "的": {"on": "テキ", "kun": "まと"}, "典": {"on": "テン", "kun": "—"}, "伝": {"on": "デン", "kun": "つた"}, "徒": {"on": "ト", "kun": "—"}, "努": {"on": "ド", "kun": "つと"}, "灯": {"on": "トウ", "kun": "—"}, "働": {"on": "ドウ", "kun": "はたら"}, "特": {"on": "トク", "kun": "—"}, "徳": {"on": "トク", "kun": "—"}, "栃": {"on": "—", "kun": "とち"}, "奈": {"on": "ナ", "kun": "—"}, "梨": {"on": "—", "kun": "なし"}, "熱": {"on": "ネツ", "kun": "あつ"}, "念": {"on": "ネン", "kun": "—"}, "敗": {"on": "ハイ", "kun": "やぶ"}, "梅": {"on": "バイ", "kun": "うめ"}, "博": {"on": "ハク、バク", "kun": "—"}, "阪": {"on": "ハン", "kun": "—"}, "飯": {"on": "ハン", "kun": "めし"}, "飛": {"on": "ヒ", "kun": "と"}, "必": {"on": "ヒツ", "kun": "かなら"}, "票": {"on": "ヒョウ", "kun": "—"}, "標": {"on": "ヒョウ", "kun": "—"}, "不": {"on": "フ、ブ", "kun": "—"}, "夫": {"on": "フ", "kun": "おっと"}, "付": {"on": "フ", "kun": "つ"}, "府": {"on": "フ", "kun": "—"}, "阜": {"on": "フ", "kun": "—"}, "富": {"on": "フ", "kun": "と、とむ"}, "副": {"on": "フク", "kun": "—"}, "兵": {"on": "ヘイ、ヒョウ", "kun": "—"}, "別": {"on": "ベツ", "kun": "わか"}, "辺": {"on": "ヘン", "kun": "あた"}, "変": {"on": "ヘン", "kun": "か"}, "便": {"on": "ベン、ビン", "kun": "たよ"}, "包": {"on": "ホウ", "kun": "つつつ"}, "法": {"on": "ホウ", "kun": "—"}, "望": {"on": "ボウ", "kun": "のぞ"}, "牧": {"on": "ボク", "kun": "—"}, "末": {"on": "マツ", "kun": "すえ"}, "満": {"on": "マン", "kun": "み"}, "未": {"on": "ミ", "kun": "—"}, "民": {"on": "ミン", "kun": "—"}, "無": {"on": "ム、ブ", "kun": "な"}, "約": {"on": "ヤク", "kun": "—"}, "勇": {"on": "ユウ", "kun": "いさ"}, "要": {"on": "ヨウ", "kun": "かなめ"}, "養": {"on": "ヨウ", "kun": "やしな"}, "浴": {"on": "ヨク", "kun": "あ"}, "利": {"on": "リ", "kun": "—"}, "陸": {"on": "リク", "kun": "—"}, "良": {"on": "リョウ", "kun": "よ"}, "料": {"on": "リョウ", "kun": "—"}, "量": {"on": "リョウ", "kun": "はか"}, "輪": {"on": "リン", "kun": "わ"}, "類": {"on": "ルイ", "kun": "たぐ"}, "令": {"on": "レイ", "kun": "—"}, "冷": {"on": "レイ", "kun": "つめ、ひ、さ"}, "例": {"on": "レイ", "kun": "たと"}, "連": {"on": "レン", "kun": "つら、つ"}, "老": {"on": "ロウ", "kun": "お"}, "労": {"on": "ロウ", "kun": "—"}, "録": {"on": "ロク", "kun": "—"}, "圧": {"on": "アツ", "kun": "—"}, "囲": {"on": "イ", "kun": "かこ"}, "移": {"on": "イ", "kun": "うつ"}, "因": {"on": "イン", "kun": "—"}, "永": {"on": "エイ", "kun": "なが"}, "営": {"on": "エイ", "kun": "いとな"}, "衛": {"on": "エイ", "kun": "—"}, "易": {"on": "エキ、イ", "kun": "やさ"}, "益": {"on": "エキ", "kun": "—"}, "液": {"on": "エキ", "kun": "—"}, "演": {"on": "エン", "kun": "—"}, "応": {"on": "オウ", "kun": "こた"}, "往": {"on": "オウ", "kun": "—"}, "桜": {"on": "—", "kun": "さくら"}, "可": {"on": "カ", "kun": "—"}, "仮": {"on": "カ", "kun": "か"}, "価": {"on": "カ", "kun": "—"}, "河": {"on": "カ", "kun": "かわ"}, "過": {"on": "カ", "kun": "す"}, "快": {"on": "カイ", "kun": "こころよ"}, "解": {"on": "カイ", "kun": "と"}, "格": {"on": "カク", "kun": "—"}, "確": {"on": "カク", "kun": "たし"}, "額": {"on": "ガク", "kun": "ひたい"}, "刊": {"on": "カン", "kun": "—"}, "幹": {"on": "カン", "kun": "みき"}, "慣": {"on": "カン", "kun": "な"}, "眼": {"on": "ガン", "kun": "—"}, "紀": {"on": "キ", "kun": "—"}, "基": {"on": "キ", "kun": "—"}, "寄": {"on": "キ", "kun": "よ"}, "規": {"on": "キ", "kun": "—"}, "喜": {"on": "キ", "kun": "よろこ"}, "技": {"on": "ギ", "kun": "—"}, "義": {"on": "ギ", "kun": "—"}, "逆": {"on": "ギャク", "kun": "さか"}, "久": {"on": "キュウ", "kun": "ひさ"}, "旧": {"on": "キュウ", "kun": "—"}, "救": {"on": "キュウ", "kun": "すく"}, "居": {"on": "キョ", "kun": "い"}, "許": {"on": "キョ", "kun": "ゆる"}, "境": {"on": "キョウ", "kun": "さかい"}, "均": {"on": "キン", "kun": "—"}, "禁": {"on": "キン", "kun": "—"}, "句": {"on": "ク", "kun": "—"}, "型": {"on": "ケイ", "kun": "かた"}, "経": {"on": "ケイ", "kun": "へ"}, "潔": {"on": "ケツ", "kun": "—"}, "件": {"on": "ケン", "kun": "—"}, "険": {"on": "ケン", "kun": "けわ"}, "検": {"on": "ケン", "kun": "—"}, "限": {"on": "ゲン", "kun": "かぎ"}, "現": {"on": "ゲン", "kun": "あらわ"}, "減": {"on": "ゲン", "kun": "へ"}, "故": {"on": "コ", "kun": "—"}, "個": {"on": "コ", "kun": "—"}, "護": {"on": "ゴ", "kun": "—"}, "効": {"on": "コウ", "kun": "き"}, "厚": {"on": "コウ", "kun": "あつ"}, "耕": {"on": "コウ", "kun": "たがや"}, "航": {"on": "コウ", "kun": "—"}, "鉱": {"on": "コウ", "kun": "—"}, "構": {"on": "コウ", "kun": "かま"}, "興": {"on": "コウ、キョウ", "kun": "—"}, "講": {"on": "コウ", "kun": "—"}, "告": {"on": "コク", "kun": "つ"}, "混": {"on": "コン", "kun": "ま、こ"}, "査": {"on": "サ", "kun": "—"}, "再": {"on": "サイ", "kun": "ふたた"}, "災": {"on": "サイ", "kun": "—"}, "妻": {"on": "サイ", "kun": "つま"}, "採": {"on": "サイ", "kun": "と"}, "際": {"on": "サイ", "kun": "—"}, "在": {"on": "ザイ", "kun": "あ"}, "財": {"on": "ザイ", "kun": "—"}, "罪": {"on": "ザイ", "kun": "つみ"}, "殺": {"on": "サツ", "kun": "ころ"}, "雑": {"on": "ザツ、ゾウ", "kun": "—"}, "酸": {"on": "サン", "kun": "—"}, "賛": {"on": "サン", "kun": "—"}, "士": {"on": "シ", "kun": "—"}, "支": {"on": "シ", "kun": "ささ"}, "史": {"on": "シ", "kun": "—"}, "志": {"on": "シ", "kun": "こころざ"}, "枝": {"on": "シ", "kun": "えだ"}, "師": {"on": "シ", "kun": "—"}, "資": {"on": "シ", "kun": "—"}, "飼": {"on": "シ", "kun": "か"}, "示": {"on": "ジ", "kun": "しめ"}, "似": {"on": "—", "kun": "に"}, "識": {"on": "シキ", "kun": "—"}, "質": {"on": "シツ", "kun": "—"}, "舎": {"on": "シャ", "kun": "—"}, "謝": {"on": "シャ", "kun": "—"}, "授": {"on": "ジュ", "kun": "—"}, "修": {"on": "シュ", "kun": "おさ"}, "述": {"on": "ジュツ", "kun": "の"}, "術": {"on": "ジュツ", "kun": "—"}, "準": {"on": "ジュン", "kun": "—"}, "序": {"on": "ジョ", "kun": "—"}, "招": {"on": "ショウ", "kun": "まね"}, "証": {"on": "ショウ", "kun": "—"}, "象": {"on": "ショウ、ゾウ", "kun": "—"}, "賞": {"on": "ショウ", "kun": "—"}, "条": {"on": "ジョウ", "kun": "—"}, "状": {"on": "ジョウ", "kun": "—"}, "常": {"on": "ジョウ", "kun": "つね"}, "情": {"on": "ジョウ", "kun": "なさ"}, "織": {"on": "シキ", "kun": "お"}, "職": {"on": "ショク", "kun": "—"}, "制": {"on": "セイ", "kun": "—"}, "性": {"on": "セイ", "kun": "—"}, "政": {"on": "セイ", "kun": "—"}, "勢": {"on": "セイ", "kun": "いきお"}, "精": {"on": "セイ", "kun": "—"}, "製": {"on": "セイ", "kun": "—"}, "税": {"on": "ゼイ", "kun": "—"}, "責": {"on": "セキ", "kun": "せ"}, "績": {"on": "セキ", "kun": "—"}, "接": {"on": "セツ", "kun": "—"}, "設": {"on": "セツ", "kun": "もう"}, "絶": {"on": "ゼツ", "kun": "た"}, "祖": {"on": "ソ", "kun": "—"}, "素": {"on": "ソ", "kun": "—"}, "総": {"on": "ソウ", "kun": "—"}, "造": {"on": "ゾウ", "kun": "つつく"}, "像": {"on": "ゾウ", "kun": "—"}, "増": {"on": "ゾウ", "kun": "ま、ふ"}, "則": {"on": "ソク", "kun": "—"}, "測": {"on": "ソク", "kun": "はか"}, "属": {"on": "ゾク", "kun": "—"}, "率": {"on": "リツ", "kun": "ひき"}, "損": {"on": "ソン", "kun": "—"}, "貸": {"on": "タイ", "kun": "か"}, "態": {"on": "タイ", "kun": "—"}, "団": {"on": "ダン", "kun": "—"}, "断": {"on": "ダン", "kun": "ことわ"}, "築": {"on": "チク", "kun": "きず"}, "貯": {"on": "チョ", "kun": "—"}, "張": {"on": "チョウ", "kun": "は"}, "停": {"on": "テイ", "kun": "—"}, "提": {"on": "テイ", "kun": "—"}, "程": {"on": "テイ", "kun": "—"}, "適": {"on": "テキ", "kun": "—"}, "統": {"on": "トウ", "kun": "—"}, "堂": {"on": "ドウ", "kun": "—"}, "銅": {"on": "ドウ", "kun": "—"}, "導": {"on": "ドウ", "kun": "みちび"}, "得": {"on": "トク", "kun": "え"}, "毒": {"on": "ドク", "kun": "—"}, "独": {"on": "ドク", "kun": "ひと"}, "任": {"on": "ニン", "kun": "まか"}, "燃": {"on": "ネン", "kun": "も"}, "能": {"on": "ノウ", "kun": "—"}, "破": {"on": "ハ", "kun": "やぶ"}, "犯": {"on": "ハン", "kun": "—"}, "判": {"on": "ハン、バン", "kun": "—"}, "版": {"on": "ハン", "kun": "—"}, "比": {"on": "ヒ", "kun": "くら"}, "肥": {"on": "ヒ", "kun": "こ"}, "非": {"on": "ヒ", "kun": "—"}, "費": {"on": "ヒ", "kun": "—"}, "備": {"on": "ビ", "kun": "そな"}, "評": {"on": "ヒョウ", "kun": "—"}, "貧": {"on": "ビン", "kun": "まず"}, "布": {"on": "フ", "kun": "ぬの"}, "婦": {"on": "フ", "kun": "—"}, "武": {"on": "ブ、ム", "kun": "—"}, "復": {"on": "フ", "kun": "—"}, "複": {"on": "フク", "kun": "—"}, "仏": {"on": "ブツ", "kun": "ほとけ"}, "粉": {"on": "フン", "kun": "こ、こな"}, "編": {"on": "ヘン", "kun": "あ"}, "弁": {"on": "ベン", "kun": "—"}, "保": {"on": "ホ", "kun": "たも"}, "墓": {"on": "ボ", "kun": "はか"}, "報": {"on": "ホウ", "kun": "—"}, "豊": {"on": "ホウ", "kun": "ゆた"}, "防": {"on": "ボウ", "kun": "ふせ"}, "貿": {"on": "ボウ", "kun": "—"}, "暴": {"on": "ボウ", "kun": "あば"}, "脈": {"on": "ミャク", "kun": "—"}, "務": {"on": "ム", "kun": "つと"}, "夢": {"on": "ム", "kun": "ゆめ"}, "迷": {"on": "—", "kun": "まよ"}, "綿": {"on": "メン", "kun": "わた"}, "輸": {"on": "ユ", "kun": "—"}, "余": {"on": "ヨ", "kun": "あ"}, "容": {"on": "ヨウ", "kun": "—"}, "略": {"on": "リャク", "kun": "—"}, "留": {"on": "リュウ、ル", "kun": "と"}, "領": {"on": "リョウ", "kun": "—"}, "歴": {"on": "レキ", "kun": "—"}, "胃": {"on": "イ", "kun": "—"}, "異": {"on": "イ", "kun": "こと"}, "遺": {"on": "イ", "kun": "—"}, "域": {"on": "イキ", "kun": "—"}, "宇": {"on": "ウ", "kun": "—"}, "映": {"on": "エイ", "kun": "うつ"}, "延": {"on": "エン", "kun": "の"}, "沿": {"on": "エン", "kun": "そ"}, "恩": {"on": "オン", "kun": "—"}, "我": {"on": "—", "kun": "われ"}, "灰": {"on": "—", "kun": "はい"}, "拡": {"on": "カク", "kun": "—"}, "革": {"on": "カク", "kun": "—"}, "閣": {"on": "カク", "kun": "—"}, "割": {"on": "—", "kun": "わり、わ"}, "株": {"on": "—", "kun": "かぶ"}, "干": {"on": "カン", "kun": "ほ"}, "巻": {"on": "カン", "kun": "ま"}, "看": {"on": "カン", "kun": "—"}, "簡": {"on": "カン", "kun": "—"}, "危": {"on": "キ", "kun": "あぶ"}, "机": {"on": "—", "kun": "つくえ"}, "揮": {"on": "キ", "kun": "—"}, "貴": {"on": "キ", "kun": "—"}, "疑": {"on": "ギ", "kun": "うたが"}, "吸": {"on": "キュウ", "kun": "す"}, "供": {"on": "キョウ", "kun": "そな、とも"}, "胸": {"on": "キョウ", "kun": "むね"}, "郷": {"on": "キョウ", "kun": "—"}, "勤": {"on": "キン", "kun": "つと"}, "筋": {"on": "キン", "kun": "すじ"}, "系": {"on": "ケイ", "kun": "—"}, "敬": {"on": "ケイ", "kun": "うやま"}, "警": {"on": "ケイ", "kun": "—"}, "劇": {"on": "ゲキ", "kun": "—"}, "激": {"on": "ゲキ", "kun": "はげ"}, "穴": {"on": "—", "kun": "あな"}, "券": {"on": "ケン", "kun": "—"}, "絹": {"on": "—", "kun": "きぬ"}, "権": {"on": "ケン", "kun": "—"}, "憲": {"on": "ケン", "kun": "—"}, "源": {"on": "ゲン", "kun": "みなもと"}, "厳": {"on": "ゲン", "kun": "きび"}, "己": {"on": "コ", "kun": "—"}, "呼": {"on": "コ", "kun": "よ"}, "誤": {"on": "ゴ", "kun": "あやま"}, "后": {"on": "コウ", "kun": "—"}, "孝": {"on": "コウ", "kun": "—"}, "皇": {"on": "コウ、オウ", "kun": "—"}, "紅": {"on": "コウ", "kun": "べに"}, "降": {"on": "コウ", "kun": "お、ふ"}, "鋼": {"on": "コウ", "kun": "—"}, "刻": {"on": "コク", "kun": "きざ"}, "穀": {"on": "コク", "kun": "—"}, "骨": {"on": "コツ", "kun": "ほね"}, "困": {"on": "コン", "kun": "こま"}, "砂": {"on": "サ", "kun": "すな"}, "座": {"on": "ザ", "kun": "—"}, "済": {"on": "サイ", "kun": "す"}, "裁": {"on": "サイ", "kun": "さば"}, "策": {"on": "サク", "kun": "—"}, "冊": {"on": "サツ", "kun": "—"}, "蚕": {"on": "サン", "kun": "かいこ"}, "至": {"on": "シ", "kun": "いた"}, "私": {"on": "シ", "kun": "わたくし、わたし"}, "姿": {"on": "シ", "kun": "すがた"}, "視": {"on": "シ", "kun": "—"}, "詞": {"on": "シ", "kun": "—"}, "誌": {"on": "シ", "kun": "—"}, "磁": {"on": "ジ", "kun": "—"}, "射": {"on": "シャ", "kun": "い"}, "捨": {"on": "シャ", "kun": "す"}, "尺": {"on": "シャク", "kun": "—"}, "若": {"on": "—", "kun": "わか"}, "樹": {"on": "ジュ", "kun": "—"}, "収": {"on": "シュウ", "kun": "おさ"}, "宗": {"on": "シュウ", "kun": "—"}, "就": {"on": "シュウ", "kun": "—"}, "衆": {"on": "シュウ", "kun": "—"}, "従": {"on": "ジュウ", "kun": "したた"}, "縦": {"on": "ジュウ", "kun": "たて"}, "縮": {"on": "シュク", "kun": "ちぢ"}, "熟": {"on": "ジュク", "kun": "—"}, "純": {"on": "ジュン", "kun": "—"}, "処": {"on": "ショ", "kun": "—"}, "署": {"on": "ショ", "kun": "—"}, "諸": {"on": "ショ", "kun": "—"}, "除": {"on": "ジョ", "kun": "のぞ"}, "承": {"on": "ショウ", "kun": "—"}, "将": {"on": "ショウ", "kun": "—"}, "傷": {"on": "ショウ", "kun": "きず"}, "障": {"on": "ショウ", "kun": "—"}, "蒸": {"on": "ジョウ", "kun": "—"}, "針": {"on": "シン", "kun": "はり"}, "仁": {"on": "ジン", "kun": "—"}, "垂": {"on": "スイ", "kun": "た"}, "推": {"on": "スイ", "kun": "—"}, "寸": {"on": "スン", "kun": "—"}, "盛": {"on": "—", "kun": "も"}, "聖": {"on": "セイ", "kun": "—"}, "誠": {"on": "セイ", "kun": "—"}, "舌": {"on": "—", "kun": "した"}, "宣": {"on": "セン", "kun": "—"}, "専": {"on": "セン", "kun": "—"}, "泉": {"on": "セン", "kun": "いずみ"}, "洗": {"on": "セン", "kun": "あら"}, "染": {"on": "—", "kun": "そ"}, "銭": {"on": "セン", "kun": "—"}, "善": {"on": "ゼン", "kun": "よ"}, "奏": {"on": "ソウ", "kun": "—"}, "窓": {"on": "ソウ", "kun": "まど"}, "創": {"on": "ソウ", "kun": "つく"}, "装": {"on": "ソウ", "kun": "—"}, "層": {"on": "ソウ", "kun": "—"}, "操": {"on": "ソウ", "kun": "—"}, "蔵": {"on": "ゾウ", "kun": "—"}, "臓": {"on": "ゾウ", "kun": "—"}, "存": {"on": "ソン", "kun": "—"}, "尊": {"on": "ソン", "kun": "たっと、とうと"}, "退": {"on": "タイ", "kun": "しりぞ"}, "宅": {"on": "タク", "kun": "—"}, "担": {"on": "タン", "kun": "—"}, "探": {"on": "タン", "kun": "さが"}, "誕": {"on": "タン", "kun": "—"}, "段": {"on": "ダン", "kun": "—"}, "暖": {"on": "ダン", "kun": "あたた"}, "値": {"on": "—", "kun": "ね"}, "宙": {"on": "チュウ", "kun": "—"}, "忠": {"on": "チュウ", "kun": "—"}, "著": {"on": "チョ", "kun": "—"}, "庁": {"on": "チョウ", "kun": "—"}, "頂": {"on": "チョウ", "kun": "いただ"}, "腸": {"on": "チョウ", "kun": "—"}, "潮": {"on": "チョウ", "kun": "しお"}, "賃": {"on": "チン", "kun": "—"}, "痛": {"on": "ツウ", "kun": "いた"}, "敵": {"on": "テキ", "kun": "—"}, "展": {"on": "テン", "kun": "—"}, "討": {"on": "トウ", "kun": "—"}, "党": {"on": "トウ", "kun": "—"}, "糖": {"on": "トウ", "kun": "—"}, "届": {"on": "—", "kun": "とど"}, "難": {"on": "ナン", "kun": "むずか"}, "乳": {"on": "ニュウ", "kun": "ちち"}, "認": {"on": "—", "kun": "みと"}, "納": {"on": "ノウ", "kun": "おさ"}, "脳": {"on": "ノウ", "kun": "—"}, "派": {"on": "ハ", "kun": "—"}, "拝": {"on": "ハイ", "kun": "おが"}, "背": {"on": "ハイ", "kun": "せ"}, "肺": {"on": "ハイ", "kun": "—"}, "俳": {"on": "ハイ", "kun": "—"}, "班": {"on": "ハン", "kun": "—"}, "晩": {"on": "バン", "kun": "—"}, "否": {"on": "ヒ", "kun": "—"}, "批": {"on": "ヒ", "kun": "—"}, "秘": {"on": "ヒ", "kun": "—"}, "俵": {"on": "ヒョウ", "kun": "たわら"}, "腹": {"on": "フク", "kun": "はら"}, "奮": {"on": "フン", "kun": "ふる"}, "並": {"on": "—", "kun": "なみ、なら"}, "陛": {"on": "ヘイ", "kun": "—"}, "閉": {"on": "ヘイ", "kun": "し、と"}, "片": {"on": "—", "kun": "かた"}, "補": {"on": "ホ", "kun": "おぎな"}, "暮": {"on": "—", "kun": "く、くら"}, "宝": {"on": "ホウ", "kun": "たから"}, "訪": {"on": "ホウ", "kun": "たず"}, "亡": {"on": "ボウ", "kun": "—"}, "忘": {"on": "—", "kun": "わす"}, "棒": {"on": "ボウ", "kun": "—"}, "枚": {"on": "マイ", "kun": "—"}, "幕": {"on": "マク、バク", "kun": "—"}, "密": {"on": "ミツ", "kun": "—"}, "盟": {"on": "メイ", "kun": "—"}, "模": {"on": "モ、ボ", "kun": "—"}, "訳": {"on": "ヤク", "kun": "わけ"}, "郵": {"on": "ユウ", "kun": "—"}, "優": {"on": "ユウ", "kun": "—"}, "預": {"on": "ヨ", "kun": "あず"}, "幼": {"on": "ヨウ", "kun": "おさな"}, "欲": {"on": "ヨク", "kun": "—"}, "翌": {"on": "ヨク", "kun": "—"}, "乱": {"on": "ラン", "kun": "みだ"}, "卵": {"on": "—", "kun": "たまご"}, "覧": {"on": "ラン", "kun": "—"}, "裏": {"on": "—", "kun": "うら"}, "律": {"on": "リツ", "kun": "—"}, "臨": {"on": "リン", "kun": "—"}, "朗": {"on": "ロウ", "kun": "—"}, "論": {"on": "ロン", "kun": "—"}};
 
 function selectKanjiTile(ch, grade) {
   const card = document.getElementById('kanji-detail-card');
   const charBox = document.getElementById('detail-char-box');
   const gradeTag = document.getElementById('detail-grade-tag');
   const statusTag = document.getElementById('detail-status-tag');
+  const tierBadge = document.getElementById('detail-tier-badge');
   const onText = document.getElementById('detail-on-text');
   const kunText = document.getElementById('detail-kun-text');
+  const exRow = document.getElementById('detail-example-row');
+  const exText = document.getElementById('detail-example-text');
 
   charBox.textContent = ch;
   gradeTag.textContent = `${grade}年生配当`;
 
   const mastered = getMasteredKanji();
   const count = mastered[ch] || 0;
+  const tier = getMasteryTier(count);
+
   if (count > 0) {
     charBox.className = "detail-char-box";
     statusTag.innerHTML = `<span style="color: #00ffaa;">⭕ 撃破済み (正解: ${count}回)</span>`;
+    if (tier === 'gold') {
+      tierBadge.innerHTML = '🥇 ゴールドマスター (5回以上正解)';
+      tierBadge.style.color = '#ffd700';
+    } else if (tier === 'silver') {
+      tierBadge.innerHTML = '🥈 シルバーマスター (3〜4回正解)';
+      tierBadge.style.color = '#b8cce4';
+    } else {
+      tierBadge.innerHTML = '🥉 ブロンズ (1〜2回正解)';
+      tierBadge.style.color = '#ffaa66';
+    }
+    tierBadge.style.display = 'inline-block';
   } else {
     charBox.className = "detail-char-box unmastered";
     statusTag.innerHTML = `<span style="color: #7b9bb8;">❌ 未正解 (${grade}年生コースで撃破しよう！)</span>`;
+    tierBadge.style.display = 'none';
   }
 
   if (ALL_KANJI_READINGS_DATA[ch]) {
@@ -3159,6 +4253,25 @@ function selectKanjiTile(ch, grade) {
   } else {
     onText.textContent = "—";
     kunText.textContent = "—";
+  }
+
+  // 例文検索 & 表示
+  let foundEx = "";
+  for (let g = 1; g <= 6; g++) {
+    const list = KANJI_DATABASE[`grade${g}`] || [];
+    const match = list.find(q => q.kanji.includes(ch));
+    if (match) {
+      foundEx = getQuestionExample(match);
+      break;
+    }
+  }
+  if (exRow && exText) {
+    if (foundEx) {
+      exText.textContent = foundEx.replace(/^例文:\s*/, '');
+      exRow.style.display = 'block';
+    } else {
+      exRow.style.display = 'none';
+    }
   }
 
   card.style.display = "flex";
@@ -3197,6 +4310,125 @@ function openGradeTableModal(targetGrade) {
 function closeG1TableModal() {
   document.getElementById('g1-table-modal').style.display = "none";
 }
+
+/* === あそびかた ガイドモーダル === */
+function openHowToModal() {
+  document.getElementById('how-to-modal').style.display = 'flex';
+}
+
+function closeHowToModal() {
+  document.getElementById('how-to-modal').style.display = 'none';
+}
+
+/* === 機体＆レーザー カスタマイズ モーダル === */
+function openCustomModal() {
+  renderCustomModal();
+  document.getElementById('custom-modal').style.display = 'flex';
+}
+
+function closeCustomModal() {
+  document.getElementById('custom-modal').style.display = 'none';
+}
+
+function renderCustomModal() {
+  const exp = getExp();
+  const current = getCustomSetting();
+
+  // ジェット機選択リスト
+  const shipRow = document.getElementById('custom-ship-row');
+  if (shipRow) {
+    shipRow.innerHTML = "";
+    Object.entries(SHIP_COLORS).forEach(([key, cfg]) => {
+      const isLocked = exp < cfg.reqExp;
+      const isActive = current.ship === key;
+
+      const card = document.createElement('div');
+      card.className = `custom-card ${isActive ? 'active' : ''} ${isLocked ? 'locked' : ''}`;
+      card.innerHTML = `
+        <div class="custom-color-circle" style="background: ${cfg.fill}; border-color: ${cfg.stroke};"></div>
+        <div style="font-weight: bold; font-size: 12px; color: ${cfg.stroke};">${cfg.name}</div>
+        <div style="font-size: 10px; color: #8bb5e0; margin-top: 2px;">
+          ${isLocked ? `🔒 ${cfg.reqExp} EXP必要` : (isActive ? '装備中' : '選択可能')}
+        </div>
+      `;
+      if (!isLocked) {
+        card.addEventListener('click', () => {
+          saveCustomSetting(key, current.laser);
+          renderCustomModal();
+        });
+      }
+      shipRow.appendChild(card);
+    });
+  }
+
+  // レーザー選択リスト
+  const laserRow = document.getElementById('custom-laser-row');
+  if (laserRow) {
+    laserRow.innerHTML = "";
+    Object.entries(LASER_COLORS).forEach(([key, cfg]) => {
+      const isLocked = exp < cfg.reqExp;
+      const isActive = current.laser === key;
+
+      const card = document.createElement('div');
+      card.className = `custom-card ${isActive ? 'active' : ''} ${isLocked ? 'locked' : ''}`;
+      card.innerHTML = `
+        <div class="custom-color-circle" style="background: ${cfg.stroke}; border-color: ${cfg.core};"></div>
+        <div style="font-weight: bold; font-size: 12px; color: ${cfg.stroke};">${cfg.name}</div>
+        <div style="font-size: 10px; color: #8bb5e0; margin-top: 2px;">
+          ${isLocked ? `🔒 ${cfg.reqExp} EXP必要` : (isActive ? '装備中' : '選択可能')}
+        </div>
+      `;
+      if (!isLocked) {
+        card.addEventListener('click', () => {
+          saveCustomSetting(current.ship, key);
+          renderCustomModal();
+        });
+      }
+      laserRow.appendChild(card);
+    });
+  }
+}
+
+/* === 表彰状（漢字マスター認定証） === */
+function openCertModal(targetGrade) {
+  const g = targetGrade || (typeof currentRoomGrade !== 'undefined' ? currentRoomGrade : 1);
+  const gradeNames = {
+    1: "第１学年 配当漢字 全80字",
+    2: "第２学年 配当漢字 全160字",
+    3: "第３学年 配当漢字 全200字",
+    4: "第４学年 配当漢字 全202字",
+    5: "第５学年 配当漢字 全193字",
+    6: "第６学年 配当漢字 全191字",
+    all: "小学校６年間 配当漢字 全1,026字"
+  };
+
+  const titleEl = document.getElementById('cert-grade-title');
+  if (titleEl) {
+    titleEl.textContent = gradeNames[g] || "小学校 配当漢字";
+  }
+
+  const dateEl = document.getElementById('cert-date-display');
+  if (dateEl) {
+    const now = new Date();
+    dateEl.textContent = `${now.getFullYear()}年 ${now.getMonth() + 1}月 ${now.getDate()}日`;
+  }
+
+  document.getElementById('cert-modal').style.display = 'flex';
+}
+
+function openGradeCertificate() {
+  openCertModal(currentRoomGrade);
+}
+
+function closeCertModal() {
+  document.getElementById('cert-modal').style.display = 'none';
+}
+
+// ページ読み込み時初期化
+updateHomeUI();
+window.addEventListener('DOMContentLoaded', () => {
+  updateHomeUI();
+});
 
 </script>
 </body>

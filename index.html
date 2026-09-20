@@ -2426,8 +2426,8 @@
 <body>
 
   <!-- BGM用オーディオ要素（ブラウザ互換性と確実な再生のためDOM配置） -->
-  <audio id="bgm-home" src="assets/bgm_home.mp3" preload="auto" loop playsinline></audio>
-  <audio id="bgm-battle" src="assets/bgm_battle.mp3" preload="auto" loop playsinline></audio>
+  <audio id="bgm-home" src="./assets/bgm_home.mp3" preload="auto" loop playsinline></audio>
+  <audio id="bgm-battle" src="./assets/bgm_battle.mp3" preload="auto" loop playsinline></audio>
 
 <div id="game-container">
   <!-- 上部ステータスバー -->
@@ -4238,7 +4238,26 @@ const KANJI_DATABASE = {
 
 
 /* ==========================================================================
-   Web Audio API による効果音 & シンセBGM生成エンジン
+   アセットURL安全解決ヘルパー（GitHub Pages・サブディレクトリ・末尾スラッシュなし完全対応）
+   ========================================================================== */
+function getAssetUrl(relPath) {
+  if (!relPath) return '';
+  if (relPath.startsWith('data:') || relPath.startsWith('http://') || relPath.startsWith('https://')) {
+    return relPath;
+  }
+  const cleanPath = relPath.replace(/^\.?\//, '');
+  const href = window.location.href.split('?')[0].split('#')[0];
+  let baseDir;
+  if (href.endsWith('.html') || href.endsWith('.htm')) {
+    baseDir = href.substring(0, href.lastIndexOf('/') + 1);
+  } else {
+    baseDir = href.endsWith('/') ? href : href + '/';
+  }
+  return new URL(cleanPath, baseDir).href;
+}
+
+/* ==========================================================================
+   Web Audio API による効果音 & オーディオBGMエンジン
    ========================================================================== */
 class SoundEngine {
   constructor() {
@@ -4248,18 +4267,35 @@ class SoundEngine {
     this.isBgmPlaying = false;
     this.homeBgm = null;
     this.battleBgm = null;
+    this.isInitialized = false;
   }
 
   init() {
+    const homeUrl = getAssetUrl('assets/bgm_home.mp3');
+    const battleUrl = getAssetUrl('assets/bgm_battle.mp3');
+
     if (!this.homeBgm) {
-      this.homeBgm = document.getElementById('bgm-home') || new Audio('assets/bgm_home.mp3');
+      this.homeBgm = document.getElementById('bgm-home') || new Audio();
+    }
+    if (this.homeBgm) {
+      if (!this.homeBgm.src || this.homeBgm.src !== homeUrl) {
+        this.homeBgm.src = homeUrl;
+      }
       this.homeBgm.loop = true;
       this.homeBgm.volume = 0.35;
+      this.homeBgm.preload = 'auto';
     }
+
     if (!this.battleBgm) {
-      this.battleBgm = document.getElementById('bgm-battle') || new Audio('assets/bgm_battle.mp3');
+      this.battleBgm = document.getElementById('bgm-battle') || new Audio();
+    }
+    if (this.battleBgm) {
+      if (!this.battleBgm.src || this.battleBgm.src !== battleUrl) {
+        this.battleBgm.src = battleUrl;
+      }
       this.battleBgm.loop = true;
       this.battleBgm.volume = 0.35;
+      this.battleBgm.preload = 'auto';
     }
 
     if (!this.ctx) {
@@ -4271,6 +4307,7 @@ class SoundEngine {
     if (this.ctx && this.ctx.state === 'suspended') {
       this.ctx.resume().catch(() => {});
     }
+    this.isInitialized = true;
   }
 
   playLaser() {
@@ -4578,8 +4615,9 @@ let targetVisual = {
 };
 
 function resizeCanvas() {
-  canvas.width = canvas.parentElement.clientWidth;
-  canvas.height = canvas.parentElement.clientHeight;
+  const p = canvas.parentElement;
+  canvas.width = p ? p.clientWidth : window.innerWidth;
+  canvas.height = p ? p.clientHeight : window.innerHeight;
   initStars();
 }
 
@@ -4688,7 +4726,7 @@ function preloadShipImages() {
   Object.entries(SHIP_COLORS).forEach(([key, cfg]) => {
     if (cfg.src) {
       const img = new Image();
-      img.src = cfg.src;
+      img.src = getAssetUrl(cfg.src);
       shipImageCache[key] = img;
     }
   });
@@ -4914,7 +4952,7 @@ function drawPlayerJet(cx, h) {
     let shipImg = shipImageCache[custom.ship];
     if (!shipImg) {
       shipImg = new Image();
-      shipImg.src = shipConfig.src;
+      shipImg.src = getAssetUrl(shipConfig.src);
       shipImageCache[custom.ship] = shipImg;
     }
 
@@ -7260,7 +7298,7 @@ function renderCustomPreview() {
     let shipImg = shipImageCache[custom.ship];
     if (!shipImg) {
       shipImg = new Image();
-      shipImg.src = shipConfig.src;
+      shipImg.src = getAssetUrl(shipConfig.src);
       shipImageCache[custom.ship] = shipImg;
     }
     const maxPW = 76;

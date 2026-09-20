@@ -543,10 +543,197 @@
       background: #0284c7;
     }
 
-    /* はらい先端シャープポリゴン */
+    /* はらい先端シャープポリゴン & はねフック */
     .kvg-stroke-tip {
       transition: opacity 0.2s ease-out;
     }
+    .kvg-stroke-hook {
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: stroke-dashoffset 0.18s cubic-bezier(0.1, 0.9, 0.2, 1.3), opacity 0.2s ease-out;
+    }
+
+    /* 漢字マス上部の中央カットイン特大バッジ（アニメーション中に大きく明示） */
+    .cutin-brush-badge {
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%) scale(0.6);
+      padding: 6px 18px;
+      border-radius: 999px;
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+      pointer-events: none;
+      z-index: 22;
+      opacity: 0;
+      transition: opacity 0.22s, transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.3);
+    }
+    .cutin-brush-badge.show {
+      opacity: 1;
+      transform: translateX(-50%) scale(1);
+    }
+    .cutin-brush-badge.tome {
+      background: linear-gradient(135deg, #f43f5e, #be123c);
+      border: 2px solid #fff;
+    }
+    .cutin-brush-badge.hane {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      border: 2px solid #fff;
+      animation: cutinBounceHane 0.35s ease-out;
+    }
+    .cutin-brush-badge.harai {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      border: 2px solid #fff;
+      animation: cutinSweepHarai 0.35s ease-out;
+    }
+    @keyframes cutinBounceHane {
+      0% { transform: translateX(-50%) scale(0.6) translateY(10px); }
+      60% { transform: translateX(-50%) scale(1.1) translateY(-4px); }
+      100% { transform: translateX(-50%) scale(1) translateY(0); }
+    }
+    @keyframes cutinSweepHarai {
+      0% { transform: translateX(-50%) scale(0.6) translateX(-15px); }
+      100% { transform: translateX(-50%) scale(1) translateX(0); }
+    }
+
+    /* 各画の終点ピン（永続表示ピン：全画完了後もどこがとめ・はね・はらいか一目瞭然） */
+    .stroke-perm-pins-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 12;
+    }
+    .stroke-perm-pin {
+      position: absolute;
+      transform: translate(-50%, -50%) scale(0.2);
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 900;
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      border: 1.5px solid #fff;
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity 0.25s, transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.3);
+    }
+    .stroke-perm-pin.show {
+      opacity: 0.95;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    .stroke-perm-pin.tome {
+      background: #e11d48;
+    }
+    .stroke-perm-pin.hane {
+      background: #d97706;
+    }
+    .stroke-perm-pin.harai {
+      background: #0284c7;
+    }
+    .stroke-perm-pin .pin-idx {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      width: 15px;
+      height: 15px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9.5px;
+      margin-right: 1px;
+    }
+
+    /* 漢字カード直下の「筆順・筆使いバー（全画一覧ステップバー）」 */
+    .stroke-step-bar-wrap {
+      padding: 8px 14px 10px;
+      background: #f8fafc;
+      border-top: 1.5px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .stroke-step-bar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #475569;
+    }
+    .stroke-step-chips {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 3px 2px 6px;
+      scrollbar-width: thin;
+    }
+    .stroke-step-chip {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      background: #fff;
+      border: 1.5px solid #cbd5e1;
+      color: #334155;
+      cursor: pointer;
+      transition: all 0.15s ease-out;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+    .stroke-step-chip:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+      border-color: #94a3b8;
+    }
+    .stroke-step-chip.active {
+      transform: scale(1.06);
+      box-shadow: 0 0 0 2.5px #38bdf8, 0 4px 10px rgba(56, 189, 248, 0.4);
+      font-weight: 900;
+    }
+    .stroke-step-chip.tome {
+      border-left: 5px solid #e11d48;
+    }
+    .stroke-step-chip.hane {
+      border-left: 5px solid #d97706;
+    }
+    .stroke-step-chip.harai {
+      border-left: 5px solid #0284c7;
+    }
+    .stroke-step-chip .chip-num {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: #fff;
+      font-weight: 900;
+    }
+    .stroke-step-chip .chip-badge {
+      font-size: 0.76rem;
+      padding: 1px 5px;
+      border-radius: 4px;
+      color: #fff;
+      font-weight: 800;
+    }
+    .stroke-step-chip .chip-badge.tome { background: #e11d48; }
+    .stroke-step-chip .chip-badge.hane { background: #d97706; }
+    .stroke-step-chip .chip-badge.harai { background: #0284c7; }
 
     /* 合格花丸オーバーレイ */
     .hanamaru-overlay {
@@ -1117,6 +1304,12 @@
             <span class="pen-tip-icon">🖌️</span>
           </div>
 
+          <!-- 筆使いカットイン特大バッジ（アニメーション中に大きく明示） -->
+          <div id="cutin-brush-badge" class="cutin-brush-badge"></div>
+
+          <!-- 各画の終点ピン（全画完了後も常時表示） -->
+          <div id="stroke-perm-pins" class="stroke-perm-pins-container"></div>
+
           <!-- 合格花丸スタンプ -->
           <div class="hanamaru-overlay" id="hanamaru-overlay">
             <div class="hanamaru-stamp">💮</div>
@@ -1125,6 +1318,19 @@
               <button class="act-btn" onclick="retryCurrentTrace()">🔄 もう一度かく</button>
               <button class="act-btn primary" onclick="navigateKanji(1)">つぎの漢字へ ▶</button>
             </div>
+          </div>
+        </div>
+
+        <!-- 筆順・筆使いバー（全画一覧ステップバー：タップで各画確認可能） -->
+        <div class="stroke-step-bar-wrap" id="stroke-step-bar-wrap">
+          <div class="stroke-step-bar-header">
+            <span>✏️ 各画の筆使いガイド（とめ・はね・はらい）:</span>
+            <button class="act-btn" id="btn-toggle-pins" onclick="togglePermanentPins()" style="flex: none; padding: 2px 8px; font-size: 0.74rem; min-height: 24px; min-width: auto; border-radius: 6px;">
+              👁️ 筆使いマークON
+            </button>
+          </div>
+          <div class="stroke-step-chips" id="stroke-step-chips">
+            <!-- JSで動的生成 -->
           </div>
         </div>
 
@@ -1798,7 +2004,114 @@
       document.getElementById('play-text').textContent = playing ? '一時停止' : 'さいせい';
     }
 
-    /* 先端尖りポリゴン生成（はらい・はねを教科書体のように美しく尖らせる） */
+    let showPermanentPins = true;
+
+    function togglePermanentPins() {
+      showPermanentPins = !showPermanentPins;
+      const btn = document.getElementById('btn-toggle-pins');
+      if (btn) {
+        btn.textContent = showPermanentPins ? '👁️ 筆使いマークON' : '🙈 筆使いマークOFF';
+        btn.style.color = showPermanentPins ? '#0284c7' : '#94a3b8';
+      }
+      const container = document.getElementById('stroke-perm-pins');
+      if (container) {
+        container.style.display = showPermanentPins ? 'block' : 'none';
+      }
+    }
+
+    /* 筆使いカットイン特大バッジ（アニメーション中に大きく明示） */
+    let cutinTimeoutId = null;
+    function triggerBrushCutin(inst, strokeIdx) {
+      const badge = document.getElementById('cutin-brush-badge');
+      if (!badge) return;
+      if (cutinTimeoutId) clearTimeout(cutinTimeoutId);
+      badge.className = `cutin-brush-badge show ${inst.kind}`;
+      badge.innerHTML = `<span>第${strokeIdx + 1}画:</span> <span>${inst.icon}</span> <span>${inst.label}</span>`;
+      cutinTimeoutId = setTimeout(() => {
+        badge.classList.remove('show');
+      }, 1050 / animSpeed);
+    }
+
+    /* 筆順・筆使いバー（全画一覧ステップバー）の動的生成 */
+    function renderStrokeStepBar(data) {
+      const chipsContainer = document.getElementById('stroke-step-chips');
+      if (!chipsContainer) return;
+      chipsContainer.innerHTML = '';
+
+      data.strokes.forEach((s, idx) => {
+        const inst = getBrushInstruction(s, data.kanji, idx + 1, data.strokesCount);
+        const color = getStrokeColor(idx + 1);
+        const chip = document.createElement('div');
+        chip.id = `stroke-chip-${idx}`;
+        chip.className = `stroke-step-chip ${inst.kind}`;
+        chip.title = `${idx + 1}画目: ${inst.label} (${s.detail || inst.detail}) - クリックで再生`;
+        chip.innerHTML = `
+          <span class="chip-num" style="background: ${color};">${idx + 1}</span>
+          <span class="chip-badge ${inst.kind}">${inst.badgeText}</span>
+        `;
+        chip.onclick = () => {
+          stopAnimation();
+          setAnimStepDirect(idx);
+          startAnimation();
+        };
+        chipsContainer.appendChild(chip);
+      });
+    }
+
+    function updateStrokeStepBar(activeIdx) {
+      const chips = document.querySelectorAll('.stroke-step-chip');
+      chips.forEach((c, idx) => {
+        const isCurrent = idx === activeIdx;
+        c.classList.toggle('active', isCurrent);
+        if (isCurrent) {
+          c.scrollIntoView({ behavior: 'smooth', inline: 'nearest', block: 'nearest' });
+        }
+      });
+    }
+
+    /* 永続終点ピンの配置（全画完了後もどこがとめ・はね・はらいか一目瞭然） */
+    function renderPermanentPins(data) {
+      const container = document.getElementById('stroke-perm-pins');
+      if (!container) return;
+      container.innerHTML = '';
+      container.style.display = showPermanentPins ? 'block' : 'none';
+
+      data.strokes.forEach((s, idx) => {
+        const inst = getBrushInstruction(s, data.kanji, idx + 1, data.strokesCount);
+        const pin = document.createElement('div');
+        pin.id = `perm-pin-${idx}`;
+        pin.className = `stroke-perm-pin ${inst.kind}`;
+        pin.innerHTML = `
+          <span class="pin-idx">${idx + 1}</span>
+          <span class="pin-sym">${inst.icon}</span>
+          <span class="pin-label">${inst.label}</span>
+        `;
+        container.appendChild(pin);
+      });
+    }
+
+    function updatePermanentPinPositions(data) {
+      data.strokes.forEach((s, idx) => {
+        const path = document.getElementById(`anim-stroke-${idx}`);
+        const pin = document.getElementById(`perm-pin-${idx}`);
+        if (!path || !pin) return;
+        const len = path.getTotalLength();
+        const pt = path.getPointAtLength(len);
+        let pctX = Math.max(7, Math.min(93, (pt.x / 109) * 100));
+        let pctY = Math.max(7, Math.min(93, (pt.y / 109) * 100));
+        pin.style.left = `${pctX}%`;
+        pin.style.top = `${pctY}%`;
+      });
+    }
+
+    function updatePermanentPinsVisibility(visibleStepCount) {
+      const pins = document.querySelectorAll('.stroke-perm-pin');
+      pins.forEach((p, idx) => {
+        p.classList.toggle('show', idx < visibleStepCount);
+      });
+    }
+
+    /* 先端尖りポリゴン生成（はらい用：教科書体のように美しく滑らかに尖らせる） */
     function createStrokeTipPolygon(path, color, idx) {
       try {
         const len = path.getTotalLength();
@@ -1813,15 +2126,15 @@
         const uy = dy / dLen;
         const nx = -uy;
         const ny = ux;
-        const r = 4.0; // ストローク半径 (stroke-width 8 / 2)
+        const r = 4.0; // ストローク半径
         // 左右の端点
         const lx = p1.x + nx * r;
         const ly = p1.y + ny * r;
         const rx = p1.x - nx * r;
         const ry = p1.y - ny * r;
-        // 先端点（進行方向に少し伸ばして尖らせる）
-        const tx = p1.x + ux * 6.5;
-        const ty = p1.y + uy * 6.5;
+        // 先端点（進行方向に伸ばしてピンと尖らせる）
+        const tx = p1.x + ux * 8.5;
+        const ty = p1.y + uy * 8.5;
 
         const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
         poly.setAttribute('id', `anim-stroke-tip-${idx}`);
@@ -1830,6 +2143,59 @@
         poly.setAttribute('fill', color);
         poly.style.opacity = '0';
         return poly;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    /* 跳ねフックパス生成（はね用：クッと鋭く跳ね上がる本物の「はね」を描く） */
+    function createStrokeHook(path, color, idx, char) {
+      try {
+        const len = path.getTotalLength();
+        if (len < 2) return null;
+        const p1 = path.getPointAtLength(len);
+        const p0 = path.getPointAtLength(Math.max(0, len - 3.5));
+        const dx = p1.x - p0.x;
+        const dy = p1.y - p0.y;
+        const dLen = Math.hypot(dx, dy);
+        if (dLen === 0) return null;
+        const ux = dx / dLen;
+        const uy = dy / dLen;
+
+        // 跳ねの向き決定（下向き進行なら左上、右向き進行なら左上/斜め上、横折れはねなら内向き）
+        let hx, hy;
+        if (uy > 0.4) {
+          // 縦に下りてくるストローク（小の1画目、月の2画目等）：左斜め上へクッと跳ねる
+          hx = -6.5;
+          hy = -7.5;
+        } else if (ux > 0.4) {
+          // 右に進むストローク（七の2画目等）：上へ跳ねる
+          hx = 0.5;
+          hy = -8.5;
+        } else {
+          // その他：法線方向を基準に上向き跳ね
+          hx = -uy * 6.5;
+          hy = -Math.abs(ux) * 7.0 - 2.0;
+        }
+
+        const qx = p1.x + hx * 0.45;
+        const qy = p1.y + hy * 0.45;
+        const ex = p1.x + hx;
+        const ey = p1.y + hy;
+
+        const hookPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        hookPath.setAttribute('id', `anim-stroke-hook-${idx}`);
+        hookPath.setAttribute('class', 'kvg-stroke-hook');
+        hookPath.setAttribute('d', `M ${p1.x.toFixed(2)},${p1.y.toFixed(2)} Q ${qx.toFixed(2)},${qy.toFixed(2)} ${ex.toFixed(2)},${ey.toFixed(2)}`);
+        hookPath.setAttribute('stroke', color);
+        hookPath.setAttribute('stroke-width', '6.5');
+        hookPath.setAttribute('fill', 'none');
+
+        const hLen = 12;
+        hookPath.style.strokeDasharray = hLen;
+        hookPath.style.strokeDashoffset = hLen;
+        hookPath.style.opacity = '0';
+        return hookPath;
       } catch (e) {
         return null;
       }
@@ -1869,6 +2235,9 @@
       currentStep = 0;
       hideBrushIndicators();
 
+      renderStrokeStepBar(data);
+      renderPermanentPins(data);
+
       const svg = document.getElementById('kanji-svg-view');
       svg.innerHTML = '';
 
@@ -1899,6 +2268,12 @@
           const tip = createStrokeTipPolygon(path, color, idx);
           if (tip) svg.appendChild(tip);
         }
+
+        // 「はね」の跳ね上がりフック
+        if (s.type === 'hane') {
+          const hook = createStrokeHook(path, color, idx, data.kanji);
+          if (hook) svg.appendChild(hook);
+        }
       });
 
       // 画番号バッジ
@@ -1913,6 +2288,9 @@
         svg.appendChild(text);
       });
 
+      updatePermanentPinPositions(data);
+      updatePermanentPinsVisibility(0);
+      updateStrokeStepBar(0);
       updateAnimGuideUI();
       startAnimation();
     }
@@ -1959,6 +2337,7 @@
         const path = document.getElementById(`anim-stroke-${i}`);
         const num = document.getElementById(`anim-num-${i}`);
         const tip = document.getElementById(`anim-stroke-tip-${i}`);
+        const hook = document.getElementById(`anim-stroke-hook-${i}`);
         if (!path) continue;
         const len = path.getTotalLength();
 
@@ -1966,13 +2345,23 @@
           path.style.strokeDashoffset = 0;
           if (num) num.style.opacity = '1';
           if (tip) tip.style.opacity = '1';
+          if (hook) {
+            hook.style.strokeDashoffset = 0;
+            hook.style.opacity = '1';
+          }
         } else {
           path.style.strokeDashoffset = len;
           if (num) num.style.opacity = '0';
           if (tip) tip.style.opacity = '0';
+          if (hook) {
+            hook.style.strokeDashoffset = 12;
+            hook.style.opacity = '0';
+          }
         }
       }
 
+      updatePermanentPinsVisibility(step);
+      updateStrokeStepBar(Math.min(step, data.strokesCount - 1));
       updateAnimGuideUI();
     }
 
@@ -1983,8 +2372,10 @@
       // すべての画を描き終えた場合
       if (currentStep >= data.strokesCount) {
         updateAnimGuideUI();
+        updatePermanentPinsVisibility(data.strokesCount);
+        updateStrokeStepBar(-1);
         playSound('fanfare');
-        stopAnimation(); // 自動でループせず完了状態で停止
+        stopAnimation(); // 完了状態で停止
         return;
       }
 
@@ -1994,10 +2385,15 @@
       const path = document.getElementById(`anim-stroke-${strokeIdx}`);
       const num = document.getElementById(`anim-num-${strokeIdx}`);
       const tip = document.getElementById(`anim-stroke-tip-${strokeIdx}`);
+      const hook = document.getElementById(`anim-stroke-hook-${strokeIdx}`);
       if (!path) return;
 
       // 前の画の終点インジケーターを非表示にして、新しい画に集中
       hideBrushIndicators();
+
+      // 筆使いカットイン大バッジ表示！
+      triggerBrushCutin(inst, strokeIdx);
+      updateStrokeStepBar(strokeIdx);
 
       // ガイドテキストを描いている画の筆使いにリアルタイム更新！
       const hint = document.getElementById('anim-guide-text');
@@ -2011,7 +2407,7 @@
 
       const len = path.getTotalLength();
       // 筆使いに応じたアニメーション時間微調整
-      const baseDuration = inst.kind === 'hane' ? 640 : inst.kind === 'harai' ? 580 : 600;
+      const baseDuration = inst.kind === 'hane' ? 620 : inst.kind === 'harai' ? 560 : 590;
       const duration = baseDuration / animSpeed;
       const startTime = performance.now();
 
@@ -2023,12 +2419,12 @@
         // 筆使い（とめ・はね・はらい）別のイージング計算
         let ease;
         if (inst.kind === 'hane') {
-          // はね：途中でタメを作り、最後キュッと跳ね上がる
-          if (progress < 0.76) {
-            ease = (progress / 0.76) * 0.74;
+          // はね：途中でグッとタメを作り、最後キュッと跳ね上がる
+          if (progress < 0.74) {
+            ease = (progress / 0.74) * 0.72;
           } else {
-            const p2 = (progress - 0.76) / 0.24;
-            ease = 0.74 + 0.26 * Math.pow(p2, 1.85);
+            const p2 = (progress - 0.74) / 0.26;
+            ease = 0.72 + 0.28 * Math.pow(p2, 2.0);
           }
         } else if (inst.kind === 'harai') {
           // はらい：終端に向かってスーーッと筆が抜けていく
@@ -2051,6 +2447,12 @@
           path.style.strokeDashoffset = 0;
           if (tip) tip.style.opacity = '1';
 
+          // はねフックのアニメーション描画
+          if (hook) {
+            hook.style.opacity = '1';
+            hook.style.strokeDashoffset = '0';
+          }
+
           // 終点インジケーター表示（とめ・はね・はらいのバッジを即座に表示！）
           const endPt = path.getPointAtLength(len);
           showBrushIndicator(endPt.x, endPt.y, inst);
@@ -2062,6 +2464,7 @@
           playSound(inst.kind);
 
           currentStep++;
+          updatePermanentPinsVisibility(currentStep);
 
           // 全画完了か判定
           if (currentStep >= data.strokesCount) {
@@ -2069,6 +2472,7 @@
             badge.textContent = `${data.strokesCount} / ${data.strokesCount} 画`;
             const pin = document.getElementById('pin-marker');
             if (pin) pin.style.display = 'none';
+            updateStrokeStepBar(-1);
             playSound('fanfare');
             stopAnimation();
             return;
@@ -2215,6 +2619,11 @@
 
       hideBrushIndicators();
       document.getElementById('hanamaru-overlay').classList.remove('show');
+
+      renderStrokeStepBar(data);
+      renderPermanentPins(data);
+      updatePermanentPinsVisibility(0);
+      updateStrokeStepBar(0);
 
       renderTraceGuideSvg(data);
       updateTraceGuideUI();
@@ -2406,9 +2815,12 @@
         currentTracePoints = [];
         traceCurrentIdx++;
 
-        const inst = getBrushInstruction(expected);
+        const inst = getBrushInstruction(expected, data.kanji, traceCurrentIdx, data.strokesCount);
         playSound(inst.kind); // とめ・はね・はらいの専用音
         showBrushIndicator(pEnd.x / scaleX, pEnd.y / scaleY, inst);
+        triggerBrushCutin(inst, traceCurrentIdx - 1);
+        updatePermanentPinsVisibility(traceCurrentIdx);
+        updateStrokeStepBar(traceCurrentIdx < data.strokesCount ? traceCurrentIdx : -1);
 
         if (traceCurrentIdx >= data.strokesCount) {
           onTraceAllCleared();

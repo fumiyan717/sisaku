@@ -40,13 +40,9 @@
       position: relative;
       width: 100vw;
       height: 100vh;
-      max-width: 1200px;
-      max-height: 800px;
       display: flex;
       flex-direction: column;
       background: radial-gradient(circle at 50% 40%, #0d1b2a 0%, #050b14 100%);
-      box-shadow: 0 0 50px rgba(0, 229, 255, 0.2);
-      border: 1px solid #1a2f4d;
       overflow: hidden;
     }
 
@@ -678,17 +674,106 @@
       line-height: 1.5;
     }
 
+    #start-modal {
+      padding: 10px;
+      justify-content: center;
+      background: radial-gradient(circle at 50% 30%, #0d1e38 0%, #030814 100%);
+    }
+
     .modal-card-start {
-      max-width: 660px;
-      max-height: 92vh;
+      max-width: 1420px;
+      width: 98%;
+      height: 96vh;
+      max-height: 96vh;
+      display: flex;
+      flex-direction: column;
+      padding: 18px 26px 14px 26px;
       overflow-y: auto;
+      scrollbar-width: thin;
+      box-shadow: 0 0 60px rgba(0, 229, 255, 0.25);
+    }
+
+    /* ホーム画面フルスクリーン2カラムダッシュボード */
+    .home-dashboard-layout {
+      display: flex;
+      gap: 18px;
+      flex: 1;
+      margin: 8px 0;
+      align-items: stretch;
+    }
+
+    .home-dashboard-left {
+      flex: 0 0 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      justify-content: space-between;
+    }
+
+    .home-dashboard-right {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    @media (max-width: 960px) {
+      .home-dashboard-layout {
+        flex-direction: column;
+      }
+      .home-dashboard-left {
+        flex: none;
+        width: 100%;
+      }
+    }
+
+    /* 機体カスタムモーダル専用（固定ヘッダー・フッター＆独立スクロール） */
+    .modal-card-custom {
+      max-width: 820px;
+      width: 95%;
+      height: 88vh;
+      max-height: 88vh;
+      display: flex;
+      flex-direction: column;
+      padding: 0 !important;
+      overflow: hidden !important;
+      border-radius: 18px;
+    }
+
+    .custom-modal-header {
+      padding: 14px 22px;
+      background: rgba(5, 12, 24, 0.96);
+      border-bottom: 1.5px solid rgba(0, 229, 255, 0.35);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .custom-modal-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 22px;
+      scrollbar-width: thin;
+    }
+
+    .custom-modal-footer {
+      padding: 14px 22px;
+      background: rgba(5, 12, 24, 0.96);
+      border-top: 1.5px solid rgba(0, 229, 255, 0.35);
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-shrink: 0;
     }
 
     .mode-select-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 16px;
+      gap: 12px;
+      margin-bottom: 8px;
+      flex: 1;
     }
 
     .mode-btn {
@@ -1723,22 +1808,24 @@
 
     /* === カスタマイズモーダル === */
     .custom-row {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin: 12px 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 12px;
+      margin: 10px 0 16px 0;
     }
 
     .custom-card {
       background: rgba(16, 32, 60, 0.9);
       border: 2px solid #204987;
       border-radius: 12px;
-      padding: 10px 14px;
+      padding: 10px 8px;
       cursor: pointer;
       text-align: center;
-      min-width: 100px;
       transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
 
     .custom-card.active {
@@ -2452,9 +2539,6 @@
 
     <div class="top-controls">
       <button id="btn-hud-menu" class="hud-room-btn hud-menu-btn" onclick="confirmReturnToMenu()">🏠 メニュー</button>
-      <button id="hud-handwrite-btn" class="hud-room-btn" onclick="openHandwriteModalFromHud()" title="一時停止して手書き練習">✍️ 手書き</button>
-      <button id="hud-ai-btn" class="hud-room-btn" onclick="openAiReportModalFromHud()" title="一時停止してAI弱点分析">📊 AI分析</button>
-      <button id="room-open-hud-btn" class="hud-room-btn" onclick="openKanjiRoom()">🏛️ 部屋</button>
       <button class="icon-btn" id="sound-toggle-btn">🔊 BGM/SE</button>
     </div>
   </header>
@@ -2592,146 +2676,157 @@
   <!-- 正解・被弾フラッシュエフェクト -->
   <div class="flash-overlay" id="flash-overlay"></div>
 
-  <!-- スタート画面モーダル -->
+  <!-- スタート画面モーダル（フルスクリーン・ワイドダッシュボード） -->
   <div class="modal-overlay" id="start-modal">
     <div class="modal-card modal-card-start">
-      <div style="font-size: 38px; margin-bottom: 2px;">🚀✨</div>
-      <h1 class="modal-title">ファイブツアーズ<br>JET 漢字バトル</h1>
-      <p class="modal-subtitle">漢字の「よみ」を答えてビームで撃破せよ！目指せ銀河の漢字マスター！</p>
-
-      <!-- 整理されたステータスドック (2段構成で文字サイズと余白を最適化) -->
-      <div class="home-status-bar">
-        <div class="status-row-top">
-          <div class="home-status-item">
-            <span class="status-label">まいにち:</span>
-            <span class="status-val streak-val" id="home-streak-display">🔥 1日目</span>
-          </div>
-          <div class="home-status-item">
-            <span class="status-label">しょうごう:</span>
-            <span class="status-val rank-val" id="home-rank-display">🧑‍🚀 みならいパイロット</span>
-          </div>
-          <div class="home-status-item">
-            <span class="status-label">EXP:</span>
-            <span class="status-val" id="home-exp-display" style="color:#00e5ff; font-weight:900;">0</span>
+      <!-- ヘッダータイトル＆ステータスバー -->
+      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 8px;">
+        <div style="text-align: left; display: flex; align-items: center; gap: 12px;">
+          <span style="font-size: 36px; line-height: 1;">🚀✨</span>
+          <div>
+            <h1 class="modal-title" style="margin: 0; font-size: 23px; text-align: left; line-height: 1.2;">ファイブツアーズ JET 漢字バトル</h1>
+            <p class="modal-subtitle" style="margin: 0; font-size: 12px; text-align: left;">漢字の「よみ」を答えてビームで撃破！目指せ銀河の漢字マスター！</p>
           </div>
         </div>
-        <div class="status-row-bottom">
-          <div class="home-status-item clickable" onclick="openPilotNameModal()" title="パイロット二つ名を変更">
-            <span class="status-label">パイロット:</span>
-            <span class="status-val" id="home-pilot-name" style="color: #ffd700; font-weight: bold;">⚡ 疾風のハヤブサ01号</span>
+
+        <!-- 整理されたステータスドック -->
+        <div class="home-status-bar" style="margin: 0; padding: 6px 14px;">
+          <div class="status-row-top" style="gap: 14px;">
+            <div class="home-status-item">
+              <span class="status-label">まいにち:</span>
+              <span class="status-val streak-val" id="home-streak-display">🔥 1日目</span>
+            </div>
+            <div class="home-status-item">
+              <span class="status-label">しょうごう:</span>
+              <span class="status-val rank-val" id="home-rank-display">🧑‍🚀 みならいパイロット</span>
+            </div>
+            <div class="home-status-item">
+              <span class="status-label">EXP:</span>
+              <span class="status-val" id="home-exp-display" style="color:#00e5ff; font-weight:900;">0</span>
+            </div>
           </div>
-          <div class="home-status-item clickable" onclick="openCustomModal()" title="機体や画像をカスタマイズ">
-            <span class="status-label">そうび:</span>
-            <span class="status-val" id="home-custom-display" style="color: var(--neon-yellow);">✈️ ブルーホーク</span>
+          <div class="status-row-bottom" style="gap: 14px; margin-top: 4px;">
+            <div class="home-status-item clickable" onclick="openPilotNameModal()" title="パイロット二つ名を変更">
+              <span class="status-label">パイロット:</span>
+              <span class="status-val" id="home-pilot-name" style="color: #ffd700; font-weight: bold;">⚡ 疾風のハヤブサ01号</span>
+            </div>
+            <div class="home-status-item clickable" onclick="openCustomModal()" title="機体をカスタマイズ">
+              <span class="status-label">そうび:</span>
+              <span class="status-val" id="home-custom-display" style="color: var(--neon-yellow);">✈️ ブルーホーク</span>
+            </div>
+            <span class="privacy-guarantee-badge" onclick="openPrivacyModal()" title="100%外部通信・本名入力なし">
+              🛡️ 個人情報ゼロ保証
+            </span>
           </div>
-          <span class="privacy-guarantee-badge" onclick="openPrivacyModal()" title="100%外部通信・本名入力なし">
-            🛡️ 個人情報ゼロ保証
-          </span>
         </div>
       </div>
 
-      <!-- 主要教科書＆漢検級別 カリキュラムセレクター -->
-      <div class="curriculum-bar" id="curriculum-bar">
-        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
-          <span class="curriculum-label">📖 学習カリキュラム:</span>
-          <select id="curriculum-select" class="curriculum-select" onchange="changeCurriculum(this.value)" onmousedown="event.stopPropagation()" onclick="event.stopPropagation()">
-            <option value="standard">🏫 学年標準（文部科学省）</option>
-            <option value="mitsumura">📘 光村図書（みつむら）準拠</option>
-            <option value="tokyo">📕 東京書籍（とうしょ）準拠</option>
-            <option value="kyoiku">📙 教育出版（きょうしゅつ）準拠</option>
-            <option value="kanken">🎖️ 日本漢字能力検定（10級〜5級）</option>
-          </select>
-        </div>
-        <div id="curriculum-active-desc" style="font-size: 11px; color: #00ffaa; font-weight: bold; text-align: left; padding-left: 2px;">
-          ✨ 文部科学省の標準学年配当で学習中
-        </div>
-      </div>
+      <!-- メインエリア：2カラムダッシュボード（横幅フル活用） -->
+      <div class="home-dashboard-layout">
+        <!-- 左カラム：設定・ミッション・発進ボタン -->
+        <div class="home-dashboard-left">
+          <!-- 学習カリキュラムセレクター -->
+          <div class="curriculum-bar" id="curriculum-bar" style="margin: 0;">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+              <span class="curriculum-label">📖 学習カリキュラム:</span>
+              <select id="curriculum-select" class="curriculum-select" onchange="changeCurriculum(this.value)" onmousedown="event.stopPropagation()" onclick="event.stopPropagation()">
+                <option value="standard">🏫 学年標準（文部科学省）</option>
+                <option value="mitsumura">📘 光村図書（みつむら）準拠</option>
+                <option value="tokyo">📕 東京書籍（とうしょ）準拠</option>
+                <option value="kyoiku">📙 教育出版（きょうしゅつ）準拠</option>
+                <option value="kanken">🎖️ 日本漢字能力検定（10級〜5級）</option>
+              </select>
+            </div>
+            <div id="curriculum-active-desc" style="font-size: 11px; color: #00ffaa; font-weight: bold; text-align: left; padding-left: 2px;">
+              ✨ 文部科学省の標準学年配当で学習中
+            </div>
+          </div>
 
-      <!-- 特別ミッション (デイリー & にがて特訓) -->
-      <div class="special-modes-row">
-        <div class="special-mode-btn" id="btn-daily-mission" onclick="startDailyMission()">
-          <div class="special-mode-title" id="daily-mission-title">🎯 今日のデイリー (5問)</div>
-          <div class="special-mode-desc" id="daily-mission-desc">1日1回ボーナスEXP！全学年から厳選出題！</div>
-        </div>
-        <div class="special-mode-btn" onclick="startMistakesMode()" id="btn-mistakes-mode">
-          <div class="special-mode-title">🔁 にがて特訓リベンジ</div>
-          <div class="special-mode-desc" id="mistakes-mode-desc">過去に間違えた漢字に集中挑戦！</div>
-        </div>
-      </div>
+          <!-- 特別ミッション (デイリー & にがて特訓) -->
+          <div class="special-modes-row" style="margin: 0;">
+            <div class="special-mode-btn" id="btn-daily-mission" onclick="startDailyMission()">
+              <div class="special-mode-title" id="daily-mission-title">🎯 今日のデイリー (5問)</div>
+              <div class="special-mode-desc" id="daily-mission-desc">1日1回ボーナスEXP！全学年から厳選出題！</div>
+            </div>
+            <div class="special-mode-btn" onclick="startMistakesMode()" id="btn-mistakes-mode">
+              <div class="special-mode-title">🔁 にがて特訓リベンジ</div>
+              <div class="special-mode-desc" id="mistakes-mode-desc">過去に間違えた漢字に集中挑戦！</div>
+            </div>
+          </div>
 
-      <!-- 学年コース選択グリッド (スッキリ整理・筆順ショートカット付き) -->
-      <div class="mode-select-grid">
-        <div class="mode-btn active" data-mode="grade1" onclick="selectMode('grade1')">
-          <a href="kakijun.html?grade=1" class="card-kakijun-shortcut" onclick="event.stopPropagation();" title="1年生の書き順を見る・練習する">✏️ 筆順</a>
-          <span class="grade-badge g1">1ねんせい</span>
-          <div class="mode-name">🌱 １年生</div>
-          <span class="mode-progress-badge" id="badge-g1">0/80字 (0%)</span>
-          <div class="mode-desc"><ruby>配当<rt>はいとう</rt></ruby>80<ruby>字<rt>じ</rt></ruby>・きほんの <ruby>読<rt>よ</rt></ruby>み</div>
-        </div>
-        <div class="mode-btn" data-mode="grade2" onclick="selectMode('grade2')">
-          <a href="kakijun.html?grade=2" class="card-kakijun-shortcut" onclick="event.stopPropagation();" title="2年生の書き順を見る・練習する">✏️ 筆順</a>
-          <span class="grade-badge g2">2ねんせい</span>
-          <div class="mode-name">🌿 ２年生</div>
-          <span class="mode-progress-badge" id="badge-g2">0/160字 (0%)</span>
-          <div class="mode-desc"><ruby>日常<rt>にちじょう</rt></ruby>の かん<ruby>字<rt>じ</rt></ruby> (160<ruby>字<rt>じ</rt></ruby>)</div>
-        </div>
-        <div class="mode-btn" data-mode="grade3" onclick="selectMode('grade3')">
-          <a href="kakijun.html?grade=3" class="card-kakijun-shortcut" onclick="event.stopPropagation();" title="3年生の書き順を見る・練習する">✏️ 筆順</a>
-          <span class="grade-badge g3">3年生</span>
-          <div class="mode-name">🌸 ３年生</div>
-          <span class="mode-progress-badge" id="badge-g3">0/200字 (0%)</span>
-          <div class="mode-desc">身近な熟語 (200字)</div>
-        </div>
-        <div class="mode-btn" data-mode="grade4" onclick="selectMode('grade4')">
-          <a href="kakijun.html?grade=4" class="card-kakijun-shortcut" onclick="event.stopPropagation();" title="4年生の書き順を見る・練習する">✏️ 筆順</a>
-          <span class="grade-badge g4">4年生</span>
-          <div class="mode-name">🍁 ４年生</div>
-          <span class="mode-progress-badge" id="badge-g4">0/202字 (0%)</span>
-          <div class="mode-desc">発展の言葉 (202字)</div>
-        </div>
-        <div class="mode-btn" data-mode="grade5" onclick="selectMode('grade5')">
-          <a href="kakijun.html?grade=5" class="card-kakijun-shortcut" onclick="event.stopPropagation();" title="5年生の書き順を見る・練習する">✏️ 筆順</a>
-          <span class="grade-badge g5">5年生</span>
-          <div class="mode-name">⚡ ５年生</div>
-          <span class="mode-progress-badge" id="badge-g5">0/193字 (0%)</span>
-          <div class="mode-desc">少し難しい熟語 (193字)</div>
-        </div>
-        <div class="mode-btn" data-mode="grade6" onclick="selectMode('grade6')">
-          <a href="kakijun.html?grade=6" class="card-kakijun-shortcut" onclick="event.stopPropagation();" title="6年生の書き順を見る・練習する">✏️ 筆順</a>
-          <span class="grade-badge g6">6年生</span>
-          <div class="mode-name">🔥 ６年生</div>
-          <span class="mode-progress-badge" id="badge-g6">0/191字 (0%)</span>
-          <div class="mode-desc">総仕上げレベル (191字)</div>
-        </div>
-        <div class="mode-btn full-width" data-mode="all" onclick="selectMode('all')">
-          <div class="mode-name">👑 全学年チャレンジ</div>
-          <div class="mode-desc">1年生〜6年生の全範囲からバランス良く出題！全10問の完全制覇ツアー！</div>
-        </div>
-      </div>
-
-      <!-- メイン発進ボタン -->
-      <div style="display: flex; gap: 12px; justify-content: center; align-items: center; flex-wrap: wrap;">
-        <button class="start-btn" id="start-game-btn" onclick="startGame()">🌱 １年生コースで発進！ (START)</button>
-      </div>
-
-      <!-- 下部整理されたナビゲーションメニュー -->
-      <div class="home-nav-container">
-        <div class="home-nav-row-group">
-          <span class="home-nav-label">✏️ まなぶ:</span>
-          <div class="home-nav-btns">
-            <a href="kakijun.html" class="home-nav-btn highlight" title="小学校全1026字の書き順アニメ＆なぞり書き">✏️ 筆順マスター</a>
-            <button class="home-nav-btn" onclick="openHandwriteModal()">✍️ 手書き特訓</button>
-            <button class="home-nav-btn" onclick="openKanjiRoom()">🏛️ 漢字の部屋</button>
+          <!-- メイン発進ボタン -->
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <button class="start-btn" id="start-game-btn" onclick="startGame()" style="width: 100%; font-size: 20px; padding: 16px 20px;">
+              🌱 １年生コースで発進！ (START)
+            </button>
           </div>
         </div>
-        <div class="home-nav-row-group">
-          <span class="home-nav-label">🏆 きろく他:</span>
-          <div class="home-nav-btns">
-            <button class="home-nav-btn" onclick="openCertModal()">🎖️ 認定証</button>
-            <button class="home-nav-btn" onclick="openAiReportModal()">📊 AI学習分析</button>
-            <button class="home-nav-btn" onclick="openCustomModal()">🚀 機体カスタム</button>
-            <button class="home-nav-btn" onclick="openHowToModal()">❓ あそびかた</button>
+
+        <!-- 右カラム：学年コース選択グリッド（広々と全6学年＋全学年を表示） -->
+        <div class="home-dashboard-right">
+          <div class="mode-select-grid">
+            <div class="mode-btn active" data-mode="grade1" onclick="selectMode('grade1')">
+              <span class="grade-badge g1">1ねんせい</span>
+              <div class="mode-name">🌱 １年生</div>
+              <span class="mode-progress-badge" id="badge-g1">0/80字 (0%)</span>
+              <div class="mode-desc"><ruby>配当<rt>はいとう</rt></ruby>80<ruby>字<rt>じ</rt></ruby>・きほんの <ruby>読<rt>よ</rt></ruby>み</div>
+            </div>
+            <div class="mode-btn" data-mode="grade2" onclick="selectMode('grade2')">
+              <span class="grade-badge g2">2ねんせい</span>
+              <div class="mode-name">🌿 ２年生</div>
+              <span class="mode-progress-badge" id="badge-g2">0/160字 (0%)</span>
+              <div class="mode-desc"><ruby>日常<rt>にちじょう</rt></ruby>の かん<ruby>字<rt>じ</rt></ruby> (160<ruby>字<rt>じ</rt></ruby>)</div>
+            </div>
+            <div class="mode-btn" data-mode="grade3" onclick="selectMode('grade3')">
+              <span class="grade-badge g3">3年生</span>
+              <div class="mode-name">🌸 ３年生</div>
+              <span class="mode-progress-badge" id="badge-g3">0/200字 (0%)</span>
+              <div class="mode-desc">身近な熟語 (200字)</div>
+            </div>
+            <div class="mode-btn" data-mode="grade4" onclick="selectMode('grade4')">
+              <span class="grade-badge g4">4年生</span>
+              <div class="mode-name">🍁 ４年生</div>
+              <span class="mode-progress-badge" id="badge-g4">0/202字 (0%)</span>
+              <div class="mode-desc">発展の言葉 (202字)</div>
+            </div>
+            <div class="mode-btn" data-mode="grade5" onclick="selectMode('grade5')">
+              <span class="grade-badge g5">5年生</span>
+              <div class="mode-name">⚡ ５年生</div>
+              <span class="mode-progress-badge" id="badge-g5">0/193字 (0%)</span>
+              <div class="mode-desc">少し難しい熟語 (193字)</div>
+            </div>
+            <div class="mode-btn" data-mode="grade6" onclick="selectMode('grade6')">
+              <span class="grade-badge g6">6年生</span>
+              <div class="mode-name">🔥 ６年生</div>
+              <span class="mode-progress-badge" id="badge-g6">0/191字 (0%)</span>
+              <div class="mode-desc">総仕上げレベル (191字)</div>
+            </div>
+            <div class="mode-btn full-width" data-mode="all" onclick="selectMode('all')">
+              <div class="mode-name">👑 全学年チャレンジ</div>
+              <div class="mode-desc">1年生〜6年生の全範囲からバランス良く出題！全10問の完全制覇ツアー！</div>
+            </div>
           </div>
+        </div>
+      </div>
+
+      <!-- 下部整理されたナビゲーションメニュー（横一列にすっきり配置） -->
+      <div class="home-nav-container" style="margin-top: 8px;">
+        <div class="home-nav-btns" style="display: flex; gap: 10px; width: 100%; flex-wrap: wrap;">
+          <a href="kakijun.html" class="home-nav-btn highlight" style="flex: 1.2; text-align: center; justify-content: center; font-size: 13.5px; padding: 10px 14px;" title="小学校全1026字の書き順アニメ＆なぞり書き練習">
+            ✏️ 筆順・手書き練習 (全1,026字)
+          </a>
+          <button class="home-nav-btn" onclick="openKanjiRoom()" style="flex: 1.1; text-align: center; justify-content: center; font-size: 13.5px; padding: 10px 14px;">
+            🏛️ 漢字の部屋 (全1026字・認定証)
+          </button>
+          <button class="home-nav-btn" onclick="openCustomModal()" style="flex: 1; text-align: center; justify-content: center; font-size: 13.5px; padding: 10px 14px;">
+            🚀 機体カスタム (機体３〜７)
+          </button>
+          <button class="home-nav-btn" onclick="openAiReportModal()" style="flex: 1; text-align: center; justify-content: center; font-size: 13.5px; padding: 10px 14px;">
+            📊 AI学習分析
+          </button>
+          <button class="home-nav-btn sub" onclick="openHowToModal()" style="flex: 0 0 auto; text-align: center; justify-content: center; font-size: 12.5px; padding: 10px 16px;">
+            ❓ あそびかた
+          </button>
         </div>
       </div>
     </div>
@@ -2959,8 +3054,9 @@
 
   <!-- ジェット機＆レーザー カスタマイズ モーダル -->
   <div class="modal-overlay" id="custom-modal" style="display: none; z-index: 125;">
-    <div class="modal-card" style="max-width: 650px;">
-      <div class="room-header">
+    <div class="modal-card modal-card-custom">
+      <!-- 固定ヘッダー（常に画面上部に固定） -->
+      <div class="custom-modal-header">
         <div class="room-title-box">
           <h2 class="room-title">🚀 機体＆レーザー カスタマイズ</h2>
           <p class="room-desc">漢字をたくさん撃破して、かっこいい機体とビームを解放しよう！</p>
@@ -2968,26 +3064,32 @@
         <button class="room-close-btn" onclick="closeCustomModal()">✕ とじる</button>
       </div>
 
-      <!-- リアルタイム プレビュードック -->
-      <div class="custom-preview-dock" id="custom-preview-dock">
-        <canvas id="custom-preview-canvas" class="custom-preview-canvas" width="320" height="110"></canvas>
-        <div class="custom-preview-names">
-          <span>機体: <strong id="custom-preview-ship-name" style="color: #00e5ff;">ブルーホーク</strong></span>
-          <span>ビーム: <strong id="custom-preview-laser-name" style="color: #00e5ff;">蒼光シアン</strong></span>
+      <!-- スクロール可能なボディエリア（機体が増えても快適に閲覧） -->
+      <div class="custom-modal-body">
+        <!-- リアルタイム プレビュードック -->
+        <div class="custom-preview-dock" id="custom-preview-dock">
+          <canvas id="custom-preview-canvas" class="custom-preview-canvas" width="320" height="110"></canvas>
+          <div class="custom-preview-names">
+            <span>機体: <strong id="custom-preview-ship-name" style="color: #00e5ff;">ブルーホーク</strong></span>
+            <span>ビーム: <strong id="custom-preview-laser-name" style="color: #00e5ff;">蒼光シアン</strong></span>
+          </div>
+        </div>
+
+        <h3 style="font-size: 15px; color: var(--neon-yellow); margin: 12px 0 6px 0; text-align: left;">✈️ ジェット機の機体・カラー</h3>
+        <div class="custom-row" id="custom-ship-row">
+          <!-- JS動的生成 -->
+        </div>
+
+        <h3 style="font-size: 15px; color: var(--primary-cyan); margin: 16px 0 6px 0; text-align: left;">⚡ レーザービームのカラー</h3>
+        <div class="custom-row" id="custom-laser-row">
+          <!-- JS動的生成 -->
         </div>
       </div>
 
-      <h3 style="font-size: 15px; color: var(--neon-yellow); margin: 12px 0 6px 0; text-align: left;">✈️ ジェット機の機体・カラー</h3>
-      <div class="custom-row" id="custom-ship-row">
-        <!-- JS動的生成 -->
+      <!-- 固定フッター（常に画面内に常駐し、絶対に押せる決定・戻るボタン） -->
+      <div class="custom-modal-footer">
+        <button class="start-btn" onclick="closeCustomModal()" style="padding: 11px 40px; font-size: 16.5px;">✅ 決定して戻る</button>
       </div>
-
-      <h3 style="font-size: 15px; color: var(--primary-cyan); margin: 16px 0 6px 0; text-align: left;">⚡ レーザービームのカラー</h3>
-      <div class="custom-row" id="custom-laser-row">
-        <!-- JS動的生成 -->
-      </div>
-
-      <button class="start-btn" onclick="closeCustomModal()" style="margin-top: 15px; padding: 10px 30px; font-size: 16px;">決定して戻る</button>
     </div>
   </div>
 
@@ -7162,8 +7264,8 @@ function renderCustomModal() {
       let visualHtml = '';
       if (cfg.src) {
         visualHtml = `
-          <div style="width: 48px; height: 38px; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, rgba(0, 229, 255, 0.25) 0%, rgba(10, 20, 40, 0.7) 80%); border-radius: 8px; border: 1.5px solid ${cfg.stroke}; box-shadow: 0 0 8px ${cfg.stroke}55; margin: 0 auto 6px auto; overflow: hidden;">
-            <img src="${cfg.src}" style="width: 100%; height: 100%; object-fit: cover; filter: drop-shadow(0 0 4px ${cfg.stroke});">
+          <div style="width: 54px; height: 42px; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, rgba(0, 229, 255, 0.25) 0%, rgba(10, 20, 40, 0.7) 80%); border-radius: 8px; border: 1.5px solid ${cfg.stroke}; box-shadow: 0 0 8px ${cfg.stroke}55; margin: 0 auto 6px auto; overflow: hidden;">
+            <img src="${getAssetUrl(cfg.src)}" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 0 4px ${cfg.stroke});">
           </div>
         `;
       } else {

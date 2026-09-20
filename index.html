@@ -831,6 +831,234 @@
       .kb-key { height: 32px; font-size: 14px; }
       .action-btn { height: 44px; font-size: 14px; }
     }
+  
+    /* 漢字の部屋 (コレクション) モーダル用CSS */
+    .modal-card-room {
+      max-width: 760px;
+      width: 95%;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      padding: 24px;
+      background: linear-gradient(180deg, #0d1e38 0%, #061020 100%);
+      border: 2px solid var(--primary-cyan);
+      box-shadow: 0 0 50px rgba(0, 229, 255, 0.4);
+      border-radius: 18px;
+    }
+
+    .room-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      border-bottom: 1px solid rgba(0, 229, 255, 0.25);
+      padding-bottom: 10px;
+    }
+
+    .room-title-box {
+      text-align: left;
+    }
+
+    .room-title {
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--neon-yellow);
+      letter-spacing: 1px;
+      margin: 0 0 4px 0;
+    }
+
+    .room-desc {
+      font-size: 12px;
+      color: #9ebddf;
+      margin: 0;
+    }
+
+    .room-close-btn {
+      background: rgba(255, 51, 102, 0.2);
+      border: 1px solid var(--neon-red);
+      color: #fff;
+      font-size: 13px;
+      font-weight: bold;
+      padding: 6px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .room-close-btn:hover {
+      background: var(--neon-red);
+      transform: scale(1.05);
+    }
+
+    .room-total-progress, .room-grade-progress {
+      background: rgba(8, 20, 40, 0.7);
+      border: 1px solid #1c3c6d;
+      border-radius: 10px;
+      padding: 8px 12px;
+      margin-bottom: 12px;
+    }
+
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: bold;
+      color: #d0e4ff;
+      margin-bottom: 5px;
+    }
+
+    .progress-bar-bg {
+      width: 100%;
+      height: 10px;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 5px;
+      overflow: hidden;
+      border: 1px solid rgba(0, 229, 255, 0.3);
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #ff0055 0%, #ffbb00 50%, #00ff88 100%);
+      border-radius: 5px;
+      transition: width 0.4s ease;
+      box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+    }
+
+    .progress-bar-fill.grade-bar {
+      background: linear-gradient(90deg, #00b0ff 0%, #00ff88 100%);
+    }
+
+    .room-grade-tabs {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .room-tab {
+      background: rgba(16, 32, 60, 0.8);
+      border: 1px solid #204987;
+      color: #9ebddf;
+      font-size: 12px;
+      font-weight: bold;
+      padding: 8px 4px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+      text-align: center;
+    }
+
+    .room-tab:hover, .room-tab.active {
+      background: rgba(0, 229, 255, 0.25);
+      border-color: var(--primary-cyan);
+      color: #fff;
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+    }
+
+    .kanji-grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(36px, 1fr));
+      gap: 6px;
+      max-height: 40vh;
+      overflow-y: auto;
+      background: rgba(3, 8, 18, 0.6);
+      border: 1px solid #163056;
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 12px;
+    }
+
+    .kanji-tile {
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.04);
+      color: #435b78;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      user-select: none;
+      position: relative;
+    }
+
+    .kanji-tile.mastered {
+      background: linear-gradient(135deg, rgba(0, 229, 255, 0.2) 0%, rgba(0, 255, 136, 0.25) 100%);
+      color: #00ffaa;
+      border: 1.5px solid #00ff88;
+      box-shadow: 0 0 8px rgba(0, 255, 136, 0.4);
+      text-shadow: 0 0 6px rgba(0, 255, 136, 0.8);
+      font-weight: 900;
+    }
+
+    .kanji-tile.mastered:hover {
+      transform: scale(1.25);
+      z-index: 10;
+      box-shadow: 0 0 15px rgba(0, 255, 136, 0.9);
+      background: #00ff88;
+      color: #051322;
+      cursor: pointer;
+    }
+
+    .room-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: #7b9bb8;
+      padding-top: 4px;
+    }
+
+    .room-reset-btn {
+      background: transparent;
+      border: 1px solid #435b78;
+      color: #7b9bb8;
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .room-reset-btn:hover {
+      border-color: var(--neon-red);
+      color: var(--neon-red);
+    }
+
+    .hud-room-btn, .action-sub-btn {
+      background: rgba(16, 32, 60, 0.9);
+      border: 1.5px solid var(--primary-cyan);
+      color: #fff;
+      font-size: 13px;
+      font-weight: bold;
+      padding: 6px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .hud-room-btn:hover, .action-sub-btn:hover {
+      background: rgba(0, 229, 255, 0.25);
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(0, 229, 255, 0.5);
+    }
+
+    @media (max-width: 600px) {
+      .room-grade-tabs {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .modal-card-room {
+        padding: 16px;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -855,6 +1083,7 @@
     </div>
 
     <div class="top-controls">
+      <button id="room-open-hud-btn" class="hud-room-btn" onclick="openKanjiRoom()">🏛️ 漢字の部屋</button>
       <button class="icon-btn" id="sound-toggle-btn">🔊 BGM/SE</button>
     </div>
   </header>
@@ -1032,7 +1261,10 @@
         </div>
       </div>
 
-      <button class="start-btn" id="start-game-btn">発進する！ (START)</button>
+      <div style="display: flex; gap: 12px; justify-content: center; align-items: center; flex-wrap: wrap;">
+        <button class="start-btn" id="start-game-btn">発進する！ (START)</button>
+        <button class="action-sub-btn" onclick="openKanjiRoom()" style="padding: 12px 20px; font-size: 16px;">🏛️ 漢字の部屋</button>
+      </div>
     </div>
   </div>
 
@@ -1052,9 +1284,70 @@
         <!-- 復習リスト -->
       </div>
 
-      <button class="start-btn" onclick="returnToTitle()" style="margin-top: 10px;">もう一度挑戦！</button>
+      <div id="result-mastery-summary" style="font-size: 13px; color: #00ffaa; margin-bottom: 10px; font-weight: bold;"></div>
+      <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 10px;">
+        <button class="start-btn" onclick="returnToTitle()" style="padding: 12px 30px; font-size: 18px;">もう一度挑戦！</button>
+        <button class="action-sub-btn" onclick="openKanjiRoom()" style="padding: 12px 20px; font-size: 16px;">🏛️ 漢字の部屋を見る</button>
+      </div>
     </div>
   </div>
+
+  <!-- 漢字の部屋モーダル (全1026字コレクション & 進捗確認) -->
+  <div class="modal-overlay" id="kanji-room-modal" style="display: none;">
+    <div class="modal-card modal-card-room">
+      <div class="room-header">
+        <div class="room-title-box">
+          <h2 class="room-title">🏛️ 漢字の部屋 (学習進捗)</h2>
+          <p class="room-desc">ゲームで正解した漢字が光るよ！目指せ全1026字コンプリート！</p>
+        </div>
+        <button class="room-close-btn" onclick="closeKanjiRoom()">✕ とじる</button>
+      </div>
+
+      <!-- 全体進捗バー -->
+      <div class="room-total-progress">
+        <div class="progress-info">
+          <span>🌟 小学校6年間の全漢字進捗</span>
+          <span id="room-total-stats">0 / 1026 字 (0.0%)</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="room-total-bar" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <!-- 学年タブ -->
+      <div class="room-grade-tabs">
+        <button class="room-tab active" data-grade="1" onclick="switchRoomGrade(1)">1年生</button>
+        <button class="room-tab" data-grade="2" onclick="switchRoomGrade(2)">2年生</button>
+        <button class="room-tab" data-grade="3" onclick="switchRoomGrade(3)">3年生</button>
+        <button class="room-tab" data-grade="4" onclick="switchRoomGrade(4)">4年生</button>
+        <button class="room-tab" data-grade="5" onclick="switchRoomGrade(5)">5年生</button>
+        <button class="room-tab" data-grade="6" onclick="switchRoomGrade(6)">6年生</button>
+      </div>
+
+      <!-- 選択学年の進捗バー -->
+      <div class="room-grade-progress">
+        <div class="progress-info">
+          <span id="room-current-grade-label">🌱 1年生の漢字</span>
+          <span id="room-grade-stats">0 / 80 字 (0%)</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill grade-bar" id="room-grade-bar" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <!-- 漢字グリッド一覧 -->
+      <div class="kanji-grid-container" id="room-kanji-grid">
+        <!-- 漢字タイル動的挿入 -->
+      </div>
+
+      <!-- フッター操作 -->
+      <div class="room-footer">
+        <span class="room-hint">💡 緑色に光っている漢字は正解できた漢字です！端末に自動保存されます。</span>
+        <button class="room-reset-btn" onclick="resetKanjiProgress()">進捗をリセット</button>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -1063,7 +1356,7 @@
    ========================================================================== */
 const KANJI_DATABASE = {
   grade1: [
-    { kanji: "青空", kana: "あおぞら", grade: "1年", hint: "晴れた日の青い空" },
+{ kanji: "青空", kana: "あおぞら", grade: "1年", hint: "晴れた日の青い空" },
     { kanji: "雨水", kana: "あまみず", grade: "1年", hint: "空から降る雨の水" },
     { kanji: "花火", kana: "はなび", grade: "1年", hint: "夜空に打ち上げるきれいな光" },
     { kanji: "先生", kana: "せんせい", grade: "1年", hint: "学校で勉強を教えてくれる人" },
@@ -1109,7 +1402,7 @@ const KANJI_DATABASE = {
     { kanji: "右手", kana: "みぎて", grade: "1年", hint: "右側の手" },
   ],
   grade2: [
-    { kanji: "黄色", kana: "きいろ", grade: "2年", hint: "バナナやレモンの色" },
+{ kanji: "黄色", kana: "きいろ", grade: "2年", hint: "バナナやレモンの色" },
     { kanji: "兄弟", kana: "きょうだい", grade: "2年", hint: "兄や弟、姉や妹のこと" },
     { kanji: "歌う", kana: "うたう", grade: "2年", hint: "声にメロディーをつけてうたう" },
     { kanji: "新聞", kana: "しんぶん", grade: "2年", hint: "毎日の出来事を伝える紙" },
@@ -1151,7 +1444,7 @@ const KANJI_DATABASE = {
     { kanji: "親切", kana: "しんせつ", grade: "2年", hint: "人に対してやさしく思いやりがあること" },
   ],
   grade3: [
-    { kanji: "平和", kana: "へいわ", grade: "3年", hint: "争いがなく穏やかなこと" },
+{ kanji: "平和", kana: "へいわ", grade: "3年", hint: "争いがなく穏やかなこと" },
     { kanji: "昔話", kana: "むかしばなし", grade: "3年", hint: "昔から語りつがれるお話" },
     { kanji: "祭り", kana: "まつり", grade: "3年", hint: "神社や町のにぎやかな行事" },
     { kanji: "係員", kana: "かかりいん", grade: "3年", hint: "その仕事をたんとうする人" },
@@ -1219,8 +1512,8 @@ const KANJI_DATABASE = {
     { kanji: "札", kana: "ふだ", grade: "4年", hint: "名前や数字を書いた小さな板や紙" },
     { kanji: "欠点", kana: "けってん", grade: "4年", hint: "足りないところや苦手な点" },
     { kanji: "結ぶ", kana: "むすぶ", grade: "4年", hint: "ひもや糸をつなぎ合わせる" },
-    { kanji: "景勝", kana: "けいしょう", grade: "4年", hint: "けしきがすぐれて美しいこと" },
-    { kanji: "残業", kana: "ざんぎょう", grade: "4年", hint: "決められた時間をこえて働くこと" },
+    { kanji: "風景", kana: "ふうけい", grade: "4年", hint: "目に見える自然や町のけしき" },
+    { kanji: "残念", kana: "ざんねん", grade: "4年", hint: "思い通りにならず心残りなこと" },
     { kanji: "各自", kana: "かくじ", grade: "4年", hint: "めいめい・ひとりひとりのこと" },
     { kanji: "観客", kana: "かんきゃく", grade: "4年", hint: "試合や劇などを見に来た人々" },
     { kanji: "器用", kana: "きよう", grade: "4年", hint: "手先などを上手に動かせること" },
@@ -1242,13 +1535,13 @@ const KANJI_DATABASE = {
     { kanji: "豊か", kana: "ゆたか", grade: "5年", hint: "物や自然、心が満ち足りているさま" },
     { kanji: "解く", kana: "とく", grade: "5年", hint: "結び目やテストの問題を解く" },
     { kanji: "賛成", kana: "さんせい", grade: "5年", hint: "意見によいと同意すること" },
-    { kanji: "能率", kana: "のうりつ", grade: "5年", hint: "同じ時間でこなせる仕事のはかどり" },
+    { kanji: "能力", kana: "のうりょく", grade: "5年", hint: "物事を成し遂げることができる力" },
     { kanji: "防ぐ", kana: "ふせぐ", grade: "5年", hint: "危険や病気をよせつけないようにする" },
     { kanji: "耕す", kana: "たがやす", grade: "5年", hint: "田畑の土を掘ってやわらかくする" },
     { kanji: "制度", kana: "せいど", grade: "5年", hint: "社会で決まった仕組みやルール" },
     { kanji: "測る", kana: "はかる", grade: "5年", hint: "長さや時間、深さを調べる" },
     { kanji: "導く", kana: "みちびく", grade: "5年", hint: "正しい方向へ道案内する" },
-    { kanji: "額", kana: "ひたい", grade: "5年", hint: "まゆ毛の上からおでこの部分" },
+    { kanji: "金額", kana: "きんがく", grade: "5年", hint: "お金の数量・値段" },
     { kanji: "貸す", kana: "かす", grade: "5年", hint: "後で返してもらう約束で物を渡す" },
     { kanji: "迷う", kana: "まよう", grade: "5年", hint: "どちらにすべきか決めかねる" },
     { kanji: "厚い", kana: "あつい", grade: "5年", hint: "本のかさや壁の厚みがあること" },
@@ -1259,21 +1552,21 @@ const KANJI_DATABASE = {
     { kanji: "破る", kana: "やぶる", grade: "5年", hint: "紙を引き裂く・約束をたがえる" },
     { kanji: "授ける", kana: "さずける", grade: "5年", hint: "目上の人が賞などを与える" },
     { kanji: "救う", kana: "すくう", grade: "5年", hint: "苦しみやピンチから助け出す" },
-    { kanji: "易しい", kana: "やさしい", grade: "5年", hint: "難しくなく簡単に理解できる" },
+    { kanji: "容易", kana: "ようい", grade: "5年", hint: "簡単で難しくないこと" },
     { kanji: "険しい", kana: "けわしい", grade: "5年", hint: "山の傾斜が急で登るのが大変なさま" },
-    { kanji: "絶好", kana: "ぜっこう", grade: "5年", hint: "これ以上ないほど良いタイミング" },
-    { kanji: "増減", kana: "ぞうげん", grade: "5年", hint: "ふえることとへること" },
+    { kanji: "絶対", kana: "ぜったい", grade: "5年", hint: "何があっても必ず・例外のないこと" },
+    { kanji: "増加", kana: "ぞうか", grade: "5年", hint: "数量や割合がふえること" },
     { kanji: "貿易", kana: "ぼうえき", grade: "5年", hint: "外国と品物を売り買いすること" },
-    { kanji: "護衛", kana: "ごえい", grade: "5年", hint: "危険がないように付き添って守る" },
+    { kanji: "保護", kana: "ほご", grade: "5年", hint: "危険から守って世話をすること" },
     { kanji: "快晴", kana: "かいせい", grade: "5年", hint: "雲ひとつない気持ちの良い晴れ" },
     { kanji: "現金", kana: "げんきん", grade: "5年", hint: "紙幣や硬貨など手元のお金" },
     { kanji: "似合う", kana: "にあう", grade: "5年", hint: "服や雰囲気がぴったり合っている" },
     { kanji: "余分", kana: "よぶん", grade: "5年", hint: "必要な分よりも余っていること" },
     { kanji: "桜", kana: "さくら", grade: "5年", hint: "春にうすピンクの花を咲かせる木" },
     { kanji: "保つ", kana: "たもつ", grade: "5年", hint: "良い状態をくずさずそのままにしておく" },
-    { kanji: "布", kana: "ぬの", grade: "5年", hint: "糸を織って作ったやわらかい生地" },
-    { kanji: "粉", kana: "こな", grade: "5年", hint: "細かくくだいたこな・小麦粉など" },
-    { kanji: "潔い", kana: "いさぎよい", grade: "5年", hint: "みれんがなくさっぱりしているさま" },
+    { kanji: "毛布", kana: "もうふ", grade: "5年", hint: "あたたかい毛織物の掛布" },
+    { kanji: "小麦粉", kana: "こむぎこ", grade: "5年", hint: "小麦をひいて粉にしたもの" },
+    { kanji: "清潔", kana: "せいけつ", grade: "5年", hint: "汚れがなくきれいで衛生的なさま" },
     { kanji: "混ざる", kana: "まざる", grade: "5年", hint: "いろいろなものがひとつに溶け合う" },
   ],
   grade6: [
@@ -1309,16 +1602,17 @@ const KANJI_DATABASE = {
     { kanji: "机", kana: "つくえ", grade: "6年", hint: "勉強や読み書きをする台" },
     { kanji: "骨", kana: "ほね", grade: "6年", hint: "人の体を支える硬い骨格" },
     { kanji: "幼い", kana: "おさない", grade: "6年", hint: "年齢が若く子どものようす" },
-    { kanji: "欲", kana: "よく", grade: "6年", hint: "何かが欲しいと願う心" },
+    { kanji: "意欲", kana: "いよく", grade: "6年", hint: "進んで何かをしようとする積極的な心" },
     { kanji: "裏", kana: "うら", grade: "6年", hint: "表の反対側の面" },
     { kanji: "針", kana: "はり", grade: "6年", hint: "先がとがった細い金属・時計の針" },
     { kanji: "階段", kana: "かいだん", grade: "6年", hint: "上や下へ行くための段" },
-    { kanji: "親孝行", kana: "おやこうこう", grade: "6年", hint: "親を大切にして心を尽くすこと" },
+    { kanji: "孝行", kana: "こうこう", grade: "6年", hint: "親を大切にして心を尽くすこと" },
     { kanji: "純白", kana: "じゅんぱく", grade: "6年", hint: "混じり気のないまっ白な色" },
     { kanji: "縮む", kana: "ちぢむ", grade: "6年", hint: "長さや体積が小さくなる" },
     { kanji: "絹", kana: "きぬ", grade: "6年", hint: "カイコのまゆからとる美しい糸" },
   ],
 };
+
 
 /* ==========================================================================
    Web Audio API による効果音 & シンセBGM生成エンジン
@@ -2143,6 +2437,9 @@ function handleCorrectAnswer(q) {
     success: true
   });
 
+  // 漢字の部屋に正解した漢字を記録・保存
+  recordMasteredKanji(q.kanji);
+
   // レーザー発射 & 大爆発
   spawnLaserBeam();
   setTimeout(() => {
@@ -2244,6 +2541,19 @@ function showGameResult(isWin) {
   scoreSpan.textContent = `${winCount} / ${currentQuestionList.length}`;
   crewSpan.textContent = `${crewLives}`;
 
+  // 漢字の部屋の進捗サマリーを表示
+  const mastered = getMasteredKanji();
+  let totalM = 0;
+  for (let g = 1; g <= 6; g++) {
+    for (const ch of ALL_GRADE_KANJI[g]) {
+      if (mastered[ch]) totalM++;
+    }
+  }
+  const summaryEl = document.getElementById('result-mastery-summary');
+  if (summaryEl) {
+    summaryEl.innerHTML = `🏛️ 漢字の部屋の進捗: <strong>${totalM} / 1026 字 (${((totalM / 1026) * 100).toFixed(1)}%)</strong> 習得中！`;
+  }
+
   list.innerHTML = "";
   solvedHistory.forEach(item => {
     const row = document.createElement('div');
@@ -2314,8 +2624,9 @@ elHiddenInput.addEventListener('input', (e) => {
   }
 });
 
-// PCキーボード用：直接キー入力 (ローマ字自動ひらがな変換)
+// PCキーボード用：直接キー入力 (ローマ字自動ひらがな変換・全パターン完全対応)
 const ROMAJI_TABLE = {
+  // 50音 (基本)
   a: "あ", i: "い", u: "う", e: "え", o: "お",
   ka: "か", ki: "き", ku: "く", ke: "け", ko: "こ",
   sa: "さ", si: "し", shi: "し", su: "す", se: "せ", so: "そ",
@@ -2325,23 +2636,47 @@ const ROMAJI_TABLE = {
   ma: "ま", mi: "み", mu: "む", me: "め", mo: "も",
   ya: "や", yu: "ゆ", yo: "よ",
   ra: "ら", ri: "り", ru: "る", re: "れ", ro: "ろ",
-  wa: "わ", wo: "を", nn: "ん",
+  wa: "わ", wo: "を", nn: "ん", "n'": "ん", "xn": "ん",
+
+  // 濁音・半濁音
   ga: "が", gi: "ぎ", gu: "ぐ", ge: "げ", go: "ご",
   za: "ざ", zi: "じ", ji: "じ", zu: "ず", ze: "ぜ", zo: "ぞ",
-  da: "だ", di: "ぢ", du: "づ", de: "で", do: "ど",
+  da: "だ", di: "ぢ", du: "づ", dzu: "づ", de: "で", do: "ど",
   ba: "ば", bi: "び", bu: "ぶ", be: "べ", bo: "ぼ",
   pa: "ぱ", pi: "ぴ", pu: "ぷ", pe: "ぺ", po: "ぽ",
-  kya: "きゃ", kyu: "きゅ", kyo: "きょ",
-  sha: "しゃ", shu: "しゅ", sho: "しょ",
-  cha: "ちゃ", chu: "ちゅ", cho: "ちょ",
-  nya: "にゃ", nyu: "にゅ", nyo: "にょ",
-  hya: "ひゃ", hyu: "ひゅ", hyo: "ひょ",
-  mya: "みゃ", myu: "みゅ", myo: "みょ",
-  rya: "りゃ", ryu: "りゅ", ryo: "りょ",
-  gya: "ぎゃ", gyu: "ぎゅ", gyo: "ぎょ",
-  ja: "じゃ", ju: "じゅ", jo: "じょ",
-  bya: "びゃ", byu: "びゅ", byo: "びょ",
-  pya: "ぴゃ", pyu: "ぴゅ", pyo: "ぴょ"
+
+  // 拗音 (きゃ・しゃ・ちゃ・にゃ・ひゃ・みゃ・りゃ・ぎゃ・じゃ・びゃ・ぴゃ)
+  kya: "きゃ", kyu: "きゅ", kye: "きぇ", kyo: "きょ",
+  sha: "しゃ", shu: "しゅ", she: "しぇ", sho: "しょ",
+  sya: "しゃ", syu: "しゅ", sye: "しぇ", syo: "しょ",
+  cha: "ちゃ", chu: "ちゅ", che: "ちぇ", cho: "ちょ",
+  tya: "ちゃ", tyu: "ちゅ", tye: "ちぇ", tyo: "ちょ",
+  cya: "ちゃ", cyu: "ちゅ", cye: "ちぇ", cyo: "ちょ",
+  nya: "にゃ", nyu: "にゅ", nye: "にぇ", nyo: "にょ",
+  hya: "ひゃ", hyu: "ひゅ", hye: "ひぇ", hyo: "ひょ",
+  mya: "みゃ", myu: "みゅ", mye: "みぇ", myo: "みょ",
+  rya: "りゃ", ryu: "りゅ", rye: "りぇ", ryo: "りょ",
+  gya: "ぎゃ", gyu: "ぎゅ", gye: "ぎぇ", gyo: "ぎょ",
+  ja: "じゃ", ju: "じゅ", je: "じぇ", jo: "じょ",
+  jya: "じゃ", jyu: "じゅ", jye: "じぇ", jyo: "じょ",
+  zya: "じゃ", zyu: "じゅ", zye: "じぇ", zyo: "じょ",
+  dya: "ぢゃ", dyu: "ぢゅ", dye: "ぢぇ", dyo: "ぢょ",
+  bya: "びゃ", byu: "びゅ", bye: "びぇ", byo: "びょ",
+  pya: "ぴゃ", pyu: "ぴゅ", pye: "ぴぇ", pyo: "ぴょ",
+
+  // 外来音・特殊音 (ファ・ティ・ディ・ウィ・ウェ 等)
+  fa: "ふぁ", fi: "ふぃ", fe: "ふぇ", fo: "ふぉ",
+  thi: "てぃ", dhi: "でぃ",
+  wi: "うぃ", we: "うぇ",
+  va: "ゔぁ", vi: "ゔぃ", vu: "ゔ", ve: "ゔぇ", vo: "ゔぉ",
+
+  // 小文字単独 (x/lプレフィックス)
+  xa: "ぁ", xi: "ぃ", xu: "ぅ", xe: "ぇ", xo: "ぉ",
+  la: "ぁ", li: "ぃ", lu: "ぅ", le: "ぇ", lo: "ぉ",
+  xtu: "っ", ltu: "っ", xtsu: "っ", ltsu: "っ",
+  xya: "ゃ", xyu: "ゅ", xyo: "ょ",
+  lya: "ゃ", lyu: "ゅ", lyo: "ょ",
+  xwa: "ゎ", lwa: "ゎ"
 };
 
 function processRomajiKey(key) {
@@ -2354,17 +2689,23 @@ function processRomajiKey(key) {
   key = key.toLowerCase();
   romajiBuffer += key;
 
-  // 促音 (っ) の処理: 子音が2回続く場合 (例: kk -> っk, tt -> っt)
-  if (romajiBuffer.length >= 2 && romajiBuffer[0] === romajiBuffer[1] && romajiBuffer[0] !== 'n') {
+  // 促音 (っ) の処理: 同じ子音が2回続く場合 (例: kk -> っk, tt -> っt, jj -> っj)
+  if (romajiBuffer.length >= 2 && romajiBuffer[0] === romajiBuffer[1] && !['n', 'a', 'i', 'u', 'e', 'o'].includes(romajiBuffer[0])) {
     appendAnswerChar('っ');
     romajiBuffer = romajiBuffer.slice(1);
   }
 
-  // 撥音 (ん)
+  // 撥音 (ん): 'nn'
   if (romajiBuffer === 'nn') {
     appendAnswerChar('ん');
     romajiBuffer = "";
     return;
+  }
+
+  // 単独 'n' の後に母音や y/n 以外の子音が来た場合 (例: nk -> んk, nt -> んt)
+  if (romajiBuffer.length >= 2 && romajiBuffer[0] === 'n' && !['a', 'i', 'u', 'e', 'o', 'y', 'n'].includes(romajiBuffer[1])) {
+    appendAnswerChar('ん');
+    romajiBuffer = romajiBuffer.slice(1);
   }
 
   // テーブル照合
@@ -2374,9 +2715,9 @@ function processRomajiKey(key) {
     return;
   }
 
-  // 3文字以上マッチしない場合
-  if (romajiBuffer.length >= 3) {
-    romajiBuffer = romajiBuffer.slice(-1);
+  // 最大4文字超えてマッチしない場合、先頭1文字を切り捨てる
+  while (romajiBuffer.length > 4) {
+    romajiBuffer = romajiBuffer.slice(1);
   }
 }
 
@@ -2431,6 +2772,138 @@ document.getElementById('game-container').addEventListener('click', (e) => {
     focusHiddenInput();
   }
 });
+
+/* ==========================================================================
+   漢字の部屋 (全1026字コレクション & localStorage進捗管理)
+   ========================================================================== */
+const ALL_GRADE_KANJI = {
+  1: "一右雨円王音下火花貝気九休玉金空月犬見五口校左三山子四糸字耳七車手十出女小上森人水正生青夕石赤千川先早草足村大男竹中虫町天田土二日入学年白八百文木本名目立力林六".split(""),
+  2: "引羽雲園遠何科夏家歌画回会海絵外角楽活間丸岩顔汽記帰弓牛魚京強教近兄形計元言原戸古午後語工公広交光考行高黄合谷国黒今才細作算止市矢姉思紙寺自時室社弱首秋週春書少場色食心新親図数西声星晴切雪船線前組走多太体台地池知茶昼長鳥朝直通弟店点電刀冬当東答頭同道読内南肉馬売買麦半番父風分聞米歩母方北毎妹万明鳴毛門夜野友用曜来里理話".split(""),
+  3: "悪安暗医委意育員院飲運泳駅央横屋温化荷界開階寒感漢館岸起期客究急級宮球去橋業曲局銀区苦具君係軽血決研県庫湖向幸港号根祭皿仕死使始指歯詩次事持式実写者主守取酒受州拾終習集住重宿所暑助昭消商章勝乗植申身神真深進世整昔全相送想息速族他打対待代第題炭短談着注柱丁帳調追定庭笛鉄転都度投豆島湯登等動童農波配倍箱畑発反坂板皮悲美鼻筆氷表秒病品負部服福物平返勉放味命面問役薬由油有遊予羊洋葉陽様落流旅両緑礼列練路和".split(""),
+  4: "愛案以衣位茨印英栄媛塩岡億加果貨課芽賀改械害街各覚潟完官管関観願岐希季旗器機議求泣給挙漁共協鏡競極熊訓軍郡群径景芸欠結建健験固功好香候康佐差菜最埼材崎昨札刷察参産散残氏司試児治滋辞鹿失借種周祝順初松笑唱焼照城縄臣信井成省清静席積折節説浅戦選然争倉巣束側続卒孫帯隊達単置仲沖兆低底的典伝徒努灯働特徳栃奈梨熱念敗梅博阪飯飛必票標不夫付府阜富副兵別辺変便包法望牧末満未民無約勇要養浴利陸良料量輪類令冷例連老労録".split(""),
+  5: "圧囲移因永営衛易益液演応往桜可仮価河過快解格確額刊幹慣眼紀基寄規喜技義逆久旧救居許境均禁句型経潔件険検限現減故個護効厚耕航鉱構興講告混査再災妻採際在財罪殺雑酸賛士支史志枝師資飼示似識質舎謝授修述術準序招証象賞条状常情織職制性政勢精製税責績接設絶祖素総造像増則測属率損貸態団断築貯張停提程適統堂銅導得毒独任燃能破犯判版比肥非費備評貧布婦武復複仏粉編弁保墓報豊防貿暴脈務夢迷綿輸余容略留領歴".split(""),
+  6: "胃異遺域宇映延沿恩我灰拡革閣割株干巻看簡危机揮貴疑吸供胸郷勤筋系敬警劇激穴券絹権憲源厳己呼誤后孝皇紅降鋼刻穀骨困砂座済裁策冊蚕至私姿視詞誌磁射捨尺若樹収宗就衆従縦縮熟純処署諸除承将傷障蒸針仁垂推寸盛聖誠舌宣専泉洗染銭善奏窓創装層操蔵臓存尊退宅担探誕段暖値宙忠著庁頂腸潮賃痛敵展討党糖届難乳認納脳派拝背肺俳班晩否批秘俵腹奮並陛閉片補暮宝訪亡忘棒枚幕密盟模訳郵優預幼欲翌乱卵覧裏律臨朗論".split("")
+};
+
+const GRADE_LABELS = {
+  1: "🌱 1年生の漢字 (80字)",
+  2: "🌿 2年生の漢字 (160字)",
+  3: "🌸 3年生の漢字 (200字)",
+  4: "🍁 4年生の漢字 (202字)",
+  5: "⚡ 5年生の漢字 (193字)",
+  6: "🔥 6年生の漢字 (191字)"
+};
+
+let currentRoomGrade = 1;
+
+function getMasteredKanji() {
+  try {
+    const data = localStorage.getItem('kanji_jet_mastered');
+    return data ? JSON.parse(data) : {};
+  } catch (e) {
+    console.warn("localStorage read failed:", e);
+    return {};
+  }
+}
+
+function recordMasteredKanji(kanjiStr) {
+  const mastered = getMasteredKanji();
+  let newlyMasteredCount = 0;
+  for (const ch of kanjiStr) {
+    if (/[一-鿿]/.test(ch)) {
+      if (!mastered[ch]) newlyMasteredCount++;
+      mastered[ch] = (mastered[ch] || 0) + 1;
+    }
+  }
+  try {
+    localStorage.setItem('kanji_jet_mastered', JSON.stringify(mastered));
+  } catch (e) {
+    console.warn("localStorage write failed:", e);
+  }
+  return newlyMasteredCount;
+}
+
+function openKanjiRoom(grade) {
+  if (grade) currentRoomGrade = grade;
+  renderKanjiRoom();
+  document.getElementById('kanji-room-modal').style.display = 'flex';
+}
+
+function closeKanjiRoom() {
+  document.getElementById('kanji-room-modal').style.display = 'none';
+}
+
+function switchRoomGrade(grade) {
+  currentRoomGrade = grade;
+  renderKanjiRoom();
+}
+
+function renderKanjiRoom() {
+  const mastered = getMasteredKanji();
+
+  // 1. 全体進捗計算 (全1026字)
+  let totalMastered = 0;
+  for (let g = 1; g <= 6; g++) {
+    for (const ch of ALL_GRADE_KANJI[g]) {
+      if (mastered[ch]) totalMastered++;
+    }
+  }
+  const totalPercent = ((totalMastered / 1026) * 100).toFixed(1);
+  document.getElementById('room-total-stats').textContent = `${totalMastered} / 1026 字 (${totalPercent}%)`;
+  document.getElementById('room-total-bar').style.width = `${totalPercent}%`;
+
+  // 2. 学年タブのラベル更新 (各学年の正解数表示)
+  document.querySelectorAll('.room-tab').forEach(tab => {
+    const g = parseInt(tab.dataset.grade, 10);
+    tab.classList.toggle('active', g === currentRoomGrade);
+    let gCount = 0;
+    for (const ch of ALL_GRADE_KANJI[g]) {
+      if (mastered[ch]) gCount++;
+    }
+    tab.textContent = `${g}年 (${gCount}/${ALL_GRADE_KANJI[g].length})`;
+  });
+
+  // 3. 選択学年の進捗バー更新
+  const currList = ALL_GRADE_KANJI[currentRoomGrade] || [];
+  let currMastered = 0;
+  for (const ch of currList) {
+    if (mastered[ch]) currMastered++;
+  }
+  const currPercent = currList.length > 0 ? ((currMastered / currList.length) * 100).toFixed(0) : 0;
+  document.getElementById('room-current-grade-label').textContent = GRADE_LABELS[currentRoomGrade] || "";
+  document.getElementById('room-grade-stats').textContent = `${currMastered} / ${currList.length} 字 (${currPercent}%)`;
+  document.getElementById('room-grade-bar').style.width = `${currPercent}%`;
+
+  // 4. 漢字タイルの描画
+  const grid = document.getElementById('room-kanji-grid');
+  grid.innerHTML = "";
+  currList.forEach(ch => {
+    const tile = document.createElement('div');
+    tile.className = 'kanji-tile';
+    tile.textContent = ch;
+    const isMastered = !!mastered[ch];
+    if (isMastered) {
+      tile.classList.add('mastered');
+      tile.title = `【${ch}】 正解数: ${mastered[ch]}回 (習得済み)`;
+    } else {
+      tile.title = `【${ch}】 未正解`;
+    }
+    grid.appendChild(tile);
+  });
+}
+
+function resetKanjiProgress() {
+  if (confirm("本当にこれまでの漢字学習の進捗をリセットしますか？\n※端末に保存された正解記録が消去されます。")) {
+    try {
+      localStorage.removeItem('kanji_jet_mastered');
+      renderKanjiRoom();
+      alert("進捗をリセットしました。新たな気持ちで挑戦しよう！");
+    } catch (e) {
+      console.warn(e);
+    }
+  }
+}
+
 </script>
 </body>
 </html>

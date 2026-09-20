@@ -358,42 +358,48 @@
 
     .answer-slots-container {
       flex: 1;
-      min-height: 54px;
-      background: rgba(0, 0, 0, 0.75);
+      min-height: 52px;
+      min-width: 0;
+      background: rgba(0, 0, 0, 0.8);
       border: 2px solid var(--primary-cyan);
       border-radius: 12px;
       box-shadow: inset 0 0 15px rgba(0, 229, 255, 0.4);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 4px 10px;
-      gap: 8px;
+      padding: 4px 8px;
+      gap: 6px;
       position: relative;
       cursor: pointer;
+      flex-wrap: nowrap;
+      overflow: hidden;
     }
 
     .char-slot {
-      width: 44px;
-      height: 44px;
+      flex: 0 1 42px;
+      width: 42px;
+      max-width: 42px;
+      height: 42px;
+      min-width: 26px;
       background: rgba(14, 25, 45, 0.9);
       border: 2px solid #204987;
       border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 26px;
+      font-size: clamp(16px, 3.8vw, 24px);
       font-weight: 900;
       color: var(--neon-yellow);
       text-shadow: 0 0 10px rgba(255, 230, 0, 0.8);
       box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.6);
-      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: all 0.15s ease;
+      box-sizing: border-box;
     }
 
     .char-slot.filled {
       border-color: var(--primary-cyan);
       background: rgba(0, 229, 255, 0.2);
-      box-shadow: 0 0 12px rgba(0, 229, 255, 0.6);
-      transform: scale(1.06);
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
     }
 
     .char-slot.active {
@@ -401,9 +407,17 @@
       animation: slotPulse 0.8s infinite alternate;
     }
 
+    .char-slot.wrong {
+      color: #ff3344 !important;
+      border-color: #ff3344 !important;
+      background: rgba(255, 51, 68, 0.25) !important;
+      box-shadow: 0 0 12px rgba(255, 51, 68, 0.8) !important;
+      text-shadow: 0 0 10px rgba(255, 51, 68, 0.9) !important;
+    }
+
     @keyframes slotPulse {
-      0% { box-shadow: 0 0 5px var(--neon-yellow); transform: scale(1.0); }
-      100% { box-shadow: 0 0 16px var(--neon-yellow); transform: scale(1.04); }
+      0% { box-shadow: 0 0 5px var(--neon-yellow); }
+      100% { box-shadow: 0 0 14px var(--neon-yellow); }
     }
 
     .hidden-input {
@@ -1071,6 +1085,37 @@
       .modal-card-room {
         padding: 16px;
       }
+      .answer-display-area {
+        gap: 5px;
+      }
+      .action-btn {
+        height: 44px;
+        padding: 0 8px;
+        font-size: 12.5px;
+        letter-spacing: 0;
+      }
+      .btn-fire {
+        font-size: 13.5px;
+        padding: 0 10px;
+      }
+      .char-slot {
+        height: 38px;
+        min-width: 22px;
+      }
+      .kanji-text {
+        font-size: 44px;
+        letter-spacing: 6px;
+        text-indent: 6px;
+      }
+      .target-kanji-box {
+        min-width: 200px;
+        padding: 10px 18px;
+      }
+      .timeout-tip-box {
+        font-size: 14px;
+        padding: 6px 14px;
+        margin-top: 14px;
+      }
     }
 
   
@@ -1355,28 +1400,59 @@
       line-height: 1.3;
     }
 
-    /* === コンボ＆スピードボーナス演出 === */
-    .combo-popup {
+    /* === コンボ＆スピードボーナス演出（縦並び・被り防止設計） === */
+    .combo-container {
       position: absolute;
-      top: 18%;
+      top: 14%;
       left: 50%;
-      transform: translate(-50%, -50%) scale(0);
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
       pointer-events: none;
       z-index: 95;
-      font-size: 32px;
-      font-weight: 900;
-      color: #ffe600;
-      text-shadow: 0 0 15px rgba(255, 230, 0, 0.9), 0 0 30px rgba(255, 85, 0, 0.8);
-      animation: comboPop 1.1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-      white-space: nowrap;
+      width: 90%;
+      max-width: 480px;
     }
 
-    @keyframes comboPop {
-      0% { transform: translate(-50%, -50%) scale(0.3); opacity: 0; }
-      20% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
-      35% { transform: translate(-50%, -50%) scale(1.0); opacity: 1; }
-      80% { transform: translate(-50%, -60%) scale(1.0); opacity: 1; }
-      100% { transform: translate(-50%, -80%) scale(0.8); opacity: 0; }
+    .combo-popup {
+      pointer-events: none;
+      font-size: 26px;
+      font-weight: 900;
+      color: #ffe600;
+      text-shadow: 0 0 12px rgba(255, 230, 0, 0.9), 0 0 25px rgba(255, 85, 0, 0.8);
+      animation: popupSlideFade 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      white-space: nowrap;
+      background: rgba(10, 20, 45, 0.9);
+      border: 2px solid #ffe600;
+      border-radius: 24px;
+      padding: 5px 20px;
+      box-shadow: 0 0 20px rgba(255, 230, 0, 0.5);
+    }
+
+    .combo-popup.speed-bonus {
+      color: #00ffff;
+      border-color: #00e5ff;
+      font-size: 20px;
+      text-shadow: 0 0 12px rgba(0, 229, 255, 0.9);
+      box-shadow: 0 0 20px rgba(0, 229, 255, 0.5);
+    }
+
+    .combo-popup.rank-up {
+      color: #ff99ff;
+      border-color: #ff66ff;
+      font-size: 22px;
+      text-shadow: 0 0 12px rgba(255, 100, 255, 0.9);
+      box-shadow: 0 0 20px rgba(255, 100, 255, 0.5);
+    }
+
+    @keyframes popupSlideFade {
+      0% { transform: scale(0.6) translateY(12px); opacity: 0; }
+      18% { transform: scale(1.08) translateY(0); opacity: 1; }
+      30% { transform: scale(1.0) translateY(0); opacity: 1; }
+      80% { transform: scale(1.0) translateY(-4px); opacity: 1; }
+      100% { transform: scale(0.92) translateY(-14px); opacity: 0; }
     }
 
     .speed-bonus-badge {
@@ -1395,17 +1471,27 @@
       to { opacity: 1; }
     }
 
-
-    /* ワンポイント解説 */
+    /* 正解表示・ワンポイント解説（枠はみ出し・二行・重なり防止） */
     .timeout-tip-box {
-      margin-top: 6px;
-      font-size: 12px;
-      color: #ffb380;
-      background: rgba(40, 10, 0, 0.85);
-      border: 1px dashed #ff5500;
-      border-radius: 6px;
-      padding: 4px 8px;
+      margin-top: 18px;
+      font-size: 16px;
+      font-weight: 900;
+      color: #ffffff;
+      background: rgba(36, 6, 12, 0.95);
+      border: 2px solid #ff3344;
+      border-radius: 12px;
+      padding: 8px 20px;
       text-align: center;
+      box-shadow: 0 0 25px rgba(255, 51, 68, 0.8), inset 0 0 10px rgba(255, 51, 68, 0.3);
+      animation: tipSlideIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      max-width: 90vw;
+      white-space: nowrap;
+      letter-spacing: 1px;
+    }
+
+    @keyframes tipSlideIn {
+      from { transform: scale(0.85) translateY(-8px); opacity: 0; }
+      to { transform: scale(1.0) translateY(0); opacity: 1; }
     }
 
     /* === 漢字定着度 3段階マスター (銅・銀・金) === */
@@ -1703,12 +1789,13 @@
         <div class="kanji-text" id="target-kanji">青空</div>
         <div class="kanji-hint" id="target-hint">学年: 1・2年生</div>
         <div class="kanji-chars-count" id="target-chars-count">4もじ</div>
-        <div class="timeout-tip-box" id="timeout-tip-box" style="display: none;"></div>
       </div>
+      <!-- タイムアウト時の正解表示（文字数バッジと被らないよう独立配置） -->
+      <div class="timeout-tip-box" id="timeout-tip-box" style="display: none;"></div>
     </div>
 
-    <!-- コンボ・スピードボーナス通知用エリア -->
-    <div id="combo-container"></div>
+    <!-- コンボ・スピードボーナス通知用エリア（縦並び・被り防止） -->
+    <div id="combo-container" class="combo-container"></div>
   </div>
 
   <!-- 下部操作コンソール & キーボード -->
@@ -3085,7 +3172,7 @@ function addExp(amount) {
   const newRank = getCurrentRank(next);
   if (newRank.title !== oldRank.title) {
     sound.playRankUp();
-    showComboEffect(`🎖️ 昇格！${newRank.title}`);
+    showComboEffect(`🎖️ 昇格！${newRank.title}`, 'rank-up');
   }
   updateHomeUI();
   return next;
@@ -3211,7 +3298,7 @@ function getQuestionExample(q) {
 }
 
 function getTimeoutAdvice(q) {
-  return `💡 正解は「${q.kana}」！${q.hint}`;
+  return `💡 正解: 「${q.kana}」`;
 }
 
 // DOM要素
@@ -3536,7 +3623,10 @@ function loadQuestion(index) {
     elTimeoutTipBox.style.display = 'none';
   }
 
-  elTargetCharsCount.textContent = `${q.kana.length}もじ`;
+  if (elTargetCharsCount) {
+    elTargetCharsCount.textContent = `${q.kana.length}もじ`;
+    elTargetCharsCount.style.display = 'inline-block';
+  }
 
   updateAnswerDisplay();
   renderCharBlocks(q);
@@ -3649,12 +3739,12 @@ function toggleKomoji() {
   }
 }
 
-/* === コンボ & スピードボーナス演出 === */
-function showComboEffect(text) {
+/* === コンボ & スピードボーナス演出（縦並び・被り防止） === */
+function showComboEffect(text, extraClass = '') {
   const container = document.getElementById('combo-container');
   if (!container) return;
   const pop = document.createElement('div');
-  pop.className = 'combo-popup';
+  pop.className = `combo-popup ${extraClass}`.trim();
   pop.textContent = text;
   container.appendChild(pop);
   setTimeout(() => pop.remove(), 1200);
@@ -3664,9 +3754,8 @@ function showSpeedBonusEffect() {
   const container = document.getElementById('combo-container');
   if (!container) return;
   const pop = document.createElement('div');
-  pop.className = 'combo-popup';
-  pop.style.color = '#00ffff';
-  pop.textContent = '⚡ SPEED BONUS! +10';
+  pop.className = 'combo-popup speed-bonus';
+  pop.textContent = '⚡ スピードボーナス！(+10)';
   container.appendChild(pop);
   setTimeout(() => pop.remove(), 1200);
 }
@@ -3776,18 +3865,21 @@ function handleTimeOut() {
     success: false
   });
 
-  // 正解を赤色で表示
+  // 正解を赤色で表示（.wrongクラス付与）
   const slots = elSlotsContainer.querySelectorAll('.char-slot');
   for (let i = 0; i < currentQ.kana.length; i++) {
     if (slots[i]) {
       slots[i].textContent = currentQ.kana[i];
-      slots[i].style.color = "var(--neon-red)";
-      slots[i].style.borderColor = "var(--neon-red)";
-      slots[i].classList.add('filled');
+      slots[i].classList.add('wrong');
     }
   }
 
-  // ワンポイント解説表示
+  // 文字数バッジを非表示にして、正解ボックスとの重なりを防止
+  if (elTargetCharsCount) {
+    elTargetCharsCount.style.display = 'none';
+  }
+
+  // 正解表示（💡 正解: 「...」）
   if (elTimeoutTipBox) {
     elTimeoutTipBox.textContent = getTimeoutAdvice(currentQ);
     elTimeoutTipBox.style.display = 'block';
@@ -3795,6 +3887,7 @@ function handleTimeOut() {
 
   setTimeout(() => {
     slots.forEach(s => {
+      s.classList.remove('wrong');
       s.style.color = "";
       s.style.borderColor = "";
     });

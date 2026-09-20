@@ -2425,6 +2425,10 @@
 </head>
 <body>
 
+  <!-- BGM用オーディオ要素（ブラウザ互換性と確実な再生のためDOM配置） -->
+  <audio id="bgm-home" src="assets/bgm_home.mp3" preload="auto" loop playsinline></audio>
+  <audio id="bgm-battle" src="assets/bgm_battle.mp3" preload="auto" loop playsinline></audio>
+
 <div id="game-container">
   <!-- 上部ステータスバー -->
   <header class="hud-top">
@@ -4241,25 +4245,31 @@ class SoundEngine {
     this.ctx = null;
     this.enabled = true;
     this.currentBgmType = null; // 'home' | 'battle' | null
-
-    // ホーム画面用BGM
-    this.homeBgm = new Audio('レトロフューチャー.mp3');
-    this.homeBgm.loop = true;
-    this.homeBgm.volume = 0.35;
-
-    // 問題を解く画面（戦闘）用BGM
-    this.battleBgm = new Audio('オーケストラ.mp3');
-    this.battleBgm.loop = true;
-    this.battleBgm.volume = 0.35;
+    this.isBgmPlaying = false;
+    this.homeBgm = null;
+    this.battleBgm = null;
   }
 
   init() {
+    if (!this.homeBgm) {
+      this.homeBgm = document.getElementById('bgm-home') || new Audio('assets/bgm_home.mp3');
+      this.homeBgm.loop = true;
+      this.homeBgm.volume = 0.35;
+    }
+    if (!this.battleBgm) {
+      this.battleBgm = document.getElementById('bgm-battle') || new Audio('assets/bgm_battle.mp3');
+      this.battleBgm.loop = true;
+      this.battleBgm.volume = 0.35;
+    }
+
     if (!this.ctx) {
       const AudioContext = window.AudioContext || window.webkitAudioContext;
-      this.ctx = new AudioContext();
+      if (AudioContext) {
+        this.ctx = new AudioContext();
+      }
     }
-    if (this.ctx.state === 'suspended') {
-      this.ctx.resume();
+    if (this.ctx && this.ctx.state === 'suspended') {
+      this.ctx.resume().catch(() => {});
     }
   }
 
@@ -4443,14 +4453,23 @@ class SoundEngine {
   playHomeBgm() {
     this.currentBgmType = 'home';
     if (!this.enabled) return;
+    this.init();
     try {
-      if (!this.battleBgm.paused) {
+      if (this.battleBgm && !this.battleBgm.paused) {
         this.battleBgm.pause();
         this.battleBgm.currentTime = 0;
       }
-      if (this.homeBgm.paused) {
+      if (this.homeBgm) {
         const p = this.homeBgm.play();
-        if (p) p.catch(() => {});
+        if (p !== undefined) {
+          p.then(() => {
+            this.isBgmPlaying = true;
+            this.updateBgmButtonUI();
+          }).catch(e => {
+            this.isBgmPlaying = false;
+            this.updateBgmButtonUI();
+          });
+        }
       }
     } catch (e) {}
   }
@@ -4458,14 +4477,23 @@ class SoundEngine {
   playBattleBgm() {
     this.currentBgmType = 'battle';
     if (!this.enabled) return;
+    this.init();
     try {
-      if (!this.homeBgm.paused) {
+      if (this.homeBgm && !this.homeBgm.paused) {
         this.homeBgm.pause();
         this.homeBgm.currentTime = 0;
       }
-      if (this.battleBgm.paused) {
+      if (this.battleBgm) {
         const p = this.battleBgm.play();
-        if (p) p.catch(() => {});
+        if (p !== undefined) {
+          p.then(() => {
+            this.isBgmPlaying = true;
+            this.updateBgmButtonUI();
+          }).catch(e => {
+            this.isBgmPlaying = false;
+            this.updateBgmButtonUI();
+          });
+        }
       }
     } catch (e) {}
   }
@@ -4476,20 +4504,28 @@ class SoundEngine {
 
   stopBgm() {
     this.currentBgmType = null;
+    this.isBgmPlaying = false;
     try {
-      this.homeBgm.pause();
-      this.homeBgm.currentTime = 0;
-      this.battleBgm.pause();
-      this.battleBgm.currentTime = 0;
+      if (this.homeBgm) {
+        this.homeBgm.pause();
+        this.homeBgm.currentTime = 0;
+      }
+      if (this.battleBgm) {
+        this.battleBgm.pause();
+        this.battleBgm.currentTime = 0;
+      }
     } catch (e) {}
+    this.updateBgmButtonUI();
   }
 
   toggleSound() {
+    this.init();
     this.enabled = !this.enabled;
     if (!this.enabled) {
+      this.isBgmPlaying = false;
       try {
-        this.homeBgm.pause();
-        this.battleBgm.pause();
+        if (this.homeBgm) this.homeBgm.pause();
+        if (this.battleBgm) this.battleBgm.pause();
       } catch (e) {}
     } else {
       if (this.currentBgmType === 'battle') {
@@ -4505,7 +4541,19 @@ class SoundEngine {
         }
       }
     }
+    this.updateBgmButtonUI();
     return this.enabled;
+  }
+
+  updateBgmButtonUI() {
+    const btn = document.getElementById('sound-toggle-btn');
+    if (btn) {
+      if (!this.enabled) {
+        btn.textContent = '🔇 MUTE';
+      } else {
+        btn.textContent = '🔊 BGM/SE';
+      }
+    }
   }
 }
 
@@ -4551,54 +4599,54 @@ function initStars() {
 /* === 機体＆レーザー カスタマイズ用パレット === */
 const SHIP_COLORS = {
   ship3: {
-    name: "機体３",
+    name: "機体３: STARHAWK Mk-II",
     type: "image",
-    src: "機体３.jpg",
-    fill: "#1f1d2b",
-    stroke: "#ff7700",
-    flame: "rgba(255, 120, 0, 0.95)",
-    reqExp: 0,
-    desc: "高速突撃戦闘機"
-  },
-  ship4: {
-    name: "機体４",
-    type: "image",
-    src: "機体４.jpg",
-    fill: "#0b1b2b",
+    src: "assets/ship_3.png",
+    fill: "#1a202c",
     stroke: "#00e5ff",
     flame: "rgba(0, 229, 255, 0.95)",
+    reqExp: 0,
+    desc: "3Dステルス戦闘機"
+  },
+  ship4: {
+    name: "機体４: IRON ATLAS Mk-I",
+    type: "image",
+    src: "assets/ship_4.png",
+    fill: "#222a1e",
+    stroke: "#a3e635",
+    flame: "rgba(163, 230, 53, 0.95)",
     reqExp: 20,
-    desc: "迎撃用重戦闘機"
+    desc: "3D重装甲爆撃機"
   },
   ship5: {
-    name: "機体５",
+    name: "機体５: SILVER HAWK Mk-IV",
     type: "image",
-    src: "機体５.jpg",
-    fill: "#22112e",
-    stroke: "#c084fc",
-    flame: "rgba(192, 132, 252, 0.95)",
+    src: "assets/ship_5.png",
+    fill: "#1e293b",
+    stroke: "#38bdf8",
+    flame: "rgba(56, 189, 248, 0.95)",
     reqExp: 60,
-    desc: "高機動ステルス機"
+    desc: "3D超音速要撃機"
   },
   ship6: {
-    name: "機体６",
+    name: "機体６: SILVER HAWK Mk-Ω",
     type: "image",
-    src: "機体６.jpg",
-    fill: "#0b261a",
-    stroke: "#34d399",
-    flame: "rgba(52, 211, 153, 0.95)",
+    src: "assets/ship_6.png",
+    fill: "#281834",
+    stroke: "#c084fc",
+    flame: "rgba(192, 132, 252, 0.95)",
     reqExp: 100,
-    desc: "要塞強襲型ジェット"
+    desc: "3D量子推進要撃機"
   },
   ship7: {
-    name: "機体７",
+    name: "機体７: GOLDEN EAGLE Mk-Σ",
     type: "image",
-    src: "機体７.jpg",
-    fill: "#2e210b",
+    src: "assets/ship_7.png",
+    fill: "#322510",
     stroke: "#fbbf24",
     flame: "rgba(251, 191, 36, 0.95)",
-    reqExp: 180,
-    desc: "究極次世代戦闘機"
+    reqExp: 160,
+    desc: "3D究極戦略戦闘機"
   },
   starhawk1: {
     name: "STARHAWK Mk-I",
@@ -8092,16 +8140,28 @@ updateHomePilotDisplay();
 setupCurriculumSelect();
 stopSelectPropagation();
 
-// 初回ユーザー操作時にBGM再生を開始（ブラウザの自動再生ブロック解除）
-function tryPlayHomeBgmOnInteraction() {
+// ユーザー操作時のBGM確実再生ハンドラ（ブラウザの自動再生ブロックを即時解除）
+function ensureBgmPlayback() {
   sound.init();
+  if (!sound.enabled) return;
+
   const startModal = document.getElementById('start-modal');
-  if (startModal && startModal.style.display !== 'none' && sound.currentBgmType !== 'battle') {
-    sound.playHomeBgm();
+  const isHomeVisible = startModal && startModal.style.display !== 'none';
+
+  if (isHomeVisible && sound.currentBgmType !== 'battle') {
+    if (!sound.isBgmPlaying || (sound.homeBgm && sound.homeBgm.paused)) {
+      sound.playHomeBgm();
+    }
+  } else if (!isHomeVisible && sound.currentBgmType === 'battle') {
+    if (!sound.isBgmPlaying || (sound.battleBgm && sound.battleBgm.paused)) {
+      sound.playBattleBgm();
+    }
   }
 }
+
+// capture: true で子要素の伝播停止に関わらず画面タップ・クリックを確実に捕捉
 ['click', 'touchstart', 'pointerdown', 'keydown'].forEach(evt => {
-  window.addEventListener(evt, tryPlayHomeBgmOnInteraction, { once: true });
+  window.addEventListener(evt, ensureBgmPlayback, { capture: true, passive: true });
 });
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -8109,6 +8169,7 @@ window.addEventListener('DOMContentLoaded', () => {
   updateHomePilotDisplay();
   setupCurriculumSelect();
   stopSelectPropagation();
+  sound.init();
   sound.playHomeBgm();
 });
 

@@ -1050,6 +1050,20 @@
       box-shadow: 0 0 15px rgba(0, 229, 255, 0.5);
     }
 
+    .hud-menu-btn {
+      background: rgba(45, 15, 25, 0.85);
+      border-color: rgba(255, 71, 87, 0.6);
+      color: #ff8595;
+      box-shadow: 0 0 8px rgba(255, 71, 87, 0.3);
+    }
+
+    .hud-menu-btn:hover {
+      background: rgba(255, 71, 87, 0.35);
+      border-color: #ff4757;
+      color: #fff;
+      box-shadow: 0 0 15px rgba(255, 71, 87, 0.6);
+    }
+
     @media (max-width: 600px) {
       .room-grade-tabs {
         grid-template-columns: repeat(3, 1fr);
@@ -1381,18 +1395,6 @@
       to { opacity: 1; }
     }
 
-    /* 例文・短文表示 */
-    .target-example-box {
-      font-size: 13px;
-      color: #d8ecff;
-      background: rgba(0, 15, 40, 0.7);
-      padding: 4px 10px;
-      border-radius: 8px;
-      border-left: 3px solid var(--primary-cyan);
-      margin-top: 4px;
-      max-width: 90%;
-      word-break: break-all;
-    }
 
     /* ワンポイント解説 */
     .timeout-tip-box {
@@ -1672,6 +1674,7 @@
     </div>
 
     <div class="top-controls">
+      <button id="btn-hud-menu" class="hud-room-btn hud-menu-btn" onclick="confirmReturnToMenu()">🏠 メニュー</button>
       <button id="room-open-hud-btn" class="hud-room-btn" onclick="openKanjiRoom()">🏛️ 漢字の部屋</button>
       <button class="icon-btn" id="sound-toggle-btn">🔊 BGM/SE</button>
     </div>
@@ -1699,7 +1702,6 @@
       <div class="target-kanji-box">
         <div class="kanji-text" id="target-kanji">青空</div>
         <div class="kanji-hint" id="target-hint">学年: 1・2年生</div>
-        <div class="target-example-box" id="target-example" style="display: none;"></div>
         <div class="kanji-chars-count" id="target-chars-count">4もじ</div>
         <div class="timeout-tip-box" id="timeout-tip-box" style="display: none;"></div>
       </div>
@@ -2051,6 +2053,25 @@
             <!-- JSで動的生成 -->
           </tbody>
         </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ゲーム中断・メニューに戻る確認モーダル -->
+  <div class="modal-overlay" id="confirm-quit-modal" style="display: none; z-index: 150;">
+    <div class="modal-card" style="max-width: 440px; text-align: center; border-color: rgba(255, 71, 87, 0.6); box-shadow: 0 0 35px rgba(255, 71, 87, 0.4);">
+      <div style="font-size: 44px; margin-bottom: 8px;">🏠🚀</div>
+      <h2 style="font-size: 22px; margin-bottom: 8px; color: #fff;">メニューに もどりますか？</h2>
+      <p style="color: #ffaa66; margin: 12px 0 20px; font-size: 13.5px; line-height: 1.6; font-weight: bold; background: rgba(255, 100, 50, 0.12); padding: 10px; border-radius: 8px;">
+        ⚠️ とちゅうで もどると、ここまでの正解（せいかい）や進捗は保存（ほぞん）されず【未学習】のままになります。
+      </p>
+      <div style="display: flex; gap: 12px; justify-content: center;">
+        <button class="action-btn" style="background: linear-gradient(135deg, #1e3a5f, #0d1b2a); border: 1.5px solid #00e5ff; flex: 1; padding: 12px; font-size: 15px;" onclick="cancelReturnToMenu()">
+          ▶ つづける
+        </button>
+        <button class="action-btn" style="background: linear-gradient(135deg, #ff4757, #ba1325); border: 1.5px solid #ff6b81; flex: 1; padding: 12px; font-size: 15px;" onclick="executeReturnToMenu()">
+          🏠 メニューへ
+        </button>
       </div>
     </div>
   </div>
@@ -3019,6 +3040,13 @@ let isDailyRun = false;
 let isMistakesRun = false;
 let runEarnedExp = 0;
 
+// セッション中の一時データ（正規終了時のみ保存、途中帰還時は未学習破棄）
+let sessionMasteredKanji = [];
+let sessionEarnedExp = 0;
+let sessionResolvedMistakes = [];
+let sessionNewMistakes = [];
+let isPausedForRoom = false;
+
 const COURSE_NAMES = {
   grade1: "🌱 １年生コース",
   grade2: "🌿 ２年生コース",
@@ -3129,32 +3157,57 @@ function resolveMistake(kanji) {
   }
 }
 
-/* === 例文辞書 & 生成 === */
+/* === 例文辞書 & 生成（漢字の部屋・学習用） === */
 const SAMPLE_SENTENCES = {
-  "青空": "青空を ジェット機が気持ちよく飛ぶ。",
+  // 1年生基本漢字
+  "一": "一番（いちばん）を目指してがんばる。",
+  "二": "二人で仲良く手をつなぐ。",
+  "三": "三日月（みかづき）が夜空に光る。",
+  "日": "日曜日（にちようび）に家族とおでかけする。",
+  "月": "まんまるい満月（まんげつ）を見上げる。",
+  "火": "火よう日に 理科の実験をする。",
+  "水": "冷たくておいしい水を飲む。",
+  "木": "庭の大きな木に小鳥がとまる。",
+  "金": "金色のメダルをもらって喜ぶ。",
+  "土": "植木ばちに 栄養たっぷりの土を入れる。",
+  "山": "高い山に登って景色をながめる。",
+  "川": "澄んだ川で魚が元気に泳ぐ。",
+  "空": "青空を鳥が気持ちよさそうに飛ぶ。",
+  "雨": "静かに雨が降りそそぐ。",
+  "花": "花だんに色とりどりの花が咲く。",
+  "草": "緑の草の上で寝ころぶ。",
+  "林": "林の小道をみんなで探検する。",
+  "森": "深い森から動物たちの声が聞こえる。",
+  "青空": "青空を ジェット機がスピードよく飛ぶ。",
   "雨水": "雨水が コップの中にたまっている。",
-  "花火": "夜空に きれいな大花火が上がる。",
+  "花火": "夏の夜空に きれいな大花火が打ち上がる。",
   "先生": "学校で 優しい先生に質問する。",
-  "手足": "運動の前に 手足をしっかり動かす。",
+  "手足": "運動の前に 手足をしっかり伸ばして準備そうとうする。",
   "山川": "大自然の 美しい山川をながめる。",
   "森林": "森林の中で 鳥の歌声をきく。",
   "草木": "雨を浴びて 草木が元気に育つ。",
-  "夕日": "西の空に 赤い夕日が沈む。",
-  "水中": "水中を 色とりどりの魚が泳ぐ。",
+  "夕日": "西の空に まっ赤な夕日が沈む。",
+  "水中": "水中を 色とりどりの熱帯魚が泳ぐ。",
   "車": "安全運転で 車を走らせる。",
   "学校": "朝 元気よく学校に登校する。",
   "時計": "時計を見て 時間を守って行動する。",
   "新聞": "お父さんが 朝の新聞を読む。",
-  "算数": "算数の 計算問題に挑戦する。",
-  "公園": "放課後 公園で友達と鬼ごっこをする。",
+  "算数": "算数の 計算問題に集中して挑戦する。",
+  "公園": "放課後 公園で友達と楽しく鬼ごっこをする。",
   "夜空": "星がいっぱいに広がる夜空を見上げる。",
-  "元気": "毎日ごはんを食べて元気にすごす。",
-  "走る": "グラウンドを 全力で走る。"
+  "元気": "毎日ごはんをモリモリ食べて元気にすごす。",
+  "走る": "グラウンドを 笑顔で全力疾走する。",
+  "友達": "大切な友達と 助け合って過ごす。",
+  "読書": "図書室で 静かに読書を楽しむ。",
+  "音楽": "みんなで 息を合わせて楽しい音楽を合奏する。",
+  "太陽": "あたたかい太陽の光が 地上を照らす。",
+  "笑顔": "クラスのみんなの 笑顔があふれる。"
 };
 
 function getQuestionExample(q) {
-  if (SAMPLE_SENTENCES[q.kanji]) return `例文: ${SAMPLE_SENTENCES[q.kanji]}`;
-  return `例文: 【${q.kanji}】(${q.kana}) : ${q.hint}`;
+  if (SAMPLE_SENTENCES[q.kanji]) return SAMPLE_SENTENCES[q.kanji];
+  if (q.hint) return `「${q.kanji}」(${q.kana}): ${q.hint}`;
+  return `「${q.kanji}」を使った言葉や短文を声に出して覚えよう！`;
 }
 
 function getTimeoutAdvice(q) {
@@ -3166,7 +3219,6 @@ const elStageText = document.getElementById('stage-text');
 const elLevelBadge = document.getElementById('level-badge');
 const elTargetKanji = document.getElementById('target-kanji');
 const elTargetHint = document.getElementById('target-hint');
-const elTargetExample = document.getElementById('target-example');
 const elTimeoutTipBox = document.getElementById('timeout-tip-box');
 const elTargetCharsCount = document.getElementById('target-chars-count');
 const elTargetLabel = document.getElementById('target-label');
@@ -3343,6 +3395,14 @@ function startGame() {
   maxComboInRun = 0;
   runEarnedExp = 0;
   lastRunMistakes = [];
+  
+  // セッションバッファ初期化（途中帰還時は破棄、正規終了時のみ確定保存）
+  sessionMasteredKanji = [];
+  sessionEarnedExp = 0;
+  sessionResolvedMistakes = [];
+  sessionNewMistakes = [];
+  isPausedForRoom = false;
+
   updateCrewDisplay();
 
   currentQuestionList = buildQuestionList();
@@ -3470,12 +3530,6 @@ function loadQuestion(index) {
   elTargetLabel.textContent = `TARGET 0${index + 1}`;
   elTargetKanji.textContent = q.kanji;
   elTargetHint.textContent = `学年: ${q.grade} | ${q.hint}`;
-
-  // 例文表示
-  if (elTargetExample) {
-    elTargetExample.textContent = getQuestionExample(q);
-    elTargetExample.style.display = 'block';
-  }
 
   // ワンポイント解説を非表示にリセット
   if (elTimeoutTipBox) {
@@ -3655,10 +3709,8 @@ function handleCorrectAnswer(q) {
     sound.playSpeedBonus();
   }
   runEarnedExp += earned;
-  addExp(earned);
-
-  // にがて克服ならリストから削除
-  resolveMistake(q.kanji);
+  sessionEarnedExp += earned;
+  sessionResolvedMistakes.push(q.kanji);
 
   solvedHistory.push({
     kanji: q.kanji,
@@ -3667,8 +3719,8 @@ function handleCorrectAnswer(q) {
     success: true
   });
 
-  // 漢字の部屋に記録
-  recordMasteredKanji(q.kanji);
+  // セッション一時バッファに蓄積（※クリアまたはゲームオーバー時のみ確定保存）
+  sessionMasteredKanji.push(q.kanji);
 
   // レーザー発射 & 大爆発
   spawnLaserBeam();
@@ -3714,7 +3766,7 @@ function handleTimeOut() {
   updateCrewDisplay();
 
   const currentQ = currentQuestionList[currentQuestionIndex];
-  recordMistake(currentQ.kanji);
+  sessionNewMistakes.push(currentQ.kanji);
   lastRunMistakes.push(currentQ);
 
   solvedHistory.push({
@@ -3766,6 +3818,31 @@ function triggerFlash(type) {
 function showGameResult(isWin) {
   clearInterval(timerInterval);
   sound.stopBgm();
+
+  // 正規終了時（全問クリアまたは撃墜ゲームオーバー）にのみ確定保存！
+  sessionMasteredKanji.forEach(k => recordMasteredKanji(k));
+  if (sessionEarnedExp > 0) {
+    addExp(sessionEarnedExp);
+  }
+  sessionResolvedMistakes.forEach(k => resolveMistake(k));
+  sessionNewMistakes.forEach(k => recordMistake(k));
+
+  // デイリーミッションボーナス判定（全問クリア時のみ）
+  if (isWin && isDailyRun) {
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const lastDaily = localStorage.getItem('kanji_jet_daily_last');
+    if (lastDaily !== todayStr) {
+      localStorage.setItem('kanji_jet_daily_last', todayStr);
+      addExp(100);
+      runEarnedExp += 100;
+    }
+  }
+
+  // セッションバッファクリア
+  sessionMasteredKanji = [];
+  sessionEarnedExp = 0;
+  sessionResolvedMistakes = [];
+  sessionNewMistakes = [];
 
   const modal = document.getElementById('result-modal');
   const icon = document.getElementById('result-icon');
@@ -3848,6 +3925,45 @@ function returnToTitle() {
   document.getElementById('result-modal').style.display = 'none';
   document.getElementById('start-modal').style.display = 'flex';
   sound.stopBgm();
+  updateHomeUI();
+}
+
+/* === ゲーム中断・メニューに戻る機能（途中退出時は進捗を未学習扱いに破棄） === */
+function confirmReturnToMenu() {
+  clearInterval(timerInterval);
+  document.getElementById('confirm-quit-modal').style.display = 'flex';
+}
+
+function cancelReturnToMenu() {
+  document.getElementById('confirm-quit-modal').style.display = 'none';
+  // 解答中であればタイマーを残り秒数から再開
+  if (timerSeconds > 0 && crewLives > 0 && !isAnswerLocked) {
+    startTimer(timerSeconds);
+  }
+}
+
+function executeReturnToMenu() {
+  document.getElementById('confirm-quit-modal').style.display = 'none';
+  clearInterval(timerInterval);
+  sound.stopBgm();
+
+  // ★重要: セッション中の一時データを破棄（そこまで正解した漢字もすべて未学習扱いのまま）
+  sessionMasteredKanji = [];
+  sessionEarnedExp = 0;
+  sessionResolvedMistakes = [];
+  sessionNewMistakes = [];
+  solvedHistory = [];
+  currentCombo = 0;
+  isAnswerLocked = false;
+
+  // HUD・アニメーションを初期状態にリセット
+  elKanjiPanel.style.transform = "translate(-50%, -50%) scale(1)";
+  elKanjiPanel.style.animation = "";
+  elSlotsContainer.style.animation = "";
+
+  document.getElementById('result-modal').style.display = 'none';
+  document.getElementById('start-modal').style.display = 'flex';
+
   updateHomeUI();
 }
 
@@ -4088,11 +4204,23 @@ function recordMasteredKanji(kanjiStr) {
 function openKanjiRoom(grade) {
   if (grade) currentRoomGrade = grade;
   renderKanjiRoom();
+  // ゲーム中に部屋を開いた場合はタイマー一時停止
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    isPausedForRoom = true;
+  }
   document.getElementById('kanji-room-modal').style.display = 'flex';
 }
 
 function closeKanjiRoom() {
   document.getElementById('kanji-room-modal').style.display = 'none';
+  // ゲーム中の一時停止だった場合はタイマー再開
+  if (isPausedForRoom) {
+    isPausedForRoom = false;
+    if (timerSeconds > 0 && crewLives > 0 && !isAnswerLocked) {
+      startTimer(timerSeconds);
+    }
+  }
 }
 
 function switchRoomGrade(grade) {
@@ -4255,14 +4383,25 @@ function selectKanjiTile(ch, grade) {
     kunText.textContent = "—";
   }
 
-  // 例文検索 & 表示
+  // 例文検索 & 表示（漢字の部屋で学べる用例解説）
   let foundEx = "";
-  for (let g = 1; g <= 6; g++) {
-    const list = KANJI_DATABASE[`grade${g}`] || [];
-    const match = list.find(q => q.kanji.includes(ch));
-    if (match) {
-      foundEx = getQuestionExample(match);
-      break;
+  if (SAMPLE_SENTENCES[ch]) {
+    foundEx = SAMPLE_SENTENCES[ch];
+  } else {
+    for (let g = 1; g <= 6; g++) {
+      const list = KANJI_DATABASE[`grade${g}`] || [];
+      const match = list.find(q => q.kanji.includes(ch));
+      if (match) {
+        foundEx = getQuestionExample(match);
+        break;
+      }
+    }
+  }
+  if (!foundEx && ALL_KANJI_READINGS_DATA[ch]) {
+    const rd = ALL_KANJI_READINGS_DATA[ch];
+    const rSample = (rd.kun && rd.kun !== "—") ? rd.kun.split('・')[0] : (rd.on && rd.on !== "—" ? rd.on.split('・')[0] : "");
+    if (rSample) {
+      foundEx = `「${ch}」は「${rSample}」と読み、小学校${grade}年生で習う大切な漢字です。`;
     }
   }
   if (exRow && exText) {

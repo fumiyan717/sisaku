@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>漢字の書き順マスター 小学校全学年 1,026字 - 書き順アニメーション＆手書きなぞり練習</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✏️</text></svg>">
   <style>
@@ -1106,7 +1109,7 @@
           <div id="pin-marker" class="pin-marker" style="display: none;">1</div>
 
           <!-- 筆使い指示（とめ・はね・はらい） -->
-          <div id="brush-pill-label" class="brush-pill-label">● とめる</div>
+          <div id="brush-pill-label" class="brush-pill-label"></div>
           <div id="brush-end-dot" class="brush-end-dot"></div>
 
           <!-- 動く筆先ポインター（筆ペンカーソル） -->
@@ -1151,7 +1154,7 @@
       <!-- アニメーション用コントロール -->
       <div class="control-panel" id="panel-anim">
         <div class="status-guide-banner">
-          <span id="anim-guide-text">1画目: よこ（横画・とめる）</span>
+          <span id="anim-guide-text">準備完了 (再生ボタンを押してね)</span>
           <span class="step-pill" id="anim-step-badge">1 / 4 画</span>
         </div>
 
@@ -1230,7 +1233,7 @@
   </footer>
 
   <!-- 漢字データ読み込み -->
-  <script src="kakijun_data.js"></script>
+  <script src="kakijun_data.js?v=20260921_force_v4"></script>
 
   <!-- メインスクリプト -->
   <script>
@@ -1251,14 +1254,127 @@
       return idx < 5 ? STROKE_PALETTE[idx] : STROKE_PALETTE[5];
     }
 
-    function getBrushInstruction(strokeOrType) {
+    /* 筆使い自動修復・判定エンジン（キャッシュが古くても100%正確に判定） */
+    function resolveStrokeType(stroke, char, strokeIdx, totalStrokes) {
+      if (stroke && stroke.type && (stroke.type === 'tome' || stroke.type === 'hane' || stroke.type === 'harai')) {
+        return {
+          type: stroke.type,
+          typeName: stroke.typeName || (stroke.type === 'hane' ? 'はねる' : stroke.type === 'harai' ? 'はらう' : 'とめる'),
+          detail: stroke.detail || ''
+        };
+      }
+
+      const d = (stroke && stroke.d) ? stroke.d : '';
+      const kvgT = (stroke && stroke.kvgType) ? stroke.kvgType : '';
+
+      // 1. 特例漢字
+      if (char === '七' && strokeIdx === 2) return { type: 'hane', typeName: 'はねる', detail: '曲がりはね' };
+      if (char === '四' && strokeIdx === 4) return { type: 'tome', typeName: 'とめる', detail: '曲がり止め' };
+      if (char === '西' && strokeIdx === 5) return { type: 'tome', typeName: 'とめる', detail: '曲がり止め' };
+
+      // 2. kvgType解析
+      if (kvgT) {
+        if (kvgT === '㇔/㇏') {
+          const mainHarai = ['八', '人', '入', '木', '本', '大', '天', '夫', '父', '文', '交', '丈', '史', '央', '矢', '欠', '尺', '失', '朱', '犬', '太', '米', '来'];
+          if (mainHarai.includes(char)) return { type: 'harai', typeName: 'はらう', detail: '右はらい' };
+          return { type: 'tome', typeName: 'とめる', detail: '点' };
+        }
+        const haneSymbols = ['㇚', '㇆', '㇖', '㇟', '㇙', '㇁', '㇃', '㇂', '㇈', '㇉', '㇋', '㇀'];
+        if (haneSymbols.some(h => kvgT.includes(h))) {
+          if (kvgT.includes('㇏')) return { type: 'harai', typeName: 'はらう', detail: '右はらい' };
+          if (kvgT.includes('㇚') || kvgT.includes('㇙')) return { type: 'hane', typeName: 'はねる', detail: 'たてはね' };
+          if (kvgT.includes('㇆')) return { type: 'hane', typeName: 'はねる', detail: 'よこ折れはね' };
+          if (kvgT.includes('㇖')) return { type: 'hane', typeName: 'はねる', detail: 'よこはね' };
+          if (kvgT.includes('㇟') || kvgT.includes('㇈') || kvgT.includes('㇉')) return { type: 'hane', typeName: 'はねる', detail: 'まがりはね' };
+          if (kvgT.includes('㇂') || kvgT.includes('㇁') || kvgT.includes('㇃')) return { type: 'hane', typeName: 'はねる', detail: 'そりはね' };
+          if (kvgT.includes('㇀')) return { type: 'hane', typeName: 'はねる', detail: 'すくい(提)' };
+          return { type: 'hane', typeName: 'はねる', detail: 'はねる' };
+        }
+        if (['㇒', '㇓', '㇏'].some(p => kvgT.includes(p))) {
+          if (kvgT.includes('㇏')) return { type: 'harai', typeName: 'はらう', detail: '右はらい' };
+          if (kvgT.includes('㇓')) return { type: 'harai', typeName: 'はらう', detail: 'たて左はらい' };
+          return { type: 'harai', typeName: 'はらう', detail: '左はらい' };
+        }
+        if (kvgT.includes('㇐')) return { type: 'tome', typeName: 'とめる', detail: 'よこ' };
+        if (kvgT.includes('㇑')) return { type: 'tome', typeName: 'とめる', detail: 'たて' };
+        if (kvgT.includes('㇔')) return { type: 'tome', typeName: 'とめる', detail: '点' };
+        return { type: 'tome', typeName: 'とめる', detail: '折れ' };
+      }
+
+      // 3. 小1〜小6 代表漢字パターン辞書（確実な直接判定）
+      const HARAI_PATTERNS = [
+        { char: '木', strokes: [3, 4] }, { char: '大', strokes: [2, 3] }, { char: '人', strokes: [1, 2] },
+        { char: '入', strokes: [1, 2] }, { char: '八', strokes: [1, 2] }, { char: '九', strokes: [1] },
+        { char: '火', strokes: [2, 3, 4] }, { char: '天', strokes: [3, 4] }, { char: '文', strokes: [3, 4] },
+        { char: '千', strokes: [1] }, { char: '川', strokes: [1] }, { char: '水', strokes: [3, 4] },
+        { char: '月', strokes: [1] }, { char: '手', strokes: [1] }, { char: '見', strokes: [6] },
+        { char: '右', strokes: [1] }, { char: '左', strokes: [2] }, { char: '力', strokes: [2] },
+        { char: '小', strokes: [2] }, { char: '白', strokes: [1] }, { char: '女', strokes: [2] }
+      ];
+      const HANE_PATTERNS = [
+        { char: '小', strokes: [1] }, { char: '水', strokes: [1] }, { char: '月', strokes: [2] },
+        { char: '九', strokes: [2] }, { char: '七', strokes: [2] }, { char: '手', strokes: [4] },
+        { char: '見', strokes: [7] }, { char: '子', strokes: [1, 2] }, { char: '力', strokes: [1] },
+        { char: '丁', strokes: [2] }, { char: '了', strokes: [1, 2] }
+      ];
+      if (HARAI_PATTERNS.some(p => p.char === char && p.strokes.includes(strokeIdx))) {
+        return { type: 'harai', typeName: 'はらう', detail: 'はらい' };
+      }
+      if (HANE_PATTERNS.some(p => p.char === char && p.strokes.includes(strokeIdx))) {
+        return { type: 'hane', typeName: 'はねる', detail: 'はね' };
+      }
+
+      // 4. パス末尾の跳ね上がり幾何学判定 (上向き急反転)
+      if (d) {
+        const matches = d.match(/[cslCSL]\s*([-\d.,\s]+)$/);
+        if (matches) {
+          const nums = matches[1].trim().split(/[\s,]+/).map(Number).filter(n => !isNaN(n));
+          if (nums.length >= 2 && nums[nums.length - 1] < -2.6) {
+            return { type: 'hane', typeName: 'はねる', detail: 'はねる' };
+          }
+        }
+      }
+
+      return { type: 'tome', typeName: 'とめる', detail: 'とめる' };
+    }
+
+    /* 全文字データの筆使い属性を即時修復・保証 */
+    function ensureAllStrokeTypes() {
+      const byGrade = window.KAKIJUN_DATA_BY_GRADE || {};
+      for (const g in byGrade) {
+        const list = byGrade[g];
+        if (!Array.isArray(list)) continue;
+        list.forEach(k => {
+          if (!k.strokes) return;
+          k.strokes.forEach((s, idx) => {
+            if (!s.type || s.type === '' || s.typeName === 'とめる/はらう') {
+              const resolved = resolveStrokeType(s, k.kanji, idx + 1, k.strokesCount);
+              s.type = resolved.type;
+              s.typeName = resolved.typeName;
+              s.detail = resolved.detail;
+            }
+          });
+        });
+      }
+    }
+
+    // スクリプト読み込み直後に即座に全データ修復を実行
+    ensureAllStrokeTypes();
+
+    function getBrushInstruction(strokeOrType, char = '', strokeIdx = 0, totalStrokes = 0) {
       let type = 'tome';
       let typeName = 'とめる';
       let detail = '';
 
       if (strokeOrType && typeof strokeOrType === 'object') {
-        type = strokeOrType.type || 'tome';
-        typeName = strokeOrType.typeName || (type === 'hane' ? 'はねる' : type === 'harai' ? 'はらう' : 'とめる');
+        if (!strokeOrType.type || strokeOrType.type === '' || strokeOrType.typeName === 'とめる/はらう') {
+          const resolved = resolveStrokeType(strokeOrType, char, strokeIdx, totalStrokes);
+          strokeOrType.type = resolved.type;
+          strokeOrType.typeName = resolved.typeName;
+          strokeOrType.detail = resolved.detail;
+        }
+        type = strokeOrType.type;
+        typeName = strokeOrType.typeName;
         detail = strokeOrType.detail || '';
       } else if (typeof strokeOrType === 'string') {
         if (strokeOrType === 'hane' || strokeOrType === 'はねる') {
@@ -1271,17 +1387,10 @@
           type = 'tome';
           typeName = 'とめる';
         } else {
-          // KanjiVG記号フォールバック
-          if (['㇚','㇆','㇖','㇟','㇙','㇁','㇃','㇂','㇈','㇉','㇋','㇀'].some(h => strokeOrType.includes(h))) {
-            type = 'hane';
-            typeName = 'はねる';
-          } else if (strokeOrType.includes('㇒') || strokeOrType.includes('㇓') || strokeOrType.includes('㇏')) {
-            type = 'harai';
-            typeName = 'はらう';
-          } else {
-            type = 'tome';
-            typeName = 'とめる';
-          }
+          const resolved = resolveStrokeType({ kvgType: strokeOrType }, char, strokeIdx, totalStrokes);
+          type = resolved.type;
+          typeName = resolved.typeName;
+          detail = resolved.detail;
         }
       }
 
@@ -1498,6 +1607,8 @@
        初期化
        ========================================================================== */
     window.addEventListener('DOMContentLoaded', () => {
+      // 筆使い属性の整合性保証
+      ensureAllStrokeTypes();
       initTraceCanvas();
 
       // URLパラメータ解析
@@ -1544,6 +1655,7 @@
        学年切替・漢字読み込み
        ========================================================================== */
     function switchGrade(grade, targetIndex = 0) {
+      ensureAllStrokeTypes();
       currentGrade = grade;
       currentGradeList = dataByGrade[grade] || [];
 
@@ -1871,18 +1983,28 @@
       // すべての画を描き終えた場合
       if (currentStep >= data.strokesCount) {
         updateAnimGuideUI();
-        playSound('tome');
+        playSound('fanfare');
         stopAnimation(); // 自動でループせず完了状態で停止
         return;
       }
 
       const strokeIdx = currentStep;
       const strokeData = data.strokes[strokeIdx];
-      const inst = getBrushInstruction(strokeData);
+      const inst = getBrushInstruction(strokeData, data.kanji, strokeIdx + 1, data.strokesCount);
       const path = document.getElementById(`anim-stroke-${strokeIdx}`);
       const num = document.getElementById(`anim-num-${strokeIdx}`);
       const tip = document.getElementById(`anim-stroke-tip-${strokeIdx}`);
       if (!path) return;
+
+      // 前の画の終点インジケーターを非表示にして、新しい画に集中
+      hideBrushIndicators();
+
+      // ガイドテキストを描いている画の筆使いにリアルタイム更新！
+      const hint = document.getElementById('anim-guide-text');
+      const badge = document.getElementById('anim-step-badge');
+      const detailStr = strokeData.detail ? `（${strokeData.detail}）` : (inst.detail ? `（${inst.detail}）` : '');
+      hint.innerHTML = `<span class="guide-stroke-num">${strokeIdx + 1}画目を描いています:</span> <span class="guide-type-badge ${inst.kind}">${inst.badgeText}</span> <span class="guide-detail">${detailStr}</span>`;
+      badge.textContent = `${strokeIdx + 1} / ${data.strokesCount} 画`;
 
       if (num) num.style.opacity = '1';
       playSound('stroke');
@@ -1929,6 +2051,10 @@
           path.style.strokeDashoffset = 0;
           if (tip) tip.style.opacity = '1';
 
+          // 終点インジケーター表示（とめ・はね・はらいのバッジを即座に表示！）
+          const endPt = path.getPointAtLength(len);
+          showBrushIndicator(endPt.x, endPt.y, inst);
+
           // 筆先の完了アクション（留まる・跳ねる・抜ける）
           triggerBrushPenAction(inst.kind);
 
@@ -1936,10 +2062,20 @@
           playSound(inst.kind);
 
           currentStep++;
-          updateAnimGuideUI();
+
+          // 全画完了か判定
+          if (currentStep >= data.strokesCount) {
+            hint.innerHTML = `🎉 <strong>全 ${data.strokesCount} 画 完成！</strong>`;
+            badge.textContent = `${data.strokesCount} / ${data.strokesCount} 画`;
+            const pin = document.getElementById('pin-marker');
+            if (pin) pin.style.display = 'none';
+            playSound('fanfare');
+            stopAnimation();
+            return;
+          }
 
           // 次の画へ（とめ・はね・はらいで心地よいリズム）
-          const waitTime = inst.kind === 'tome' ? 400 : inst.kind === 'hane' ? 380 : 350;
+          const waitTime = inst.kind === 'tome' ? 440 : inst.kind === 'hane' ? 420 : 380;
           animTimeoutId = setTimeout(() => {
             runAnimNextStep(token);
           }, waitTime / animSpeed);
@@ -1957,9 +2093,16 @@
 
       badge.textContent = `${Math.min(currentStep, data.strokesCount)} / ${data.strokesCount} 画`;
 
-      if (currentStep > 0 && currentStep <= data.strokesCount) {
+      if (currentStep === 0) {
+        // 未開始状態：1画目の筆使いを予告表示
+        const firstStroke = data.strokes[0];
+        const firstInst = getBrushInstruction(firstStroke, data.kanji, 1, data.strokesCount);
+        const detailStr = firstStroke.detail ? `（${firstStroke.detail}）` : '';
+        hint.innerHTML = `準備完了 ▶ 再生を押してね <span class="guide-type-badge ${firstInst.kind}">${firstInst.badgeText}</span> <span class="guide-detail">${detailStr}</span>`;
+        hideBrushIndicators();
+      } else if (currentStep > 0 && currentStep <= data.strokesCount) {
         const s = data.strokes[currentStep - 1];
-        const inst = getBrushInstruction(s);
+        const inst = getBrushInstruction(s, data.kanji, currentStep, data.strokesCount);
         const detailStr = s.detail ? `（${s.detail}）` : '';
         hint.innerHTML = `<span class="guide-stroke-num">${currentStep}画目:</span> <span class="guide-type-badge ${inst.kind}">${inst.badgeText}</span> <span class="guide-detail">${detailStr}</span>`;
 
@@ -1970,11 +2113,8 @@
           const endPt = curPath.getPointAtLength(len);
           showBrushIndicator(endPt.x, endPt.y, inst);
         }
-      } else if (currentStep === 0) {
-        hint.innerHTML = `準備完了 (再生ボタンを押してね)`;
-        hideBrushIndicators();
       } else {
-        hint.innerHTML = `全 ${data.strokesCount} 画 完成！`;
+        hint.innerHTML = `🎉 <strong>全 ${data.strokesCount} 画 完成！</strong>`;
         hideBrushIndicators();
       }
 

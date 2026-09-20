@@ -4605,6 +4605,26 @@ function initStars() {
 
 /* === 機体＆レーザー カスタマイズ用パレット === */
 const SHIP_COLORS = {
+  starhawk1: {
+    name: "STARHAWK Mk-I",
+    type: "image",
+    src: "assets/ship_starhawk1.png",
+    fill: "#1e3a5f",
+    stroke: "#00e5ff",
+    flame: "rgba(0, 229, 255, 0.95)",
+    reqExp: 0,
+    desc: "最新鋭3D戦闘機"
+  },
+  starhawk2: {
+    name: "STARHAWK Mk-II",
+    type: "image",
+    src: "assets/ship_starhawk2.png",
+    fill: "#1a202c",
+    stroke: "#ffd700",
+    flame: "rgba(255, 190, 0, 0.95)",
+    reqExp: 50,
+    desc: "ステルス3D戦闘機"
+  },
   blue: { name: "ブルーホーク", fill: "#0e1d38", stroke: "#00e5ff", flame: "rgba(0, 229, 255, 0.8)", reqExp: 0 },
   red: { name: "フレイムレッド", fill: "#3a0e14", stroke: "#ff3344", flame: "rgba(255, 68, 68, 0.8)", reqExp: 30 },
   green: { name: "エメラルド", fill: "#0e3020", stroke: "#00ff88", flame: "rgba(0, 255, 136, 0.8)", reqExp: 80 },
@@ -4618,6 +4638,19 @@ const LASER_COLORS = {
   yellow: { name: "雷光イエロー", stroke: "#ffe600", core: "#ffffff", reqExp: 100 },
   rainbow: { name: "レインボー", stroke: "#ff00ea", core: "#00ffff", reqExp: 250 }
 };
+
+// 機体画像キャッシュ
+const shipImageCache = {};
+function preloadShipImages() {
+  Object.entries(SHIP_COLORS).forEach(([key, cfg]) => {
+    if (cfg.src) {
+      const img = new Image();
+      img.src = cfg.src;
+      shipImageCache[key] = img;
+    }
+  });
+}
+preloadShipImages();
 
 let customShipImageObj = null;
 
@@ -4669,6 +4702,8 @@ function handleCustomShipImageUpload(event) {
 
       customShipImageObj = new Image();
       customShipImageObj.src = dataUrl;
+      const current = getCustomSetting();
+      saveCustomSetting('custom_image', current.laser);
       renderCustomModal();
       applyCustomTheme();
     };
@@ -4682,6 +4717,10 @@ function clearCustomShipImage() {
     localStorage.removeItem('kanji_jet_custom_image');
   } catch (e) {}
   customShipImageObj = null;
+  const current = getCustomSetting();
+  if (current.ship === 'custom_image') {
+    saveCustomSetting('starhawk1', current.laser);
+  }
   renderCustomModal();
   applyCustomTheme();
 }
@@ -4689,15 +4728,16 @@ function clearCustomShipImage() {
 function getCustomSetting() {
   try {
     const data = localStorage.getItem('kanji_jet_custom');
-    return data ? JSON.parse(data) : { ship: 'blue', laser: 'cyan' };
+    return data ? JSON.parse(data) : { ship: 'starhawk1', laser: 'cyan' };
   } catch (e) {
-    return { ship: 'blue', laser: 'cyan' };
+    return { ship: 'starhawk1', laser: 'cyan' };
   }
 }
 
 function applyCustomTheme() {
   const custom = getCustomSetting();
-  const shipConfig = SHIP_COLORS[custom.ship] || SHIP_COLORS.blue;
+  const isCustomUpload = custom.ship === 'custom_image' && customShipImageObj && customShipImageObj.src;
+  const shipConfig = SHIP_COLORS[custom.ship] || SHIP_COLORS.starhawk1 || SHIP_COLORS.blue;
   const laserConfig = LASER_COLORS[custom.laser] || LASER_COLORS.cyan;
 
   document.documentElement.style.setProperty('--player-ship-stroke', shipConfig.stroke);
@@ -4707,10 +4747,11 @@ function applyCustomTheme() {
 
   const homeCustomEl = document.getElementById('home-custom-display');
   if (homeCustomEl) {
-    if (customShipImageObj && customShipImageObj.src) {
+    if (isCustomUpload) {
       homeCustomEl.innerHTML = `<span style="color: #00ffaa; font-weight: bold;">🖼️ オリジナル画像機体</span> / <span style="color: ${laserConfig.stroke}; font-weight: bold;">⚡ ${laserConfig.name}</span>`;
     } else {
-      homeCustomEl.innerHTML = `<span style="color: ${shipConfig.stroke}; font-weight: bold;">✈️ ${shipConfig.name}</span> / <span style="color: ${laserConfig.stroke}; font-weight: bold;">⚡ ${laserConfig.name}</span>`;
+      const icon = shipConfig.src ? '🚀' : '✈️';
+      homeCustomEl.innerHTML = `<span style="color: ${shipConfig.stroke}; font-weight: bold;">${icon} ${shipConfig.name}</span> / <span style="color: ${laserConfig.stroke}; font-weight: bold;">⚡ ${laserConfig.name}</span>`;
     }
   }
 }
@@ -4895,11 +4936,11 @@ function drawPlayerJet(cx, h) {
   // コックピットHUDのすぐ上の宇宙空間に機体を配置（画面中央でダイナミックに飛行）
   const jetBaseY = Math.min(h * 0.54, h - 220);
   const custom = getCustomSetting();
-  const shipConfig = SHIP_COLORS[custom.ship] || SHIP_COLORS.blue;
   const flameTime = Date.now() * 0.02;
 
-  // 0. オリジナル画像がセットされている場合は画像機体を描画
-  if (customShipImageObj && customShipImageObj.complete && customShipImageObj.naturalWidth > 0) {
+  // 0. アップロードされたオリジナル機体画像が選択されている場合
+  if (custom.ship === 'custom_image' && customShipImageObj && customShipImageObj.complete && customShipImageObj.naturalWidth > 0) {
+    const shipConfig = SHIP_COLORS.blue;
     const targetW = 140;
     const aspect = customShipImageObj.naturalHeight / customShipImageObj.naturalWidth;
     const targetH = Math.min(130, targetW * aspect);
@@ -4923,6 +4964,57 @@ function drawPlayerJet(cx, h) {
     ctx.shadowColor = shipConfig.stroke;
     ctx.shadowBlur = 16;
     ctx.drawImage(customShipImageObj, cx - targetW / 2, jetBaseY - targetH / 2, targetW, targetH);
+    ctx.restore();
+
+    ctx.restore();
+    return;
+  }
+
+  const shipConfig = SHIP_COLORS[custom.ship] || SHIP_COLORS.starhawk1 || SHIP_COLORS.blue;
+
+  // 1. 公式3Dモデル機体（STARHAWK Mk-I, STARHAWK Mk-II）の場合
+  if (shipConfig.src) {
+    let shipImg = shipImageCache[custom.ship];
+    if (!shipImg) {
+      shipImg = new Image();
+      shipImg.src = shipConfig.src;
+      shipImageCache[custom.ship] = shipImg;
+    }
+
+    const targetW = 135;
+    const targetH = 135;
+
+    // ツインエンジン推進炎エフェクト
+    const flameH = 22 + Math.sin(flameTime) * 8;
+    ctx.save();
+    ctx.fillStyle = shipConfig.flame;
+    ctx.shadowColor = shipConfig.stroke;
+    ctx.shadowBlur = 16;
+
+    // 左ノズル推進炎 (cx - 23 付近)
+    ctx.beginPath();
+    ctx.moveTo(cx - 28, jetBaseY + targetH * 0.28);
+    ctx.lineTo(cx - 22, jetBaseY + targetH * 0.28 + flameH);
+    ctx.lineTo(cx - 16, jetBaseY + targetH * 0.28);
+    ctx.closePath();
+    ctx.fill();
+
+    // 右ノズル推進炎 (cx + 23 付近)
+    ctx.beginPath();
+    ctx.moveTo(cx + 16, jetBaseY + targetH * 0.28);
+    ctx.lineTo(cx + 22, jetBaseY + targetH * 0.28 + flameH);
+    ctx.lineTo(cx + 28, jetBaseY + targetH * 0.28);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+
+    // 機体本体の描画（美しいシャドウ・グロー効果付き）
+    ctx.save();
+    ctx.shadowColor = shipConfig.stroke;
+    ctx.shadowBlur = 18;
+    if (shipImg && shipImg.complete && shipImg.naturalWidth > 0) {
+      ctx.drawImage(shipImg, cx - targetW / 2, jetBaseY - targetH / 2, targetW, targetH);
+    }
     ctx.restore();
 
     ctx.restore();
@@ -7073,7 +7165,16 @@ function renderCustomModal() {
   const statusTxt = document.getElementById('custom-ship-img-status');
   if (customShipImageObj && customShipImageObj.src) {
     if (clearBtn) clearBtn.style.display = 'inline-block';
-    if (statusTxt) statusTxt.style.display = 'block';
+    if (statusTxt) {
+      statusTxt.style.display = 'block';
+      if (current.ship === 'custom_image') {
+        statusTxt.innerHTML = '✨ あなたのオリジナル画像を機体として出撃中！';
+        statusTxt.style.color = '#00ffaa';
+      } else {
+        statusTxt.innerHTML = '📁 オリジナル画像保存済み（下のリストからいつでも切り替え可能）';
+        statusTxt.style.color = '#8bb5e0';
+      }
+    }
   } else {
     if (clearBtn) clearBtn.style.display = 'none';
     if (statusTxt) statusTxt.style.display = 'none';
@@ -7083,15 +7184,49 @@ function renderCustomModal() {
   const shipRow = document.getElementById('custom-ship-row');
   if (shipRow) {
     shipRow.innerHTML = "";
+
+    // オリジナル画像が登録されている場合、カードの先頭に追加
+    if (customShipImageObj && customShipImageObj.src) {
+      const isActive = current.ship === 'custom_image';
+      const card = document.createElement('div');
+      card.className = `custom-card ${isActive ? 'active' : ''}`;
+      card.innerHTML = `
+        <div style="width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; background: rgba(0, 255, 170, 0.15); border-radius: 8px; border: 1.5px solid #00ffaa; margin: 0 auto 6px auto;">
+          <img src="${customShipImageObj.src}" style="width: 32px; height: 32px; object-fit: contain;">
+        </div>
+        <div style="font-weight: bold; font-size: 11.5px; color: #00ffaa; white-space: nowrap;">オリジナル</div>
+        <div style="font-size: 10px; color: #8bb5e0; margin-top: 2px;">
+          ${isActive ? '装備中' : '選択可能'}
+        </div>
+      `;
+      card.addEventListener('click', () => {
+        saveCustomSetting('custom_image', current.laser);
+        renderCustomModal();
+      });
+      shipRow.appendChild(card);
+    }
+
     Object.entries(SHIP_COLORS).forEach(([key, cfg]) => {
       const isLocked = exp < cfg.reqExp;
       const isActive = current.ship === key;
 
       const card = document.createElement('div');
       card.className = `custom-card ${isActive ? 'active' : ''} ${isLocked ? 'locked' : ''}`;
+
+      let visualHtml = '';
+      if (cfg.src) {
+        visualHtml = `
+          <div style="width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, rgba(0, 229, 255, 0.25) 0%, rgba(10, 20, 40, 0.7) 80%); border-radius: 8px; border: 1.5px solid ${cfg.stroke}; box-shadow: 0 0 8px ${cfg.stroke}55; margin: 0 auto 6px auto;">
+            <img src="${cfg.src}" style="width: 32px; height: 32px; object-fit: contain; filter: drop-shadow(0 0 4px ${cfg.stroke});">
+          </div>
+        `;
+      } else {
+        visualHtml = `<div class="custom-color-circle" style="background: ${cfg.fill}; border-color: ${cfg.stroke};"></div>`;
+      }
+
       card.innerHTML = `
-        <div class="custom-color-circle" style="background: ${cfg.fill}; border-color: ${cfg.stroke};"></div>
-        <div style="font-weight: bold; font-size: 12px; color: ${cfg.stroke};">${cfg.name}</div>
+        ${visualHtml}
+        <div style="font-weight: bold; font-size: 11.5px; color: ${cfg.stroke}; white-space: nowrap;">${cfg.name}</div>
         <div style="font-size: 10px; color: #8bb5e0; margin-top: 2px;">
           ${isLocked ? `🔒 ${cfg.reqExp} EXP必要` : (isActive ? '装備中' : '選択可能')}
         </div>
@@ -7144,17 +7279,19 @@ function renderCustomPreview() {
   const h = c.height;
 
   const custom = getCustomSetting();
-  const shipConfig = SHIP_COLORS[custom.ship] || SHIP_COLORS.blue;
+  const isCustomUpload = custom.ship === 'custom_image' && customShipImageObj && customShipImageObj.src;
+  const shipConfig = SHIP_COLORS[custom.ship] || SHIP_COLORS.starhawk1 || SHIP_COLORS.blue;
   const laserConfig = LASER_COLORS[custom.laser] || LASER_COLORS.cyan;
 
   // ラベル更新
   const shipLabel = document.getElementById('custom-preview-ship-name');
   if (shipLabel) {
-    if (customShipImageObj && customShipImageObj.src) {
+    if (isCustomUpload) {
       shipLabel.textContent = '🖼️ オリジナル画像機体';
       shipLabel.style.color = '#00ffaa';
     } else {
-      shipLabel.textContent = shipConfig.name;
+      const icon = shipConfig.src ? '🚀 ' : '✈️ ';
+      shipLabel.textContent = icon + shipConfig.name;
       shipLabel.style.color = shipConfig.stroke;
     }
   }
@@ -7216,8 +7353,8 @@ function renderCustomPreview() {
   pctx.lineTo(cx + 14, cy + 18);
   pctx.fill();
 
-  // オリジナル画像があれば画像を描画
-  if (customShipImageObj && customShipImageObj.complete && customShipImageObj.naturalWidth > 0) {
+  // 0. オリジナル画像
+  if (isCustomUpload) {
     const pw = 80;
     const aspect = customShipImageObj.naturalHeight / customShipImageObj.naturalWidth;
     const ph = Math.min(65, pw * aspect);
@@ -7226,7 +7363,24 @@ function renderCustomPreview() {
     return;
   }
 
-  // 通常機体
+  // 1. 公式3Dモデル機体
+  if (shipConfig.src) {
+    let shipImg = shipImageCache[custom.ship];
+    if (!shipImg) {
+      shipImg = new Image();
+      shipImg.src = shipConfig.src;
+      shipImageCache[custom.ship] = shipImg;
+    }
+    const pw = 74;
+    const ph = 74;
+    if (shipImg && shipImg.complete && shipImg.naturalWidth > 0) {
+      pctx.drawImage(shipImg, cx - pw / 2, cy - ph / 2, pw, ph);
+    }
+    pctx.restore();
+    return;
+  }
+
+  // 2. 通常ベクター機体
   pctx.fillStyle = shipConfig.fill;
   pctx.strokeStyle = shipConfig.stroke;
   pctx.lineWidth = 2.5;

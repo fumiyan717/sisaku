@@ -2542,7 +2542,10 @@
           <div class="mode-name">🌱 １年生</div>
           <span class="mode-progress-badge" id="badge-g1">0/80字 (0%)</span>
           <div class="mode-desc"><ruby>配当<rt>はいとう</rt></ruby>80<ruby>字<rt>じ</rt></ruby>・きほんの <ruby>読<rt>よ</rt></ruby>み</div>
-          <button class="mode-quick-start" onclick="event.stopPropagation(); quickStart('grade1')">🚀 すぐ発進!</button>
+          <div style="display: flex; gap: 4px; width: 100%;">
+            <button class="mode-quick-start" style="flex: 1;" onclick="event.stopPropagation(); quickStart('grade1')">🚀 すぐ発進!</button>
+            <a href="kakijun.html" class="mode-quick-start" style="flex: 1; background: linear-gradient(135deg, #0284c7, #0369a1); border-color: #38bdf8; text-decoration: none; color: #fff; text-align: center; display: flex; align-items: center; justify-content: center;" onclick="event.stopPropagation();">✏️ 書き順</a>
+          </div>
         </div>
         <div class="mode-btn" data-mode="grade2" onclick="selectMode('grade2')">
           <span class="grade-badge g2">2ねんせい</span>
@@ -2595,6 +2598,7 @@
       <div class="home-nav-row">
         <button class="home-nav-btn" onclick="openHowToModal()">❓ あそびかた</button>
         <button class="home-nav-btn" onclick="openHandwriteModal()">✍️ 手書き特訓</button>
+        <a href="kakijun.html" class="home-nav-btn" style="text-decoration: none; color: #ffe600; border-color: #ffe600;">✏️ 書き順マスター</a>
         <button class="home-nav-btn" onclick="openAiReportModal()">📊 AI学習分析</button>
         <button class="home-nav-btn" onclick="openCustomModal()">🚀 機体カスタム</button>
         <button class="home-nav-btn" onclick="openKanjiRoom()">🏛️ 漢字の部屋</button>
@@ -2713,9 +2717,12 @@
           <div id="detail-example-row" style="margin-top: 4px; font-size: 12px; color: #a4c8e0;">
             <span class="reading-label">例文:</span> <span id="detail-example-text">きれいな花が咲く。</span>
           </div>
-          <div style="margin-top: 6px;">
+          <div style="margin-top: 6px; display: flex; gap: 6px; flex-wrap: wrap;">
             <button class="action-sub-btn" id="btn-detail-handwrite" onclick="startHandwriteForCurrentDetail()" style="font-size: 11px; padding: 3px 10px; border-color: #00e5ff; color: #00e5ff; background: rgba(0, 229, 255, 0.1);">
               ✍️ この漢字を手書き特訓する
+            </button>
+            <button class="action-sub-btn" id="btn-detail-kakijun" onclick="openKakijunForCurrentDetail()" style="font-size: 11px; padding: 3px 10px; border-color: #ffe600; color: #ffe600; background: rgba(255, 230, 0, 0.1);">
+              ✏️ 書き順をみる・練習する
             </button>
           </div>
         </div>
@@ -6657,7 +6664,30 @@ function selectKanjiTile(ch, grade) {
     }
   }
 
+  // 1年生配当漢字（書き順システム対応）の判定
+  const btnKakijun = document.getElementById('btn-detail-kakijun');
+  if (btnKakijun) {
+    const isGrade1 = ALL_GRADE_KANJI[1].includes(ch);
+    if (isGrade1) {
+      btnKakijun.style.display = 'inline-flex';
+      btnKakijun.innerHTML = '✏️ 書き順をみる・練習する';
+      btnKakijun.title = '新学社スタイルの書き順アニメーション＆なぞり書き練習を開きます';
+    } else {
+      btnKakijun.style.display = 'inline-flex';
+      btnKakijun.innerHTML = '✏️ 1年生の書き順一覧へ';
+      btnKakijun.title = '1年生配当の書き順システムを開きます';
+    }
+  }
+
   card.style.display = "flex";
+}
+
+function openKakijunForCurrentDetail() {
+  if (currentDetailKanji) {
+    window.location.href = `kakijun.html?kanji=${encodeURIComponent(currentDetailKanji)}`;
+  } else {
+    window.location.href = 'kakijun.html';
+  }
 }
 
 function closeKanjiDetail() {

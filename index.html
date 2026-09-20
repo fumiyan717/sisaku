@@ -75,6 +75,18 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .stage-course-tag {
+      font-size: 12px;
+      font-weight: bold;
+      color: #fff;
+      background: linear-gradient(90deg, rgba(0, 229, 255, 0.3), rgba(0, 255, 136, 0.3));
+      border: 1px solid var(--primary-cyan);
+      padding: 3px 10px;
+      border-radius: 12px;
+      letter-spacing: 1px;
     }
 
     .stage-sub {
@@ -649,43 +661,84 @@
       line-height: 1.5;
     }
 
+    .modal-card-start {
+      max-width: 660px;
+      max-height: 92vh;
+      overflow-y: auto;
+    }
+
     .mode-select-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 25px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
     }
 
     .mode-btn {
-      background: rgba(16, 32, 60, 0.8);
+      background: rgba(16, 32, 60, 0.85);
       border: 2px solid #204987;
       border-radius: 12px;
-      padding: 15px 10px;
+      padding: 10px 8px;
       cursor: pointer;
       transition: all 0.2s;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
       color: #fff;
+      position: relative;
     }
 
     .mode-btn:hover, .mode-btn.active {
       border-color: var(--primary-cyan);
-      background: rgba(0, 229, 255, 0.15);
-      box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
+      background: rgba(0, 229, 255, 0.2);
+      box-shadow: 0 0 15px rgba(0, 229, 255, 0.5);
       transform: translateY(-2px);
     }
 
+    .mode-btn.full-width {
+      grid-column: 1 / -1;
+      padding: 12px 14px;
+      flex-direction: row;
+      justify-content: center;
+      gap: 15px;
+      background: linear-gradient(90deg, rgba(32, 73, 135, 0.6) 0%, rgba(16, 32, 60, 0.85) 100%);
+    }
+
+    .grade-badge {
+      font-size: 11px;
+      font-weight: bold;
+      padding: 2px 8px;
+      border-radius: 8px;
+      display: inline-block;
+    }
+    .grade-badge.g1 { background: rgba(255, 75, 114, 0.25); color: #ff6b8b; border: 1px solid #ff4b72; }
+    .grade-badge.g2 { background: rgba(255, 152, 0, 0.25); color: #ffb74d; border: 1px solid #ff9800; }
+    .grade-badge.g3 { background: rgba(255, 235, 59, 0.25); color: #ffee58; border: 1px solid #fdd835; }
+    .grade-badge.g4 { background: rgba(0, 230, 118, 0.25); color: #69f0ae; border: 1px solid #00e676; }
+    .grade-badge.g5 { background: rgba(0, 176, 255, 0.25); color: #40c4ff; border: 1px solid #00b0ff; }
+    .grade-badge.g6 { background: rgba(213, 0, 249, 0.25); color: #ea80fc; border: 1px solid #d500f9; }
+
     .mode-name {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 900;
       color: var(--neon-yellow);
     }
 
     .mode-desc {
-      font-size: 11px;
+      font-size: 10px;
       color: #a4c1e4;
+      line-height: 1.3;
+    }
+
+    @media (max-width: 600px) {
+      .mode-select-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .mode-btn.full-width {
+        flex-direction: column;
+        gap: 4px;
+      }
     }
 
     .start-btn {
@@ -786,6 +839,7 @@
   <!-- 上部ステータスバー -->
   <header class="hud-top">
     <div class="stage-badge">
+      <span id="stage-course" class="stage-course-tag">🌱 １年生コース</span>
       <span id="stage-text">STAGE 1</span>
       <span id="level-badge" class="stage-sub">LEVEL 1 / 3</span>
     </div>
@@ -936,27 +990,45 @@
 
   <!-- スタート画面モーダル -->
   <div class="modal-overlay" id="start-modal">
-    <div class="modal-card">
-      <div style="font-size: 40px; margin-bottom: 5px;">🚀✨</div>
+    <div class="modal-card modal-card-start">
+      <div style="font-size: 38px; margin-bottom: 4px;">🚀✨</div>
       <h1 class="modal-title">ファイブツアーズ<br>JET 漢字バトル</h1>
-      <p class="modal-subtitle">ジェット機で宇宙を進み、迫り来る漢字の「よみ」を答えてビームで撃破せよ！</p>
+      <p class="modal-subtitle">挑戦する学年コースを選んで発進！迫り来る漢字の「よみ」を答えてビームで撃破せよ！</p>
 
       <div class="mode-select-grid">
-        <div class="mode-btn active" data-mode="all" onclick="selectMode('all')">
-          <div class="mode-name">🌟 全ステージ挑戦</div>
-          <div class="mode-desc">1年生〜FINALまで全10問の完全制覇ツアー！</div>
+        <div class="mode-btn active" data-mode="grade1" onclick="selectMode('grade1')">
+          <span class="grade-badge g1">1ねんせい</span>
+          <div class="mode-name">🌱 １年生</div>
+          <div class="mode-desc">配当80字・基本の読み</div>
         </div>
-        <div class="mode-btn" data-mode="low" onclick="selectMode('low')">
-          <div class="mode-name">🌱 低学年ツアー</div>
-          <div class="mode-desc">1・2年生で学習する漢字を中心に出題！</div>
+        <div class="mode-btn" data-mode="grade2" onclick="selectMode('grade2')">
+          <span class="grade-badge g2">2ねんせい</span>
+          <div class="mode-name">🌿 ２年生</div>
+          <div class="mode-desc">配当160字・日常の漢字</div>
         </div>
-        <div class="mode-btn" data-mode="mid" onclick="selectMode('mid')">
-          <div class="mode-name">⚡ 中学年ツアー</div>
-          <div class="mode-desc">3・4年生で学習する漢字を中心に出題！</div>
+        <div class="mode-btn" data-mode="grade3" onclick="selectMode('grade3')">
+          <span class="grade-badge g3">3年生</span>
+          <div class="mode-name">🌸 ３年生</div>
+          <div class="mode-desc">配当200字・身近な熟語</div>
         </div>
-        <div class="mode-btn" data-mode="high" onclick="selectMode('high')">
-          <div class="mode-name">🔥 高学年・難関</div>
-          <div class="mode-desc">5・6年生と卒業レベルの最強漢字ツアー！</div>
+        <div class="mode-btn" data-mode="grade4" onclick="selectMode('grade4')">
+          <span class="grade-badge g4">4年生</span>
+          <div class="mode-name">🍁 ４年生</div>
+          <div class="mode-desc">配当202字・発展の言葉</div>
+        </div>
+        <div class="mode-btn" data-mode="grade5" onclick="selectMode('grade5')">
+          <span class="grade-badge g5">5年生</span>
+          <div class="mode-name">⚡ ５年生</div>
+          <div class="mode-desc">配当193字・少し難しい熟語</div>
+        </div>
+        <div class="mode-btn" data-mode="grade6" onclick="selectMode('grade6')">
+          <span class="grade-badge g6">6年生</span>
+          <div class="mode-name">🔥 ６年生</div>
+          <div class="mode-desc">配当191字・総仕上げレベル</div>
+        </div>
+        <div class="mode-btn full-width" data-mode="all" onclick="selectMode('all')">
+          <div class="mode-name">👑 全学年チャレンジ</div>
+          <div class="mode-desc">1年生〜6年生の全範囲からバランス良く出題！全10問の完全制覇ツアー！</div>
         </div>
       </div>
 
@@ -990,53 +1062,262 @@
    漢字データベース (小学校1年生〜6年生 配当漢字)
    ========================================================================== */
 const KANJI_DATABASE = {
-  // STAGE 1: 小学校1〜2年生レベル
-  stage1: [
-    { kanji: "青空", kana: "あおぞら", grade: "1・2年", hint: "晴れた日の空" },
-    { kanji: "雨水", kana: "あまみず", grade: "1年", hint: "空から降る水" },
-    { kanji: "川原", kana: "かわら", grade: "1・2年", hint: "川のほとりの平らな所" },
-    { kanji: "花火", kana: "はなび", grade: "1・2年", hint: "夜空に咲く光の花" },
+  grade1: [
+    { kanji: "青空", kana: "あおぞら", grade: "1年", hint: "晴れた日の青い空" },
+    { kanji: "雨水", kana: "あまみず", grade: "1年", hint: "空から降る雨の水" },
+    { kanji: "花火", kana: "はなび", grade: "1年", hint: "夜空に打ち上げるきれいな光" },
+    { kanji: "先生", kana: "せんせい", grade: "1年", hint: "学校で勉強を教えてくれる人" },
+    { kanji: "手足", kana: "てあし", grade: "1年", hint: "手と足のこと" },
+    { kanji: "山川", kana: "やまかわ", grade: "1年", hint: "山と川" },
+    { kanji: "森林", kana: "しんりん", grade: "1年", hint: "木がたくさん集まったところ" },
+    { kanji: "草木", kana: "くさき", grade: "1年", hint: "草や木のこと" },
+    { kanji: "夕日", kana: "ゆうひ", grade: "1年", hint: "夕方にしずむ赤い太陽" },
+    { kanji: "水中", kana: "すいちゅう", grade: "1年", hint: "水の中" },
+    { kanji: "男子", kana: "だんし", grade: "1年", hint: "男の子のこと" },
+    { kanji: "女子", kana: "じょし", grade: "1年", hint: "女の子のこと" },
+    { kanji: "車", kana: "くるま", grade: "1年", hint: "人や荷物をのせて走る乗り物" },
+    { kanji: "音", kana: "おと", grade: "1年", hint: "耳にきこえるひびき" },
+    { kanji: "犬", kana: "いぬ", grade: "1年", hint: "人に良くなつくかわいい動物" },
+    { kanji: "虫", kana: "むし", grade: "1年", hint: "カブトムシやチョウなど" },
+    { kanji: "竹", kana: "たけ", grade: "1年", hint: "まっすぐ天にのびる植物" },
+    { kanji: "糸", kana: "いと", grade: "1年", hint: "ぬいものをするときに使う細いすじ" },
+    { kanji: "石", kana: "いし", grade: "1年", hint: "地面やかたい岩のかけら" },
+    { kanji: "貝", kana: "かい", grade: "1年", hint: "かたいからにおおわれた海の生き物" },
+    { kanji: "学校", kana: "がっこう", grade: "1年", hint: "みんなで集まって勉強するところ" },
+    { kanji: "本", kana: "ほん", grade: "1年", hint: "読んで勉強する書物" },
+    { kanji: "目", kana: "め", grade: "1年", hint: "物を見るための器官" },
+    { kanji: "耳", kana: "みみ", grade: "1年", hint: "音をきくための器官" },
+    { kanji: "口", kana: "くち", grade: "1年", hint: "ごはんを食べたりおしゃべりする所" },
+    { kanji: "町", kana: "まち", grade: "1年", hint: "家やお店がたくさんあるところ" },
+    { kanji: "村", kana: "むら", grade: "1年", hint: "山や自然にかこまれた集落" },
+    { kanji: "力", kana: "ちから", grade: "1年", hint: "物を動かしたり走るエネルギー" },
+    { kanji: "王子", kana: "おうじ", grade: "1年", hint: "王様のおとこの子" },
+    { kanji: "大金", kana: "たいきん", grade: "1年", hint: "とても大きなお金のこと" },
+    { kanji: "小川", kana: "おがわ", grade: "1年", hint: "さらさらと流れる小さな川" },
+    { kanji: "足音", kana: "あしおと", grade: "1年", hint: "歩いたり走ったりする足の音" },
+    { kanji: "子犬", kana: "こいぬ", grade: "1年", hint: "かわいらしい小さな犬" },
+    { kanji: "水玉", kana: "みずたま", grade: "1年", hint: "丸い水滴や水玉もよう" },
+    { kanji: "目玉", kana: "めだま", grade: "1年", hint: "目の玉のこと" },
+    { kanji: "火花", kana: "ひばな", grade: "1年", hint: "パチパチと飛び散る火の粒" },
+    { kanji: "文字", kana: "もじ", grade: "1年", hint: "言葉を書き表したしるし" },
+    { kanji: "百円", kana: "ひゃくえん", grade: "1年", hint: "百円玉のお金" },
+    { kanji: "千円", kana: "せんえん", grade: "1年", hint: "千円札のお金" },
+    { kanji: "出口", kana: "でぐち", grade: "1年", hint: "外へ出るところ" },
+    { kanji: "入口", kana: "いりぐち", grade: "1年", hint: "中へ入るところ" },
+    { kanji: "月日", kana: "つきひ", grade: "1年", hint: "年月や日々のながれ" },
+    { kanji: "左手", kana: "ひだりて", grade: "1年", hint: "左側の手" },
+    { kanji: "右手", kana: "みぎて", grade: "1年", hint: "右側の手" },
+  ],
+  grade2: [
     { kanji: "黄色", kana: "きいろ", grade: "2年", hint: "バナナやレモンの色" },
-    { kanji: "親指", kana: "おやゆび", grade: "2年", hint: "手で一番太い指" },
-    { kanji: "海辺", kana: "うみべ", grade: "2年", hint: "海の近くの場所" },
-    { kanji: "兄弟", kana: "きょうだい", grade: "2年", hint: "兄や弟、姉や妹" },
-    { kanji: "朝日", kana: "あさひ", grade: "1年", hint: "朝に昇る太陽" },
-    { kanji: "大風", kana: "おおかぜ", grade: "1・2年", hint: "激しく吹く風" }
+    { kanji: "兄弟", kana: "きょうだい", grade: "2年", hint: "兄や弟、姉や妹のこと" },
+    { kanji: "歌う", kana: "うたう", grade: "2年", hint: "声にメロディーをつけてうたう" },
+    { kanji: "新聞", kana: "しんぶん", grade: "2年", hint: "毎日の出来事を伝える紙" },
+    { kanji: "絵本", kana: "えほん", grade: "2年", hint: "楽しい絵がたくさんある本" },
+    { kanji: "切手", kana: "きって", grade: "2年", hint: "手紙を出すときに貼る小さな紙" },
+    { kanji: "朝顔", kana: "あさがお", grade: "2年", hint: "夏の朝にきれいに咲く花" },
+    { kanji: "算数", kana: "さんすう", grade: "2年", hint: "計算やかたちを学ぶ教科" },
+    { kanji: "時計", kana: "とけい", grade: "2年", hint: "いまの時間を教えてくれる機械" },
+    { kanji: "教室", kana: "きょうしつ", grade: "2年", hint: "学校で勉強をする部屋" },
+    { kanji: "元気", kana: "げんき", grade: "2年", hint: "病気をせず体がじょうぶなこと" },
+    { kanji: "丸い", kana: "まるい", grade: "2年", hint: "ボールのようなえんの形" },
+    { kanji: "岩", kana: "いわ", grade: "2年", hint: "とても大きな石のかたまり" },
+    { kanji: "活気", kana: "かっき", grade: "2年", hint: "元気でにぎやかなようす" },
+    { kanji: "小鳥", kana: "ことり", grade: "2年", hint: "かわいらしい小さな鳥" },
+    { kanji: "夜空", kana: "よぞら", grade: "2年", hint: "星や月がかがやく夜の空" },
+    { kanji: "公園", kana: "こうえん", grade: "2年", hint: "みんなが遊んだり休む広場" },
+    { kanji: "外国", kana: "がいこく", grade: "2年", hint: "自分の国以外の国" },
+    { kanji: "広場", kana: "ひろば", grade: "2年", hint: "広々として人が集まる場所" },
+    { kanji: "東西", kana: "とうざい", grade: "2年", hint: "東と西のほうかく" },
+    { kanji: "南北", kana: "なんぼく", grade: "2年", hint: "南と北のほうかく" },
+    { kanji: "風車", kana: "かざぐるま", grade: "2年", hint: "風を受けてくるくる回るもの" },
+    { kanji: "牛肉", kana: "ぎゅうにく", grade: "2年", hint: "牛のお肉のこと" },
+    { kanji: "走る", kana: "はしる", grade: "2年", hint: "足を速く動かして進む" },
+    { kanji: "読む", kana: "よむ", grade: "2年", hint: "文字を目で追って声に出す" },
+    { kanji: "話す", kana: "はなす", grade: "2年", hint: "言葉を使って人に伝える" },
+    { kanji: "食べる", kana: "たべる", grade: "2年", hint: "ごはんを口に入れて味わう" },
+    { kanji: "心", kana: "こころ", grade: "2年", hint: "人の気持ちや思い" },
+    { kanji: "頭", kana: "あたま", grade: "2年", hint: "首から上の大切な部分" },
+    { kanji: "首", kana: "くび", grade: "2年", hint: "頭と胴体をつなぐ部分" },
+    { kanji: "晴れ", kana: "はれ", grade: "2年", hint: "雲が晴れて太陽が出ること" },
+    { kanji: "冬休み", kana: "ふゆやすみ", grade: "2年", hint: "冬の学校のお休み" },
+    { kanji: "春風", kana: "はるかぜ", grade: "2年", hint: "春に吹くあたたかい風" },
+    { kanji: "野原", kana: "のはら", grade: "2年", hint: "草がたくさん生えた広い野原" },
+    { kanji: "白馬", kana: "はくば", grade: "2年", hint: "毛色が白い美しい馬" },
+    { kanji: "汽車", kana: "きしゃ", grade: "2年", hint: "蒸気や煙を出して走る列車" },
+    { kanji: "池", kana: "いけ", grade: "2年", hint: "水がたまっている小さな場所" },
+    { kanji: "谷", kana: "たに", grade: "2年", hint: "山と山の間にある低いくぼみ" },
+    { kanji: "図書", kana: "としょ", grade: "2年", hint: "本や書物のこと" },
+    { kanji: "親切", kana: "しんせつ", grade: "2年", hint: "人に対してやさしく思いやりがあること" },
   ],
-  // STAGE 2: 小学校3〜4年生レベル
-  stage2: [
+  grade3: [
     { kanji: "平和", kana: "へいわ", grade: "3年", hint: "争いがなく穏やかなこと" },
-    { kanji: "昔話", kana: "むかしばなし", grade: "3年", hint: "昔から伝わるお話" },
-    { kanji: "祭り", kana: "まつり", grade: "3年", hint: "神社やお寺のにぎやかな行事" },
+    { kanji: "昔話", kana: "むかしばなし", grade: "3年", hint: "昔から語りつがれるお話" },
+    { kanji: "祭り", kana: "まつり", grade: "3年", hint: "神社や町のにぎやかな行事" },
+    { kanji: "係員", kana: "かかりいん", grade: "3年", hint: "その仕事をたんとうする人" },
+    { kanji: "荷物", kana: "にもつ", grade: "3年", hint: "手で運んだり送ったりする品物" },
+    { kanji: "相談", kana: "そうだん", grade: "3年", hint: "困ったことを話し合って決める" },
+    { kanji: "道具", kana: "どうぐ", grade: "3年", hint: "作業や運動に役立つ品物" },
+    { kanji: "勝負", kana: "しょうぶ", grade: "3年", hint: "勝ち負けをきそうこと" },
+    { kanji: "鉄橋", kana: "てっきょう", grade: "3年", hint: "鉄で作られた大きな橋" },
+    { kanji: "農業", kana: "のうぎょう", grade: "3年", hint: "お米や野菜を育てる産業" },
+    { kanji: "畑", kana: "はたけ", grade: "3年", hint: "作物を育てるためにたがやした土地" },
+    { kanji: "命", kana: "いのち", grade: "3年", hint: "生きている力・たいせつな生命" },
+    { kanji: "漢字", kana: "かんじ", grade: "3年", hint: "日本で使われる文字のひとつ" },
+    { kanji: "理由", kana: "りゆう", grade: "3年", hint: "そうなったわけ・原因" },
+    { kanji: "薬", kana: "くすり", grade: "3年", hint: "病気やけがを治すためのもの" },
+    { kanji: "笛", kana: "ふえ", grade: "3年", hint: "息をふきこんでピーと鳴らす楽器" },
+    { kanji: "客", kana: "きゃく", grade: "3年", hint: "お店に来て買い物をする人" },
+    { kanji: "暗い", kana: "くらい", grade: "3年", hint: "光が少なくて見えにくいようす" },
+    { kanji: "苦い", kana: "にがい", grade: "3年", hint: "薬やピーマンなどの味" },
+    { kanji: "短い", kana: "みじかい", grade: "3年", hint: "長さや時間が少ないこと" },
+    { kanji: "美しい", kana: "うつくしい", grade: "3年", hint: "見た目がきれいで整っている" },
+    { kanji: "拾う", kana: "ひろう", grade: "3年", hint: "地面にあるものを手にとる" },
+    { kanji: "投げる", kana: "なげる", grade: "3年", hint: "ボールなどを遠くへ飛ばす" },
+    { kanji: "運ぶ", kana: "はこぶ", grade: "3年", hint: "物を別の場所へ移す" },
+    { kanji: "泳ぐ", kana: "およぐ", grade: "3年", hint: "水の中で手足を動かして進む" },
+    { kanji: "集まる", kana: "あつまる", grade: "3年", hint: "人がひとつの場所にそろう" },
+    { kanji: "港", kana: "みなと", grade: "3年", hint: "船が止まったり荷物を積む所" },
+    { kanji: "湖", kana: "みずうみ", grade: "3年", hint: "陸地に囲まれた大きな水たまり" },
+    { kanji: "温かい", kana: "あたたかい", grade: "3年", hint: "寒くなくほどよいぬくもりがある" },
+    { kanji: "速い", kana: "はやい", grade: "3年", hint: "動くスピードがあること" },
+    { kanji: "箱", kana: "はこ", grade: "3年", hint: "中に物を入れる四角いうつわ" },
+    { kanji: "波", kana: "なみ", grade: "3年", hint: "海や湖の水面にできるうねり" },
+    { kanji: "急行", kana: "きゅうこう", grade: "3年", hint: "普通の電車より速く走る列車" },
+    { kanji: "銀色", kana: "ぎんいろ", grade: "3年", hint: "キラキラした銀の輝く色" },
+    { kanji: "重い", kana: "おもい", grade: "3年", hint: "目方が大きくて持ち上げにくい" },
+    { kanji: "中央", kana: "ちゅうおう", grade: "3年", hint: "真ん中の部分" },
+    { kanji: "研究所", kana: "けんきゅうじょ", grade: "3年", hint: "物事を深く調べる施設" },
+    { kanji: "氷", kana: "こおり", grade: "3年", hint: "水が冷たく凍ったもの" },
+    { kanji: "指", kana: "ゆび", grade: "3年", hint: "手の先に5本ある部分" },
+    { kanji: "歯医者", kana: "はいしゃ", grade: "3年", hint: "歯の病気や虫歯を治すお医者さん" },
+  ],
+  grade4: [
     { kanji: "健康", kana: "けんこう", grade: "4年", hint: "体に病気がなく元気なこと" },
-    { kanji: "信号", kana: "しんごう", grade: "3・4年", hint: "青・黄・赤の交通の合図" },
     { kanji: "固い", kana: "かたい", grade: "4年", hint: "力を加えても形がくずれない" },
-    { kanji: "鏡", kana: "かがみ", grade: "4年", hint: "姿を映すもの" },
-    { kanji: "勇気", kana: "ゆうき", grade: "4年", hint: "恐れずに立ち向かう心" },
-    { kanji: "係員", kana: "かかりいん", grade: "3年", hint: "仕事を担当する人" },
-    { kanji: "秒針", kana: "びょうしん", grade: "3年", hint: "時計の秒を示す針" }
+    { kanji: "鏡", kana: "かがみ", grade: "4年", hint: "自分の姿をきれいに映すもの" },
+    { kanji: "勇気", kana: "ゆうき", grade: "4年", hint: "こわがらずに立ち向かう心" },
+    { kanji: "信号", kana: "しんごう", grade: "4年", hint: "赤・黄・青の交通の合図" },
+    { kanji: "辞典", kana: "じてん", grade: "4年", hint: "言葉の意味や漢字を調べる本" },
+    { kanji: "努力", kana: "どりょく", grade: "4年", hint: "目標のために一生懸命がんばること" },
+    { kanji: "協力", kana: "きょうりょく", grade: "4年", hint: "同じ目的に向かって力を合わせる" },
+    { kanji: "印刷", kana: "いんさつ", grade: "4年", hint: "機械で紙に文字や絵を刷る" },
+    { kanji: "季節", kana: "きせつ", grade: "4年", hint: "春夏秋冬のうつりかわり" },
+    { kanji: "成功", kana: "せいこう", grade: "4年", hint: "目指していたことをやりとげる" },
+    { kanji: "失敗", kana: "しっぱい", grade: "4年", hint: "やりそこなってうまくいかないこと" },
+    { kanji: "満点", kana: "まんてん", grade: "4年", hint: "テストで決められた一番高い点数" },
+    { kanji: "願う", kana: "ねがう", grade: "4年", hint: "こうなってほしいと心から祈る" },
+    { kanji: "唱える", kana: "となえる", grade: "4年", hint: "声を出してとなえる・じゅもんなど" },
+    { kanji: "浅い", kana: "あさい", grade: "4年", hint: "水の深さがすくないこと" },
+    { kanji: "束", kana: "たば", grade: "4年", hint: "花などをひとつにまとめたもの" },
+    { kanji: "置く", kana: "おく", grade: "4年", hint: "物をある場所にすえること" },
+    { kanji: "照らす", kana: "てらす", grade: "4年", hint: "光を当てて明るく見せる" },
+    { kanji: "害虫", kana: "がいちゅう", grade: "4年", hint: "人や植物にわるい影響を与える虫" },
+    { kanji: "牧場", kana: "ぼくじょう", grade: "4年", hint: "牛や馬をのびのび飼う広い土地" },
+    { kanji: "倉", kana: "くら", grade: "4年", hint: "大事な荷物を保管する頑丈な建物" },
+    { kanji: "命令", kana: "めいれい", grade: "4年", hint: "上の人が言いつけること" },
+    { kanji: "札", kana: "ふだ", grade: "4年", hint: "名前や数字を書いた小さな板や紙" },
+    { kanji: "欠点", kana: "けってん", grade: "4年", hint: "足りないところや苦手な点" },
+    { kanji: "結ぶ", kana: "むすぶ", grade: "4年", hint: "ひもや糸をつなぎ合わせる" },
+    { kanji: "景勝", kana: "けいしょう", grade: "4年", hint: "けしきがすぐれて美しいこと" },
+    { kanji: "残業", kana: "ざんぎょう", grade: "4年", hint: "決められた時間をこえて働くこと" },
+    { kanji: "各自", kana: "かくじ", grade: "4年", hint: "めいめい・ひとりひとりのこと" },
+    { kanji: "観客", kana: "かんきゃく", grade: "4年", hint: "試合や劇などを見に来た人々" },
+    { kanji: "器用", kana: "きよう", grade: "4年", hint: "手先などを上手に動かせること" },
+    { kanji: "軍隊", kana: "ぐんたい", grade: "4年", hint: "国を守るために組織された部隊" },
+    { kanji: "変形", kana: "へんけい", grade: "4年", hint: "形が別の形に変わること" },
+    { kanji: "包む", kana: "つつむ", grade: "4年", hint: "紙や布でくるんでおおう" },
+    { kanji: "冷たい", kana: "つめたい", grade: "4年", hint: "温度がひくくてひんやりする" },
+    { kanji: "案内", kana: "あんない", grade: "4年", hint: "道や場所を教えて連れていくこと" },
+    { kanji: "笑う", kana: "わらう", grade: "4年", hint: "うれしくて声をたててほほえむ" },
+    { kanji: "戦う", kana: "たたかう", grade: "4年", hint: "力をつくして相手と競い合う" },
+    { kanji: "飛ぶ", kana: "とぶ", grade: "4年", hint: "空中を羽ばたいて進む" },
+    { kanji: "静か", kana: "しずか", grade: "4年", hint: "音や声がしなくて落ち着いたさま" },
   ],
-  // STAGE 3: 小学校5〜6年生レベル
-  stage3: [
-    { kanji: "宇宙", kana: "うちゅう", grade: "6年", hint: "地球をとりまく空間" },
-    { kanji: "複雑", kana: "ふくざつ", grade: "5年", hint: "入り組んでいて難しいこと" },
-    { kanji: "砂糖", kana: "さとう", grade: "6年", hint: "甘い調味料" },
-    { kanji: "尊敬", kana: "そんけい", grade: "6年", hint: "相手を尊びうやまうこと" },
-    { kanji: "憲法", kana: "けんぽう", grade: "6年", hint: "国の基本となる最高法規" },
-    { kanji: "障子", kana: "しょうじ", grade: "6年", hint: "和室の明かり取りの建具" },
-    { kanji: "貧しい", kana: "まずしい", grade: "5年", hint: "お金や物が乏しいこと" },
-    { kanji: "素直", kana: "すなお", grade: "5年", hint: "心がひねくれていないこと" },
-    { kanji: "模範", kana: "もはん", grade: "6年", hint: "見習うべき手本" },
-    { kanji: "呼吸", kana: "こきゅう", grade: "6年", hint: "息を吸ったり吐いたりすること" }
+  grade5: [
+    { kanji: "複雑", kana: "ふくざつ", grade: "5年", hint: "入り組んでいて簡単ではないこと" },
+    { kanji: "貧しい", kana: "まずしい", grade: "5年", hint: "お金や物が乏しく足りないようす" },
+    { kanji: "素直", kana: "すなお", grade: "5年", hint: "心がひねくれておらずまっすぐなさま" },
+    { kanji: "責任", kana: "せきにん", grade: "5年", hint: "引き受けた任務を果たす義務" },
+    { kanji: "豊か", kana: "ゆたか", grade: "5年", hint: "物や自然、心が満ち足りているさま" },
+    { kanji: "解く", kana: "とく", grade: "5年", hint: "結び目やテストの問題を解く" },
+    { kanji: "賛成", kana: "さんせい", grade: "5年", hint: "意見によいと同意すること" },
+    { kanji: "能率", kana: "のうりつ", grade: "5年", hint: "同じ時間でこなせる仕事のはかどり" },
+    { kanji: "防ぐ", kana: "ふせぐ", grade: "5年", hint: "危険や病気をよせつけないようにする" },
+    { kanji: "耕す", kana: "たがやす", grade: "5年", hint: "田畑の土を掘ってやわらかくする" },
+    { kanji: "制度", kana: "せいど", grade: "5年", hint: "社会で決まった仕組みやルール" },
+    { kanji: "測る", kana: "はかる", grade: "5年", hint: "長さや時間、深さを調べる" },
+    { kanji: "導く", kana: "みちびく", grade: "5年", hint: "正しい方向へ道案内する" },
+    { kanji: "額", kana: "ひたい", grade: "5年", hint: "まゆ毛の上からおでこの部分" },
+    { kanji: "貸す", kana: "かす", grade: "5年", hint: "後で返してもらう約束で物を渡す" },
+    { kanji: "迷う", kana: "まよう", grade: "5年", hint: "どちらにすべきか決めかねる" },
+    { kanji: "厚い", kana: "あつい", grade: "5年", hint: "本のかさや壁の厚みがあること" },
+    { kanji: "往復", kana: "おうふく", grade: "5年", hint: "目的地へ行ってまた戻ってくること" },
+    { kanji: "鉱物", kana: "こうぶつ", grade: "5年", hint: "地中から採掘される天然の資源" },
+    { kanji: "条件", kana: "じょうけん", grade: "5年", hint: "物事が成立するための決まり" },
+    { kanji: "燃える", kana: "もえる", grade: "5年", hint: "火がついて光や熱を出す" },
+    { kanji: "破る", kana: "やぶる", grade: "5年", hint: "紙を引き裂く・約束をたがえる" },
+    { kanji: "授ける", kana: "さずける", grade: "5年", hint: "目上の人が賞などを与える" },
+    { kanji: "救う", kana: "すくう", grade: "5年", hint: "苦しみやピンチから助け出す" },
+    { kanji: "易しい", kana: "やさしい", grade: "5年", hint: "難しくなく簡単に理解できる" },
+    { kanji: "険しい", kana: "けわしい", grade: "5年", hint: "山の傾斜が急で登るのが大変なさま" },
+    { kanji: "絶好", kana: "ぜっこう", grade: "5年", hint: "これ以上ないほど良いタイミング" },
+    { kanji: "増減", kana: "ぞうげん", grade: "5年", hint: "ふえることとへること" },
+    { kanji: "貿易", kana: "ぼうえき", grade: "5年", hint: "外国と品物を売り買いすること" },
+    { kanji: "護衛", kana: "ごえい", grade: "5年", hint: "危険がないように付き添って守る" },
+    { kanji: "快晴", kana: "かいせい", grade: "5年", hint: "雲ひとつない気持ちの良い晴れ" },
+    { kanji: "現金", kana: "げんきん", grade: "5年", hint: "紙幣や硬貨など手元のお金" },
+    { kanji: "似合う", kana: "にあう", grade: "5年", hint: "服や雰囲気がぴったり合っている" },
+    { kanji: "余分", kana: "よぶん", grade: "5年", hint: "必要な分よりも余っていること" },
+    { kanji: "桜", kana: "さくら", grade: "5年", hint: "春にうすピンクの花を咲かせる木" },
+    { kanji: "保つ", kana: "たもつ", grade: "5年", hint: "良い状態をくずさずそのままにしておく" },
+    { kanji: "布", kana: "ぬの", grade: "5年", hint: "糸を織って作ったやわらかい生地" },
+    { kanji: "粉", kana: "こな", grade: "5年", hint: "細かくくだいたこな・小麦粉など" },
+    { kanji: "潔い", kana: "いさぎよい", grade: "5年", hint: "みれんがなくさっぱりしているさま" },
+    { kanji: "混ざる", kana: "まざる", grade: "5年", hint: "いろいろなものがひとつに溶け合う" },
   ],
-  // FINAL BOSS: 最難関・卒業レベル
-  final: [
-    { kanji: "桜桃", kana: "おうとう", grade: "6年", hint: "さくらんぼのこと" },
-    { kanji: "縦横", kana: "じゅうおう", grade: "6年", hint: "たてとよこ、四方八方" },
-    { kanji: "厳重", kana: "げんじゅう", grade: "6年", hint: "少しの油断もないよう厳しいこと" },
-    { kanji: "親孝行", kana: "おやこうこう", grade: "6年", hint: "両親を大切にして尽くすこと" },
-    { kanji: "処置", kana: "しょち", grade: "6年", hint: "事態に対処して始末をつけること" }
-  ]
+  grade6: [
+    { kanji: "宇宙", kana: "うちゅう", grade: "6年", hint: "地球をとりまく星々の無限の空間" },
+    { kanji: "砂糖", kana: "さとう", grade: "6年", hint: "料理を甘くする白い調味料" },
+    { kanji: "尊敬", kana: "そんけい", grade: "6年", hint: "立派な人として敬い尊ぶこと" },
+    { kanji: "憲法", kana: "けんぽう", grade: "6年", hint: "国の最高のきまりとなる法規" },
+    { kanji: "呼吸", kana: "こきゅう", grade: "6年", hint: "息を吸ったり吐いたりすること" },
+    { kanji: "障子", kana: "しょうじ", grade: "6年", hint: "和室の明かりを通す格子の建具" },
+    { kanji: "縦横", kana: "じゅうおう", grade: "6年", hint: "たてとよこ・四方八方" },
+    { kanji: "処置", kana: "しょち", grade: "6年", hint: "事態に対処してうまく始末をつける" },
+    { kanji: "厳重", kana: "げんじゅう", grade: "6年", hint: "少しの油断もなく警戒すること" },
+    { kanji: "疑問", kana: "ぎもん", grade: "6年", hint: "本当かどうか疑わしく思うこと" },
+    { kanji: "朗読", kana: "ろうどく", grade: "6年", hint: "声に出して本や詩を読み上げること" },
+    { kanji: "窓", kana: "まど", grade: "6年", hint: "部屋に光や風を入れるための窓" },
+    { kanji: "秘密", kana: "ひみつ", grade: "6年", hint: "人には隠して知らせないこと" },
+    { kanji: "激しい", kana: "はげしい", grade: "6年", hint: "勢いが強くてすさまじいようす" },
+    { kanji: "視界", kana: "しかい", grade: "6年", hint: "目で見通すことができる範囲" },
+    { kanji: "脳", kana: "のう", grade: "6年", hint: "考えることや体を指示する頭の器官" },
+    { kanji: "宝", kana: "たから", grade: "6年", hint: "とても価値があって大切な品物" },
+    { kanji: "盛んな", kana: "さかんな", grade: "6年", hint: "活気があって勢いが良いさま" },
+    { kanji: "洗う", kana: "あらう", grade: "6年", hint: "水や石けんで汚れを落とす" },
+    { kanji: "幕府", kana: "ばくふ", grade: "6年", hint: "武士の頭領が政治を行った組織" },
+    { kanji: "忠実", kana: "ちゅうじつ", grade: "6年", hint: "真心をもって教えや任務に従うこと" },
+    { kanji: "訪ねる", kana: "たずねる", grade: "6年", hint: "人の家や名所へ足を運ぶ" },
+    { kanji: "卵", kana: "たまご", grade: "6年", hint: "鳥や魚が産む殻や膜に包まれたもの" },
+    { kanji: "誤り", kana: "あやまり", grade: "6年", hint: "まちがい・正しくないこと" },
+    { kanji: "困る", kana: "こまる", grade: "6年", hint: "どうしたらいいか途方に暮れる" },
+    { kanji: "姿", kana: "すがた", grade: "6年", hint: "人の形や外見のようす" },
+    { kanji: "補う", kana: "おぎなう", grade: "6年", hint: "不足している分を足して満たす" },
+    { kanji: "垂れる", kana: "たれる", grade: "6年", hint: "下に向かってぶら下がる・したたる" },
+    { kanji: "警備", kana: "けいび", grade: "6年", hint: "事故や悪事を警戒して防ぐこと" },
+    { kanji: "机", kana: "つくえ", grade: "6年", hint: "勉強や読み書きをする台" },
+    { kanji: "骨", kana: "ほね", grade: "6年", hint: "人の体を支える硬い骨格" },
+    { kanji: "幼い", kana: "おさない", grade: "6年", hint: "年齢が若く子どものようす" },
+    { kanji: "欲", kana: "よく", grade: "6年", hint: "何かが欲しいと願う心" },
+    { kanji: "裏", kana: "うら", grade: "6年", hint: "表の反対側の面" },
+    { kanji: "針", kana: "はり", grade: "6年", hint: "先がとがった細い金属・時計の針" },
+    { kanji: "階段", kana: "かいだん", grade: "6年", hint: "上や下へ行くための段" },
+    { kanji: "親孝行", kana: "おやこうこう", grade: "6年", hint: "親を大切にして心を尽くすこと" },
+    { kanji: "純白", kana: "じゅんぱく", grade: "6年", hint: "混じり気のないまっ白な色" },
+    { kanji: "縮む", kana: "ちぢむ", grade: "6年", hint: "長さや体積が小さくなる" },
+    { kanji: "絹", kana: "きぬ", grade: "6年", hint: "カイコのまゆからとる美しい糸" },
+  ],
 };
 
 /* ==========================================================================
@@ -1489,7 +1770,7 @@ requestAnimationFrame(renderLoop);
 /* ==========================================================================
    ゲーム進行・ステート管理ロジック
    ========================================================================== */
-let gameMode = 'all';
+let gameMode = 'grade1';
 let currentQuestionList = [];
 let currentQuestionIndex = 0;
 let currentAnswer = "";
@@ -1499,6 +1780,16 @@ let timerInterval = null;
 let isAnswerLocked = false;
 let solvedHistory = [];
 let currentInputMode = 'blocks';
+
+const COURSE_NAMES = {
+  grade1: "🌱 １年生コース",
+  grade2: "🌿 ２年生コース",
+  grade3: "🌸 ３年生コース",
+  grade4: "🍁 ４年生コース",
+  grade5: "⚡ ５年生コース",
+  grade6: "🔥 ６年生コース",
+  all: "👑 全学年チャレンジ"
+};
 
 // DOM要素
 const elStageText = document.getElementById('stage-text');
@@ -1546,19 +1837,27 @@ function buildQuestionList() {
   let list = [];
   const shuffle = (arr) => [...arr].sort(() => Math.random() - 0.5);
 
-  if (gameMode === 'low') {
-    list = shuffle(KANJI_DATABASE.stage1).slice(0, 6);
-  } else if (gameMode === 'mid') {
-    list = shuffle(KANJI_DATABASE.stage2).slice(0, 6);
-  } else if (gameMode === 'high') {
-    list = [...shuffle(KANJI_DATABASE.stage3).slice(0, 5), ...shuffle(KANJI_DATABASE.final).slice(0, 2)];
+  if (gameMode === 'grade1') {
+    list = shuffle(KANJI_DATABASE.grade1).slice(0, 10);
+  } else if (gameMode === 'grade2') {
+    list = shuffle(KANJI_DATABASE.grade2).slice(0, 10);
+  } else if (gameMode === 'grade3') {
+    list = shuffle(KANJI_DATABASE.grade3).slice(0, 10);
+  } else if (gameMode === 'grade4') {
+    list = shuffle(KANJI_DATABASE.grade4).slice(0, 10);
+  } else if (gameMode === 'grade5') {
+    list = shuffle(KANJI_DATABASE.grade5).slice(0, 10);
+  } else if (gameMode === 'grade6') {
+    list = shuffle(KANJI_DATABASE.grade6).slice(0, 10);
   } else {
-    // 全問ツアーズモード: Stage1(3問) -> Stage2(3問) -> Stage3(3問) -> FINAL(1問)
+    // 全学年チャレンジ: 1年(1問) -> 2年(1問) -> 3年(2問) -> 4年(2問) -> 5年(2問) -> 6年(2問)
     list = [
-      ...shuffle(KANJI_DATABASE.stage1).slice(0, 3),
-      ...shuffle(KANJI_DATABASE.stage2).slice(0, 3),
-      ...shuffle(KANJI_DATABASE.stage3).slice(0, 3),
-      ...shuffle(KANJI_DATABASE.final).slice(0, 1)
+      ...shuffle(KANJI_DATABASE.grade1).slice(0, 1),
+      ...shuffle(KANJI_DATABASE.grade2).slice(0, 1),
+      ...shuffle(KANJI_DATABASE.grade3).slice(0, 2),
+      ...shuffle(KANJI_DATABASE.grade4).slice(0, 2),
+      ...shuffle(KANJI_DATABASE.grade5).slice(0, 2),
+      ...shuffle(KANJI_DATABASE.grade6).slice(0, 2)
     ];
   }
   return list;
@@ -1679,8 +1978,14 @@ function loadQuestion(index) {
   const q = currentQuestionList[index];
   const total = currentQuestionList.length;
 
-  // ステージラベル判定
-  if (index === total - 1 && (gameMode === 'all' || gameMode === 'high')) {
+  // コースバッジ更新
+  const elStageCourse = document.getElementById('stage-course');
+  if (elStageCourse) {
+    elStageCourse.textContent = COURSE_NAMES[gameMode] || "ツアー";
+  }
+
+  // ステージラベル判定 (全10問: STAGE 1 (1-3), STAGE 2 (4-6), STAGE 3 (7-9), FINAL (10))
+  if (index === total - 1) {
     elStageText.textContent = "FINAL STAGE";
     elStageText.style.color = "var(--neon-red)";
     elLevelBadge.textContent = "BOSS BATTLE";
@@ -1951,17 +2256,18 @@ function showGameResult(isWin) {
     list.appendChild(row);
   });
 
+  const courseTitle = COURSE_NAMES[gameMode] || "ツアーズ";
   if (isWin) {
     icon.textContent = "🏆";
     title.textContent = "MISSION COMPLETE!";
     title.style.color = "var(--neon-yellow)";
-    msg.textContent = "おめでとう！全ターゲットの撃破に成功した！";
+    msg.textContent = `おめでとう！【${courseTitle}】全ターゲットを完全撃破！`;
     sound.playCorrect();
   } else {
     icon.textContent = "💥";
     title.textContent = "MISSION FAILED...";
     title.style.color = "var(--neon-red)";
-    msg.textContent = "全機撃墜...！漢字をマスターして再挑戦せよ！";
+    msg.textContent = `【${courseTitle}】全機撃墜...！復習してもう一度挑戦せよ！`;
   }
 
   modal.style.display = 'flex';

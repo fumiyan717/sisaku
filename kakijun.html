@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>漢字の書き順マスター 小学1年生 全80字 - 書き順アニメーション＆手書きなぞり練習</title>
+  <title>漢字の書き順マスター 小学校全学年 1,026字 - 書き順アニメーション＆手書きなぞり練習</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✏️</text></svg>">
   <style>
     :root {
@@ -117,6 +117,54 @@
       box-shadow: 0 2px 6px rgba(236, 72, 153, 0.4);
     }
 
+    /* === 学年セレクターバー === */
+    .grade-bar-wrapper {
+      background: #ffffff;
+      border-bottom: 2px solid #e2e8f0;
+      padding: 8px 16px;
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+      gap: 8px;
+      position: sticky;
+      top: 56px;
+      z-index: 90;
+    }
+
+    .grade-chip {
+      background: #f1f5f9;
+      border: 2px solid #cbd5e1;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: #475569;
+      cursor: pointer;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+
+    .grade-chip:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .grade-chip.active {
+      background: #0284c7;
+      border-color: #0284c7;
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);
+    }
+
+    .grade-count-tag {
+      font-size: 0.75rem;
+      opacity: 0.85;
+      font-weight: normal;
+    }
+
     /* === メインコンテナ === */
     .app-main {
       flex: 1;
@@ -224,7 +272,7 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     }
 
-    /* === 自作オリジナル教材カードフレーム === */
+    /* === 教材カードフレーム === */
     .shingakusha-card {
       background: #fff;
       border-radius: 16px;
@@ -293,7 +341,7 @@
       cursor: crosshair;
     }
 
-    /* 始点・終点ガイドピン・ヒントアニメ */
+    /* 始点・終点ガイドピン */
     .stroke-guide-pin {
       position: absolute;
       width: 30px;
@@ -624,7 +672,7 @@
       text-shadow: 0 2px 4px rgba(225, 29, 72, 0.2);
     }
 
-    /* === 右カラム: 80字一覧 & 検索・フィルタ === */
+    /* === 右カラム: 漢字一覧 & 検索・フィルタ === */
     .list-workspace {
       background: #fff;
       border-radius: 16px;
@@ -633,9 +681,9 @@
       display: flex;
       flex-direction: column;
       gap: 14px;
-      max-height: calc(100vh - 100px);
+      max-height: calc(100vh - 120px);
       position: sticky;
-      top: 80px;
+      top: 130px;
     }
 
     @media (max-width: 960px) {
@@ -823,12 +871,12 @@
     /* 印刷スタイル */
     @media print {
       body { background: #fff; }
-      .top-header, .mode-tab-group, .controls-panel, .list-workspace, .kanji-nav-bar, .app-footer-credit { display: none !important; }
+      .top-header, .grade-bar-wrapper, .mode-tab-group, .controls-panel, .list-workspace, .kanji-nav-bar, .app-footer-credit { display: none !important; }
       .app-main { display: block; padding: 0; }
       .shingakusha-card { border: 2px solid #000; box-shadow: none; width: 100%; max-width: 600px; margin: 0 auto; }
       #trace-canvas { display: none !important; }
       #kanji-svg-view { display: block !important; }
-      .kvg-stroke { stroke: #cbd5e1 !important; } /* なぞり書き練習用グレー */
+      .kvg-stroke { stroke: #cbd5e1 !important; }
     }
   </style>
 </head>
@@ -838,7 +886,7 @@
   <header class="top-header">
     <div class="header-title-group">
       <h1>✏️ 漢字の書き順マスター</h1>
-      <span class="header-badge">小学1年生 全80字</span>
+      <span class="header-badge" id="header-grade-badge">小学校全学年 1,026字</span>
     </div>
     <div class="header-actions">
       <button class="nav-btn" id="btn-audio-toggle" onclick="toggleAudio()" title="音声をきりかえ">
@@ -853,6 +901,28 @@
     </div>
   </header>
 
+  <!-- 学年切り替えバー (全学年対応) -->
+  <div class="grade-bar-wrapper">
+    <button class="grade-chip active" data-grade="1" onclick="switchGrade(1)">
+      🌱 1年生 <span class="grade-count-tag" id="grade-badge-1">(80字)</span>
+    </button>
+    <button class="grade-chip" data-grade="2" onclick="switchGrade(2)">
+      🌿 2年生 <span class="grade-count-tag" id="grade-badge-2">(160字)</span>
+    </button>
+    <button class="grade-chip" data-grade="3" onclick="switchGrade(3)">
+      🌸 3年生 <span class="grade-count-tag" id="grade-badge-3">(200字)</span>
+    </button>
+    <button class="grade-chip" data-grade="4" onclick="switchGrade(4)">
+      🍁 4年生 <span class="grade-count-tag" id="grade-badge-4">(202字)</span>
+    </button>
+    <button class="grade-chip" data-grade="5" onclick="switchGrade(5)">
+      ⚡ 5年生 <span class="grade-count-tag" id="grade-badge-5">(193字)</span>
+    </button>
+    <button class="grade-chip" data-grade="6" onclick="switchGrade(6)">
+      🔥 6年生 <span class="grade-count-tag" id="grade-badge-6">(191字)</span>
+    </button>
+  </div>
+
   <!-- メインコンテンツ -->
   <main class="app-main">
 
@@ -863,13 +933,13 @@
       <div class="kanji-nav-bar">
         <button class="nav-arrow-btn" id="btn-prev-kanji" onclick="navigateKanji(-1)">◀ まえ</button>
         <div class="current-kanji-info">
-          <div class="current-kanji-num" id="current-card-no">カード No. 1 / 80</div>
+          <div class="current-kanji-num" id="current-card-no">1年生 No. 1 / 80</div>
           <div class="current-kanji-lead" id="current-kanji-title">木 (き)</div>
         </div>
         <button class="nav-arrow-btn" id="btn-next-kanji" onclick="navigateKanji(1)">つぎ ▶</button>
       </div>
 
-      <!-- モード切替タブ（完全オリジナル2本柱） -->
+      <!-- モード切替タブ -->
       <div class="mode-tab-group">
         <button class="mode-tab-btn active" id="tab-anim" onclick="switchMode('anim')">
           🎬 かきじゅん アニメ
@@ -879,7 +949,7 @@
         </button>
       </div>
 
-      <!-- オリジナル 教材カードフレーム -->
+      <!-- 教材カードフレーム -->
       <div class="shingakusha-card" id="main-kanji-card">
 
         <!-- 上部：漢字マス（十字リーダー線） -->
@@ -933,7 +1003,7 @@
 
         <!-- 最下部メタ情報 -->
         <div class="card-footer-meta">
-          <span class="brand-tag">文部科学省 学習指導要領配当</span>
+          <span class="brand-tag" id="current-grade-tag">文部科学省 1年生配当</span>
           <span class="strokes-meta-tag" id="stroke-count-tag">全 4 画</span>
         </div>
       </div>
@@ -985,11 +1055,11 @@
 
     </div>
 
-    <!-- 右カラム: 80字一覧 & 検索 -->
+    <!-- 右カラム: 漢字一覧 & 検索 -->
     <div class="list-workspace">
       <div class="list-header">
         <div class="list-title">
-          📚 1年生の漢字リスト <span style="font-size: 0.85rem; color: #64748b; font-weight: normal;" id="list-count-badge">(全80字)</span>
+          📚 <span id="list-grade-title">1年生の漢字リスト</span> <span style="font-size: 0.85rem; color: #64748b; font-weight: normal;" id="list-count-badge">(全80字)</span>
         </div>
         <div class="filter-tabs">
           <button class="filter-tab-btn active" onclick="sortKanjiList('order', this)">教科書順</button>
@@ -1007,7 +1077,7 @@
 
       <!-- 漢字グリッドスクロール -->
       <div class="kanji-grid-scroll" id="kanji-grid-container">
-        <!-- JSで80字生成 -->
+        <!-- JSで動的生成 -->
       </div>
     </div>
 
@@ -1015,10 +1085,10 @@
 
   <!-- フッターライセンス表記 -->
   <footer class="app-footer-credit">
-    小学校第1学年配当漢字（80字）準拠 ｜ ストロークデータ: <a href="https://kanjivg.tagaini.net/" target="_blank" rel="noopener">KanjiVG</a> (CC BY-SA 3.0 Ulrich Apel) ｜ 完全オリジナル開発
+    文部科学省 小学校学習指導要領配当漢字（全1,026字）準拠 ｜ ストロークデータ: <a href="https://kanjivg.tagaini.net/" target="_blank" rel="noopener">KanjiVG</a> (CC BY-SA 3.0 Ulrich Apel) ｜ 完全オリジナル開発
   </footer>
 
-  <!-- 書き順データ読み込み -->
+  <!-- 書き順データ読み込み (全学年1026字統合データ) -->
   <script src="kakijun_data.js"></script>
 
   <!-- 書き順マスター メインロジック -->
@@ -1041,7 +1111,6 @@
       return idx < 5 ? STROKE_COLORS[idx] : STROKE_COLORS[5];
     }
 
-    /* 筆使い注記の判定 */
     function getInstructionInfo(kvgType) {
       if (!kvgType) return { action: 'とめる', type: 'dot' };
       if (kvgType.includes('㇒')) return { action: 'はらう', type: 'arrow' };
@@ -1055,20 +1124,22 @@
     /* ==========================================================================
        状態管理
        ========================================================================== */
-    let allKanji = window.KAKIJUN_DATA || [];
-    let currentIndex = 0; // 0〜79
+    const allDataByGrade = window.KAKIJUN_DATA_BY_GRADE || { 1: window.KAKIJUN_DATA || [] };
+    let currentGrade = 1; // 1〜6
+    let currentKanjiList = allDataByGrade[1] || [];
+    let currentIndex = 0; // 学年内インデックス
     let currentMode = 'anim'; // 'anim', 'trace'
     let isPlaying = false;
     let animSpeed = 1.0;
     let animTimeout = null;
-    let currentStep = 0; // 0 = 何も描かれていない, 1〜strokesCount
+    let currentStep = 0;
     let isAudioEnabled = true;
     let showTraceGuide = true;
 
     // なぞり書き状態
     let traceCanvas, traceCtx;
-    let traceCurrentStrokeIdx = 0; // 0〜strokesCount-1
-    let userDrawnStrokes = []; // 描いたパス履歴
+    let traceCurrentStrokeIdx = 0;
+    let userDrawnStrokes = [];
     let isDrawing = false;
     let currentPathPoints = [];
 
@@ -1113,7 +1184,6 @@
         const now = audioCtx.currentTime;
 
         if (type === 'stroke') {
-          // 筆を走らせるシュッという音
           const osc = audioCtx.createOscillator();
           const gain = audioCtx.createGain();
           osc.type = 'sine';
@@ -1126,7 +1196,6 @@
           osc.start(now);
           osc.stop(now + 0.12);
         } else if (type === 'step') {
-          // 1画進んだときのピン音
           const osc = audioCtx.createOscillator();
           const gain = audioCtx.createGain();
           osc.type = 'triangle';
@@ -1138,7 +1207,6 @@
           osc.start(now);
           osc.stop(now + 0.18);
         } else if (type === 'fanfare') {
-          // 合格ファンファーレ (ド・ミ・ソ・ド)
           const notes = [523.25, 659.25, 783.99, 1046.50];
           notes.forEach((freq, idx) => {
             const osc = audioCtx.createOscillator();
@@ -1177,7 +1245,7 @@
     }
 
     function speakCurrentKanji() {
-      const data = allKanji[currentIndex];
+      const data = currentKanjiList[currentIndex];
       if (!data) return;
       let speech = `${data.kanji}。`;
       if (data.kunyomi && data.kunyomi !== '—') {
@@ -1191,25 +1259,39 @@
     }
 
     /* ==========================================================================
-       初期化 & 漢字切替
+       初期化 & 学年切替
        ========================================================================== */
     window.addEventListener('DOMContentLoaded', () => {
+      initTraceCanvas();
+
       const urlParams = new URLSearchParams(window.location.search);
       const qKanji = urlParams.get('kanji');
+      const qGrade = parseInt(urlParams.get('grade'), 10);
       const qId = parseInt(urlParams.get('id'), 10);
 
+      let targetGrade = 1;
+      let targetIndex = 0;
+
+      // 漢字名から学年とインデックスを自動検出
       if (qKanji) {
-        const foundIdx = allKanji.findIndex(k => k.kanji === qKanji);
-        if (foundIdx !== -1) currentIndex = foundIdx;
-      } else if (!isNaN(qId) && qId >= 1 && qId <= allKanji.length) {
-        currentIndex = qId - 1;
+        for (let g = 1; g <= 6; g++) {
+          const list = allDataByGrade[g] || [];
+          const idx = list.findIndex(k => k.kanji === qKanji);
+          if (idx !== -1) {
+            targetGrade = g;
+            targetIndex = idx;
+            break;
+          }
+        }
+      } else if (!isNaN(qGrade) && qGrade >= 1 && qGrade <= 6) {
+        targetGrade = qGrade;
+        if (!isNaN(qId) && qId >= 1) {
+          targetIndex = Math.max(0, qId - 1);
+        }
       }
 
-      initTraceCanvas();
-      renderKanjiGrid();
-      loadKanji(currentIndex);
+      switchGrade(targetGrade, targetIndex);
 
-      // キーボード操作対応
       window.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowLeft') navigateKanji(-1);
         if (e.key === 'ArrowRight') navigateKanji(1);
@@ -1220,44 +1302,57 @@
       });
     });
 
-    function loadKanji(idx) {
-      if (idx < 0 || idx >= allKanji.length) return;
-      currentIndex = idx;
-      const data = allKanji[currentIndex];
+    function switchGrade(grade, initialIndex = 0) {
+      currentGrade = grade;
+      currentKanjiList = allDataByGrade[grade] || [];
 
-      // ナビバー更新
-      document.getElementById('current-card-no').textContent = `カード No. ${data.id} / 80`;
+      // 学年チップのUI更新
+      document.querySelectorAll('.grade-chip').forEach(chip => {
+        const g = parseInt(chip.dataset.grade, 10);
+        chip.classList.toggle('active', g === currentGrade);
+      });
+
+      document.getElementById('header-grade-badge').textContent = `${currentGrade}年生 (${currentKanjiList.length}字)`;
+      document.getElementById('list-grade-title').textContent = `${currentGrade}年生の漢字リスト`;
+      document.getElementById('current-grade-tag').textContent = `文部科学省 ${currentGrade}年生配当`;
+
+      renderKanjiGrid();
+      loadKanji(Math.min(initialIndex, currentKanjiList.length - 1));
+    }
+
+    function loadKanji(idx) {
+      if (idx < 0 || idx >= currentKanjiList.length) return;
+      currentIndex = idx;
+      const data = currentKanjiList[currentIndex];
+
+      document.getElementById('current-card-no').textContent = `${currentGrade}年生 No. ${data.id} / ${currentKanjiList.length}`;
       const firstKun = (data.kunyomi && data.kunyomi !== '—') ? data.kunyomi.split('、')[0] : '';
       const firstOn = (data.onyomi && data.onyomi !== '—') ? data.onyomi.split('、')[0] : '';
       const readingDisp = firstKun || firstOn;
       document.getElementById('current-kanji-title').textContent = `${data.kanji} (${readingDisp})`;
 
       document.getElementById('btn-prev-kanji').disabled = (currentIndex === 0);
-      document.getElementById('btn-next-kanji').disabled = (currentIndex === allKanji.length - 1);
+      document.getElementById('btn-next-kanji').disabled = (currentIndex === currentKanjiList.length - 1);
 
-      // カード下部更新
       renderReadings(data);
       document.getElementById('stroke-count-tag').textContent = `全 ${data.strokesCount} 画`;
 
-      // モードに応じた初期化
       if (currentMode === 'anim') {
         initSvgAnimation(data);
       } else if (currentMode === 'trace') {
         initTraceMode(data);
       }
 
-      // グリッドのアクティブ表示更新
       updateGridSelection();
     }
 
     function navigateKanji(delta) {
       const next = currentIndex + delta;
-      if (next >= 0 && next < allKanji.length) {
+      if (next >= 0 && next < currentKanjiList.length) {
         loadKanji(next);
       }
     }
 
-    /* 訓読み・音読み表示の整形 */
     function renderReadings(data) {
       const kunContainer = document.getElementById('kunyomi-container');
       const onContainer = document.getElementById('onyomi-container');
@@ -1316,13 +1411,13 @@
         traceCanvas.style.display = 'none';
         animCtrl.style.display = 'flex';
         traceCtrl.style.display = 'none';
-        initSvgAnimation(allKanji[currentIndex]);
+        initSvgAnimation(currentKanjiList[currentIndex]);
       } else if (mode === 'trace') {
         svgView.style.display = 'block';
         traceCanvas.style.display = 'block';
         animCtrl.style.display = 'none';
         traceCtrl.style.display = 'flex';
-        initTraceMode(allKanji[currentIndex]);
+        initTraceMode(currentKanjiList[currentIndex]);
       }
     }
 
@@ -1335,7 +1430,7 @@
       const svg = document.getElementById('kanji-svg-view');
       svg.innerHTML = '';
 
-      // 1. 各画の背景薄グレーガイド（下敷き）
+      // 背景薄グレーガイド
       data.strokes.forEach(s => {
         const bgPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         bgPath.setAttribute('d', s.d);
@@ -1343,7 +1438,7 @@
         svg.appendChild(bgPath);
       });
 
-      // 2. 実際のカラフルな書き順ストローク
+      // カラフルな書き順ストローク
       data.strokes.forEach((s, idx) => {
         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         path.setAttribute('d', s.d);
@@ -1353,13 +1448,12 @@
 
         svg.appendChild(path);
 
-        // 線長測定と dashoffset 設定
         const len = path.getTotalLength();
         path.style.strokeDasharray = len;
         path.style.strokeDashoffset = len;
       });
 
-      // 3. 画番号バッジ
+      // 画番号バッジ
       data.numbers.forEach((num, idx) => {
         const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
         g.setAttribute('id', `stroke-num-${idx}`);
@@ -1367,7 +1461,6 @@
         g.style.transition = 'opacity 0.2s';
 
         if (idx === 0) {
-          // 1画目: ピンク丸に白文字 ❶
           const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
           circle.setAttribute('cx', num.x);
           circle.setAttribute('cy', num.y);
@@ -1386,7 +1479,6 @@
           text.textContent = '1';
           g.appendChild(text);
         } else {
-          // 2画目以降: ピンク数字
           const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
           text.setAttribute('x', num.x);
           text.setAttribute('y', num.y);
@@ -1399,12 +1491,11 @@
       });
 
       updateAnimUI();
-      // 自動で1画目を再生開始
       startAnimation();
     }
 
     function updateAnimUI() {
-      const data = allKanji[currentIndex];
+      const data = currentKanjiList[currentIndex];
       const badge = document.getElementById('anim-step-badge');
       const hint = document.getElementById('anim-stroke-hint');
       const pin = document.getElementById('stroke-pin');
@@ -1417,7 +1508,6 @@
         const s = data.strokes[currentStep - 1];
         hint.textContent = `${currentStep}画目: ${s.typeName}`;
 
-        // 筆使い注記ラベル＆終点丸印の配置
         const curPath = document.getElementById(`stroke-path-${currentStep - 1}`);
         if (curPath) {
           const len = curPath.getTotalLength();
@@ -1428,7 +1518,6 @@
           endDot.style.top = `${(endPt.y / 109) * 100}%`;
           endDot.classList.add('show');
 
-          // 注記文字（とめる・はらう・はねる）の位置
           let labelX = (endPt.x / 109) * 100;
           let labelY = (endPt.y / 109) * 100;
           if (labelX > 75) labelX -= 12; else labelX += 4;
@@ -1447,7 +1536,6 @@
         hint.textContent = `全${data.strokesCount}画 完成！`;
       }
 
-      // 始点ピンの表示制御
       if (currentStep < data.strokesCount) {
         const nextPath = document.getElementById(`stroke-path-${currentStep}`);
         if (nextPath) {
@@ -1489,19 +1577,18 @@
 
     function restartAnimation() {
       pauseAnimation();
-      const data = allKanji[currentIndex];
-      initSvgAnimation(data);
+      initSvgAnimation(currentKanjiList[currentIndex]);
     }
 
     function stepStroke(delta) {
       pauseAnimation();
-      const data = allKanji[currentIndex];
+      const data = currentKanjiList[currentIndex];
       const target = Math.max(0, Math.min(data.strokesCount, currentStep + delta));
       setStepDirect(target);
     }
 
     function setStepDirect(step) {
-      const data = allKanji[currentIndex];
+      const data = currentKanjiList[currentIndex];
       currentStep = step;
 
       for (let i = 0; i < data.strokesCount; i++) {
@@ -1521,7 +1608,7 @@
     }
 
     function animateNextStep() {
-      const data = allKanji[currentIndex];
+      const data = currentKanjiList[currentIndex];
       if (currentStep >= data.strokesCount) {
         animTimeout = setTimeout(() => {
           if (isPlaying) {
@@ -1635,7 +1722,7 @@
     }
 
     function updateTraceUI() {
-      const data = allKanji[currentIndex];
+      const data = currentKanjiList[currentIndex];
       const text = document.getElementById('trace-status-text');
       const badge = document.getElementById('trace-step-badge');
       const pin = document.getElementById('stroke-pin');
@@ -1693,7 +1780,7 @@
     }
 
     function validateCurrentStroke() {
-      const data = allKanji[currentIndex];
+      const data = currentKanjiList[currentIndex];
       if (traceCurrentStrokeIdx >= data.strokesCount) return;
 
       const expectedStroke = data.strokes[traceCurrentStrokeIdx];
@@ -1747,7 +1834,7 @@
     }
 
     function onTraceComplete() {
-      const data = allKanji[currentIndex];
+      const data = currentKanjiList[currentIndex];
       saveClearedKanji(data.kanji);
       updateTraceUI();
       playSound('fanfare');
@@ -1798,26 +1885,26 @@
     }
 
     function replayTrace() {
-      initTraceMode(allKanji[currentIndex]);
+      initTraceMode(currentKanjiList[currentIndex]);
     }
 
     function toggleTraceGuide() {
       showTraceGuide = !showTraceGuide;
       document.getElementById('btn-toggle-guide').textContent = showTraceGuide ? '👁️ お手本ON' : '👁️ お手本OFF';
-      renderTraceSvgGuide(allKanji[currentIndex]);
+      renderTraceSvgGuide(currentKanjiList[currentIndex]);
     }
 
     /* ==========================================================================
-       80字一覧グリッド & フィルタ・ソート
+       漢字一覧グリッド & フィルタ・ソート
        ========================================================================== */
-    let currentSort = 'order'; // 'order', 'aiueo', 'strokes', 'cleared'
+    let currentSort = 'order';
 
     function renderKanjiGrid() {
       const container = document.getElementById('kanji-grid-container');
       container.innerHTML = '';
       const cleared = getClearedKanji();
 
-      let displayList = [...allKanji];
+      let displayList = [...currentKanjiList];
       if (currentSort === 'aiueo') {
         displayList.sort((a, b) => (a.kunyomi || a.onyomi).localeCompare(b.kunyomi || b.onyomi, 'ja'));
       } else if (currentSort === 'strokes') {
@@ -1836,7 +1923,7 @@
         item.dataset.id = k.id;
         item.dataset.kanji = k.kanji;
         if (cleared[k.kanji]) item.classList.add('cleared');
-        if (k.id === allKanji[currentIndex]?.id) item.classList.add('active');
+        if (k.id === currentKanjiList[currentIndex]?.id) item.classList.add('active');
 
         item.innerHTML = `
           <span class="grid-kanji-stamp">💮</span>
@@ -1845,7 +1932,7 @@
         `;
 
         item.addEventListener('click', () => {
-          const targetIdx = allKanji.findIndex(item => item.id === k.id);
+          const targetIdx = currentKanjiList.findIndex(item => item.id === k.id);
           if (targetIdx !== -1) {
             loadKanji(targetIdx);
           }
@@ -1854,12 +1941,12 @@
         container.appendChild(item);
       });
 
-      const clearedCount = Object.keys(cleared).length;
-      document.getElementById('list-count-badge').textContent = `(全80字 / 💮合格 ${clearedCount}字)`;
+      const gradeCleared = currentKanjiList.filter(k => cleared[k.kanji]).length;
+      document.getElementById('list-count-badge').textContent = `(全${currentKanjiList.length}字 / 💮合格 ${gradeCleared}字)`;
     }
 
     function updateGridSelection() {
-      const current = allKanji[currentIndex];
+      const current = currentKanjiList[currentIndex];
       if (!current) return;
       document.querySelectorAll('.grid-kanji-item').forEach(item => {
         const isActive = (item.dataset.kanji === current.kanji);
@@ -1883,7 +1970,7 @@
           return;
         }
         const ch = item.dataset.kanji;
-        const data = allKanji.find(k => k.kanji === ch);
+        const data = currentKanjiList.find(k => k.kanji === ch);
         if (!data) return;
 
         const matchKanji = data.kanji.includes(query);

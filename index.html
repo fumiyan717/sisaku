@@ -1059,6 +1059,148 @@
       }
     }
 
+  
+    /* 漢字詳細カード & 音訓表モーダル */
+    .kanji-detail-card {
+      background: rgba(14, 28, 54, 0.95);
+      border: 1.5px solid var(--primary-cyan);
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+      position: relative;
+    }
+
+    .detail-char-box {
+      width: 54px;
+      height: 54px;
+      border-radius: 10px;
+      background: rgba(0, 229, 255, 0.15);
+      border: 2px solid var(--primary-cyan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      font-weight: 900;
+      color: #00ffaa;
+      text-shadow: 0 0 10px rgba(0, 255, 170, 0.8);
+      flex-shrink: 0;
+    }
+
+    .detail-char-box.unmastered {
+      color: #7b9bb8;
+      border-color: #435b78;
+      background: rgba(255, 255, 255, 0.05);
+      text-shadow: none;
+    }
+
+    .detail-info {
+      flex: 1;
+      text-align: left;
+    }
+
+    .detail-title-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+      flex-wrap: wrap;
+    }
+
+    .detail-grade-tag {
+      font-size: 11px;
+      font-weight: bold;
+      padding: 1px 6px;
+      border-radius: 6px;
+      background: rgba(255, 75, 114, 0.25);
+      color: #ff6b8b;
+      border: 1px solid #ff4b72;
+    }
+
+    .detail-status-tag {
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .detail-readings-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      font-size: 13px;
+      margin-top: 3px;
+    }
+
+    .reading-label {
+      color: #9ebddf;
+      margin-right: 4px;
+      font-weight: bold;
+    }
+
+    .reading-text {
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .detail-close-btn {
+      background: transparent;
+      border: none;
+      color: #7b9bb8;
+      font-size: 18px;
+      cursor: pointer;
+      position: absolute;
+      top: 8px;
+      right: 12px;
+    }
+
+    .detail-close-btn:hover {
+      color: #ff0055;
+    }
+
+    .room-table-btn {
+      background: rgba(255, 235, 59, 0.15);
+      border: 1px solid #ffd600;
+      color: #ffd600;
+      font-size: 12px;
+      font-weight: bold;
+      padding: 4px 10px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .room-table-btn:hover {
+      background: rgba(255, 235, 59, 0.35);
+      transform: scale(1.05);
+    }
+
+    .g1-readings-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 13px;
+    }
+
+    .g1-readings-table th, .g1-readings-table td {
+      border: 1px solid #204987;
+      padding: 6px 10px;
+      text-align: left;
+    }
+
+    .g1-readings-table th {
+      background: rgba(16, 32, 60, 0.95);
+      color: var(--neon-yellow);
+    }
+
+    .g1-readings-table tr:nth-child(even) {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
   </style>
 </head>
 <body>
@@ -1324,13 +1466,16 @@
         <button class="room-tab" data-grade="6" onclick="switchRoomGrade(6)">6年生</button>
       </div>
 
-      <!-- 選択学年の進捗バー -->
+      <!-- 選択学年の進捗バー & 音訓表ボタン -->
       <div class="room-grade-progress">
-        <div class="progress-info">
+        <div class="progress-info" style="display: flex; justify-content: space-between; align-items: center;">
           <span id="room-current-grade-label">🌱 1年生の漢字</span>
-          <span id="room-grade-stats">0 / 80 字 (0%)</span>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <button id="btn-show-g1-table" class="room-table-btn" onclick="openG1TableModal()">📋 1年生の音読み・訓読み表</button>
+            <span id="room-grade-stats">0 / 80 字 (0%)</span>
+          </div>
         </div>
-        <div class="progress-bar-bg">
+        <div class="progress-bar-bg" style="margin-top: 6px;">
           <div class="progress-bar-fill grade-bar" id="room-grade-bar" style="width: 0%;"></div>
         </div>
       </div>
@@ -1340,10 +1485,54 @@
         <!-- 漢字タイル動的挿入 -->
       </div>
 
+      <!-- 漢字詳細カード (タイル選択時に表示) -->
+      <div class="kanji-detail-card" id="kanji-detail-card" style="display: none;">
+        <div class="detail-char-box" id="detail-char-box">花</div>
+        <div class="detail-info">
+          <div class="detail-title-row">
+            <span class="detail-grade-tag" id="detail-grade-tag">🌱 1年生</span>
+            <span class="detail-status-tag" id="detail-status-tag">⭕ 撃破済み (3回)</span>
+          </div>
+          <div class="detail-readings-row">
+            <div><span class="reading-label">音読み:</span><span class="reading-text" id="detail-on-text">カ</span></div>
+            <div><span class="reading-label">訓読み:</span><span class="reading-text" id="detail-kun-text">はな</span></div>
+          </div>
+        </div>
+        <button class="detail-close-btn" onclick="closeKanjiDetail()">✕</button>
+      </div>
+
       <!-- フッター操作 -->
       <div class="room-footer">
         <span class="room-hint">💡 緑色に光っている漢字は正解できた漢字です！端末に自動保存されます。</span>
         <button class="room-reset-btn" onclick="resetKanjiProgress()">進捗をリセット</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 1年生 音読み・訓読み一覧モーダル -->
+  <div class="modal-overlay" id="g1-table-modal" style="display: none; z-index: 120;">
+    <div class="modal-card modal-card-room" style="max-width: 780px;">
+      <div class="room-header">
+        <div class="room-title-box">
+          <h2 class="room-title">📋 小学校1年生で学習する漢字80字 (音読み・訓読み一覧)</h2>
+          <p class="room-desc">学習指導要領配当の公式音訓一覧です。ゲームの出題と完全連動しています！</p>
+        </div>
+        <button class="room-close-btn" onclick="closeG1TableModal()">✕ とじる</button>
+      </div>
+      <div style="max-height: 60vh; overflow-y: auto; padding: 4px;">
+        <table class="g1-readings-table">
+          <thead>
+            <tr>
+              <th style="width: 50px; text-align: center;">漢字</th>
+              <th style="width: 140px;">音読み</th>
+              <th>訓読み</th>
+            </tr>
+          </thead>
+          <tbody id="g1-table-tbody">
+            <!-- JSで動的生成 -->
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -1356,7 +1545,7 @@
    ========================================================================== */
 const KANJI_DATABASE = {
   grade1: [
-{ kanji: "青空", kana: "あおぞら", grade: "1年", hint: "晴れた日の青い空" },
+    { kanji: "青空", kana: "あおぞら", grade: "1年", hint: "晴れた日の青い空" },
     { kanji: "雨水", kana: "あまみず", grade: "1年", hint: "空から降る雨の水" },
     { kanji: "花火", kana: "はなび", grade: "1年", hint: "夜空に打ち上げるきれいな光" },
     { kanji: "先生", kana: "せんせい", grade: "1年", hint: "学校で勉強を教えてくれる人" },
@@ -1384,7 +1573,6 @@ const KANJI_DATABASE = {
     { kanji: "町", kana: "まち", grade: "1年", hint: "家やお店がたくさんあるところ" },
     { kanji: "村", kana: "むら", grade: "1年", hint: "山や自然にかこまれた集落" },
     { kanji: "力", kana: "ちから", grade: "1年", hint: "物を動かしたり走るエネルギー" },
-    { kanji: "王子", kana: "おうじ", grade: "1年", hint: "王様のおとこの子" },
     { kanji: "大金", kana: "たいきん", grade: "1年", hint: "とても大きなお金のこと" },
     { kanji: "小川", kana: "おがわ", grade: "1年", hint: "さらさらと流れる小さな川" },
     { kanji: "足音", kana: "あしおと", grade: "1年", hint: "歩いたり走ったりする足の音" },
@@ -1400,6 +1588,33 @@ const KANJI_DATABASE = {
     { kanji: "月日", kana: "つきひ", grade: "1年", hint: "年月や日々のながれ" },
     { kanji: "左手", kana: "ひだりて", grade: "1年", hint: "左側の手" },
     { kanji: "右手", kana: "みぎて", grade: "1年", hint: "右側の手" },
+    { kanji: "立つ", kana: "たつ", grade: "1年", hint: "足でからだを支えて起き上がる" },
+    { kanji: "休む", kana: "やすむ", grade: "1年", hint: "からだを休めて元気を回復する" },
+    { kanji: "見る", kana: "みる", grade: "1年", hint: "目を向けて確かめる" },
+    { kanji: "出る", kana: "でる", grade: "1年", hint: "部屋や建物から外へ出る" },
+    { kanji: "入る", kana: "はいる", grade: "1年", hint: "中へ進んで入る" },
+    { kanji: "上", kana: "うえ", grade: "1年", hint: "高いほう・天のほう" },
+    { kanji: "下", kana: "した", grade: "1年", hint: "低いほう・地面のほう" },
+    { kanji: "正しい", kana: "ただしい", grade: "1年", hint: "まちがいがないこと・せいかい" },
+    { kanji: "早い", kana: "はやい", grade: "1年", hint: "時刻があさ早いこと" },
+    { kanji: "赤い", kana: "あかい", grade: "1年", hint: "リンゴやポストのような色" },
+    { kanji: "白い", kana: "しろい", grade: "1年", hint: "雪やごはんのような色" },
+    { kanji: "青い", kana: "あおい", grade: "1年", hint: "海やすんだ空のような色" },
+    { kanji: "大きい", kana: "おおきい", grade: "1年", hint: "サイズやかたちが大きなさま" },
+    { kanji: "小さい", kana: "ちいさい", grade: "1年", hint: "サイズやかたちが小さなさま" },
+    { kanji: "一つ", kana: "ひとつ", grade: "1年", hint: "ものの数が1このこと" },
+    { kanji: "二つ", kana: "ふたつ", grade: "1年", hint: "ものの数が2このこと" },
+    { kanji: "三つ", kana: "みっつ", grade: "1年", hint: "ものの数が3このこと" },
+    { kanji: "四つ", kana: "よっつ", grade: "1年", hint: "ものの数が4このこと" },
+    { kanji: "五つ", kana: "いつつ", grade: "1年", hint: "ものの数が5このこと" },
+    { kanji: "六つ", kana: "むっつ", grade: "1年", hint: "ものの数が6このこと" },
+    { kanji: "七つ", kana: "ななつ", grade: "1年", hint: "ものの数が7このこと" },
+    { kanji: "八つ", kana: "やっつ", grade: "1年", hint: "ものの数が8このこと" },
+    { kanji: "九つ", kana: "ここのつ", grade: "1年", hint: "ものの数が9このこと" },
+    { kanji: "十", kana: "とお", grade: "1年", hint: "ものの数が10このこと（とお）" },
+    { kanji: "正月", kana: "しょうがつ", grade: "1年", hint: "新しい年のはじめの1月" },
+    { kanji: "空気", kana: "くうき", grade: "1年", hint: "地球を包む目に見えない気体" },
+    { kanji: "水田", kana: "すいでん", grade: "1年", hint: "水を引いてお米を作る田んぼ" },
   ],
   grade2: [
 { kanji: "黄色", kana: "きいろ", grade: "2年", hint: "バナナやレモンの色" },
@@ -2873,6 +3088,11 @@ function renderKanjiRoom() {
   document.getElementById('room-current-grade-label').textContent = GRADE_LABELS[currentRoomGrade] || "";
   document.getElementById('room-grade-stats').textContent = `${currMastered} / ${currList.length} 字 (${currPercent}%)`;
   document.getElementById('room-grade-bar').style.width = `${currPercent}%`;
+  
+  const g1Btn = document.getElementById('btn-show-g1-table');
+  if (g1Btn) {
+    g1Btn.style.display = (currentRoomGrade === 1) ? 'inline-flex' : 'none';
+  }
 
   // 4. 漢字タイルの描画
   const grid = document.getElementById('room-kanji-grid');
@@ -2884,10 +3104,13 @@ function renderKanjiRoom() {
     const isMastered = !!mastered[ch];
     if (isMastered) {
       tile.classList.add('mastered');
-      tile.title = `【${ch}】 正解数: ${mastered[ch]}回 (習得済み)`;
+      tile.title = `【${ch}】 正解数: ${mastered[ch]}回 (クリックで音訓表示)`;
     } else {
-      tile.title = `【${ch}】 未正解`;
+      tile.title = `【${ch}】 未正解 (クリックで音訓表示)`;
     }
+    tile.addEventListener('click', () => {
+      selectKanjiTile(ch, currentRoomGrade);
+    });
     grid.appendChild(tile);
   });
 }
@@ -2902,6 +3125,391 @@ function resetKanjiProgress() {
       console.warn(e);
     }
   }
+}
+
+
+const GRADE1_READINGS_DATA = {
+  "一": {
+    "on": "イチ、イツ",
+    "kun": "ひと、ひと・つ"
+  },
+  "右": {
+    "on": "ウ、ユウ",
+    "kun": "みぎ"
+  },
+  "雨": {
+    "on": "ウ",
+    "kun": "あめ、あま"
+  },
+  "円": {
+    "on": "エン",
+    "kun": "まる・い"
+  },
+  "王": {
+    "on": "オウ",
+    "kun": "（なし）"
+  },
+  "音": {
+    "on": "オン",
+    "kun": "おと、ね"
+  },
+  "下": {
+    "on": "カ、ゲ",
+    "kun": "した、しも、さ・がる、くだ・る、お・りる"
+  },
+  "火": {
+    "on": "カ",
+    "kun": "ひ"
+  },
+  "花": {
+    "on": "カ",
+    "kun": "はな"
+  },
+  "貝": {
+    "on": "（なし）",
+    "kun": "かい"
+  },
+  "学": {
+    "on": "ガク",
+    "kun": "まな・ぶ"
+  },
+  "川": {
+    "on": "（なし）",
+    "kun": "かわ"
+  },
+  "気": {
+    "on": "キ、ケ",
+    "kun": "（なし）"
+  },
+  "九": {
+    "on": "キュウ、ク",
+    "kun": "ここの、ここの・つ"
+  },
+  "休": {
+    "on": "キュウ",
+    "kun": "やす・む"
+  },
+  "玉": {
+    "on": "ギョク",
+    "kun": "たま"
+  },
+  "金": {
+    "on": "キン、コン",
+    "kun": "かね、かな"
+  },
+  "空": {
+    "on": "クウ",
+    "kun": "そら、あ・く、から"
+  },
+  "月": {
+    "on": "ゲツ、ガツ",
+    "kun": "つき"
+  },
+  "犬": {
+    "on": "ケン",
+    "kun": "いぬ"
+  },
+  "見": {
+    "on": "ケン",
+    "kun": "み・る"
+  },
+  "五": {
+    "on": "ゴ",
+    "kun": "いつ、いつ・つ"
+  },
+  "口": {
+    "on": "コウ、ク",
+    "kun": "くち"
+  },
+  "校": {
+    "on": "コウ",
+    "kun": "（なし）"
+  },
+  "左": {
+    "on": "サ",
+    "kun": "ひだり"
+  },
+  "三": {
+    "on": "サン",
+    "kun": "み、み・つ、みっ・つ"
+  },
+  "山": {
+    "on": "サン",
+    "kun": "やま"
+  },
+  "子": {
+    "on": "シ、ス",
+    "kun": "こ"
+  },
+  "四": {
+    "on": "シ",
+    "kun": "よ、よ・つ、よっ・つ、よん"
+  },
+  "糸": {
+    "on": "シ",
+    "kun": "いと"
+  },
+  "字": {
+    "on": "ジ",
+    "kun": "（なし）"
+  },
+  "耳": {
+    "on": "（なし）",
+    "kun": "みみ"
+  },
+  "七": {
+    "on": "シチ",
+    "kun": "なな、なな・つ、なの"
+  },
+  "車": {
+    "on": "シャ",
+    "kun": "くるま"
+  },
+  "手": {
+    "on": "シュ",
+    "kun": "て"
+  },
+  "十": {
+    "on": "ジュウ、ジツ",
+    "kun": "と、とお"
+  },
+  "出": {
+    "on": "シュツ",
+    "kun": "で・る、だ・す"
+  },
+  "女": {
+    "on": "ジョ",
+    "kun": "おんな"
+  },
+  "小": {
+    "on": "ショウ",
+    "kun": "ちい・さい、こ、お"
+  },
+  "上": {
+    "on": "ジョウ",
+    "kun": "うえ、うわ、かみ、あ・がる、のぼ・る"
+  },
+  "森": {
+    "on": "シン",
+    "kun": "もり"
+  },
+  "人": {
+    "on": "ジン、ニン",
+    "kun": "ひと"
+  },
+  "水": {
+    "on": "スイ",
+    "kun": "みず"
+  },
+  "正": {
+    "on": "セイ、ショウ",
+    "kun": "ただ・しい、まさ"
+  },
+  "生": {
+    "on": "セイ、ショウ",
+    "kun": "い・きる、う・まれる、は・える、なま"
+  },
+  "青": {
+    "on": "セイ",
+    "kun": "あお、あお・い"
+  },
+  "夕": {
+    "on": "（なし）",
+    "kun": "ゆう"
+  },
+  "石": {
+    "on": "セキ、シャク",
+    "kun": "いし"
+  },
+  "赤": {
+    "on": "セキ",
+    "kun": "あか、あか・い"
+  },
+  "千": {
+    "on": "セン",
+    "kun": "ち"
+  },
+  "先": {
+    "on": "セン",
+    "kun": "さき"
+  },
+  "早": {
+    "on": "ソウ",
+    "kun": "はや・い"
+  },
+  "草": {
+    "on": "ソウ",
+    "kun": "くさ"
+  },
+  "足": {
+    "on": "ソク",
+    "kun": "あし、た・りる"
+  },
+  "村": {
+    "on": "ソン",
+    "kun": "むら"
+  },
+  "大": {
+    "on": "ダイ、タイ",
+    "kun": "おお、おお・きい"
+  },
+  "男": {
+    "on": "ダン、ナン",
+    "kun": "おとこ"
+  },
+  "竹": {
+    "on": "チク",
+    "kun": "たけ"
+  },
+  "中": {
+    "on": "チュウ、ジュウ",
+    "kun": "なか"
+  },
+  "虫": {
+    "on": "チュウ",
+    "kun": "むし"
+  },
+  "町": {
+    "on": "チョウ",
+    "kun": "まち"
+  },
+  "天": {
+    "on": "テン",
+    "kun": "あま"
+  },
+  "田": {
+    "on": "デン",
+    "kun": "た"
+  },
+  "土": {
+    "on": "ド、ト",
+    "kun": "つち"
+  },
+  "二": {
+    "on": "ニ",
+    "kun": "ふた、ふた・つ"
+  },
+  "日": {
+    "on": "ニチ、ジツ",
+    "kun": "ひ、か"
+  },
+  "入": {
+    "on": "ニュウ",
+    "kun": "い・る、い・れる、はい・る"
+  },
+  "年": {
+    "on": "ネン",
+    "kun": "とし"
+  },
+  "白": {
+    "on": "ハク",
+    "kun": "しろ、しろ・い、しら"
+  },
+  "八": {
+    "on": "ハチ",
+    "kun": "や、や・つ、やっ・つ、よ"
+  },
+  "百": {
+    "on": "ヒャク",
+    "kun": "（なし）"
+  },
+  "文": {
+    "on": "ブン、モン",
+    "kun": "（なし）"
+  },
+  "木": {
+    "on": "ボク、モク",
+    "kun": "き、こ"
+  },
+  "本": {
+    "on": "ホン",
+    "kun": "もと"
+  },
+  "名": {
+    "on": "メイ、ミョウ",
+    "kun": "な"
+  },
+  "目": {
+    "on": "モク",
+    "kun": "め"
+  },
+  "立": {
+    "on": "リツ",
+    "kun": "た・つ"
+  },
+  "力": {
+    "on": "リョク、リキ",
+    "kun": "ちから"
+  },
+  "林": {
+    "on": "リン",
+    "kun": "はやし"
+  },
+  "六": {
+    "on": "ロク",
+    "kun": "む、む・つ、むっ・つ、むい"
+  }
+};
+
+function selectKanjiTile(ch, grade) {
+  const card = document.getElementById('kanji-detail-card');
+  const charBox = document.getElementById('detail-char-box');
+  const gradeTag = document.getElementById('detail-grade-tag');
+  const statusTag = document.getElementById('detail-status-tag');
+  const onText = document.getElementById('detail-on-text');
+  const kunText = document.getElementById('detail-kun-text');
+
+  charBox.textContent = ch;
+  gradeTag.textContent = `${grade}年生配当`;
+
+  const mastered = getMasteredKanji();
+  const count = mastered[ch] || 0;
+  if (count > 0) {
+    charBox.className = "detail-char-box";
+    statusTag.innerHTML = `<span style="color: #00ffaa;">⭕ 撃破済み (正解: ${count}回)</span>`;
+  } else {
+    charBox.className = "detail-char-box unmastered";
+    statusTag.innerHTML = `<span style="color: #7b9bb8;">❌ 未正解 (${grade}年生コースで撃破しよう！)</span>`;
+  }
+
+  if (grade === 1 && GRADE1_READINGS_DATA[ch]) {
+    const d = GRADE1_READINGS_DATA[ch];
+    onText.textContent = d.on || "（なし）";
+    kunText.textContent = d.kun || "（なし）";
+  } else {
+    onText.textContent = "—";
+    kunText.textContent = "—";
+  }
+
+  card.style.display = "flex";
+}
+
+function closeKanjiDetail() {
+  document.getElementById('kanji-detail-card').style.display = "none";
+}
+
+function openG1TableModal() {
+  const tbody = document.getElementById('g1-table-tbody');
+  tbody.innerHTML = "";
+  const mastered = getMasteredKanji();
+
+  ALL_GRADE_KANJI[1].forEach(ch => {
+    const d = GRADE1_READINGS_DATA[ch] || { on: "—", kun: "—" };
+    const tr = document.createElement('tr');
+    const isM = !!mastered[ch];
+    tr.innerHTML = `
+      <td style="text-align: center; font-size: 20px; font-weight: 900; color: ${isM ? '#00ffaa' : '#5b7596'};">${ch}</td>
+      <td style="color: #ffd600; font-weight: bold;">${d.on}</td>
+      <td style="color: #00e5ff;">${d.kun}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  document.getElementById('g1-table-modal').style.display = "flex";
+}
+
+function closeG1TableModal() {
+  document.getElementById('g1-table-modal').style.display = "none";
 }
 
 </script>

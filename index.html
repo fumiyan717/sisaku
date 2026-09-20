@@ -2049,18 +2049,7 @@
     }
 
     /* === 教科書・漢検カリキュラム セレクター === */
-    .curriculum-bar {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin: 8px 0 14px 0;
-      flex-wrap: wrap;
-      background: rgba(8, 20, 42, 0.85);
-      border: 1.5px solid #244673;
-      border-radius: 12px;
-      padding: 8px 12px;
-    }
+    
 
     .curriculum-label {
       font-size: 12px;
@@ -2071,23 +2060,9 @@
       gap: 4px;
     }
 
-    .curriculum-select {
-      background: #0f2444;
-      color: #00ffff;
-      border: 1.5px solid #00e5ff;
-      border-radius: 8px;
-      padding: 5px 12px;
-      font-size: 13px;
-      font-weight: bold;
-      cursor: pointer;
-      outline: none;
-      box-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
-    }
+    
 
-    .curriculum-select:focus {
-      border-color: #ffd700;
-      box-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
-    }
+    
 
     /* === ローカルAI学習分析レポート === */
     .ai-report-card {
@@ -2264,7 +2239,66 @@
       box-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
     }
 
-  </style>
+  
+    /* === プルダウン（select）視認性・完全クロスブラウザ対応スタイル === */
+    select.curriculum-select,
+    select.pilot-select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2012%2012%22%3E%3Cpath%20fill%3D%22%2300e5ff%22%20d%3D%22M2%204l4%205%204-5z%22%2F%3E%3C%2Fsvg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 10px 10px;
+      padding: 8px 30px 8px 12px !important;
+      background-color: #0c1c36 !important;
+      color: #00ffff !important;
+      border: 1.5px solid #00e5ff !important;
+      border-radius: 8px !important;
+      font-size: 13px !important;
+      font-weight: bold;
+      cursor: pointer;
+      outline: none;
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.25);
+      touch-action: manipulation;
+      min-height: 38px;
+    }
+
+    select.curriculum-select:focus,
+    select.pilot-select:focus {
+      border-color: #ffd700 !important;
+      box-shadow: 0 0 14px rgba(255, 215, 0, 0.5) !important;
+    }
+
+    select.curriculum-select option,
+    select.pilot-select option {
+      background-color: #081426 !important;
+      color: #ffffff !important;
+      font-size: 14px !important;
+      padding: 10px 14px !important;
+      font-weight: normal;
+    }
+
+    select.curriculum-select option:checked,
+    select.pilot-select option:checked {
+      background-color: #163b6b !important;
+      color: #ffd700 !important;
+      font-weight: bold;
+    }
+
+    .curriculum-bar {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin: 8px 0 12px 0;
+      background: rgba(8, 20, 42, 0.85);
+      border: 1.5px solid #244673;
+      border-radius: 12px;
+      padding: 10px 14px;
+      text-align: left;
+    }
+
+</style>
 </head>
 <body>
 
@@ -2470,15 +2504,20 @@
       </div>
 
       <!-- 主要教科書＆漢検級別 カリキュラムセレクター -->
-      <div class="curriculum-bar">
-        <span class="curriculum-label">📖 学習カリキュラム:</span>
-        <select id="curriculum-select" class="curriculum-select" onchange="changeCurriculum(this.value)">
-          <option value="standard">🏫 学年標準（文部科学省）</option>
-          <option value="mitsumura">📘 光村図書（みつむら）準拠</option>
-          <option value="tokyo">📕 東京書籍（とうしょ）準拠</option>
-          <option value="kyoiku">📙 教育出版（きょうしゅつ）準拠</option>
-          <option value="kanken">🎖️ 日本漢字能力検定（10級〜5級）</option>
-        </select>
+      <div class="curriculum-bar" id="curriculum-bar">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+          <span class="curriculum-label">📖 学習カリキュラム:</span>
+          <select id="curriculum-select" class="curriculum-select" onchange="changeCurriculum(this.value)">
+            <option value="standard">🏫 学年標準（文部科学省）</option>
+            <option value="mitsumura">📘 光村図書（みつむら）準拠</option>
+            <option value="tokyo">📕 東京書籍（とうしょ）準拠</option>
+            <option value="kyoiku">📙 教育出版（きょうしゅつ）準拠</option>
+            <option value="kanken">🎖️ 日本漢字能力検定（10級〜5級）</option>
+          </select>
+        </div>
+        <div id="curriculum-active-desc" style="font-size: 11px; color: #00ffaa; font-weight: bold; text-align: left; padding-left: 2px;">
+          ✨ 文部科学省の標準学年配当で学習中
+        </div>
       </div>
 
       <!-- 特別ミッション (デイリー & にがて特訓) -->
@@ -4709,7 +4748,13 @@ function updatePilotModalPreview() {
   const selNum = document.getElementById('pilot-slot-num');
   const preview = document.getElementById('pilot-modal-preview');
   if (selAdj && selNoun && selNum && preview) {
-    preview.textContent = `${selAdj.value}${selNoun.value}${selNum.value}`;
+    const newName = `${selAdj.value}${selNoun.value}${selNum.value}`;
+    preview.textContent = newName;
+    // プルダウン操作時に即座に自動保存・全画面同期（ボタン押し忘れ防止）
+    try {
+      localStorage.setItem('kanji_jet_pilot_name', newName);
+    } catch(e) {}
+    updateHomePilotDisplay();
   }
 }
 
@@ -4859,6 +4904,19 @@ function updateCurriculumDisplay() {
   const sel = document.getElementById('curriculum-select');
   if (sel && sel.value !== currentCurriculum) {
     sel.value = currentCurriculum;
+  }
+
+  // カリキュラム詳細説明バーの更新
+  const descEl = document.getElementById('curriculum-active-desc');
+  if (descEl) {
+    const descMap = {
+      standard: "🏫 文部科学省 標準学年配当（全1026字をバランスよく習得）",
+      mitsumura: "📘 光村図書 教科書準拠（国語の授業・単元の習う順に優先出題！）",
+      tokyo: "📕 東京書籍 教科書準拠（新しい国語の単元順に優先出題！）",
+      kyoiku: "📙 教育出版 教科書準拠（ひろがる言葉の単元順に優先出題！）",
+      kanken: "🎖️ 日本漢字能力検定（10級〜5級の配当級別マスターモード！）"
+    };
+    descEl.textContent = descMap[currentCurriculum] || descMap.standard;
   }
 
   // 学年ボタン各要素のテキスト更新
@@ -5333,6 +5391,10 @@ function pickAdaptiveQuestions(pool, targetCount, maxMistakes = 2) {
     selectedRest.forEach(item => picked.push(item.q));
   }
 
+  // 教科書・漢検モード時は学習順序を維持、標準時は適度にシャッフル
+  if (typeof currentCurriculum !== 'undefined' && currentCurriculum !== 'standard') {
+    return picked;
+  }
   return shuffle(picked);
 }
 
@@ -7204,21 +7266,25 @@ function openHandwriteModal(targetChar) {
   initHandwriteCanvas();
 
   const gradeSel = document.getElementById('handwrite-grade-select');
+  let selectedGrade = 1;
+  let charToPractice = targetChar;
+
   if (targetChar) {
-    hwCurrentChar = targetChar;
-    // 学年セレクトを連動
     for (let g = 1; g <= 6; g++) {
       if ((ALL_GRADE_KANJI[g] || []).includes(targetChar)) {
-        if (gradeSel) gradeSel.value = g.toString();
-        populateHandwriteCharSelect(g, targetChar);
+        selectedGrade = g;
         break;
       }
     }
   } else {
-    const curG = (gradeSel ? parseInt(gradeSel.value, 10) : 1) || 1;
-    populateHandwriteCharSelect(curG);
+    selectedGrade = (gradeSel ? parseInt(gradeSel.value, 10) : 1) || 1;
+    const list = ALL_GRADE_KANJI[selectedGrade] || ALL_GRADE_KANJI[1];
+    charToPractice = list[0] || "一";
   }
-  setHandwriteTargetChar(hwCurrentChar);
+
+  if (gradeSel) gradeSel.value = selectedGrade.toString();
+  populateHandwriteCharSelect(selectedGrade, charToPractice);
+  setHandwriteTargetChar(charToPractice);
 }
 
 function closeHandwriteModal() {
@@ -7259,24 +7325,34 @@ function openPilotNameModalFromHud() {
 
 function onHandwriteGradeChange(gVal) {
   const g = parseInt(gVal, 10) || 1;
-  populateHandwriteCharSelect(g);
+  const list = ALL_GRADE_KANJI[g] || ALL_GRADE_KANJI[1];
+  const firstChar = list[0] || "一";
+  populateHandwriteCharSelect(g, firstChar);
+  setHandwriteTargetChar(firstChar);
 }
 
 function populateHandwriteCharSelect(grade, selectedChar) {
   const charSel = document.getElementById('handwrite-char-select');
   if (!charSel) return;
   const list = ALL_GRADE_KANJI[grade] || ALL_GRADE_KANJI[1];
-  charSel.innerHTML = list.map(c => `<option value="${c}">${c}</option>`).join('');
-  if (selectedChar && list.includes(selectedChar)) {
-    charSel.value = selectedChar;
-    setHandwriteTargetChar(selectedChar);
-  } else if (list.length > 0) {
-    charSel.value = list[0];
-    setHandwriteTargetChar(list[0]);
-  }
+  charSel.innerHTML = list.map(c => {
+    const rd = ALL_KANJI_READINGS_DATA[c];
+    let rText = "";
+    if (rd) {
+      const k = rd.kun && rd.kun !== "—" ? rd.kun.split('、')[0] : "";
+      const o = rd.on && rd.on !== "—" ? rd.on.split('、')[0] : "";
+      rText = k || o || "";
+    }
+    const label = rText ? `${c} (${rText})` : c;
+    return `<option value="${c}">${label}</option>`;
+  }).join('');
+
+  const activeChar = (selectedChar && list.includes(selectedChar)) ? selectedChar : (list[0] || "一");
+  charSel.value = activeChar;
 }
 
 function selectHandwriteTargetChar(ch) {
+  if (!ch) return;
   setHandwriteTargetChar(ch);
 }
 

@@ -366,46 +366,183 @@
       50% { transform: translate(-50%, -50%) scale(1.15); }
     }
 
+    /* 動く筆先ポインター（アニメーション中の筆跡追従） */
+    .brush-pen-pointer {
+      position: absolute;
+      width: 28px;
+      height: 28px;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 15;
+      display: none;
+      filter: drop-shadow(0 2px 5px rgba(0,0,0,0.35));
+    }
+    .brush-pen-pointer .pen-tip-icon {
+      font-size: 24px;
+      line-height: 1;
+      display: block;
+      transform: rotate(-35deg) translate(-2px, -2px);
+    }
+    .brush-pen-pointer.drawing {
+      display: block;
+    }
+    /* 筆使いアクション演出 */
+    .brush-pen-pointer.action-tome {
+      animation: penActionTome 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .brush-pen-pointer.action-hane {
+      animation: penActionHane 0.35s cubic-bezier(0.1, 0.9, 0.2, 1.3);
+    }
+    .brush-pen-pointer.action-harai {
+      animation: penActionHarai 0.4s ease-out forwards;
+    }
+
+    @keyframes penActionTome {
+      0% { transform: translate(-50%, -50%) scale(1.25); }
+      50% { transform: translate(-50%, -50%) scale(0.9); }
+      100% { transform: translate(-50%, -50%) scale(1); }
+    }
+    @keyframes penActionHane {
+      0% { transform: translate(-50%, -50%) scale(1); }
+      35% { transform: translate(-50%, -50%) translate(-2px, 3px) scale(0.95); }
+      100% { transform: translate(-50%, -50%) translate(-12px, -14px) scale(1.2); }
+    }
+    @keyframes penActionHarai {
+      0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+      50% { transform: translate(-50%, -50%) translate(8px, 8px) scale(0.85); opacity: 0.8; }
+      100% { transform: translate(-50%, -50%) translate(16px, 16px) scale(0.4); opacity: 0; }
+    }
+
     /* 筆使いラベル（とめ・はね・はらい） */
     .brush-pill-label {
       position: absolute;
-      background: var(--accent-pink);
-      color: #fff;
       font-size: 13px;
       font-weight: 900;
-      padding: 3px 8px;
+      padding: 4px 10px;
       border-radius: 999px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.25);
       pointer-events: none;
-      z-index: 12;
-      transform: translate(-50%, -50%);
+      z-index: 14;
+      transform: translate(-50%, -50%) scale(0.6);
       opacity: 0;
-      transition: opacity 0.25s, transform 0.25s;
+      transition: opacity 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      border: 1.5px solid rgba(255, 255, 255, 0.9);
     }
 
     .brush-pill-label.show {
       opacity: 1;
-      transform: translate(-50%, -50%) scale(1.05);
+      transform: translate(-50%, -50%) scale(1);
+    }
+    /* とめる：ルビーレッド */
+    .brush-pill-label.tome {
+      background: linear-gradient(135deg, #f43f5e, #be123c);
+      color: #fff;
+    }
+    /* はねる：アンバーオレンジ */
+    .brush-pill-label.hane {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #fff;
+    }
+    /* はらう：スカイシアン */
+    .brush-pill-label.harai {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      color: #fff;
     }
 
-    /* 終点ドット */
+    /* 終点インジケーター */
     .brush-end-dot {
       position: absolute;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: var(--accent-pink);
       transform: translate(-50%, -50%);
       pointer-events: none;
-      z-index: 11;
-      box-shadow: 0 0 6px rgba(230, 0, 126, 0.6);
+      z-index: 13;
       opacity: 0;
-      transition: opacity 0.25s;
+      transition: opacity 0.25s, transform 0.25s;
     }
 
     .brush-end-dot.show {
       opacity: 1;
+    }
+    /* とめる終点：カチッとした二重丸ドット */
+    .brush-end-dot.tome {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #f43f5e;
+      border: 2.5px solid #fff;
+      box-shadow: 0 0 0 2px #be123c, 0 0 10px rgba(244, 63, 94, 0.8);
+      animation: dotPulseTome 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes dotPulseTome {
+      0% { transform: translate(-50%, -50%) scale(0.2); }
+      70% { transform: translate(-50%, -50%) scale(1.3); }
+      100% { transform: translate(-50%, -50%) scale(1); }
+    }
+    /* はねる終点：跳ね上がる矢印バッジ */
+    .brush-end-dot.hane {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #f59e0b;
+      border: 2px solid #fff;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 900;
+      animation: dotBounceHane 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.4);
+    }
+    @keyframes dotBounceHane {
+      0% { transform: translate(-50%, -50%) scale(0.3) translateY(6px); }
+      60% { transform: translate(-50%, -50%) scale(1.3) translateY(-8px); }
+      100% { transform: translate(-50%, -50%) scale(1) translateY(-4px); }
+    }
+    /* はらう終点：スーッと流れるスウィープエフェクト */
+    .brush-end-dot.harai {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.95) 0%, rgba(2, 132, 199, 0.7) 60%, transparent 100%);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.9);
+      animation: dotSweepHarai 0.45s ease-out;
+    }
+    @keyframes dotSweepHarai {
+      0% { transform: translate(-50%, -50%) scale(0.3); opacity: 0; }
+      50% { transform: translate(-50%, -50%) scale(1.35); opacity: 1; }
+      100% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; }
+    }
+
+    /* ガイドバナー内の筆使いタグ */
+    .guide-type-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 3px 9px;
+      border-radius: 6px;
+      font-size: 0.86rem;
+      font-weight: 900;
+      color: #fff;
+      margin: 0 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    }
+    .guide-type-badge.tome {
+      background: #e11d48;
+    }
+    .guide-type-badge.hane {
+      background: #d97706;
+    }
+    .guide-type-badge.harai {
+      background: #0284c7;
+    }
+
+    /* はらい先端シャープポリゴン */
+    .kvg-stroke-tip {
+      transition: opacity 0.2s ease-out;
     }
 
     /* 合格花丸オーバーレイ */
@@ -969,8 +1106,13 @@
           <div id="pin-marker" class="pin-marker" style="display: none;">1</div>
 
           <!-- 筆使い指示（とめ・はね・はらい） -->
-          <div id="brush-pill-label" class="brush-pill-label">とめる</div>
+          <div id="brush-pill-label" class="brush-pill-label">● とめる</div>
           <div id="brush-end-dot" class="brush-end-dot"></div>
+
+          <!-- 動く筆先ポインター（筆ペンカーソル） -->
+          <div id="brush-pen-pointer" class="brush-pen-pointer" style="display: none;">
+            <span class="pen-tip-icon">🖌️</span>
+          </div>
 
           <!-- 合格花丸スタンプ -->
           <div class="hanamaru-overlay" id="hanamaru-overlay">
@@ -1109,13 +1251,68 @@
       return idx < 5 ? STROKE_PALETTE[idx] : STROKE_PALETTE[5];
     }
 
-    function getBrushInstruction(typeStr) {
-      if (!typeStr) return { label: 'とめる', kind: 'dot' };
-      if (typeStr.includes('㇒') || typeStr.includes('㇏')) return { label: 'はらう', kind: 'slash' };
-      if (typeStr.includes('㇚') || typeStr.includes('㇈') || typeStr.includes('㇂') || typeStr.includes('㇁')) {
-        return { label: 'はねる', kind: 'hook' };
+    function getBrushInstruction(strokeOrType) {
+      let type = 'tome';
+      let typeName = 'とめる';
+      let detail = '';
+
+      if (strokeOrType && typeof strokeOrType === 'object') {
+        type = strokeOrType.type || 'tome';
+        typeName = strokeOrType.typeName || (type === 'hane' ? 'はねる' : type === 'harai' ? 'はらう' : 'とめる');
+        detail = strokeOrType.detail || '';
+      } else if (typeof strokeOrType === 'string') {
+        if (strokeOrType === 'hane' || strokeOrType === 'はねる') {
+          type = 'hane';
+          typeName = 'はねる';
+        } else if (strokeOrType === 'harai' || strokeOrType === 'はらう') {
+          type = 'harai';
+          typeName = 'はらう';
+        } else if (strokeOrType === 'tome' || strokeOrType === 'とめる') {
+          type = 'tome';
+          typeName = 'とめる';
+        } else {
+          // KanjiVG記号フォールバック
+          if (['㇚','㇆','㇖','㇟','㇙','㇁','㇃','㇂','㇈','㇉','㇋','㇀'].some(h => strokeOrType.includes(h))) {
+            type = 'hane';
+            typeName = 'はねる';
+          } else if (strokeOrType.includes('㇒') || strokeOrType.includes('㇓') || strokeOrType.includes('㇏')) {
+            type = 'harai';
+            typeName = 'はらう';
+          } else {
+            type = 'tome';
+            typeName = 'とめる';
+          }
+        }
       }
-      return { label: 'とめる', kind: 'dot' };
+
+      if (type === 'hane') {
+        return {
+          kind: 'hane',
+          label: 'はねる',
+          icon: '⤴',
+          badgeText: '⤴ はねる',
+          detail: detail || 'キュッとはねる',
+          color: '#f59e0b'
+        };
+      } else if (type === 'harai') {
+        return {
+          kind: 'harai',
+          label: 'はらう',
+          icon: '彡',
+          badgeText: '彡 はらう',
+          detail: detail || 'スーッとはらう',
+          color: '#0284c7'
+        };
+      } else {
+        return {
+          kind: 'tome',
+          label: 'とめる',
+          icon: '●',
+          badgeText: '● とめる',
+          detail: detail || 'しっかりとめる',
+          color: '#e11d48'
+        };
+      }
     }
 
     /* ==========================================================================
@@ -1173,28 +1370,68 @@
         const now = audioCtx.currentTime;
 
         if (type === 'stroke') {
+          // 描き始めの音
           const osc = audioCtx.createOscillator();
           const gain = audioCtx.createGain();
           osc.type = 'sine';
           osc.frequency.setValueAtTime(320, now);
-          osc.frequency.exponentialRampToValueAtTime(540, now + 0.1);
-          gain.gain.setValueAtTime(0.1, now);
+          osc.frequency.exponentialRampToValueAtTime(540, now + 0.08);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.08);
+        } else if (type === 'tome') {
+          // 「とめる」：トン！（しっかり留まる心地よい音）
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(280, now);
+          osc.frequency.exponentialRampToValueAtTime(160, now + 0.1);
+          gain.gain.setValueAtTime(0.18, now);
           gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
           osc.connect(gain);
           gain.connect(audioCtx.destination);
           osc.start(now);
           osc.stop(now + 0.1);
+        } else if (type === 'hane') {
+          // 「はねる」：キュッ！/ピピッ！（高らかに跳ね上がる音）
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(460, now);
+          osc.frequency.exponentialRampToValueAtTime(920, now + 0.12);
+          gain.gain.setValueAtTime(0.16, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.12);
+        } else if (type === 'harai') {
+          // 「はらう」：シュッ！/サーッ！（風のように滑らかに抜ける音）
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(740, now);
+          osc.frequency.exponentialRampToValueAtTime(220, now + 0.16);
+          gain.gain.setValueAtTime(0.14, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.16);
         } else if (type === 'step') {
           const osc = audioCtx.createOscillator();
           const gain = audioCtx.createGain();
           osc.type = 'triangle';
-          osc.frequency.setValueAtTime(620, now);
-          gain.gain.setValueAtTime(0.15, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+          osc.frequency.setValueAtTime(580, now);
+          gain.gain.setValueAtTime(0.14, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
           osc.connect(gain);
           gain.connect(audioCtx.destination);
           osc.start(now);
-          osc.stop(now + 0.15);
+          osc.stop(now + 0.12);
         } else if (type === 'fanfare') {
           const notes = [523.25, 659.25, 783.99, 1046.50];
           notes.forEach((freq, idx) => {
@@ -1440,12 +1677,79 @@
         clearTimeout(animTimeoutId);
         animTimeoutId = null;
       }
+      hideBrushPointer();
       updatePlayButtonUI(false);
     }
 
     function updatePlayButtonUI(playing) {
       document.getElementById('play-icon').textContent = playing ? '⏸' : '▶';
       document.getElementById('play-text').textContent = playing ? '一時停止' : 'さいせい';
+    }
+
+    /* 先端尖りポリゴン生成（はらい・はねを教科書体のように美しく尖らせる） */
+    function createStrokeTipPolygon(path, color, idx) {
+      try {
+        const len = path.getTotalLength();
+        if (len < 2) return null;
+        const p1 = path.getPointAtLength(len);
+        const p0 = path.getPointAtLength(Math.max(0, len - 3));
+        const dx = p1.x - p0.x;
+        const dy = p1.y - p0.y;
+        const dLen = Math.hypot(dx, dy);
+        if (dLen === 0) return null;
+        const ux = dx / dLen;
+        const uy = dy / dLen;
+        const nx = -uy;
+        const ny = ux;
+        const r = 4.0; // ストローク半径 (stroke-width 8 / 2)
+        // 左右の端点
+        const lx = p1.x + nx * r;
+        const ly = p1.y + ny * r;
+        const rx = p1.x - nx * r;
+        const ry = p1.y - ny * r;
+        // 先端点（進行方向に少し伸ばして尖らせる）
+        const tx = p1.x + ux * 6.5;
+        const ty = p1.y + uy * 6.5;
+
+        const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+        poly.setAttribute('id', `anim-stroke-tip-${idx}`);
+        poly.setAttribute('class', 'kvg-stroke-tip');
+        poly.setAttribute('points', `${lx.toFixed(2)},${ly.toFixed(2)} ${tx.toFixed(2)},${ty.toFixed(2)} ${rx.toFixed(2)},${ry.toFixed(2)}`);
+        poly.setAttribute('fill', color);
+        poly.style.opacity = '0';
+        return poly;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    /* 筆先カーソル（アニメーション追従）の更新 */
+    function updateBrushPenPosition(svgX, svgY) {
+      const pen = document.getElementById('brush-pen-pointer');
+      if (!pen) return;
+      const pctX = (svgX / 109) * 100;
+      const pctY = (svgY / 109) * 100;
+      pen.style.left = `${pctX}%`;
+      pen.style.top = `${pctY}%`;
+      pen.className = 'brush-pen-pointer drawing';
+      pen.style.display = 'block';
+    }
+
+    function triggerBrushPenAction(kind) {
+      const pen = document.getElementById('brush-pen-pointer');
+      if (!pen) return;
+      pen.className = `brush-pen-pointer drawing action-${kind}`;
+      setTimeout(() => {
+        if (!isPlaying) pen.style.display = 'none';
+      }, 350 / animSpeed);
+    }
+
+    function hideBrushPointer() {
+      const pen = document.getElementById('brush-pen-pointer');
+      if (pen) {
+        pen.style.display = 'none';
+        pen.className = 'brush-pen-pointer';
+      }
     }
 
     function initAnimMode(data) {
@@ -1466,16 +1770,23 @@
 
       // 各ストローク（初期状態: strokeDashoffset = len で隠す）
       data.strokes.forEach((s, idx) => {
+        const color = getStrokeColor(idx + 1);
         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         path.setAttribute('d', s.d);
         path.setAttribute('id', `anim-stroke-${idx}`);
         path.setAttribute('class', 'kvg-stroke');
-        path.setAttribute('stroke', getStrokeColor(idx + 1));
+        path.setAttribute('stroke', color);
         svg.appendChild(path);
 
         const len = path.getTotalLength();
         path.style.strokeDasharray = len;
         path.style.strokeDashoffset = len;
+
+        // 「はらい」の先端尖りポリゴン
+        if (s.type === 'harai') {
+          const tip = createStrokeTipPolygon(path, color, idx);
+          if (tip) svg.appendChild(tip);
+        }
       });
 
       // 画番号バッジ
@@ -1530,19 +1841,23 @@
     function setAnimStepDirect(step) {
       currentStep = step;
       const data = currentGradeList[currentIndex];
+      hideBrushPointer();
 
       for (let i = 0; i < data.strokesCount; i++) {
         const path = document.getElementById(`anim-stroke-${i}`);
         const num = document.getElementById(`anim-num-${i}`);
+        const tip = document.getElementById(`anim-stroke-tip-${i}`);
         if (!path) continue;
         const len = path.getTotalLength();
 
         if (i < step) {
           path.style.strokeDashoffset = 0;
           if (num) num.style.opacity = '1';
+          if (tip) tip.style.opacity = '1';
         } else {
           path.style.strokeDashoffset = len;
           if (num) num.style.opacity = '0';
+          if (tip) tip.style.opacity = '0';
         }
       }
 
@@ -1556,42 +1871,78 @@
       // すべての画を描き終えた場合
       if (currentStep >= data.strokesCount) {
         updateAnimGuideUI();
-        playSound('step');
+        playSound('tome');
         stopAnimation(); // 自動でループせず完了状態で停止
         return;
       }
 
       const strokeIdx = currentStep;
+      const strokeData = data.strokes[strokeIdx];
+      const inst = getBrushInstruction(strokeData);
       const path = document.getElementById(`anim-stroke-${strokeIdx}`);
       const num = document.getElementById(`anim-num-${strokeIdx}`);
+      const tip = document.getElementById(`anim-stroke-tip-${strokeIdx}`);
       if (!path) return;
 
       if (num) num.style.opacity = '1';
       playSound('stroke');
 
       const len = path.getTotalLength();
-      const duration = 600 / animSpeed;
+      // 筆使いに応じたアニメーション時間微調整
+      const baseDuration = inst.kind === 'hane' ? 640 : inst.kind === 'harai' ? 580 : 600;
+      const duration = baseDuration / animSpeed;
       const startTime = performance.now();
 
       function drawFrame(now) {
         if (!isPlaying || token !== animToken) return;
         const elapsed = now - startTime;
         const progress = Math.min(1, elapsed / duration);
-        const ease = 1 - Math.pow(1 - progress, 3);
+
+        // 筆使い（とめ・はね・はらい）別のイージング計算
+        let ease;
+        if (inst.kind === 'hane') {
+          // はね：途中でタメを作り、最後キュッと跳ね上がる
+          if (progress < 0.76) {
+            ease = (progress / 0.76) * 0.74;
+          } else {
+            const p2 = (progress - 0.76) / 0.24;
+            ease = 0.74 + 0.26 * Math.pow(p2, 1.85);
+          }
+        } else if (inst.kind === 'harai') {
+          // はらい：終端に向かってスーーッと筆が抜けていく
+          ease = Math.pow(progress, 1.35);
+        } else {
+          // とめる：自然な減速でピタッと止まる
+          ease = 1 - Math.pow(1 - progress, 2.4);
+        }
+
+        const curLen = len * ease;
         path.style.strokeDashoffset = len * (1 - ease);
+
+        // 動く筆先カーソルの座標更新
+        const pt = path.getPointAtLength(Math.min(len, Math.max(0, curLen)));
+        updateBrushPenPosition(pt.x, pt.y);
 
         if (progress < 1) {
           animFrameId = requestAnimationFrame(drawFrame);
         } else {
           path.style.strokeDashoffset = 0;
+          if (tip) tip.style.opacity = '1';
+
+          // 筆先の完了アクション（留まる・跳ねる・抜ける）
+          triggerBrushPenAction(inst.kind);
+
+          // 専用サウンド（トメ：トン！、ハネ：キュッ！、ハライ：シュッ！）
+          playSound(inst.kind);
+
           currentStep++;
           updateAnimGuideUI();
-          playSound('step');
 
-          // 次の画へ
+          // 次の画へ（とめ・はね・はらいで心地よいリズム）
+          const waitTime = inst.kind === 'tome' ? 400 : inst.kind === 'hane' ? 380 : 350;
           animTimeoutId = setTimeout(() => {
             runAnimNextStep(token);
-          }, 350 / animSpeed);
+          }, waitTime / animSpeed);
         }
       }
 
@@ -1608,21 +1959,22 @@
 
       if (currentStep > 0 && currentStep <= data.strokesCount) {
         const s = data.strokes[currentStep - 1];
-        const inst = getBrushInstruction(s.type);
-        hint.textContent = `${currentStep}画目: ${s.typeName} (${inst.label})`;
+        const inst = getBrushInstruction(s);
+        const detailStr = s.detail ? `（${s.detail}）` : '';
+        hint.innerHTML = `<span class="guide-stroke-num">${currentStep}画目:</span> <span class="guide-type-badge ${inst.kind}">${inst.badgeText}</span> <span class="guide-detail">${detailStr}</span>`;
 
         // 終点インジケーター表示
         const curPath = document.getElementById(`anim-stroke-${currentStep - 1}`);
         if (curPath) {
           const len = curPath.getTotalLength();
           const endPt = curPath.getPointAtLength(len);
-          showBrushIndicator(endPt.x, endPt.y, inst.label);
+          showBrushIndicator(endPt.x, endPt.y, inst);
         }
       } else if (currentStep === 0) {
-        hint.textContent = `準備完了 (再生ボタンを押してね)`;
+        hint.innerHTML = `準備完了 (再生ボタンを押してね)`;
         hideBrushIndicators();
       } else {
-        hint.textContent = `全 ${data.strokesCount} 画 完成！`;
+        hint.innerHTML = `全 ${data.strokesCount} 画 完成！`;
         hideBrushIndicators();
       }
 
@@ -1644,9 +1996,13 @@
       }
     }
 
-    function showBrushIndicator(svgX, svgY, label) {
+    function showBrushIndicator(svgX, svgY, inst) {
       const pill = document.getElementById('brush-pill-label');
       const dot = document.getElementById('brush-end-dot');
+
+      // クラス名を設定（tome / hane / harai）
+      pill.className = `brush-pill-label show ${inst.kind}`;
+      dot.className = `brush-end-dot show ${inst.kind}`;
 
       // 0〜109 の座標をパーセントに変換し、はみ出ないように clamp
       let pctX = Math.max(8, Math.min(92, (svgX / 109) * 100));
@@ -1654,20 +2010,20 @@
 
       dot.style.left = `${pctX}%`;
       dot.style.top = `${pctY}%`;
-      dot.classList.add('show');
+      dot.innerHTML = inst.kind === 'hane' ? '⤴' : '';
 
-      // ラベル位置は少しずらす
-      let labelX = pctX > 75 ? pctX - 12 : pctX + 10;
-      let labelY = pctY > 80 ? pctY - 8 : pctY + 5;
+      // ラベル位置の自動微調整（画面端で隠れないように）
+      let labelX = pctX > 72 ? pctX - 14 : pctX + 13;
+      let labelY = pctY > 80 ? pctY - 9 : pctY + 6;
       pill.style.left = `${labelX}%`;
       pill.style.top = `${labelY}%`;
-      pill.textContent = label;
-      pill.classList.add('show');
+      pill.innerHTML = `<span>${inst.icon}</span> <span>${inst.label}</span>`;
     }
 
     function hideBrushIndicators() {
-      document.getElementById('brush-pill-label').classList.remove('show');
-      document.getElementById('brush-end-dot').classList.remove('show');
+      document.getElementById('brush-pill-label').className = 'brush-pill-label';
+      document.getElementById('brush-end-dot').className = 'brush-end-dot';
+      hideBrushPointer();
     }
 
     function setAnimSpeed(sp, btn) {
@@ -1731,23 +2087,31 @@
 
       // お手本ストローク
       data.strokes.forEach((s, idx) => {
+        const color = getStrokeColor(idx + 1);
         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         path.setAttribute('d', s.d);
         path.setAttribute('class', 'kvg-stroke');
-        path.setAttribute('stroke', getStrokeColor(idx + 1));
+        path.setAttribute('stroke', color);
         path.style.strokeDashoffset = '0';
 
         // ガイド表示切り替え
+        let targetOpacity = '0.2';
         if (!showTraceGuide) {
-          path.style.opacity = '0';
-        } else if (idx < traceCurrentIdx) {
-          path.style.opacity = '0.2';
+          targetOpacity = '0';
         } else if (idx === traceCurrentIdx) {
-          path.style.opacity = '0.7';
-        } else {
-          path.style.opacity = '0.2';
+          targetOpacity = '0.7';
         }
+        path.style.opacity = targetOpacity;
         svg.appendChild(path);
+
+        // はらい先端尖りポリゴン
+        if (s.type === 'harai') {
+          const tip = createStrokeTipPolygon(path, color, idx);
+          if (tip) {
+            tip.style.opacity = targetOpacity;
+            svg.appendChild(tip);
+          }
+        }
       });
 
       // 画番号
@@ -1772,8 +2136,9 @@
 
       if (traceCurrentIdx < data.strokesCount) {
         const s = data.strokes[traceCurrentIdx];
-        const inst = getBrushInstruction(s.type);
-        guideText.textContent = `👉 ${traceCurrentIdx + 1}画目をなぞろう (${s.typeName}・${inst.label})`;
+        const inst = getBrushInstruction(s);
+        const detailStr = s.detail ? `（${s.detail}）` : '';
+        guideText.innerHTML = `👉 <strong>第${traceCurrentIdx + 1}画</strong> をなぞろう！ <span class="guide-type-badge ${inst.kind}">${inst.badgeText}</span> <span class="guide-detail">${detailStr}</span>`;
 
         // 始点ピンの配置
         const tempPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
@@ -1785,7 +2150,7 @@
         pin.style.background = getStrokeColor(traceCurrentIdx + 1);
         pin.style.display = 'flex';
       } else {
-        guideText.textContent = `💮 全て正しく書けました！`;
+        guideText.innerHTML = `💮 <strong>全 ${data.strokesCount} 画</strong> 正しく書けました！`;
         pin.style.display = 'none';
         hideBrushIndicators();
       }
@@ -1900,7 +2265,10 @@
         });
         currentTracePoints = [];
         traceCurrentIdx++;
-        playSound('step');
+
+        const inst = getBrushInstruction(expected);
+        playSound(inst.kind); // とめ・はね・はらいの専用音
+        showBrushIndicator(pEnd.x / scaleX, pEnd.y / scaleY, inst);
 
         if (traceCurrentIdx >= data.strokesCount) {
           onTraceAllCleared();

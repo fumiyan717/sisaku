@@ -3,7 +3,6 @@
     "id": 1,
     "kanji": "木",
     "strokesCount": 4,
-    "cardImage": "cards/01_木.webp",
     "onyomi": "ぼく、もく",
     "kunyomi": "き、こ",
     "strokes": [
@@ -71,7 +70,6 @@
     "id": 2,
     "kanji": "大",
     "strokesCount": 3,
-    "cardImage": "cards/02_大.webp",
     "onyomi": "だい、たい",
     "kunyomi": "おお、おおきい",
     "strokes": [
@@ -128,7 +126,6 @@
     "id": 3,
     "kanji": "小",
     "strokesCount": 3,
-    "cardImage": "cards/03_小.webp",
     "onyomi": "しょう",
     "kunyomi": "ちいさい、こ、お",
     "strokes": [
@@ -186,7 +183,6 @@
     "id": 4,
     "kanji": "一",
     "strokesCount": 1,
-    "cardImage": "cards/04_一.webp",
     "onyomi": "いち、いつ",
     "kunyomi": "ひと、ひとつ",
     "strokes": [
@@ -221,7 +217,6 @@
     "id": 5,
     "kanji": "二",
     "strokesCount": 2,
-    "cardImage": "cards/05_二.webp",
     "onyomi": "に",
     "kunyomi": "ふた、ふたつ",
     "strokes": [
@@ -266,7 +261,6 @@
     "id": 6,
     "kanji": "三",
     "strokesCount": 3,
-    "cardImage": "cards/06_三.webp",
     "onyomi": "さん",
     "kunyomi": "み、みっつ",
     "strokes": [
@@ -322,7 +316,6 @@
     "id": 7,
     "kanji": "四",
     "strokesCount": 5,
-    "cardImage": "cards/07_四.webp",
     "onyomi": "し",
     "kunyomi": "よ、よっつ、よん",
     "strokes": [
@@ -402,7 +395,6 @@
     "id": 8,
     "kanji": "五",
     "strokesCount": 4,
-    "cardImage": "cards/08_五.webp",
     "onyomi": "ご",
     "kunyomi": "いつ、いつつ",
     "strokes": [
@@ -469,7 +461,6 @@
     "id": 9,
     "kanji": "六",
     "strokesCount": 4,
-    "cardImage": "cards/09_六.webp",
     "onyomi": "ろく",
     "kunyomi": "む、むっつ",
     "strokes": [
@@ -536,7 +527,6 @@
     "id": 10,
     "kanji": "七",
     "strokesCount": 2,
-    "cardImage": "cards/10_七.webp",
     "onyomi": "しち",
     "kunyomi": "なな、ななつ",
     "strokes": [
@@ -581,7 +571,6 @@
     "id": 11,
     "kanji": "八",
     "strokesCount": 2,
-    "cardImage": "cards/11_八.webp",
     "onyomi": "はち",
     "kunyomi": "や、やっつ",
     "strokes": [
@@ -626,7 +615,6 @@
     "id": 12,
     "kanji": "九",
     "strokesCount": 2,
-    "cardImage": "cards/12_九.webp",
     "onyomi": "きゅう、く",
     "kunyomi": "ここの、ここのつ",
     "strokes": [
@@ -672,7 +660,6 @@
     "id": 13,
     "kanji": "十",
     "strokesCount": 2,
-    "cardImage": "cards/13_十.webp",
     "onyomi": "じゅう、じっ",
     "kunyomi": "とお、と",
     "strokes": [
@@ -718,7 +705,6 @@
     "id": 14,
     "kanji": "子",
     "strokesCount": 3,
-    "cardImage": "cards/14_子.webp",
     "onyomi": "し、す",
     "kunyomi": "こ",
     "strokes": [
@@ -773,7 +759,6 @@
     "id": 15,
     "kanji": "空",
     "strokesCount": 8,
-    "cardImage": "cards/15_空.webp",
     "onyomi": "くう",
     "kunyomi": "そら、あく、から",
     "strokes": [
@@ -886,7 +871,6 @@
     "id": 16,
     "kanji": "先",
     "strokesCount": 6,
-    "cardImage": "cards/16_先.webp",
     "onyomi": "せん",
     "kunyomi": "さき",
     "strokes": [
@@ -973,7 +957,6 @@
     "id": 17,
     "kanji": "生",
     "strokesCount": 5,
-    "cardImage": "cards/17_生.webp",
     "onyomi": "せい、しょう",
     "kunyomi": "いきる、うまれる、はえる、なま",
     "strokes": [
@@ -1056,7 +1039,6 @@
     "id": 18,
     "kanji": "男",
     "strokesCount": 7,
-    "cardImage": "cards/18_男.webp",
     "onyomi": "だん、なん",
     "kunyomi": "おとこ",
     "strokes": [
@@ -1155,7 +1137,6 @@
     "id": 19,
     "kanji": "女",
     "strokesCount": 3,
-    "cardImage": "cards/19_女.webp",
     "onyomi": "じょ",
     "kunyomi": "おんな",
     "strokes": [
@@ -1209,7 +1190,6 @@
     "id": 20,
     "kanji": "手",
     "strokesCount": 4,
-    "cardImage": "cards/20_手.webp",
     "onyomi": "しゅ",
     "kunyomi": "て",
     "strokes": [
@@ -1274,7 +1254,6 @@
     "id": 21,
     "kanji": "天",
     "strokesCount": 4,
-    "cardImage": "cards/21_天.webp",
     "onyomi": "てん",
     "kunyomi": "あま",
     "strokes": [
@@ -1339,7 +1318,6 @@
     "id": 22,
     "kanji": "青",
     "strokesCount": 8,
-    "cardImage": "cards/22_青.webp",
     "onyomi": "せい",
     "kunyomi": "あお、あおい",
     "strokes": [
@@ -1450,7 +1428,6 @@
     "id": 23,
     "kanji": "文",
     "strokesCount": 4,
-    "cardImage": "cards/23_文.webp",
     "onyomi": "ぶん、もん",
     "kunyomi": "—",
     "strokes": [
@@ -1516,7 +1493,6 @@
     "id": 24,
     "kanji": "字",
     "strokesCount": 6,
-    "cardImage": "cards/24_字.webp",
     "onyomi": "じ",
     "kunyomi": "—",
     "strokes": [
@@ -1603,7 +1579,6 @@
     "id": 25,
     "kanji": "正",
     "strokesCount": 5,
-    "cardImage": "cards/25_正.webp",
     "onyomi": "せい、しょう",
     "kunyomi": "ただしい、まさ",
     "strokes": [
@@ -1682,7 +1657,6 @@
     "id": 26,
     "kanji": "見",
     "strokesCount": 7,
-    "cardImage": "cards/26_見.webp",
     "onyomi": "けん",
     "kunyomi": "みる",
     "strokes": [
@@ -1780,7 +1754,6 @@
     "id": 27,
     "kanji": "学",
     "strokesCount": 8,
-    "cardImage": "cards/27_学.webp",
     "onyomi": "がく",
     "kunyomi": "まなぶ",
     "strokes": [
@@ -1889,7 +1862,6 @@
     "id": 28,
     "kanji": "校",
     "strokesCount": 10,
-    "cardImage": "cards/28_校.webp",
     "onyomi": "こう",
     "kunyomi": "—",
     "strokes": [
@@ -2020,7 +1992,6 @@
     "id": 29,
     "kanji": "山",
     "strokesCount": 3,
-    "cardImage": "cards/29_山.webp",
     "onyomi": "さん",
     "kunyomi": "やま",
     "strokes": [
@@ -2074,7 +2045,6 @@
     "id": 30,
     "kanji": "水",
     "strokesCount": 4,
-    "cardImage": "cards/30_水.webp",
     "onyomi": "すい",
     "kunyomi": "みず",
     "strokes": [
@@ -2139,7 +2109,6 @@
     "id": 31,
     "kanji": "雨",
     "strokesCount": 8,
-    "cardImage": "cards/31_雨.webp",
     "onyomi": "う",
     "kunyomi": "あめ、あま",
     "strokes": [
@@ -2250,7 +2219,6 @@
     "id": 32,
     "kanji": "上",
     "strokesCount": 3,
-    "cardImage": "cards/32_上.webp",
     "onyomi": "じょう",
     "kunyomi": "うえ、うわ、かみ、あがる、のぼる",
     "strokes": [
@@ -2312,7 +2280,6 @@
     "id": 33,
     "kanji": "下",
     "strokesCount": 3,
-    "cardImage": "cards/33_下.webp",
     "onyomi": "か、げ",
     "kunyomi": "した、しも、もと、さがる、くだる、おりる",
     "strokes": [
@@ -2377,7 +2344,6 @@
     "id": 34,
     "kanji": "日",
     "strokesCount": 4,
-    "cardImage": "cards/34_日.webp",
     "onyomi": "にち、じつ",
     "kunyomi": "ひ、か",
     "strokes": [
@@ -2445,7 +2411,6 @@
     "id": 35,
     "kanji": "火",
     "strokesCount": 4,
-    "cardImage": "cards/35_火.webp",
     "onyomi": "か",
     "kunyomi": "ひ",
     "strokes": [
@@ -2510,7 +2475,6 @@
     "id": 36,
     "kanji": "田",
     "strokesCount": 5,
-    "cardImage": "cards/36_田.webp",
     "onyomi": "でん",
     "kunyomi": "た",
     "strokes": [
@@ -2586,7 +2550,6 @@
     "id": 37,
     "kanji": "川",
     "strokesCount": 3,
-    "cardImage": "cards/37_川.webp",
     "onyomi": "—",
     "kunyomi": "かわ",
     "strokes": [
@@ -2640,7 +2603,6 @@
     "id": 38,
     "kanji": "竹",
     "strokesCount": 6,
-    "cardImage": "cards/38_竹.webp",
     "onyomi": "ちく",
     "kunyomi": "たけ",
     "strokes": [
@@ -2727,7 +2689,6 @@
     "id": 39,
     "kanji": "月",
     "strokesCount": 4,
-    "cardImage": "cards/39_月.webp",
     "onyomi": "げつ、がつ",
     "kunyomi": "つき",
     "strokes": [
@@ -2793,7 +2754,6 @@
     "id": 40,
     "kanji": "車",
     "strokesCount": 7,
-    "cardImage": "cards/40_車.webp",
     "onyomi": "しゃ",
     "kunyomi": "くるま",
     "strokes": [
@@ -2891,7 +2851,6 @@
     "id": 41,
     "kanji": "人",
     "strokesCount": 2,
-    "cardImage": "cards/41_人.webp",
     "onyomi": "じん、にん",
     "kunyomi": "ひと",
     "strokes": [
@@ -2935,7 +2894,6 @@
     "id": 42,
     "kanji": "気",
     "strokesCount": 6,
-    "cardImage": "cards/42_気.webp",
     "onyomi": "き、け",
     "kunyomi": "—",
     "strokes": [
@@ -3023,7 +2981,6 @@
     "id": 43,
     "kanji": "糸",
     "strokesCount": 6,
-    "cardImage": "cards/43_糸.webp",
     "onyomi": "し",
     "kunyomi": "いと",
     "strokes": [
@@ -3110,7 +3067,6 @@
     "id": 44,
     "kanji": "目",
     "strokesCount": 5,
-    "cardImage": "cards/44_目.webp",
     "onyomi": "もく",
     "kunyomi": "め",
     "strokes": [
@@ -3186,7 +3142,6 @@
     "id": 45,
     "kanji": "玉",
     "strokesCount": 5,
-    "cardImage": "cards/45_玉.webp",
     "onyomi": "ぎょく",
     "kunyomi": "たま",
     "strokes": [
@@ -3262,7 +3217,6 @@
     "id": 46,
     "kanji": "村",
     "strokesCount": 7,
-    "cardImage": "cards/46_村.webp",
     "onyomi": "そん",
     "kunyomi": "むら",
     "strokes": [
@@ -3360,7 +3314,6 @@
     "id": 47,
     "kanji": "白",
     "strokesCount": 5,
-    "cardImage": "cards/47_白.webp",
     "onyomi": "はく",
     "kunyomi": "しろ、しろい",
     "strokes": [
@@ -3438,7 +3391,6 @@
     "id": 48,
     "kanji": "土",
     "strokesCount": 3,
-    "cardImage": "cards/48_土.webp",
     "onyomi": "ど、と",
     "kunyomi": "つち",
     "strokes": [
@@ -3493,7 +3445,6 @@
     "id": 49,
     "kanji": "音",
     "strokesCount": 9,
-    "cardImage": "cards/49_音.webp",
     "onyomi": "おん",
     "kunyomi": "おと、ね",
     "strokes": [
@@ -3615,7 +3566,6 @@
     "id": 50,
     "kanji": "花",
     "strokesCount": 7,
-    "cardImage": "cards/50_花.webp",
     "onyomi": "か",
     "kunyomi": "はな",
     "strokes": [
@@ -3713,7 +3663,6 @@
     "id": 51,
     "kanji": "休",
     "strokesCount": 6,
-    "cardImage": "cards/51_休.webp",
     "onyomi": "きゅう",
     "kunyomi": "やすむ",
     "strokes": [
@@ -3800,7 +3749,6 @@
     "id": 52,
     "kanji": "虫",
     "strokesCount": 6,
-    "cardImage": "cards/52_虫.webp",
     "onyomi": "ちゅう",
     "kunyomi": "むし",
     "strokes": [
@@ -3887,7 +3835,6 @@
     "id": 53,
     "kanji": "金",
     "strokesCount": 8,
-    "cardImage": "cards/53_金.webp",
     "onyomi": "きん、こん",
     "kunyomi": "かね、かな",
     "strokes": [
@@ -3999,7 +3946,6 @@
     "id": 54,
     "kanji": "本",
     "strokesCount": 5,
-    "cardImage": "cards/54_本.webp",
     "onyomi": "ほん",
     "kunyomi": "もと",
     "strokes": [
@@ -4075,7 +4021,6 @@
     "id": 55,
     "kanji": "森",
     "strokesCount": 12,
-    "cardImage": "cards/55_森.webp",
     "onyomi": "しん",
     "kunyomi": "もり",
     "strokes": [
@@ -4228,7 +4173,6 @@
     "id": 56,
     "kanji": "出",
     "strokesCount": 5,
-    "cardImage": "cards/56_出.webp",
     "onyomi": "しゅつ",
     "kunyomi": "でる、だす",
     "strokes": [
@@ -4306,7 +4250,6 @@
     "id": 57,
     "kanji": "中",
     "strokesCount": 4,
-    "cardImage": "cards/57_中.webp",
     "onyomi": "ちゅう",
     "kunyomi": "なか",
     "strokes": [
@@ -4371,7 +4314,6 @@
     "id": 58,
     "kanji": "町",
     "strokesCount": 7,
-    "cardImage": "cards/58_町.webp",
     "onyomi": "ちょう",
     "kunyomi": "まち",
     "strokes": [
@@ -4469,7 +4411,6 @@
     "id": 59,
     "kanji": "入",
     "strokesCount": 2,
-    "cardImage": "cards/59_入.webp",
     "onyomi": "にゅう",
     "kunyomi": "はいる、いれる",
     "strokes": [
@@ -4514,7 +4455,6 @@
     "id": 60,
     "kanji": "赤",
     "strokesCount": 7,
-    "cardImage": "cards/60_赤.webp",
     "onyomi": "せき",
     "kunyomi": "あか、あかい",
     "strokes": [
@@ -4614,7 +4554,6 @@
     "id": 61,
     "kanji": "耳",
     "strokesCount": 6,
-    "cardImage": "cards/61_耳.webp",
     "onyomi": "—",
     "kunyomi": "みみ",
     "strokes": [
@@ -4701,7 +4640,6 @@
     "id": 62,
     "kanji": "王",
     "strokesCount": 4,
-    "cardImage": "cards/62_王.webp",
     "onyomi": "おう",
     "kunyomi": "—",
     "strokes": [
@@ -4766,7 +4704,6 @@
     "id": 63,
     "kanji": "口",
     "strokesCount": 3,
-    "cardImage": "cards/63_口.webp",
     "onyomi": "こう、く",
     "kunyomi": "くち",
     "strokes": [
@@ -4821,7 +4758,6 @@
     "id": 64,
     "kanji": "年",
     "strokesCount": 6,
-    "cardImage": "cards/64_年.webp",
     "onyomi": "ねん",
     "kunyomi": "とし",
     "strokes": [
@@ -4908,7 +4844,6 @@
     "id": 65,
     "kanji": "立",
     "strokesCount": 5,
-    "cardImage": "cards/65_立.webp",
     "onyomi": "りつ",
     "kunyomi": "たつ",
     "strokes": [
@@ -4984,7 +4919,6 @@
     "id": 66,
     "kanji": "草",
     "strokesCount": 9,
-    "cardImage": "cards/66_草.webp",
     "onyomi": "そう",
     "kunyomi": "くさ",
     "strokes": [
@@ -5104,7 +5038,6 @@
     "id": 67,
     "kanji": "名",
     "strokesCount": 6,
-    "cardImage": "cards/67_名.webp",
     "onyomi": "めい、みょう",
     "kunyomi": "な",
     "strokes": [
@@ -5192,7 +5125,6 @@
     "id": 68,
     "kanji": "夕",
     "strokesCount": 3,
-    "cardImage": "cards/68_夕.webp",
     "onyomi": "—",
     "kunyomi": "ゆう",
     "strokes": [
@@ -5246,7 +5178,6 @@
     "id": 69,
     "kanji": "百",
     "strokesCount": 6,
-    "cardImage": "cards/69_百.webp",
     "onyomi": "ひゃく",
     "kunyomi": "—",
     "strokes": [
@@ -5333,7 +5264,6 @@
     "id": 70,
     "kanji": "円",
     "strokesCount": 4,
-    "cardImage": "cards/70_円.webp",
     "onyomi": "えん",
     "kunyomi": "まるい",
     "strokes": [
@@ -5398,7 +5328,6 @@
     "id": 71,
     "kanji": "千",
     "strokesCount": 3,
-    "cardImage": "cards/71_千.webp",
     "onyomi": "せん",
     "kunyomi": "ち",
     "strokes": [
@@ -5452,7 +5381,6 @@
     "id": 72,
     "kanji": "犬",
     "strokesCount": 4,
-    "cardImage": "cards/72_犬.webp",
     "onyomi": "けん",
     "kunyomi": "いぬ",
     "strokes": [
@@ -5517,7 +5445,6 @@
     "id": 73,
     "kanji": "早",
     "strokesCount": 6,
-    "cardImage": "cards/73_早.webp",
     "onyomi": "そう",
     "kunyomi": "はやい",
     "strokes": [
@@ -5604,7 +5531,6 @@
     "id": 74,
     "kanji": "貝",
     "strokesCount": 7,
-    "cardImage": "cards/74_貝.webp",
     "onyomi": "—",
     "kunyomi": "かい",
     "strokes": [
@@ -5702,7 +5628,6 @@
     "id": 75,
     "kanji": "林",
     "strokesCount": 8,
-    "cardImage": "cards/75_林.webp",
     "onyomi": "りん",
     "kunyomi": "はやし",
     "strokes": [
@@ -5811,7 +5736,6 @@
     "id": 76,
     "kanji": "右",
     "strokesCount": 5,
-    "cardImage": "cards/76_右.webp",
     "onyomi": "う、ゆう",
     "kunyomi": "みぎ",
     "strokes": [
@@ -5888,7 +5812,6 @@
     "id": 77,
     "kanji": "足",
     "strokesCount": 7,
-    "cardImage": "cards/77_足.webp",
     "onyomi": "そく",
     "kunyomi": "あし、たりる",
     "strokes": [
@@ -5988,7 +5911,6 @@
     "id": 78,
     "kanji": "石",
     "strokesCount": 5,
-    "cardImage": "cards/78_石.webp",
     "onyomi": "せき、しゃく",
     "kunyomi": "いし",
     "strokes": [
@@ -6065,7 +5987,6 @@
     "id": 79,
     "kanji": "左",
     "strokesCount": 5,
-    "cardImage": "cards/79_左.webp",
     "onyomi": "さ",
     "kunyomi": "ひだり",
     "strokes": [
@@ -6141,7 +6062,6 @@
     "id": 80,
     "kanji": "力",
     "strokesCount": 2,
-    "cardImage": "cards/80_力.webp",
     "onyomi": "りょく、りき",
     "kunyomi": "ちから",
     "strokes": [

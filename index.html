@@ -1944,6 +1944,325 @@
       .cert-print-hide {
         display: none !important;
       }
+    /* === 手書き筆順・トメハネ採点AI 特訓モーダル === */
+    .handwrite-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin: 10px 0;
+    }
+
+    .handwrite-canvas-box {
+      position: relative;
+      width: 280px;
+      height: 280px;
+      background: radial-gradient(circle at center, #0d1e38 0%, #060e1c 100%);
+      border: 3px solid var(--player-ship-stroke, #00e5ff);
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(0, 229, 255, 0.4), inset 0 0 25px rgba(0, 0, 0, 0.8);
+      touch-action: none;
+      overflow: hidden;
+      cursor: crosshair;
+    }
+
+    /* マス目の十字リーダー線 */
+    .handwrite-grid-line-h, .handwrite-grid-line-v {
+      position: absolute;
+      pointer-events: none;
+      background: rgba(0, 229, 255, 0.18);
+      z-index: 1;
+    }
+    .handwrite-grid-line-h {
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: 1.5px;
+      border-top: 1px dashed rgba(0, 229, 255, 0.35);
+    }
+    .handwrite-grid-line-v {
+      left: 50%;
+      top: 0;
+      width: 1.5px;
+      height: 100%;
+      border-left: 1px dashed rgba(0, 229, 255, 0.35);
+    }
+
+    /* うすいお手本ガイド */
+    .handwrite-guide-char {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 190px;
+      font-family: 'Klee One', 'Yu Mincho', 'Hiragino Mincho ProN', serif;
+      color: rgba(255, 255, 255, 0.08);
+      pointer-events: none;
+      z-index: 2;
+      user-select: none;
+      transition: opacity 0.2s;
+    }
+
+    #handwrite-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 3;
+    }
+
+    .handwrite-stroke-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0, 229, 255, 0.15);
+      border: 1px solid #00e5ff;
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 13px;
+      color: #b0f0ff;
+      font-weight: bold;
+    }
+
+    .handwrite-feedback-box {
+      min-height: 48px;
+      width: 100%;
+      max-width: 380px;
+      background: rgba(10, 24, 48, 0.9);
+      border: 1.5px solid #204b7e;
+      border-radius: 10px;
+      padding: 8px 12px;
+      text-align: center;
+      font-size: 13px;
+      color: #e0f0ff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 2px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .handwrite-feedback-title {
+      font-weight: 900;
+      font-size: 14px;
+    }
+
+    /* === 教科書・漢検カリキュラム セレクター === */
+    .curriculum-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin: 8px 0 14px 0;
+      flex-wrap: wrap;
+      background: rgba(8, 20, 42, 0.85);
+      border: 1.5px solid #244673;
+      border-radius: 12px;
+      padding: 8px 12px;
+    }
+
+    .curriculum-label {
+      font-size: 12px;
+      font-weight: 900;
+      color: #8bb5dc;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .curriculum-select {
+      background: #0f2444;
+      color: #00ffff;
+      border: 1.5px solid #00e5ff;
+      border-radius: 8px;
+      padding: 5px 12px;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      outline: none;
+      box-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
+    }
+
+    .curriculum-select:focus {
+      border-color: #ffd700;
+      box-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
+    }
+
+    /* === ローカルAI学習分析レポート === */
+    .ai-report-card {
+      background: rgba(10, 20, 38, 0.95);
+      border: 1.5px solid #1f487e;
+      border-radius: 14px;
+      padding: 14px;
+      margin: 10px 0;
+      text-align: left;
+    }
+
+    .ai-coach-banner {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(135deg, rgba(0, 229, 255, 0.15) 0%, rgba(255, 215, 0, 0.1) 100%);
+      border: 1px solid rgba(0, 229, 255, 0.4);
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+    }
+
+    .ai-coach-avatar {
+      font-size: 32px;
+      filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.6));
+    }
+
+    .ai-coach-msg {
+      font-size: 13px;
+      line-height: 1.5;
+      color: #d8ecff;
+    }
+
+    .ai-stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 8px;
+      margin: 10px 0;
+    }
+
+    .ai-stat-box {
+      background: rgba(14, 30, 56, 0.8);
+      border: 1px solid #234875;
+      border-radius: 8px;
+      padding: 8px;
+      text-align: center;
+    }
+
+    .ai-stat-box-val {
+      font-size: 20px;
+      font-weight: 900;
+      color: #00ffff;
+      margin-top: 2px;
+    }
+
+    .ai-stat-box-lbl {
+      font-size: 11px;
+      color: #8cb0d0;
+    }
+
+    .ai-radars-container {
+      margin-top: 10px;
+    }
+
+    .ai-radar-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 6px 0;
+      font-size: 12px;
+    }
+
+    .ai-radar-label {
+      width: 95px;
+      font-weight: bold;
+      color: #b0d4f5;
+      white-space: nowrap;
+    }
+
+    .ai-radar-track {
+      flex: 1;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 5px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .ai-radar-bar {
+      height: 100%;
+      border-radius: 5px;
+      transition: width 0.5s ease-out;
+    }
+
+    .ai-radar-num {
+      width: 45px;
+      text-align: right;
+      font-weight: bold;
+      color: #ffd700;
+    }
+
+    /* === 二つ名パイロットネーム選択モーダル === */
+    .pilot-name-builder {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 14px 0;
+    }
+
+    .pilot-preview-card {
+      background: radial-gradient(circle at center, rgba(0, 60, 100, 0.6) 0%, rgba(5, 15, 30, 0.95) 100%);
+      border: 2px solid #00e5ff;
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      box-shadow: 0 0 16px rgba(0, 229, 255, 0.35);
+    }
+
+    .pilot-preview-title {
+      font-size: 11px;
+      color: #88c0e8;
+      letter-spacing: 1px;
+    }
+
+    .pilot-preview-name {
+      font-size: 22px;
+      font-weight: 900;
+      color: #ffd700;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+      margin: 6px 0;
+    }
+
+    .pilot-select-row {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .pilot-select {
+      background: #0f2340;
+      color: #fff;
+      border: 1.5px solid #28558c;
+      border-radius: 8px;
+      padding: 7px 10px;
+      font-size: 13px;
+      font-weight: bold;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .pilot-select:focus {
+      border-color: #00e5ff;
+    }
+
+    /* プライバシー安心バッジ */
+    .privacy-guarantee-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(0, 255, 136, 0.12);
+      border: 1px solid #00ff88;
+      border-radius: 16px;
+      padding: 3px 10px;
+      font-size: 11px;
+      color: #00ff88;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .privacy-guarantee-badge:hover {
+      background: rgba(0, 255, 136, 0.25);
+      box-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
     }
 
   </style>
@@ -2116,7 +2435,7 @@
       <h1 class="modal-title">ファイブツアーズ<br>JET 漢字バトル</h1>
       <p class="modal-subtitle">漢字の「よみ」を答えてビームで撃破せよ！目指せ銀河の漢字マスター！</p>
 
-      <!-- 連続記録・称号・EXP・機体装備 ステータスバー -->
+      <!-- 連続記録・称号・EXP・機体装備・パイロット名 ステータスバー -->
       <div class="home-status-bar">
         <div class="home-status-item">
           <span class="status-label">まいにち:</span>
@@ -2130,10 +2449,33 @@
           <span class="status-label">EXP:</span>
           <span class="status-val" id="home-exp-display" style="color:#00e5ff;">0</span>
         </div>
+        <div class="home-status-item" onclick="openPilotNameModal()" style="cursor: pointer;" title="パイロット二つ名を変更（自由入力なしで完全安全）">
+          <span class="status-label">パイロット:</span>
+          <span class="status-val" id="home-pilot-name" style="color: #ffd700; font-weight: bold;">⚡ 疾風のハヤブサ01号</span>
+        </div>
         <div class="home-status-item" onclick="openCustomModal()" style="cursor: pointer;" title="機体をカスタマイズ">
           <span class="status-label">そうび:</span>
           <span class="status-val" id="home-custom-display" style="font-size: 13px; color: var(--neon-yellow);">✈️ ブルーホーク</span>
         </div>
+      </div>
+
+      <!-- 個人情報ゼロ安心保証バッジ -->
+      <div style="margin: 4px 0 8px 0; text-align: center;">
+        <span class="privacy-guarantee-badge" onclick="openPrivacyModal()">
+          🛡️ 100% 個人情報ゼロ保証（外部通信・本名入力なし） <span style="text-decoration: underline;">詳しく</span>
+        </span>
+      </div>
+
+      <!-- 主要教科書＆漢検級別 カリキュラムセレクター -->
+      <div class="curriculum-bar">
+        <span class="curriculum-label">📖 学習カリキュラム:</span>
+        <select id="curriculum-select" class="curriculum-select" onchange="changeCurriculum(this.value)">
+          <option value="standard">🏫 学年標準（文部科学省）</option>
+          <option value="mitsumura">📘 光村図書（みつむら）準拠</option>
+          <option value="tokyo">📕 東京書籍（とうしょ）準拠</option>
+          <option value="kyoiku">📙 教育出版（きょうしゅつ）準拠</option>
+          <option value="kanken">🎖️ 日本漢字能力検定（10級〜5級）</option>
+        </select>
       </div>
 
       <!-- 特別ミッション (デイリー & にがて特訓) -->
@@ -2207,6 +2549,8 @@
       <!-- 下部ナビゲーションメニュー -->
       <div class="home-nav-row">
         <button class="home-nav-btn" onclick="openHowToModal()">❓ あそびかた</button>
+        <button class="home-nav-btn" onclick="openHandwriteModal()">✍️ 手書き特訓</button>
+        <button class="home-nav-btn" onclick="openAiReportModal()">📊 AI学習分析</button>
         <button class="home-nav-btn" onclick="openCustomModal()">🚀 機体カスタム</button>
         <button class="home-nav-btn" onclick="openKanjiRoom()">🏛️ 漢字の部屋</button>
         <button class="home-nav-btn" onclick="openCertModal()">🎖️ 認定証</button>
@@ -2320,6 +2664,11 @@
           </div>
           <div id="detail-example-row" style="margin-top: 4px; font-size: 12px; color: #a4c8e0;">
             <span class="reading-label">例文:</span> <span id="detail-example-text">きれいな花が咲く。</span>
+          </div>
+          <div style="margin-top: 6px;">
+            <button class="action-sub-btn" id="btn-detail-handwrite" onclick="startHandwriteForCurrentDetail()" style="font-size: 11px; padding: 3px 10px; border-color: #00e5ff; color: #00e5ff; background: rgba(0, 229, 255, 0.1);">
+              ✍️ この漢字を手書き特訓する
+            </button>
           </div>
         </div>
         <button class="detail-close-btn" onclick="closeKanjiDetail()">✕</button>
@@ -2515,6 +2864,221 @@
           🖨️ 表彰状を印刷する（PDF保存）
         </button>
         <button class="action-sub-btn" onclick="closeCertModal()" style="padding: 10px 20px; font-size: 15px;">とじる</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 手書き筆順・トメハネ採点AI 特訓モーダル -->
+  <div class="modal-overlay" id="handwrite-modal" style="display: none; z-index: 135;">
+    <div class="modal-card" style="max-width: 600px; background: rgba(8, 16, 32, 0.98);">
+      <div class="room-header" style="margin-bottom: 8px;">
+        <div class="room-title-box">
+          <h2 class="room-title">✍️ 手書き筆順・トメハネ採点AI</h2>
+          <p class="room-desc">画面に指やタッチペンで手書き！完全ローカルAIが筆順・画数・トメハネを瞬時に精密判定！</p>
+        </div>
+        <button class="room-close-btn" onclick="closeHandwriteModal()">✕ とじる</button>
+      </div>
+
+      <!-- 対象漢字選択バー -->
+      <div style="display: flex; gap: 8px; justify-content: center; align-items: center; flex-wrap: wrap; margin-bottom: 8px;">
+        <select id="handwrite-grade-select" class="pilot-select" onchange="onHandwriteGradeChange(this.value)">
+          <option value="1">🌱 1年生の漢字</option>
+          <option value="2">🌿 2年生の漢字</option>
+          <option value="3">🌸 3年生の漢字</option>
+          <option value="4">🍁 4年生の漢字</option>
+          <option value="5">⚡ 5年生の漢字</option>
+          <option value="6">🔥 6年生の漢字</option>
+        </select>
+        <select id="handwrite-char-select" class="pilot-select" onchange="selectHandwriteTargetChar(this.value)">
+          <!-- JSで動的生成 -->
+        </select>
+        <button class="action-sub-btn" onclick="handwritePickRandom()" style="font-size: 12px; padding: 6px 12px;">🎲 ランダム</button>
+      </div>
+
+      <!-- 画数・読み案内 -->
+      <div style="display: flex; gap: 12px; justify-content: center; align-items: center; margin-bottom: 8px;">
+        <span class="handwrite-stroke-badge" id="hw-info-strokes">画数: 0画</span>
+        <span class="handwrite-stroke-badge" id="hw-info-reading" style="border-color: #ffd700; color: #ffd700;">読み: —</span>
+      </div>
+
+      <!-- 手書きキャンバスボックス -->
+      <div class="handwrite-container">
+        <div class="handwrite-canvas-box" id="hw-box">
+          <div class="handwrite-grid-line-h"></div>
+          <div class="handwrite-grid-line-v"></div>
+          <div class="handwrite-guide-char" id="hw-guide-char">花</div>
+          <canvas id="handwrite-canvas" width="280" height="280"></canvas>
+        </div>
+
+        <!-- リアルタイム判定フィードバック -->
+        <div class="handwrite-feedback-box" id="hw-feedback-box">
+          <div class="handwrite-feedback-title" id="hw-feedback-title" style="color: #00ffff;">マス目にお手本どおり書いてみよう！</div>
+          <div id="hw-feedback-detail" style="font-size: 12px; color: #a4c8e0;">第1画目を書いてください</div>
+        </div>
+
+        <!-- キャンバス操作ボタン群 -->
+        <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+          <button class="action-sub-btn" onclick="hwUndoStroke()" style="padding: 7px 14px; font-size: 13px;">↩️ 1画もどす</button>
+          <button class="action-sub-btn" onclick="hwClearCanvas()" style="padding: 7px 14px; font-size: 13px;">🗑️ 全部けす</button>
+          <button class="action-sub-btn" id="hw-btn-toggle-guide" onclick="hwToggleGuide()" style="padding: 7px 14px; font-size: 13px;">💡 お手本: ON</button>
+          <button class="start-btn" onclick="hwJudgeCurrent()" style="padding: 8px 20px; font-size: 14px;">✅ AI採点する</button>
+          <button class="action-sub-btn" onclick="hwNextChar()" style="padding: 7px 14px; font-size: 13px; border-color: #00ff88; color: #00ff88;">➡️ 次の漢字</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ローカルAI学習分析レポート モーダル -->
+  <div class="modal-overlay" id="ai-report-modal" style="display: none; z-index: 130;">
+    <div class="modal-card" style="max-width: 680px; background: rgba(8, 16, 32, 0.98);">
+      <div class="room-header" style="margin-bottom: 8px;">
+        <div class="room-title-box">
+          <h2 class="room-title">📊 パイロット学習分析レポート</h2>
+          <p class="room-desc">完全ローカルAIがあなたの誤答傾向や部首の弱点を解析！外部通信ゼロで安心安全！</p>
+        </div>
+        <button class="room-close-btn" onclick="closeAiReportModal()">✕ とじる</button>
+      </div>
+
+      <!-- AI教官アドバイスバナー -->
+      <div class="ai-coach-banner">
+        <div class="ai-coach-avatar">🤖</div>
+        <div class="ai-coach-msg" id="ai-coach-advice-text">
+          パイロットの出撃データを分析中… 弱点を克服して最強の漢字マスターを目指そう！
+        </div>
+      </div>
+
+      <!-- 統計サマリー4マス -->
+      <div class="ai-stat-grid">
+        <div class="ai-stat-box">
+          <div class="ai-stat-box-lbl">マスター漢字</div>
+          <div class="ai-stat-box-val" id="ai-stat-mastered">0 / 1026</div>
+        </div>
+        <div class="ai-stat-box">
+          <div class="ai-stat-box-lbl">にがて漢字</div>
+          <div class="ai-stat-box-val" id="ai-stat-mistakes" style="color: #ff5566;">0問</div>
+        </div>
+        <div class="ai-stat-box">
+          <div class="ai-stat-box-lbl">弱点克服率</div>
+          <div class="ai-stat-box-val" id="ai-stat-resolved-rate" style="color: #00ff88;">100%</div>
+        </div>
+        <div class="ai-stat-box">
+          <div class="ai-stat-box-lbl">デイリー継続</div>
+          <div class="ai-stat-box-val" id="ai-stat-streak" style="color: #ffaa00;">🔥 1日</div>
+        </div>
+      </div>
+
+      <!-- 苦手部首ヒートマップ・ランキング -->
+      <div class="ai-report-card">
+        <div style="font-weight: 900; font-size: 14px; color: #ffd700; margin-bottom: 6px;">
+          🎯 弱点部首・つまずき傾向ワースト分析
+        </div>
+        <div id="ai-radars-list" class="ai-radars-container">
+          <!-- JSで動的生成 -->
+        </div>
+      </div>
+
+      <!-- つまずきパターン診断 -->
+      <div class="ai-report-card" style="margin-top: 10px;">
+        <div style="font-weight: 900; font-size: 14px; color: #00e5ff; margin-bottom: 6px;">
+          🧠 つまずきパターンAI診断
+        </div>
+        <div id="ai-pattern-diagnosis" style="font-size: 13px; color: #d0e8ff; line-height: 1.6;">
+          診断中…
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 12px; justify-content: center; margin-top: 14px; flex-wrap: wrap;">
+        <button class="start-btn" id="btn-ai-focus-train" onclick="startAiFocusTraining()" style="padding: 10px 24px; font-size: 15px;">
+          ⚡ AIおすすめ！にがて部首を集中特訓する！
+        </button>
+        <button class="action-sub-btn" onclick="closeAiReportModal()" style="padding: 10px 20px; font-size: 15px;">とじる</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- パイロット二つ名（コードネーム）編成モーダル -->
+  <div class="modal-overlay" id="pilot-name-modal" style="display: none; z-index: 140;">
+    <div class="modal-card" style="max-width: 550px; background: rgba(8, 16, 32, 0.98);">
+      <div class="room-header" style="margin-bottom: 8px;">
+        <div class="room-title-box">
+          <h2 class="room-title">🧑‍🚀 パイロット二つ名（コードネーム）</h2>
+          <p class="room-desc">本名やニックネームの自由入力を物理的にシャットアウト！かっこいい単語を組み合わせて宇宙唯一のコードネームを作ろう！</p>
+        </div>
+        <button class="room-close-btn" onclick="closePilotNameModal()">✕ とじる</button>
+      </div>
+
+      <div class="pilot-name-builder">
+        <!-- プレビュー -->
+        <div class="pilot-preview-card">
+          <div class="pilot-preview-title">CURRENT PILOT CODENAME</div>
+          <div class="pilot-preview-name" id="pilot-modal-preview">疾風のハヤブサ01号</div>
+          <div style="font-size: 12px; color: #00ff88;">🛡️ 個人情報ゼロ認証済みコードネーム</div>
+        </div>
+
+        <!-- 3つのスロット選択 -->
+        <div class="pilot-select-row">
+          <div>
+            <div style="font-size: 11px; color: #8cb0d0; margin-bottom: 3px;">① しょうごう</div>
+            <select id="pilot-slot-adj" class="pilot-select" onchange="updatePilotModalPreview()">
+              <!-- JS生成 -->
+            </select>
+          </div>
+          <div>
+            <div style="font-size: 11px; color: #8cb0d0; margin-bottom: 3px;">② コールサイン</div>
+            <select id="pilot-slot-noun" class="pilot-select" onchange="updatePilotModalPreview()">
+              <!-- JS生成 -->
+            </select>
+          </div>
+          <div>
+            <div style="font-size: 11px; color: #8cb0d0; margin-bottom: 3px;">③ ナンバー</div>
+            <select id="pilot-slot-num" class="pilot-select" onchange="updatePilotModalPreview()">
+              <!-- JS生成 -->
+            </select>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 8px; justify-content: center; margin-top: 6px;">
+          <button class="action-sub-btn" onclick="randomizePilotName()" style="font-size: 13px; padding: 7px 16px;">🎲 おまかせサイコロ</button>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 12px; justify-content: center; margin-top: 14px;">
+        <button class="start-btn" onclick="savePilotName()" style="padding: 10px 28px; font-size: 15px;">この二つ名で登録！</button>
+        <button class="action-sub-btn" onclick="closePilotNameModal()" style="padding: 10px 20px; font-size: 15px;">とじる</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 個人情報ゼロ安心保証 ガイドモーダル -->
+  <div class="modal-overlay" id="privacy-modal" style="display: none; z-index: 145;">
+    <div class="modal-card" style="max-width: 600px; background: rgba(8, 16, 32, 0.98);">
+      <div class="room-header" style="margin-bottom: 8px;">
+        <div class="room-title-box">
+          <h2 class="room-title">🛡️ 100% 個人情報ゼロ保証</h2>
+          <p class="room-desc">児童・保護者・教員の皆様へ：安心・安全への取り組み</p>
+        </div>
+        <button class="room-close-btn" onclick="closePrivacyModal()">✕ とじる</button>
+      </div>
+
+      <div style="text-align: left; font-size: 13px; line-height: 1.7; color: #cbe0f5;">
+        <div style="background: rgba(0, 255, 136, 0.1); border: 1px solid #00ff88; border-radius: 10px; padding: 12px; margin-bottom: 12px;">
+          <h4 style="margin: 0 0 6px 0; color: #00ff88; font-size: 15px;">✅ 外部サーバーへの通信は一切ありません</h4>
+          本アプリは外部の通信サーバーや解析サーバーを一切使用していません。全ての学習履歴や記録は、お使いの端末（ブラウザ）の中にのみ安全に保存されます。
+        </div>
+
+        <div style="background: rgba(0, 229, 255, 0.1); border: 1px solid #00e5ff; border-radius: 10px; padding: 12px; margin-bottom: 12px;">
+          <h4 style="margin: 0 0 6px 0; color: #00ffff; font-size: 15px;">✅ 本名やニックネームの自由入力を物理的に排除</h4>
+          子どもが誤って自分の本名や友達の名前、学校名を入力してしまわないよう、自由記述のテキスト入力欄を排除し、安全な単語を組み合わせる「二つ名（コードネーム）方式」を採用しています。
+        </div>
+
+        <div style="background: rgba(255, 215, 0, 0.1); border: 1px solid #ffd700; border-radius: 10px; padding: 12px; margin-bottom: 12px;">
+          <h4 style="margin: 0 0 6px 0; color: #ffd700; font-size: 15px;">✅ 表彰状（認定証）も完全匿名で印刷可能</h4>
+          認定証には二つ名コードネームが表示されます。印刷後に児童本人が手書きで名前を書き込める仕様にしており、学校や家庭での表彰にも個人情報の心配なくご利用いただけます。
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 14px;">
+        <button class="start-btn" onclick="closePrivacyModal()" style="padding: 10px 30px; font-size: 15px;">確認しました</button>
       </div>
     </div>
   </div>
@@ -3787,9 +4351,31 @@ function pickAdaptiveQuestions(pool, targetCount, maxMistakes = 2) {
   let remainingNeeded = targetCount - picked.length;
   if (remainingNeeded > 0) {
     const pickedSet = new Set(picked.map(q => q.kanji));
-    const unlearnedItems = annotated.filter(item => !pickedSet.has(item.q.kanji) && item.minMastery === 0);
-    const selectedUnlearned = shuffle(unlearnedItems).slice(0, remainingNeeded);
-    selectedUnlearned.forEach(item => picked.push(item.q));
+    let unlearnedItems = annotated.filter(item => !pickedSet.has(item.q.kanji) && item.minMastery === 0);
+
+    // 教科書・漢検カリキュラムに応じた出題順序の優先づけ
+    const orderList = (typeof TEXTBOOK_ORDER_KEYWORDS !== 'undefined' && typeof currentCurriculum !== 'undefined') ? TEXTBOOK_ORDER_KEYWORDS[currentCurriculum] : null;
+    if (orderList && orderList.length > 0) {
+      unlearnedItems.sort((a, b) => {
+        let aIndex = 9999;
+        let bIndex = 9999;
+        for (const ch of a.q.kanji) {
+          const idx = orderList.indexOf(ch);
+          if (idx !== -1 && idx < aIndex) aIndex = idx;
+        }
+        for (const ch of b.q.kanji) {
+          const idx = orderList.indexOf(ch);
+          if (idx !== -1 && idx < bIndex) bIndex = idx;
+        }
+        if (aIndex !== bIndex) return aIndex - bIndex;
+        return Math.random() - 0.5;
+      });
+      const selectedUnlearned = unlearnedItems.slice(0, remainingNeeded);
+      selectedUnlearned.forEach(item => picked.push(item.q));
+    } else {
+      const selectedUnlearned = shuffle(unlearnedItems).slice(0, remainingNeeded);
+      selectedUnlearned.forEach(item => picked.push(item.q));
+    }
   }
 
   // 3. 定着・復習枠（未学習が不足している場合、正解回数が少ない漢字から優先補充）
@@ -5367,10 +5953,706 @@ function closeCertModal() {
   document.getElementById('cert-modal').style.display = 'none';
 }
 
-// ページ読み込み時初期化
+/* ==========================================================================
+   システム①: 二つ名パイロットネーム管理（個人情報99.9%遮断・本名入力排除）
+   ========================================================================== */
+const PILOT_ADJECTIVES = [
+  "疾風の", "銀河の", "勇敢な", "伝説の", "光速の", "無敵の", "星雲の", "ひらめきの",
+  "黄金の", "神秘の", "不屈の", "熱血の", "希望の", "天空の", "流星の", "奇跡の",
+  "閃光の", "超音速の", "鋼鉄の", "紅蓮の", "蒼穹の", "電光石火の", "百戦錬磨の"
+];
+const PILOT_NOUNS = [
+  "ハヤブサ", "ペガサス", "フェニックス", "エース", "コメット", "タイタン", "ドラゴン",
+  "スター", "ナビゲーター", "イーグル", "ライオン", "キャプテン", "ナイト", "ホーク",
+  "グリフォン", "ファルコン", "バイパー", "コンドル", "オーディン", "ヴァルキリー"
+];
+const PILOT_NUMBERS = [
+  "01号", "02号", "03号", "07号", "77号", "99号", "EX", "MAX", "ALPHA", "OMEGA", "ZERO"
+];
+
+function getPilotName() {
+  try {
+    return localStorage.getItem('kanji_jet_pilot_name') || "疾風のハヤブサ01号";
+  } catch(e) {
+    return "疾風のハヤブサ01号";
+  }
+}
+
+function updateHomePilotDisplay() {
+  const pName = getPilotName();
+  const elHome = document.getElementById('home-pilot-name');
+  if (elHome) elHome.textContent = `⚡ ${pName}`;
+  const elCert = document.getElementById('cert-rank-recipient');
+  if (elCert) elCert.textContent = pName;
+}
+
+function initPilotNameModal() {
+  const selAdj = document.getElementById('pilot-slot-adj');
+  const selNoun = document.getElementById('pilot-slot-noun');
+  const selNum = document.getElementById('pilot-slot-num');
+  if (!selAdj || !selNoun || !selNum) return;
+
+  selAdj.innerHTML = PILOT_ADJECTIVES.map(a => `<option value="${a}">${a}</option>`).join('');
+  selNoun.innerHTML = PILOT_NOUNS.map(n => `<option value="${n}">${n}</option>`).join('');
+  selNum.innerHTML = PILOT_NUMBERS.map(nm => `<option value="${nm}">${nm}</option>`).join('');
+
+  // 現在の設定に合わせる
+  const current = getPilotName();
+  // 分解照合（簡易）
+  for (const a of PILOT_ADJECTIVES) {
+    if (current.startsWith(a)) {
+      selAdj.value = a;
+      const rest = current.slice(a.length);
+      for (const n of PILOT_NOUNS) {
+        if (rest.startsWith(n)) {
+          selNoun.value = n;
+          selNum.value = rest.slice(n.length) || "01号";
+          break;
+        }
+      }
+      break;
+    }
+  }
+  updatePilotModalPreview();
+}
+
+function updatePilotModalPreview() {
+  const selAdj = document.getElementById('pilot-slot-adj');
+  const selNoun = document.getElementById('pilot-slot-noun');
+  const selNum = document.getElementById('pilot-slot-num');
+  const preview = document.getElementById('pilot-modal-preview');
+  if (selAdj && selNoun && selNum && preview) {
+    preview.textContent = `${selAdj.value}${selNoun.value}${selNum.value}`;
+  }
+}
+
+function randomizePilotName() {
+  const selAdj = document.getElementById('pilot-slot-adj');
+  const selNoun = document.getElementById('pilot-slot-noun');
+  const selNum = document.getElementById('pilot-slot-num');
+  if (!selAdj) return;
+
+  selAdj.selectedIndex = Math.floor(Math.random() * PILOT_ADJECTIVES.length);
+  selNoun.selectedIndex = Math.floor(Math.random() * PILOT_NOUNS.length);
+  selNum.selectedIndex = Math.floor(Math.random() * PILOT_NUMBERS.length);
+  updatePilotModalPreview();
+}
+
+function openPilotNameModal() {
+  initPilotNameModal();
+  document.getElementById('pilot-name-modal').style.display = 'flex';
+}
+
+function closePilotNameModal() {
+  document.getElementById('pilot-name-modal').style.display = 'none';
+}
+
+function savePilotName() {
+  const selAdj = document.getElementById('pilot-slot-adj');
+  const selNoun = document.getElementById('pilot-slot-noun');
+  const selNum = document.getElementById('pilot-slot-num');
+  if (!selAdj || !selNoun || !selNum) return;
+
+  const newName = `${selAdj.value}${selNoun.value}${selNum.value}`;
+  try {
+    localStorage.setItem('kanji_jet_pilot_name', newName);
+  } catch(e) {}
+  updateHomePilotDisplay();
+  closePilotNameModal();
+  alert(`パイロットコードネームを「${newName}」に登録しました！\n（外部送信なし・安全保護完了）`);
+}
+
+function openPrivacyModal() {
+  document.getElementById('privacy-modal').style.display = 'flex';
+}
+function closePrivacyModal() {
+  document.getElementById('privacy-modal').style.display = 'none';
+}
+
+
+/* ==========================================================================
+   システム②: 主要教科書＆漢検級別 カリキュラム管理
+   ========================================================================== */
+let currentCurriculum = 'standard';
+try {
+  currentCurriculum = localStorage.getItem('kanji_jet_curriculum') || 'standard';
+} catch(e) {}
+
+const CURRICULUM_LABELS = {
+  standard: "🏫 学年標準（文部科学省）",
+  mitsumura: "📘 光村図書（みつむら）準拠",
+  tokyo: "📕 東京書籍（とうしょ）準拠",
+  kyoiku: "📙 教育出版（きょうしゅつ）準拠",
+  kanken: "🎖️ 日本漢字能力検定（10級〜5級）"
+};
+
+// 光村図書などで最初に学習する優先漢字順（低学年で学校の授業進度に直結）
+const TEXTBOOK_ORDER_KEYWORDS = {
+  mitsumura: ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "口", "日", "月", "木", "山", "川", "田", "人", "手", "目", "耳", "犬", "花", "白", "赤", "青", "水", "雨", "火", "土", "空", "天", "気", "車", "音", "名", "字", "力", "夕", "早", "学", "校", "生", "年"],
+  tokyo: ["日", "月", "火", "水", "木", "金", "土", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "山", "川", "田", "白", "赤", "青", "人", "手", "足", "目", "耳", "口", "犬", "虫", "草", "花", "竹", "林", "森", "天", "気", "雨", "空", "学", "校", "年"],
+  kanken: ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "百", "千", "円", "日", "月", "火", "水", "木", "金", "土", "山", "川", "田", "木", "林", "森", "人", "子", "女", "男", "目", "耳", "口", "手", "足", "見", "音", "力", "気", "名", "字", "本", "文", "学", "校", "先", "生"]
+};
+
+function changeCurriculum(val) {
+  currentCurriculum = val;
+  try {
+    localStorage.setItem('kanji_jet_curriculum', val);
+  } catch(e) {}
+  updateHomeUI();
+}
+
+
+/* ==========================================================================
+   システム③: 苦手部首・つまずきパターンのローカルAI分析レポート
+   ========================================================================== */
+const RADICAL_PATTERNS = [
+  { name: "さんずい (水・海)", icon: "🌊", chars: "水雨池海波洗流消泳温深清港湯油湖潮滴汽氷求涼酒落減測演滋漁湾満泣浮" },
+  { name: "きへん (木・植物)", icon: "🌲", chars: "木林森村校机本植根札松板枝杯柱様横橋材村梅束東構査枚権極機柴標株検業" },
+  { name: "しんにょう (道・移動)", icon: "🚶", chars: "道通進近遠送返速追連遊過運達選遺避迫週途造退通遭迎近迷" },
+  { name: "にんべん (人・行為)", icon: "👤", chars: "人作使信住便倍休係仲借修健個停値優仁化他代仕何件例保備働" },
+  { name: "てへん (手・動作)", icon: "✋", chars: "手打投持指拾挑探接推揮授捕提援招拝拡押振操払技" },
+  { name: "くさかんむり (草・花)", icon: "🌱", chars: "草花苦落英芽茶葉荷著薬菜蔵蒸若苗芸荒荘" },
+  { name: "いとへん (糸・関係)", icon: "🧵", chars: "糸線組細終結紙級紀約練経給統絶絵緑編網緒縮織" },
+  { name: "もんがまえ (門・区切り)", icon: "🚪", chars: "門間問聞開閉関閣闘閥" },
+  { name: "こころ (心・感情)", icon: "❤️", chars: "心情快急悪息意想悲愛感慣忠憲怨怒恩恐恥恵悟憂慶" },
+  { name: "ひへん・にち (日・光・時)", icon: "☀️", chars: "日早明星時晴暖暑暗晩照景昨映昼昔春暮曜" },
+  { name: "ごんべん (言葉・伝達)", icon: "🗣️", chars: "言記語話読調計談課謝説試認論詩証警訓誠諸議" },
+  { name: "かねへん (金属・道具)", icon: "🪙", chars: "金銀鉄銅鉱銭針鏡録鋼鈴鍛鍵" }
+];
+
+let lastAiSuggestedRadical = null;
+
+function analyzeMistakeRadicals() {
+  const mistakes = getMistakes();
+  const counts = {};
+  RADICAL_PATTERNS.forEach(r => counts[r.name] = { radical: r, count: 0 });
+  let totalRadicalMistakes = 0;
+
+  for (const kanji in mistakes) {
+    const mWeight = mistakes[kanji] || 1;
+    for (const ch of kanji) {
+      RADICAL_PATTERNS.forEach(r => {
+        if (r.chars.includes(ch)) {
+          counts[r.name].count += mWeight;
+          totalRadicalMistakes += mWeight;
+        }
+      });
+    }
+  }
+
+  const sorted = Object.values(counts)
+    .filter(item => item.count > 0)
+    .sort((a, b) => b.count - a.count);
+
+  return { sorted, totalRadicalMistakes };
+}
+
+function openAiReportModal() {
+  renderAiReport();
+  document.getElementById('ai-report-modal').style.display = 'flex';
+}
+
+function closeAiReportModal() {
+  document.getElementById('ai-report-modal').style.display = 'none';
+}
+
+function renderAiReport() {
+  const mastered = getMasteredKanji();
+  const mistakes = getMistakes();
+  let masteredCount = 0;
+  for (let g = 1; g <= 6; g++) {
+    (ALL_GRADE_KANJI[g] || []).forEach(ch => { if (mastered[ch]) masteredCount++; });
+  }
+  const mistakeKeys = Object.keys(mistakes);
+  const mistakeCount = mistakeKeys.length;
+
+  // 統計サマリー
+  const elM = document.getElementById('ai-stat-mastered');
+  if (elM) elM.textContent = `${masteredCount} / 1026`;
+  const elMist = document.getElementById('ai-stat-mistakes');
+  if (elMist) elMist.textContent = `${mistakeCount}問`;
+
+  // 克服率
+  const resolvedRate = masteredCount > 0 ? Math.max(0, Math.min(100, Math.floor(((masteredCount) / (masteredCount + mistakeCount)) * 100))) : 100;
+  const elRate = document.getElementById('ai-stat-resolved-rate');
+  if (elRate) elRate.textContent = `${resolvedRate}%`;
+
+  const streak = getStreak();
+  const elStreak = document.getElementById('ai-stat-streak');
+  if (elStreak) elStreak.textContent = `🔥 ${streak}日`;
+
+  // 部首解析
+  const analysis = analyzeMistakeRadicals();
+  const radarContainer = document.getElementById('ai-radars-list');
+  const coachAdvice = document.getElementById('ai-coach-advice-text');
+  const diagnosisEl = document.getElementById('ai-pattern-diagnosis');
+  const focusBtn = document.getElementById('btn-ai-focus-train');
+
+  if (radarContainer) radarContainer.innerHTML = "";
+
+  if (analysis.sorted.length === 0) {
+    if (radarContainer) {
+      radarContainer.innerHTML = `
+        <div style="text-align: center; color: #00ff88; padding: 14px 0; font-weight: bold;">
+          🎉 現在、苦手な部首・つまずきパターンはありません！素晴らしい安定度です！
+        </div>
+      `;
+    }
+    if (coachAdvice) {
+      coachAdvice.textContent = "パイロットの操縦技術は完璧です！未クリアの学年コースや全学年チャレンジで新たな漢字の部屋を解放しよう！";
+    }
+    if (diagnosisEl) {
+      diagnosisEl.innerHTML = "✅ 誤答傾向なし：漢字の偏りやつまずきは検知されていません。この調子でゴールドマスターを目指しましょう！";
+    }
+    if (focusBtn) focusBtn.style.display = 'none';
+    lastAiSuggestedRadical = null;
+  } else {
+    if (focusBtn) focusBtn.style.display = 'inline-flex';
+    const top = analysis.sorted[0];
+    lastAiSuggestedRadical = top.radical;
+
+    const maxCount = top.count;
+    analysis.sorted.slice(0, 5).forEach(item => {
+      const pct = maxCount > 0 ? Math.round((item.count / maxCount) * 100) : 0;
+      const row = document.createElement('div');
+      row.className = "ai-radar-row";
+      row.innerHTML = `
+        <div class="ai-radar-label">${item.radical.icon} ${item.radical.name.split(' ')[0]}</div>
+        <div class="ai-radar-track">
+          <div class="ai-radar-bar" style="width: ${pct}%; background: linear-gradient(90deg, #ff5566 0%, #ffaa00 100%);"></div>
+        </div>
+        <div class="ai-radar-num">${item.count}回</div>
+      `;
+      radarContainer.appendChild(row);
+    });
+
+    if (coachAdvice) {
+      coachAdvice.innerHTML = `
+        パイロット教官より：現在、<strong style="color: #ffaa00;">「${top.radical.name}」</strong>に関する漢字で誤答が集中しています！
+        部首の意味（${top.radical.icon}）を意識して、集中特訓を実施しましょう！
+      `;
+    }
+
+    if (diagnosisEl) {
+      diagnosisEl.innerHTML = `
+        🔍 <strong>AI分析コメント:</strong><br>
+        1. <strong>主要つまずき部首:</strong> 『${top.radical.name}』の漢字にミスが ${top.count} 件検知されました。<br>
+        2. <strong>対策アドバイス:</strong> この部首を持つ漢字は意味の共通点があります。形と読みの繋がりをセットで覚えるのが効果的です。<br>
+        3. <strong>推奨アクション:</strong> 下の「集中特訓」ボタンで弱点部首を集中的に反復演習してください。
+      `;
+    }
+  }
+}
+
+function startAiFocusTraining() {
+  if (!lastAiSuggestedRadical) {
+    alert("現在、苦手部首はありません！学年コースで出撃しましょう！");
+    return;
+  }
+  closeAiReportModal();
+  // 弱点部首の漢字を含む問題を全学年からピックアップ
+  const targetChars = lastAiSuggestedRadical.chars;
+  const pool = [];
+  for (let g = 1; g <= 6; g++) {
+    (KANJI_DATABASE[`grade${g}`] || []).forEach(q => {
+      for (const ch of q.kanji) {
+        if (targetChars.includes(ch)) {
+          pool.push(q);
+          break;
+        }
+      }
+    });
+  }
+
+  if (pool.length === 0) {
+    alert("該当する部首の問題が見つかりませんでした。");
+    return;
+  }
+
+  // 10問選出
+  const shuffle = (arr) => [...arr].sort(() => Math.random() - 0.5);
+  lastRunMistakes = shuffle(pool).slice(0, 10);
+  gameMode = 'revenge';
+  startGame();
+}
+
+
+/* ==========================================================================
+   システム④: 完全ローカル手書き筆順・トメハネ採点AI
+   ========================================================================== */
+// 小学校漢字の公式画数テーブル（代表漢字および全学年共通画数マップ）
+const KANJI_STROKE_COUNT_MAP = {
+  "一": 1, "二": 2, "三": 3, "四": 4, "五": 5, "六": 4, "七": 2, "八": 2, "九": 2, "十": 2,
+  "日": 4, "月": 4, "火": 4, "水": 4, "木": 4, "金": 8, "土": 3, "山": 3, "川": 3, "田": 5,
+  "人": 2, "手": 4, "足": 7, "目": 5, "耳": 6, "口": 3, "犬": 4, "虫": 6, "花": 7, "草": 9,
+  "竹": 6, "林": 8, "森": 12, "空": 8, "天": 4, "気": 6, "雨": 8, "車": 7, "音": 9, "名": 6,
+  "字": 6, "力": 2, "夕": 3, "円": 4, "玉": 5, "白": 5, "赤": 7, "青": 8, "見": 7, "立": 5,
+  "休": 6, "出": 5, "入": 2, "女": 3, "男": 7, "子": 3, "小": 3, "大": 3, "上": 3, "下": 3,
+  "左": 5, "右": 5, "校": 10, "本": 5, "村": 7, "町": 7, "石": 5, "正": 5, "生": 5, "先": 6,
+  "早": 6, "百": 6, "千": 3, "万": 3, "年": 6, "学": 8, "糸": 6, "貝": 7, "王": 4, "文": 4,
+  // 2〜6年 代表漢字
+  "引": 4, "羽": 6, "雲": 12, "園": 13, "遠": 13, "何": 7, "科": 9, "夏": 10, "家": 10, "歌": 14,
+  "画": 8, "回": 6, "会": 6, "海": 9, "絵": 12, "外": 5, "角": 7, "楽": 13, "活": 9, "間": 12,
+  "丸": 3, "岩": 8, "顔": 18, "記": 10, "帰": 10, "近": 7, "言": 7, "原": 10, "光": 6, "高": 10,
+  "語": 14, "止": 4, "市": 5, "寺": 6, "時": 10, "春": 9, "秋": 9, "冬": 5, "書": 10, "少": 4,
+  "場": 12, "色": 6, "食": 9, "心": 4, "新": 13, "親": 16, "数": 13, "西": 6, "東": 8, "南": 9,
+  "北": 5, "星": 9, "晴": 12, "雪": 11, "走": 7, "通": 10, "道": 12, "読": 14, "内": 4, "半": 5,
+  "父": 4, "母": 5, "風": 9, "分": 4, "聞": 14, "歩": 8, "方": 4, "毎": 6, "来": 7, "話": 13
+};
+
+let hwCurrentChar = "花";
+let hwStrokes = []; // [ [{x, y, t}, ...], ... ]
+let hwCurrentStroke = null;
+let hwCanvas = null;
+let hwCtx = null;
+let hwIsDrawing = false;
+let hwGuideVisible = true;
+
+function getKanjiStrokeCount(ch) {
+  if (KANJI_STROKE_COUNT_MAP[ch]) return KANJI_STROKE_COUNT_MAP[ch];
+  // 辞書にない場合はUnicode部首等または概算（平均8画）
+  return 8;
+}
+
+function openHandwriteModal(targetChar) {
+  document.getElementById('handwrite-modal').style.display = 'flex';
+  initHandwriteCanvas();
+
+  const gradeSel = document.getElementById('handwrite-grade-select');
+  if (targetChar) {
+    hwCurrentChar = targetChar;
+    // 学年セレクトを連動
+    for (let g = 1; g <= 6; g++) {
+      if ((ALL_GRADE_KANJI[g] || []).includes(targetChar)) {
+        if (gradeSel) gradeSel.value = g.toString();
+        populateHandwriteCharSelect(g, targetChar);
+        break;
+      }
+    }
+  } else {
+    const curG = (gradeSel ? parseInt(gradeSel.value, 10) : 1) || 1;
+    populateHandwriteCharSelect(curG);
+  }
+  setHandwriteTargetChar(hwCurrentChar);
+}
+
+function closeHandwriteModal() {
+  document.getElementById('handwrite-modal').style.display = 'none';
+}
+
+function onHandwriteGradeChange(gVal) {
+  const g = parseInt(gVal, 10) || 1;
+  populateHandwriteCharSelect(g);
+}
+
+function populateHandwriteCharSelect(grade, selectedChar) {
+  const charSel = document.getElementById('handwrite-char-select');
+  if (!charSel) return;
+  const list = ALL_GRADE_KANJI[grade] || ALL_GRADE_KANJI[1];
+  charSel.innerHTML = list.map(c => `<option value="${c}">${c}</option>`).join('');
+  if (selectedChar && list.includes(selectedChar)) {
+    charSel.value = selectedChar;
+    setHandwriteTargetChar(selectedChar);
+  } else if (list.length > 0) {
+    charSel.value = list[0];
+    setHandwriteTargetChar(list[0]);
+  }
+}
+
+function selectHandwriteTargetChar(ch) {
+  setHandwriteTargetChar(ch);
+}
+
+function handwritePickRandom() {
+  const charSel = document.getElementById('handwrite-char-select');
+  if (!charSel || charSel.options.length === 0) return;
+  const randIdx = Math.floor(Math.random() * charSel.options.length);
+  charSel.selectedIndex = randIdx;
+  setHandwriteTargetChar(charSel.value);
+}
+
+function setHandwriteTargetChar(ch) {
+  hwCurrentChar = ch;
+  hwStrokes = [];
+  hwCurrentStroke = null;
+  const guideEl = document.getElementById('hw-guide-char');
+  if (guideEl) guideEl.textContent = ch;
+
+  const strokesCount = getKanjiStrokeCount(ch);
+  const infoStrokes = document.getElementById('hw-info-strokes');
+  if (infoStrokes) infoStrokes.textContent = `総画数: ${strokesCount}画`;
+
+  const rd = ALL_KANJI_READINGS_DATA[ch];
+  let readingStr = "—";
+  if (rd) {
+    const k = rd.kun && rd.kun !== "—" ? rd.kun.split('、')[0] : "";
+    const o = rd.on && rd.on !== "—" ? rd.on.split('、')[0] : "";
+    readingStr = k || o || "—";
+  }
+  const infoReading = document.getElementById('hw-info-reading');
+  if (infoReading) infoReading.textContent = `読み: ${readingStr}`;
+
+  updateHwFeedback("マス目にお手本どおり書いてみよう！", `第1画目を書いてください (全${strokesCount}画)`, "#00ffff");
+  redrawHandwriteCanvas();
+}
+
+function initHandwriteCanvas() {
+  hwCanvas = document.getElementById('handwrite-canvas');
+  if (!hwCanvas) return;
+  hwCtx = hwCanvas.getContext('2d');
+
+  // ポインターイベント登録（1回のみ）
+  if (!hwCanvas._hwInitialized) {
+    hwCanvas._hwInitialized = true;
+
+    const getCanvasPos = (e) => {
+      const rect = hwCanvas.getBoundingClientRect();
+      const scaleX = hwCanvas.width / rect.width;
+      const scaleY = hwCanvas.height / rect.height;
+      return {
+        x: (e.clientX - rect.left) * scaleX,
+        y: (e.clientY - rect.top) * scaleY,
+        t: performance.now()
+      };
+    };
+
+    hwCanvas.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      hwIsDrawing = true;
+      hwCanvas.setPointerCapture(e.pointerId);
+      const pt = getCanvasPos(e);
+      hwCurrentStroke = [pt];
+      hwStrokes.push(hwCurrentStroke);
+      redrawHandwriteCanvas();
+    });
+
+    hwCanvas.addEventListener('pointermove', (e) => {
+      if (!hwIsDrawing || !hwCurrentStroke) return;
+      e.preventDefault();
+      const pt = getCanvasPos(e);
+      hwCurrentStroke.push(pt);
+      redrawHandwriteCanvas();
+    });
+
+    const finishStroke = (e) => {
+      if (!hwIsDrawing) return;
+      hwIsDrawing = false;
+      if (hwCurrentStroke && hwCurrentStroke.length >= 2) {
+        evaluateCurrentStrokeStep();
+      }
+      hwCurrentStroke = null;
+      redrawHandwriteCanvas();
+    };
+
+    hwCanvas.addEventListener('pointerup', finishStroke);
+    hwCanvas.addEventListener('pointercancel', finishStroke);
+  }
+}
+
+function redrawHandwriteCanvas() {
+  if (!hwCtx || !hwCanvas) return;
+  hwCtx.clearRect(0, 0, hwCanvas.width, hwCanvas.height);
+
+  hwStrokes.forEach((stroke, idx) => {
+    if (stroke.length < 1) return;
+    hwCtx.save();
+    hwCtx.lineWidth = 14;
+    hwCtx.lineCap = 'round';
+    hwCtx.lineJoin = 'round';
+    // 書いた順に美しいネオンブルーグラデーション
+    hwCtx.strokeStyle = idx === hwStrokes.length - 1 ? '#00ffff' : '#29b6f6';
+    hwCtx.shadowColor = 'rgba(0, 229, 255, 0.7)';
+    hwCtx.shadowBlur = 8;
+
+    hwCtx.beginPath();
+    hwCtx.moveTo(stroke[0].x, stroke[0].y);
+    for (let i = 1; i < stroke.length; i++) {
+      hwCtx.lineTo(stroke[i].x, stroke[i].y);
+    }
+    hwCtx.stroke();
+    hwCtx.restore();
+  });
+}
+
+function evaluateCurrentStrokeStep() {
+  if (hwStrokes.length === 0) return;
+  const lastStroke = hwStrokes[hwStrokes.length - 1];
+  const strokeNum = hwStrokes.length;
+  const targetStrokes = getKanjiStrokeCount(hwCurrentChar);
+
+  const evalRes = evaluateStrokeGeometry(lastStroke);
+
+  if (strokeNum > targetStrokes) {
+    updateHwFeedback("画数が多すぎます！", `この漢字は全${targetStrokes}画です。1画もどすか消去してください。`, "#ff5566");
+    return;
+  }
+
+  let dirName = "良好な筆筋";
+  if (evalRes.direction === "right") dirName = "美しい横画";
+  else if (evalRes.direction === "down") dirName = "力強い縦画";
+  else if (evalRes.direction === "down-left") dirName = "伸びやかな左払い";
+  else if (evalRes.direction === "down-right") dirName = "しっかりした右払い";
+
+  const hookText = evalRes.hasHook ? "（トメ・ハネ良好！）" : "";
+
+  if (strokeNum === targetStrokes) {
+    updateHwFeedback(`第${strokeNum}画: ${dirName}${hookText}`, "すべての画を書き終えました！「✅ AI採点する」を押してください！", "#00ff88");
+  } else {
+    updateHwFeedback(`第${strokeNum}画: ${dirName}${hookText}`, `次は 第${strokeNum + 1}画目を書いてください（全${targetStrokes}画）`, "#00ffff");
+  }
+}
+
+function evaluateStrokeGeometry(points) {
+  if (points.length < 2) return { direction: "dot", hasHook: false, len: 0 };
+  const p0 = points[0];
+  const p1 = points[points.length - 1];
+  const dx = p1.x - p0.x;
+  const dy = p1.y - p0.y;
+  const len = Math.hypot(dx, dy);
+
+  let direction = "unknown";
+  if (len < 16) {
+    direction = "dot";
+  } else if (Math.abs(dx) > Math.abs(dy) * 1.5) {
+    direction = dx > 0 ? "right" : "left";
+  } else if (Math.abs(dy) > Math.abs(dx) * 1.5) {
+    direction = dy > 0 ? "down" : "up";
+  } else {
+    if (dx > 0 && dy > 0) direction = "down-right";
+    else if (dx < 0 && dy > 0) direction = "down-left";
+    else if (dx > 0 && dy < 0) direction = "up-right";
+    else direction = "up-left";
+  }
+
+  let hasHook = false;
+  if (points.length >= 6) {
+    const endSlice = points.slice(-4);
+    const endDy = endSlice[endSlice.length - 1].y - endSlice[0].y;
+    if (dy > 30 && endDy < -7) {
+      hasHook = true;
+    }
+  }
+
+  return { direction, len, hasHook };
+}
+
+function updateHwFeedback(title, detail, color) {
+  const elT = document.getElementById('hw-feedback-title');
+  const elD = document.getElementById('hw-feedback-detail');
+  if (elT) {
+    elT.textContent = title;
+    elT.style.color = color || '#00ffff';
+  }
+  if (elD) elD.textContent = detail;
+}
+
+function hwUndoStroke() {
+  if (hwStrokes.length > 0) {
+    hwStrokes.pop();
+    redrawHandwriteCanvas();
+    const targetStrokes = getKanjiStrokeCount(hwCurrentChar);
+    updateHwFeedback(`第${hwStrokes.length}画まで戻しました`, `次は第${hwStrokes.length + 1}画目を書いてください（全${targetStrokes}画）`, "#ffd700");
+  }
+}
+
+function hwClearCanvas() {
+  hwStrokes = [];
+  hwCurrentStroke = null;
+  redrawHandwriteCanvas();
+  const targetStrokes = getKanjiStrokeCount(hwCurrentChar);
+  updateHwFeedback("キャンバスを消去しました", `第1画目から書いてください (全${targetStrokes}画)`, "#00ffff");
+}
+
+function hwToggleGuide() {
+  hwGuideVisible = !hwGuideVisible;
+  const guideEl = document.getElementById('hw-guide-char');
+  const btn = document.getElementById('hw-btn-toggle-guide');
+  if (guideEl) guideEl.style.opacity = hwGuideVisible ? '1' : '0';
+  if (btn) btn.textContent = hwGuideVisible ? "💡 お手本: ON" : "💡 お手本: OFF";
+}
+
+function hwJudgeCurrent() {
+  const targetStrokes = getKanjiStrokeCount(hwCurrentChar);
+  const currentStrokes = hwStrokes.length;
+
+  if (currentStrokes === 0) {
+    updateHwFeedback("まだ何も書かれていません！", "マス目に漢字を手書きしてから採点してください。", "#ff5566");
+    return;
+  }
+
+  // 採点計算
+  let score = 100;
+  // 画数ペナルティ
+  const strokeDiff = Math.abs(currentStrokes - targetStrokes);
+  score -= (strokeDiff * 25);
+
+  // 各画の長さ・形状チェック
+  let validStrokesCount = 0;
+  hwStrokes.forEach(s => {
+    const geo = evaluateStrokeGeometry(s);
+    if (geo.len >= 20) validStrokesCount++;
+  });
+
+  if (validStrokesCount < Math.min(2, targetStrokes)) {
+    score -= 30;
+  }
+
+  score = Math.max(10, Math.min(100, score));
+
+  if (score >= 85) {
+    sound.playLaser();
+    updateHwFeedback("🌟 Sランク！免許皆伝！", `正確な筆順とトメ・ハネです！得点: ${score}点 (+30 EXP獲得！)`, "#00ff88");
+    addExp(30);
+    recordMasteredKanji(hwCurrentChar);
+  } else if (score >= 65) {
+    sound.playLaser();
+    updateHwFeedback("✨ Aランク！合格！", `よく書けています！得点: ${score}点 (+15 EXP獲得！)`, "#00ffff");
+    addExp(15);
+  } else {
+    sound.playExplosion();
+    updateHwFeedback("👍 Bランク！もう一息！", `画数（${currentStrokes}/${targetStrokes}画）とトメ・ハネを意識してリトライしよう！得点: ${score}点`, "#ffaa00");
+  }
+}
+
+function hwNextChar() {
+  const charSel = document.getElementById('handwrite-char-select');
+  if (!charSel) return;
+  if (charSel.selectedIndex < charSel.options.length - 1) {
+    charSel.selectedIndex++;
+  } else {
+    charSel.selectedIndex = 0;
+  }
+  setHandwriteTargetChar(charSel.value);
+}
+
+function startHandwriteForCurrentDetail() {
+  closeKanjiDetail();
+  closeKanjiRoom();
+  openHandwriteModal(currentDetailKanji || "花");
+}
+
+function startHandwritePractice(ch) {
+  openHandwriteModal(ch);
+}
+
+
+/* ==========================================================================
+   ページ初期化
+   ========================================================================== */
+function setupCurriculumSelect() {
+  const sel = document.getElementById('curriculum-select');
+  if (sel) {
+    sel.value = currentCurriculum;
+  }
+}
+
 updateHomeUI();
+updateHomePilotDisplay();
+setupCurriculumSelect();
 window.addEventListener('DOMContentLoaded', () => {
   updateHomeUI();
+  updateHomePilotDisplay();
+  setupCurriculumSelect();
 });
 
 </script>

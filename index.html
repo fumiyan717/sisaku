@@ -1668,21 +1668,18 @@
       font-size: 20px;
       font-weight: bold;
       margin: 14px 0;
-      border-bottom: 1px dashed #999;
-      display: inline-block;
-      padding: 2px 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 20px;
+      border-bottom: 2px solid #b8860b;
+      color: #2b1f05;
     }
 
-    .cert-name-input {
-      font-size: 20px;
-      font-weight: bold;
-      border: none;
-      background: transparent;
-      text-align: center;
-      border-bottom: 1.5px solid #666;
-      font-family: inherit;
-      outline: none;
-      width: 180px;
+    .cert-recipient-badge {
+      color: #b8860b;
+      font-size: 22px;
+      font-weight: 900;
     }
 
     .cert-text {
@@ -1707,6 +1704,142 @@
       transform: rotate(-10deg);
       background: rgba(204, 0, 0, 0.05);
       margin-top: 10px;
+    }
+
+    /* 認定証セレクタータブ一覧（達成で色変化・未達成ロック） */
+    .cert-tabs-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    @media (max-width: 600px) {
+      .cert-tabs-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .cert-tab-btn {
+      background: rgba(14, 25, 45, 0.85);
+      border: 1.5px solid #2b4c7e;
+      border-radius: 10px;
+      padding: 8px 6px;
+      color: #7b9bb8;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .cert-tab-btn:hover {
+      border-color: var(--primary-cyan);
+      color: #fff;
+    }
+
+    .cert-tab-btn.unlocked {
+      background: linear-gradient(135deg, rgba(184, 134, 11, 0.25) 0%, rgba(255, 215, 0, 0.15) 100%);
+      border: 1.5px solid #ffd700;
+      color: #ffd700;
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+    }
+
+    .cert-tab-btn.active {
+      border-color: #00ffff !important;
+      box-shadow: 0 0 15px rgba(0, 229, 255, 0.6) !important;
+      transform: scale(1.03);
+    }
+
+    .cert-tab-btn.unlocked.active {
+      border-color: #fff !important;
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.8) !important;
+    }
+
+    .cert-tab-icon {
+      font-size: 18px;
+    }
+
+    .cert-tab-title {
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .cert-tab-status {
+      font-size: 10px;
+      padding: 1px 6px;
+      border-radius: 8px;
+    }
+
+    .cert-tab-btn.unlocked .cert-tab-status {
+      background: rgba(255, 215, 0, 0.2);
+      color: #ffd700;
+    }
+
+    .cert-tab-btn:not(.unlocked) .cert-tab-status {
+      background: rgba(100, 120, 150, 0.2);
+      color: #7b9bb8;
+    }
+
+    /* 未達成時のロック表示案内パネル */
+    .cert-locked-panel {
+      background: rgba(12, 20, 36, 0.95);
+      border: 2px dashed #40587c;
+      border-radius: 16px;
+      padding: 35px 20px;
+      text-align: center;
+      color: #a4c8e0;
+      margin: 10px 0;
+      box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.5);
+    }
+
+    .cert-locked-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+      filter: drop-shadow(0 0 15px rgba(255, 100, 100, 0.4));
+    }
+
+    .cert-locked-title {
+      font-size: 20px;
+      font-weight: 900;
+      color: #ffaa66;
+      margin-bottom: 8px;
+    }
+
+    .cert-locked-desc {
+      font-size: 14px;
+      line-height: 1.7;
+      color: #a0c0e0;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* タイピング中（ローマ字未確定・IME変換中）のリアルタイム表示 */
+    .char-slot.typing {
+      color: #00ffff !important;
+      font-size: clamp(14px, 3.2vw, 19px) !important;
+      font-family: 'Courier New', monospace, sans-serif !important;
+      border-color: #00ffff !important;
+      background: rgba(0, 229, 255, 0.18) !important;
+      box-shadow: 0 0 14px rgba(0, 229, 255, 0.7) !important;
+      animation: typingBlink 0.6s infinite alternate;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    @keyframes typingBlink {
+      from { opacity: 0.65; transform: scale(0.98); }
+      to { opacity: 1.0; transform: scale(1.02); }
+    }
+
+    .typing-preview-bar {
+      font-size: 13px;
+      color: #a4c8e0;
+      margin-top: 4px;
+      text-align: center;
+      min-height: 18px;
     }
 
     @media print {
@@ -1809,6 +1942,8 @@
       <button class="action-btn btn-backspace" id="btn-backspace">⌫ 1文字</button>
       <button class="action-btn btn-fire" id="btn-submit">💥 はっしゃ！</button>
     </div>
+    <!-- キーボード入力中リアルタイム表示バー -->
+    <div class="typing-preview-bar" id="typing-preview-bar" style="display: none;"></div>
 
     <!-- 入力モード切り替えタブ (小学生が見てすぐ選べる) -->
     <div class="input-mode-tabs">
@@ -2234,16 +2369,27 @@
 
   <!-- 漢字マスター認定証（表彰状）モーダル -->
   <div class="modal-overlay" id="cert-modal" style="display: none; z-index: 130;">
-    <div class="modal-card" style="max-width: 720px; background: rgba(10, 15, 25, 0.95);">
-      <div class="cert-print-hide" style="display: flex; justify-content: flex-end; margin-bottom: 8px;">
-        <button class="room-close-btn" onclick="closeCertModal()">✕ とじる</button>
+    <div class="modal-card" style="max-width: 760px; background: rgba(10, 15, 25, 0.96);">
+      <div class="cert-print-hide">
+        <div class="room-header" style="margin-bottom: 10px;">
+          <div class="room-title-box">
+            <h2 class="room-title">🎖️ 漢字マスター認定証 授与室</h2>
+            <p class="room-desc">各学年の漢字をすべて撃破（100%達成）すると、公式認定証が授与され印刷（PDF保存）できます！</p>
+          </div>
+          <button class="room-close-btn" onclick="closeCertModal()">✕ とじる</button>
+        </div>
+
+        <!-- 認定証セレクタータブ一覧（達成済みは金色、未達成はロック） -->
+        <div class="cert-tabs-grid" id="cert-tabs-container">
+          <!-- JSで動的生成 -->
+        </div>
       </div>
 
-      <!-- 印刷対応の賞状本体 -->
-      <div class="cert-container" id="cert-print-area">
+      <!-- 達成時：印刷対応の賞状本体 -->
+      <div class="cert-container" id="cert-print-area" style="display: none;">
         <div class="cert-title">表　彰　状</div>
         <div class="cert-recipient">
-          <input type="text" id="cert-user-name" class="cert-name-input" value="みらいのパイロット" placeholder="おなまえ"> 殿
+          <span class="cert-recipient-badge" id="cert-rank-recipient">漢字マスター</span> 殿
         </div>
         <div class="cert-text" id="cert-text-body">
           あなたは「ファイブツアーズJET 漢字バトル」において<br>
@@ -2262,9 +2408,21 @@
         </div>
       </div>
 
-      <div class="cert-print-hide" style="display: flex; gap: 12px; justify-content: center; margin-top: 16px;">
-        <button class="start-btn" onclick="window.print()" style="padding: 10px 24px; font-size: 16px; background: linear-gradient(90deg, #b8860b 0%, #ffd700 100%); color: #000;">
-          🖨️ いんさつする（PDF保存）
+      <!-- 未達成時：ロック案内パネル -->
+      <div class="cert-locked-panel" id="cert-locked-area" style="display: none;">
+        <div class="cert-locked-icon">🔒</div>
+        <div class="cert-locked-title" id="cert-locked-title">第１学年 認定証はロックされています</div>
+        <div class="cert-locked-desc" id="cert-locked-desc">
+          この認定証を受け取るには、該当学年の漢字をすべて撃破する必要があります。<br>
+          現在の達成状況: <strong id="cert-locked-count" style="color: #ffd700;">0 / 80 字</strong>（あと <span id="cert-locked-remain" style="color: #ff5566;">80</span> 字）<br>
+          学年コースに出撃して、すべての漢字をマスターしよう！
+        </div>
+      </div>
+
+      <!-- フッター操作 -->
+      <div class="cert-print-hide" style="display: flex; gap: 12px; justify-content: center; margin-top: 14px;">
+        <button class="start-btn" id="btn-cert-print" onclick="window.print()" style="display: none; padding: 10px 24px; font-size: 16px; background: linear-gradient(90deg, #b8860b 0%, #ffd700 100%); color: #000; font-weight: 900;">
+          🖨️ 表彰状を印刷する（PDF保存）
         </button>
         <button class="action-sub-btn" onclick="closeCertModal()" style="padding: 10px 20px; font-size: 15px;">とじる</button>
       </div>
@@ -3569,11 +3727,34 @@ function updateAnswerDisplay() {
     slots = elSlotsContainer.querySelectorAll('.char-slot');
   }
 
+  // キーボードで入力中の未確定文字（ローマ字バッファ or IME変換中）
+  const pending = romajiBuffer || composingText || "";
+
   for (let i = 0; i < targetLen; i++) {
-    const char = currentAnswer[i] || "";
-    slots[i].textContent = char;
-    slots[i].classList.toggle('filled', !!char);
-    slots[i].classList.toggle('active', i === currentAnswer.length);
+    if (i < currentAnswer.length) {
+      // 確定したひらがな
+      slots[i].textContent = currentAnswer[i];
+      slots[i].className = 'char-slot filled';
+    } else if (i === currentAnswer.length && pending) {
+      // ★入力中の文字をリアルタイムでマス目に表示！
+      slots[i].textContent = pending;
+      slots[i].className = 'char-slot active typing';
+    } else {
+      // 未入力
+      slots[i].textContent = "";
+      slots[i].className = (i === currentAnswer.length) ? 'char-slot active' : 'char-slot';
+    }
+  }
+
+  // キーボード入力ガイドバー
+  const previewEl = document.getElementById('typing-preview-bar');
+  if (previewEl) {
+    if (pending) {
+      previewEl.innerHTML = `⌨️ 入力中: <strong style="color: #00ffff; font-family: monospace; font-size: 15px;">${pending.toUpperCase()}</strong>`;
+      previewEl.style.display = 'block';
+    } else {
+      previewEl.style.display = 'none';
+    }
   }
 
   if (currentAnswer.length >= targetLen) {
@@ -3591,6 +3772,8 @@ function loadQuestion(index) {
 
   isAnswerLocked = false;
   currentAnswer = "";
+  romajiBuffer = "";
+  composingText = "";
   elHiddenInput.value = "";
   questionStartTime = performance.now();
 
@@ -3689,12 +3872,16 @@ function appendAnswerChar(char) {
 
 function removeLastChar() {
   if (isAnswerLocked) return;
+  romajiBuffer = "";
+  composingText = "";
   currentAnswer = currentAnswer.slice(0, -1);
   updateAnswerDisplay();
 }
 
 function clearAnswer() {
   if (isAnswerLocked) return;
+  romajiBuffer = "";
+  composingText = "";
   currentAnswer = "";
   updateAnswerDisplay();
 }
@@ -4069,20 +4256,28 @@ function focusHiddenInput() {
 
 // 物理キーボード / IME入力 / ローマ字自動変換
 let isComposing = false;
+let composingText = "";
 let romajiBuffer = "";
 
 elHiddenInput.addEventListener('compositionstart', () => {
   isComposing = true;
+  composingText = "";
+});
+
+elHiddenInput.addEventListener('compositionupdate', (e) => {
+  composingText = e.data || "";
+  updateAnswerDisplay();
 });
 
 elHiddenInput.addEventListener('compositionend', () => {
   isComposing = false;
+  composingText = "";
   const val = elHiddenInput.value;
   const h = toHiragana(val);
   if (h) {
     currentAnswer = h.slice(0, 10);
-    updateAnswerDisplay();
   }
+  updateAnswerDisplay();
 });
 
 elHiddenInput.addEventListener('input', (e) => {
@@ -4154,6 +4349,7 @@ function processRomajiKey(key) {
   if (key === '-') {
     appendAnswerChar('ー');
     romajiBuffer = "";
+    updateAnswerDisplay();
     return;
   }
   if (!/^[a-z]$/i.test(key)) return;
@@ -4170,6 +4366,7 @@ function processRomajiKey(key) {
   if (romajiBuffer === 'nn') {
     appendAnswerChar('ん');
     romajiBuffer = "";
+    updateAnswerDisplay();
     return;
   }
 
@@ -4183,6 +4380,7 @@ function processRomajiKey(key) {
   if (ROMAJI_TABLE[romajiBuffer]) {
     appendAnswerChar(ROMAJI_TABLE[romajiBuffer]);
     romajiBuffer = "";
+    updateAnswerDisplay();
     return;
   }
 
@@ -4190,6 +4388,9 @@ function processRomajiKey(key) {
   while (romajiBuffer.length > 4) {
     romajiBuffer = romajiBuffer.slice(1);
   }
+
+  // 入力途中のキー（例: 'k', 'sh' など）を画面に即座に反映！
+  updateAnswerDisplay();
 }
 
 elHiddenInput.addEventListener('keydown', (e) => {
@@ -4199,6 +4400,7 @@ elHiddenInput.addEventListener('keydown', (e) => {
   } else if (e.key === 'Backspace') {
     if (romajiBuffer.length > 0) {
       romajiBuffer = romajiBuffer.slice(0, -1);
+      updateAnswerDisplay();
       e.preventDefault();
       return;
     }
@@ -4622,30 +4824,161 @@ function renderCustomModal() {
 }
 
 /* === 表彰状（漢字マスター認定証） === */
+const CERT_TABS = [
+  { key: 1, label: "1ねんせい", shortTitle: "第１学年", title: "第１学年 配当漢字 全80字" },
+  { key: 2, label: "2ねんせい", shortTitle: "第２学年", title: "第２学年 配当漢字 全160字" },
+  { key: 3, label: "3年生", shortTitle: "第３学年", title: "第３学年 配当漢字 全200字" },
+  { key: 4, label: "4年生", shortTitle: "第４学年", title: "第４学年 配当漢字 全202字" },
+  { key: 5, label: "5年生", shortTitle: "第５学年", title: "第５学年 配当漢字 全193字" },
+  { key: 6, label: "6年生", shortTitle: "第６学年", title: "第６学年 配当漢字 全191字" },
+  { key: 'all', label: "全学年制覇", shortTitle: "全学年完全制覇", title: "小学校６年間 配当漢字 全1,026字" }
+];
+
+let selectedCertKey = 1;
+
+function getGradeMasteryStatus(gradeKey) {
+  const mastered = getMasteredKanji();
+  if (gradeKey === 'all') {
+    const totalCount = 1026;
+    let masteredCount = 0;
+    for (let g = 1; g <= 6; g++) {
+      if (typeof ALL_GRADE_KANJI !== 'undefined' && ALL_GRADE_KANJI[g]) {
+        for (const ch of ALL_GRADE_KANJI[g]) {
+          if ((mastered[ch] || 0) >= 1) masteredCount++;
+        }
+      }
+    }
+    return {
+      masteredCount,
+      totalCount,
+      isUnlocked: masteredCount >= totalCount,
+      percent: Math.floor((masteredCount / totalCount) * 100)
+    };
+  } else {
+    const g = parseInt(gradeKey, 10);
+    const kanjiList = (typeof ALL_GRADE_KANJI !== 'undefined' && ALL_GRADE_KANJI[g]) ? ALL_GRADE_KANJI[g] : [];
+    const totalCount = kanjiList.length;
+    let masteredCount = 0;
+    for (const ch of kanjiList) {
+      if ((mastered[ch] || 0) >= 1) masteredCount++;
+    }
+    return {
+      masteredCount,
+      totalCount,
+      isUnlocked: totalCount > 0 && masteredCount >= totalCount,
+      percent: totalCount > 0 ? Math.floor((masteredCount / totalCount) * 100) : 0
+    };
+  }
+}
+
 function openCertModal(targetGrade) {
-  const g = targetGrade || (typeof currentRoomGrade !== 'undefined' ? currentRoomGrade : 1);
-  const gradeNames = {
-    1: "第１学年 配当漢字 全80字",
-    2: "第２学年 配当漢字 全160字",
-    3: "第３学年 配当漢字 全200字",
-    4: "第４学年 配当漢字 全202字",
-    5: "第５学年 配当漢字 全193字",
-    6: "第６学年 配当漢字 全191字",
-    all: "小学校６年間 配当漢字 全1,026字"
-  };
-
-  const titleEl = document.getElementById('cert-grade-title');
-  if (titleEl) {
-    titleEl.textContent = gradeNames[g] || "小学校 配当漢字";
+  if (targetGrade !== undefined) {
+    selectedCertKey = targetGrade;
+  } else if (typeof currentRoomGrade !== 'undefined' && currentRoomGrade) {
+    selectedCertKey = currentRoomGrade;
+  } else {
+    selectedCertKey = 1;
   }
-
-  const dateEl = document.getElementById('cert-date-display');
-  if (dateEl) {
-    const now = new Date();
-    dateEl.textContent = `${now.getFullYear()}年 ${now.getMonth() + 1}月 ${now.getDate()}日`;
-  }
-
+  renderCertModal();
   document.getElementById('cert-modal').style.display = 'flex';
+}
+
+function selectCertGrade(key) {
+  selectedCertKey = key;
+  renderCertModal();
+}
+
+function renderCertModal() {
+  const container = document.getElementById('cert-tabs-container');
+  if (!container) return;
+
+  // 1. タブ一覧の生成
+  container.innerHTML = "";
+  CERT_TABS.forEach(tab => {
+    const status = getGradeMasteryStatus(tab.key);
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    const isActive = (tab.key.toString() === selectedCertKey.toString());
+    btn.className = `cert-tab-btn ${status.isUnlocked ? 'unlocked' : ''} ${isActive ? 'active' : ''}`;
+    btn.onclick = () => selectCertGrade(tab.key);
+
+    const icon = status.isUnlocked ? '🏆' : '🔒';
+    const statusText = status.isUnlocked ? '達成！' : `${status.masteredCount}/${status.totalCount}字`;
+
+    btn.innerHTML = `
+      <span class="cert-tab-icon">${icon}</span>
+      <span class="cert-tab-label">${tab.label}</span>
+      <span class="cert-tab-status">${statusText}</span>
+    `;
+    container.appendChild(btn);
+  });
+
+  // 2. 選択中の認定証の表示切り替え
+  const currentTab = CERT_TABS.find(t => t.key.toString() === selectedCertKey.toString()) || CERT_TABS[0];
+  const currentStatus = getGradeMasteryStatus(currentTab.key);
+
+  const printArea = document.getElementById('cert-print-area');
+  const lockedArea = document.getElementById('cert-locked-area');
+  const printBtn = document.getElementById('btn-cert-print');
+
+  if (currentStatus.isUnlocked) {
+    // 達成！賞状と印刷ボタンを表示
+    if (printArea) printArea.style.display = 'block';
+    if (lockedArea) lockedArea.style.display = 'none';
+    if (printBtn) printBtn.style.display = 'inline-flex';
+
+    // 称号設定（実名は使わず、EXP称号を自動表示して個人情報を完全保護）
+    const rankRecipient = document.getElementById('cert-rank-recipient');
+    if (rankRecipient) {
+      const exp = getExp();
+      const rank = getCurrentRank(exp);
+      rankRecipient.textContent = rank.title || "漢字マスターパイロット";
+    }
+
+    // 学年タイトル
+    const titleEl = document.getElementById('cert-grade-title');
+    if (titleEl) {
+      titleEl.textContent = currentTab.title;
+    }
+
+    // 本文
+    const bodyEl = document.getElementById('cert-text-body');
+    if (bodyEl) {
+      bodyEl.innerHTML = `
+        あなたは「ファイブツアーズJET 漢字バトル」において<br>
+        <strong style="color: #b8860b; font-size: 18px;">${currentTab.title}</strong> の<br>
+        読みと意味を完全に見極め、すべての漢字を完全撃破いたしました。<br>
+        その弛まぬ努力と卓越した漢字力をここに讃え、栄誉を表彰します。
+      `;
+    }
+
+    // 日付
+    const dateEl = document.getElementById('cert-date-display');
+    if (dateEl) {
+      const now = new Date();
+      dateEl.textContent = `${now.getFullYear()}年 ${now.getMonth() + 1}月 ${now.getDate()}日`;
+    }
+  } else {
+    // 未達成！ロック案内を表示し、印刷ボタンを非表示
+    if (printArea) printArea.style.display = 'none';
+    if (lockedArea) lockedArea.style.display = 'block';
+    if (printBtn) printBtn.style.display = 'none';
+
+    const lockedTitle = document.getElementById('cert-locked-title');
+    if (lockedTitle) {
+      lockedTitle.textContent = `${currentTab.shortTitle} 認定証はロックされています`;
+    }
+
+    const lockedCount = document.getElementById('cert-locked-count');
+    if (lockedCount) {
+      lockedCount.textContent = `${currentStatus.masteredCount} / ${currentStatus.totalCount} 字 (${currentStatus.percent}%)`;
+    }
+
+    const lockedRemain = document.getElementById('cert-locked-remain');
+    if (lockedRemain) {
+      lockedRemain.textContent = currentStatus.totalCount - currentStatus.masteredCount;
+    }
+  }
 }
 
 function openGradeCertificate() {

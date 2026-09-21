@@ -456,6 +456,24 @@
       color: #fff;
     }
 
+    /* なぞり書きミス時の手本ハイライト（脈動ゴールド）＆手本とのズレ可視化 */
+    @keyframes pulseGoldTarget {
+      0%, 100% {
+        stroke: #f59e0b !important;
+        stroke-width: 9px !important;
+        filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.9));
+      }
+      50% {
+        stroke: #fbbf24 !important;
+        stroke-width: 12px !important;
+        filter: drop-shadow(0 0 14px rgba(251, 191, 36, 1));
+      }
+    }
+    .target-pulse-gold {
+      animation: pulseGoldTarget 0.45s ease-in-out infinite alternate !important;
+      opacity: 1 !important;
+    }
+
     /* 終点インジケーター */
     .brush-end-dot {
       position: absolute;
@@ -2756,7 +2774,45 @@
       redrawTraceCanvas();
     }
 
-    /* なぞり書き判定（方向・始点・網羅率） */
+    // なぞり書きの失敗フィードバック状態管理
+    let failedStrokeData = null; // { points, message, expectedIdx }
+    let failedFeedbackTimeout = null;
+
+    function triggerTraceFailure(reason, points, expectedIdx) {
+      if (failedFeedbackTimeout) clearTimeout(failedFeedbackTimeout);
+
+      // お手本SVGパスにゴールド点滅クラスを付与して「正しい位置」を明示
+      const expectedPath = document.getElementById(`anim-stroke-${expectedIdx}`);
+      if (expectedPath) {
+        expectedPath.classList.add('target-pulse-gold');
+      }
+
+      failedStrokeData = {
+        points: [...points],
+        message: reason.message,
+        expectedIdx: expectedIdx
+      };
+
+      const guideText = document.getElementById('trace-guide-text');
+      if (guideText) {
+        guideText.innerHTML = `<span style="color: #ef4444; font-weight: 800; font-size: 14.5px;">${reason.message}</span>`;
+      }
+
+      // 注意音
+      playSound('tome');
+      redrawTraceCanvas();
+
+      failedFeedbackTimeout = setTimeout(() => {
+        if (expectedPath) {
+          expectedPath.classList.remove('target-pulse-gold');
+        }
+        failedStrokeData = null;
+        redrawTraceCanvas();
+        updateTraceGuideUI();
+      }, 1900);
+    }
+
+    /* なぞり書き判定（方向・始点・終点・とめはねはらいの精密診断） */
     function verifyCurrentStroke() {
       const data = currentGradeList[currentIndex];
       if (traceCurrentIdx >= data.strokesCount) return;
@@ -2783,22 +2839,39 @@
       const uStart = currentTracePoints[0];
       const uEnd = currentTracePoints[currentTracePoints.length - 1];
 
-      // 許容半径（画面サイズに応じた優しい判定）
+      // ユーザーの総描画距離
+      let uLen = 0;
+      for (let i = 1; i < currentTracePoints.length; i++) {
+        uLen += Math.hypot(currentTracePoints[i].x - currentTracePoints[i - 1].x, currentTracePoints[i].y - currentTracePoints[i - 1].y);
+      }
+      const eLen = totalLen * ((scaleX + scaleY) / 2);
+
+      // 許容半径（画面サイズに応じた判定）
       const tolerance = Math.max(55, rect.width * 0.22);
       const startDist = Math.hypot(uStart.x - pStart.x, uStart.y - pStart.y);
       const endDist = Math.hypot(uEnd.x - pEnd.x, uEnd.y - pEnd.y);
 
-      // 逆走チェック（終点から始点へ描いていないか）
+      // 筆使い属性
+      const inst = getBrushInstruction(expected, data.kanji, traceCurrentIdx + 1, data.strokesCount);
+
+      // 1. 逆走チェック（終点から始点へ描いていないか）
       const reverseStartDist = Math.hypot(uStart.x - pEnd.x, uStart.y - pEnd.y);
       if (reverseStartDist < tolerance && startDist > tolerance * 1.5) {
+        const savedPts = [...currentTracePoints];
         currentTracePoints = [];
-        const guideText = document.getElementById('trace-guide-text');
-        guideText.textContent = `⚠️ ぎゃく向きだよ！①の始点から矢印のほうへ書こう！`;
-        setTimeout(updateTraceGuideUI, 1400);
+        triggerTraceFailure({ type: 'reverse', message: '⚠️ 反対向きだよ！①の始点から矢印のほうへ書こう！' }, savedPts, traceCurrentIdx);
         return;
       }
 
-      // サンプリング網羅チェック
+      // 2. 始点チェック
+      if (startDist > tolerance) {
+        const savedPts = [...currentTracePoints];
+        currentTracePoints = [];
+        triggerTraceFailure({ type: 'start_far', message: '📍 始点がズレているよ！①の丸（スタート位置）から書き始めよう！' }, savedPts, traceCurrentIdx);
+        return;
+      }
+
+      // 3. サンプリング網羅チェック
       let matchedCount = 0;
       for (const ep of expectedPts) {
         const isNear = currentTracePoints.some(up => Math.hypot(up.x - ep.x, up.y - ep.y) < tolerance);
@@ -2806,8 +2879,14 @@
       }
       const matchRatio = matchedCount / expectedPts.length;
 
-      // 判定合格
-      if (startDist <= tolerance && matchRatio >= 0.42) {
+      // 4. 合格判定
+      if (matchRatio >= 0.42 && endDist <= tolerance * 1.35) {
+        // 合格時、直前の失敗表示をクリア
+        if (failedFeedbackTimeout) clearTimeout(failedFeedbackTimeout);
+        const prevPath = document.getElementById(`anim-stroke-${traceCurrentIdx}`);
+        if (prevPath) prevPath.classList.remove('target-pulse-gold');
+        failedStrokeData = null;
+
         userDrawnStrokes.push({
           points: [...currentTracePoints],
           color: getStrokeColor(traceCurrentIdx + 1)
@@ -2815,7 +2894,6 @@
         currentTracePoints = [];
         traceCurrentIdx++;
 
-        const inst = getBrushInstruction(expected, data.kanji, traceCurrentIdx, data.strokesCount);
         playSound(inst.kind); // とめ・はね・はらいの専用音
         showBrushIndicator(pEnd.x / scaleX, pEnd.y / scaleY, inst);
         triggerBrushCutin(inst, traceCurrentIdx - 1);
@@ -2828,10 +2906,46 @@
           updateTraceGuideUI();
         }
       } else {
+        // 不合格時の具体的・教育的フィードバック診断！
+        const savedPts = [...currentTracePoints];
         currentTracePoints = [];
-        const guideText = document.getElementById('trace-guide-text');
-        guideText.textContent = `惜しい！もう一度 ①の始点から丁寧になぞろう！`;
-        setTimeout(updateTraceGuideUI, 1200);
+
+        let failReason = null;
+        const lengthRatio = uLen / Math.max(1, eLen);
+
+        // A. 短すぎる・途中で止まっている
+        if (lengthRatio < 0.62 || endDist > tolerance * 1.3) {
+          if (inst.kind === 'harai') {
+            failReason = { type: 'harai_short', message: '彡 はらいが短すぎるよ！スーッと先までしっかり払おう！' };
+          } else if (inst.kind === 'hane') {
+            failReason = { type: 'hane_short', message: '⤴ はねの位置まで届いていないよ！角まで引いてから跳ねよう！' };
+          } else {
+            failReason = { type: 'tome_short', message: '● 途中で止まっているよ！線の端までしっかり引こう！' };
+          }
+        }
+        // B. 終点の方向・曲がりチェック
+        else if (currentTracePoints.length >= 4 && expectedPts.length >= 4) {
+          const uLastSlice = savedPts.slice(-4);
+          const uLastDx = uLastSlice[uLastSlice.length - 1].x - uLastSlice[0].x;
+          const uLastDy = uLastSlice[uLastSlice.length - 1].y - uLastSlice[0].y;
+          const eLastDx = pEnd.x - expectedPts[expectedPts.length - 3].x;
+          const eLastDy = pEnd.y - expectedPts[expectedPts.length - 3].y;
+
+          if (inst.kind === 'hane' && (uLastDy > 2 || (eLastDy < -2 && uLastDy >= 0))) {
+            failReason = { type: 'hane_dir', message: `⤴ はねの向きがちがうよ！${inst.detail || '上に向かってキュッと跳ねよう'}！` };
+          } else if (inst.kind === 'tome' && Math.hypot(uLastDx, uLastDy) > 15 && Math.abs(uLastDx * eLastDy - uLastDy * eLastDx) > 200) {
+            failReason = { type: 'tome_curve', message: '● とめの部分で線が曲がっているよ！まっすぐピタッと止めよう！' };
+          } else if (inst.kind === 'harai' && Math.abs(uLastDx * eLastDy - uLastDy * eLastDx) > 250) {
+            failReason = { type: 'harai_dir', message: '彡 はらいの方向がずれているよ！お手本のラインに沿って払おう！' };
+          }
+        }
+
+        // C. 一般的なズレ
+        if (!failReason) {
+          failReason = { type: 'deviated', message: 'お手本の線から外れているよ！金色の点線に合わせて丁寧になぞろう！' };
+        }
+
+        triggerTraceFailure(failReason, savedPts, traceCurrentIdx);
       }
     }
 
@@ -2854,10 +2968,32 @@
         drawPathPoints(s.points, s.color, 14);
       });
 
+      // ミスしたストロークの手本とのズレ可視化（半透明の赤＋破線）
+      if (failedStrokeData && failedStrokeData.points.length > 1) {
+        drawFailedPath(failedStrokeData.points);
+      }
+
       // 描画中ストローク
       if (currentTracePoints.length > 1) {
         drawPathPoints(currentTracePoints, getStrokeColor(traceCurrentIdx + 1), 14);
       }
+    }
+
+    function drawFailedPath(points) {
+      if (points.length < 2) return;
+      traceCtx.save();
+      traceCtx.strokeStyle = 'rgba(239, 68, 68, 0.85)';
+      traceCtx.lineWidth = 12;
+      traceCtx.lineCap = 'round';
+      traceCtx.lineJoin = 'round';
+      traceCtx.setLineDash([8, 6]);
+      traceCtx.beginPath();
+      traceCtx.moveTo(points[0].x, points[0].y);
+      for (let i = 1; i < points.length; i++) {
+        traceCtx.lineTo(points[i].x, points[i].y);
+      }
+      traceCtx.stroke();
+      traceCtx.restore();
     }
 
     function drawPathPoints(points, color, width) {

@@ -2508,7 +2508,214 @@
       text-align: left;
     }
 
+    /* === 先生モード（Teacher Mode）専用スタイル === */
+    .home-nav-btn.teacher-btn {
+      background: linear-gradient(135deg, #3730a3, #6366f1) !important;
+      border: 1.5px solid #818cf8 !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 12px rgba(99, 102, 241, 0.45);
+      font-weight: bold;
+    }
+    .home-nav-btn.teacher-btn:hover {
+      background: linear-gradient(135deg, #4338ca, #4f46e5) !important;
+      box-shadow: 0 0 16px rgba(99, 102, 241, 0.7);
+    }
+
+    /* 先生指定ターゲットバナー（ホーム画面用） */
+    .teacher-target-banner {
+      background: linear-gradient(135deg, rgba(30, 27, 75, 0.95), rgba(49, 46, 129, 0.92));
+      border: 2px solid #818cf8;
+      border-radius: 12px;
+      padding: 10px 14px;
+      margin-bottom: 8px;
+      box-shadow: 0 0 15px rgba(129, 140, 248, 0.35);
+      text-align: left;
+    }
+    .target-exit-btn {
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid #ef4444;
+      color: #fca5a5;
+      border-radius: 6px;
+      padding: 3px 8px;
+      font-size: 11px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .target-exit-btn:hover {
+      background: #ef4444;
+      color: #fff;
+    }
+
+    /* 先生コントロールパネル（モーダル） */
+    .modal-card-teacher {
+      max-width: 960px;
+      width: 95%;
+      height: 90vh;
+      display: flex;
+      flex-direction: column;
+      background: rgba(10, 15, 30, 0.98);
+      border: 2px solid #6366f1;
+      box-shadow: 0 0 35px rgba(99, 102, 241, 0.4);
+      padding: 0;
+      overflow: hidden;
+    }
+    .teacher-modal-header {
+      padding: 14px 20px;
+      background: linear-gradient(90deg, #1e1b4b, #312e81);
+      border-bottom: 2px solid #4f46e5;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .teacher-tabs-nav {
+      display: flex;
+      background: rgba(15, 23, 42, 0.9);
+      border-bottom: 1.5px solid #334155;
+      padding: 6px 14px 0 14px;
+      gap: 6px;
+      overflow-x: auto;
+      flex-shrink: 0;
+    }
+    .teacher-tab-btn {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid #475569;
+      border-bottom: none;
+      color: #cbd5e1;
+      padding: 10px 16px;
+      font-size: 13.5px;
+      font-weight: bold;
+      border-radius: 8px 8px 0 0;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .teacher-tab-btn.active {
+      background: #4338ca;
+      color: #ffffff;
+      border-color: #818cf8;
+      box-shadow: 0 -2px 10px rgba(129, 140, 248, 0.3);
+    }
+    .teacher-tab-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 20px;
+      display: none;
+    }
+    .teacher-tab-content.active {
+      display: block;
+    }
+
+    /* 漢字グリッド選択 */
+    .teacher-kanji-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+      gap: 6px;
+      max-height: 220px;
+      overflow-y: auto;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1.5px solid #334155;
+      border-radius: 8px;
+      padding: 10px;
+    }
+    .teacher-kanji-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 38px;
+      border: 1.5px solid #334155;
+      border-radius: 6px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #cbd5e1;
+      cursor: pointer;
+      background: #1e293b;
+      transition: all 0.15s;
+    }
+    .teacher-kanji-item.selected {
+      background: #4f46e5;
+      border-color: #a5b4fc;
+      color: #ffffff;
+      box-shadow: 0 0 8px rgba(99, 102, 241, 0.6);
+      transform: scale(1.05);
+    }
+
+    /* QRコード表示ボックス */
+    .teacher-qr-box {
+      background: #ffffff;
+      padding: 12px;
+      border-radius: 10px;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    }
+
+    /* 賞状スタイル */
+    .cert-frame {
+      background: #fffdf0;
+      color: #1a1a1a;
+      border: 12px double #b45309;
+      border-radius: 12px;
+      padding: 24px 30px;
+      position: relative;
+      box-shadow: inset 0 0 15px rgba(180, 83, 9, 0.15), 0 5px 25px rgba(0,0,0,0.4);
+      font-family: 'Yu Mincho', 'Hiragino Mincho ProN', serif;
+    }
+    .cert-hanamaru-stamp {
+      position: absolute;
+      right: 40px;
+      bottom: 40px;
+      width: 105px;
+      height: 105px;
+      border: 4px dashed #dc2626;
+      border-radius: 50%;
+      color: #dc2626;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 14px;
+      transform: rotate(-12deg);
+      background: rgba(254, 226, 226, 0.6);
+      box-shadow: 0 0 10px rgba(220, 38, 38, 0.2);
+    }
+
+    @media print {
+      body * {
+        visibility: hidden !important;
+      }
+      #print-certificate-wrapper, #print-certificate-wrapper * {
+        visibility: visible !important;
+      }
+      #print-certificate-wrapper {
+        position: fixed !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        background: #fff !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        z-index: 999999 !important;
+      }
+      .cert-frame {
+        width: 92% !important;
+        height: 88% !important;
+        border: 10px double #92400e !important;
+        box-shadow: none !important;
+        page-break-inside: avoid !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+    }
 </style>
+<script src="assets/qrcode.min.js"></script>
 </head>
 <body>
 
@@ -2725,6 +2932,16 @@
       <div class="home-dashboard-layout">
         <!-- 左カラム：設定・ミッション・発進ボタン -->
         <div class="home-dashboard-left">
+          <!-- 先生指定ターゲットバナー (URLパラメータ等で指定時のみ表示) -->
+          <div id="teacher-target-mission-banner" class="teacher-target-banner" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 13.5px; font-weight: 900; color: #ffd700;">🎯 先生からの特別ミッション発動中！</span>
+              <button class="target-exit-btn" onclick="clearTeacherTargetMode()">✕ 解除</button>
+            </div>
+            <div id="teacher-target-kanji-display" style="font-size: 16px; font-weight: bold; color: #fff; margin-top: 4px; letter-spacing: 2px;"></div>
+            <div id="teacher-target-meta-info" style="font-size: 11px; color: #a5b4fc; margin-top: 3px;"></div>
+          </div>
+
           <!-- 学習カリキュラムセレクター -->
           <div class="curriculum-bar" id="curriculum-bar" style="margin: 0;">
             <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
@@ -2826,6 +3043,9 @@
           </button>
           <button class="home-nav-btn sub" onclick="openHowToModal()" style="flex: 0 0 auto; text-align: center; justify-content: center; font-size: 12.5px; padding: 10px 16px;">
             ❓ あそびかた
+          </button>
+          <button class="home-nav-btn teacher-btn" onclick="openTeacherAuthModal()" style="flex: 0 0 auto; text-align: center; justify-content: center; font-size: 13px; padding: 10px 16px;" title="先生専用設定・今日の漢字出題・賞状印刷">
+            🎓 先生モード
           </button>
         </div>
       </div>
@@ -3201,6 +3421,7 @@
         <div class="handwrite-feedback-box" id="hw-feedback-box">
           <div class="handwrite-feedback-title" id="hw-feedback-title" style="color: #00ffff;">マス目にお手本どおり書いてみよう！</div>
           <div id="hw-feedback-detail" style="font-size: 12px; color: #a4c8e0;">第1画目を書いてください</div>
+          <div id="hw-feedback-advices" style="font-size: 11.5px; color: #fde047; margin-top: 5px; text-align: left; line-height: 1.4; display: none;"></div>
         </div>
 
         <!-- キャンバス操作ボタン群 -->
@@ -3369,6 +3590,251 @@
       </div>
     </div>
   </div>
+
+  <!-- 先生モード認証モーダル (PINコード) -->
+  <div class="modal-overlay" id="teacher-auth-modal" style="display: none; z-index: 160;">
+    <div class="modal-card" style="max-width: 440px; text-align: center; background: rgba(10, 15, 30, 0.98); border: 2px solid #6366f1;">
+      <div style="font-size: 40px; margin-bottom: 6px;">🎓</div>
+      <h2 style="font-size: 20px; color: #a5b4fc; margin-bottom: 4px;">先生モード認証</h2>
+      <p style="font-size: 13px; color: #94a3b8; margin-bottom: 16px; line-height: 1.5;">
+        授業・宿題の出題設定や賞状発行を行う教員専用画面です。<br>暗証番号を入力してください。（初期値: <strong style="color:#ffd700;">1234</strong>）
+      </p>
+      <div style="margin-bottom: 16px;">
+        <input type="password" id="teacher-pin-input" maxlength="8" placeholder="1234" style="width: 180px; font-size: 24px; text-align: center; letter-spacing: 6px; padding: 8px 12px; background: #0f172a; border: 2px solid #6366f1; border-radius: 8px; color: #fff;" onkeydown="if(event.key==='Enter')verifyTeacherPin()">
+      </div>
+      <div id="teacher-pin-error" style="color: #ef4444; font-size: 12.5px; font-weight: bold; margin-bottom: 12px; display: none;">暗証番号が正しくありません</div>
+      <div style="display: flex; gap: 10px; justify-content: center;">
+        <button class="start-btn" onclick="verifyTeacherPin()" style="padding: 9px 24px; font-size: 14px; background: #4f46e5;">認証して開く</button>
+        <button class="action-sub-btn" onclick="closeTeacherAuthModal()" style="padding: 9px 18px; font-size: 14px;">キャンセル</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 先生コントロールパネル モーダル -->
+  <div class="modal-overlay" id="teacher-panel-modal" style="display: none; z-index: 150;">
+    <div class="modal-card modal-card-teacher">
+      <!-- 固定ヘッダー -->
+      <div class="teacher-modal-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 26px;">🎓</span>
+          <div>
+            <h2 style="margin: 0; font-size: 18px; color: #fff;">先生コントロールパネル (Teacher Dashboard)</h2>
+            <div style="font-size: 11.5px; color: #a5b4fc;">完全ローカル・個人情報ゼロ保証 ｜ 授業・宿題フォーカス & 難易度管理</div>
+          </div>
+        </div>
+        <button class="room-close-btn" onclick="closeTeacherPanelModal()">✕ とじる</button>
+      </div>
+
+      <!-- タブナビゲーション -->
+      <div class="teacher-tabs-nav">
+        <button class="teacher-tab-btn active" id="tab-btn-target" onclick="switchTeacherTab('target')">🎯 今日のターゲット漢字・QR配布</button>
+        <button class="teacher-tab-btn" id="tab-btn-preset" onclick="switchTeacherTab('preset')">📚 教科書単元別プリセット</button>
+        <button class="teacher-tab-btn" id="tab-btn-difficulty" onclick="switchTeacherTab('difficulty')">⚙️ クラス難易度設定</button>
+        <button class="teacher-tab-btn" id="tab-btn-cert" onclick="switchTeacherTab('cert')">💮 はなまる学習証明書（賞状）</button>
+        <button class="teacher-tab-btn" id="tab-btn-data" onclick="switchTeacherTab('data')">💾 データ管理・リセット</button>
+      </div>
+
+      <!-- タブ1: ターゲット漢字・QR配布 -->
+      <div class="teacher-tab-content active" id="teacher-tab-target">
+        <div style="background: rgba(30, 27, 75, 0.4); border: 1.5px solid #4f46e5; border-radius: 10px; padding: 14px; margin-bottom: 14px;">
+          <h3 style="font-size: 15px; color: #a5b4fc; margin-bottom: 6px;">💡 授業・宿題の漢字に強制フォーカス</h3>
+          <p style="font-size: 12.5px; color: #cbd5e1; line-height: 1.5;">
+            今日・今週学習する漢字を選択すると、その漢字だけが出題される「特訓モード」を作れます。<br>
+            生成されたQRコードを電子黒板やプロジェクターに映すか、共有URLを配布すると、児童の端末が一瞬で指定モードに同期します。
+          </p>
+        </div>
+
+        <!-- 漢字自由入力欄 & クイック反映 -->
+        <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 12px; flex-wrap: wrap;">
+          <span style="font-size: 13px; font-weight: bold; color: #ffd700;">✏️ 漢字を直接入力:</span>
+          <input type="text" id="teacher-quick-kanji-input" placeholder="例: 青 空 町 村 海" style="flex: 1; min-width: 200px; padding: 8px 12px; background: #0f172a; border: 1.5px solid #6366f1; border-radius: 6px; color: #fff; font-size: 15px; letter-spacing: 2px;">
+          <button class="start-btn" onclick="applyQuickKanjiInput()" style="padding: 8px 16px; font-size: 13px; background: #4f46e5;">反映する</button>
+          <button class="action-sub-btn" onclick="clearTeacherKanjiSelection()" style="padding: 8px 12px; font-size: 12px;">クリア</button>
+        </div>
+
+        <!-- 学年選択フィルター -->
+        <div style="display: flex; gap: 8px; margin-bottom: 10px; align-items: center; flex-wrap: wrap;">
+          <span style="font-size: 13px; color: #94a3b8;">学年一覧から選ぶ:</span>
+          <div style="display: flex; gap: 6px;">
+            <button class="action-sub-btn" id="t-grade-btn-1" onclick="loadTeacherKanjiGrid(1)" style="padding: 4px 10px; font-size: 12px;">1年</button>
+            <button class="action-sub-btn" id="t-grade-btn-2" onclick="loadTeacherKanjiGrid(2)" style="padding: 4px 10px; font-size: 12px;">2年</button>
+            <button class="action-sub-btn" id="t-grade-btn-3" onclick="loadTeacherKanjiGrid(3)" style="padding: 4px 10px; font-size: 12px;">3年</button>
+            <button class="action-sub-btn" id="t-grade-btn-4" onclick="loadTeacherKanjiGrid(4)" style="padding: 4px 10px; font-size: 12px;">4年</button>
+            <button class="action-sub-btn" id="t-grade-btn-5" onclick="loadTeacherKanjiGrid(5)" style="padding: 4px 10px; font-size: 12px;">5年</button>
+            <button class="action-sub-btn" id="t-grade-btn-6" onclick="loadTeacherKanjiGrid(6)" style="padding: 4px 10px; font-size: 12px;">6年</button>
+          </div>
+          <div style="margin-left: auto; font-size: 12.5px; color: #00ff88; font-weight: bold;">
+            選択中: <span id="teacher-selected-count">0</span> 字
+          </div>
+        </div>
+
+        <!-- 漢字選択グリッド -->
+        <div class="teacher-kanji-grid" id="teacher-kanji-grid-container"></div>
+
+        <!-- QRコード & 共有URL生成エリア -->
+        <div style="margin-top: 16px; background: rgba(15, 23, 42, 0.8); border: 1.5px solid #334155; border-radius: 10px; padding: 16px; display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+          <div style="text-align: center;">
+            <div class="teacher-qr-box" id="teacher-qrcode-canvas-box"></div>
+            <div style="font-size: 11px; color: #94a3b8; margin-top: 6px;">📱 児童端末のカメラで読取</div>
+          </div>
+          <div style="flex: 1; min-width: 260px; text-align: left;">
+            <div style="font-size: 13.5px; font-weight: bold; color: #ffd700; margin-bottom: 6px;">🔗 児童配布用URL (授業・宿題用)</div>
+            <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+              <input type="text" id="teacher-share-url-input" readonly style="flex: 1; padding: 8px 10px; background: #0b1329; border: 1px solid #4f46e5; border-radius: 6px; color: #00e5ff; font-size: 12px;" onclick="this.select()">
+              <button class="action-sub-btn" onclick="copyTeacherShareUrl()" style="padding: 8px 14px; font-size: 12px; border-color: #00ff88; color: #00ff88;">📋 コピー</button>
+            </div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <button class="start-btn" onclick="launchTeacherTargetOnCurrentDevice()" style="padding: 9px 20px; font-size: 13.5px; background: linear-gradient(135deg, #10b981, #059669);">
+                🚀 この端末で今すぐターゲット開始
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- タブ2: 教科書単元別プリセット -->
+      <div class="teacher-tab-content" id="teacher-tab-preset">
+        <div style="background: rgba(30, 27, 75, 0.4); border: 1.5px solid #4f46e5; border-radius: 10px; padding: 14px; margin-bottom: 14px;">
+          <h3 style="font-size: 15px; color: #a5b4fc; margin-bottom: 4px;">📖 単元を選ぶだけで今週の漢字が一発セット！</h3>
+          <p style="font-size: 12.5px; color: #cbd5e1;">教科書の進行に合わせてワンクリックでターゲットを設定できます。</p>
+        </div>
+        <div id="teacher-presets-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px;"></div>
+      </div>
+
+      <!-- タブ3: クラス難易度設定 -->
+      <div class="teacher-tab-content" id="teacher-tab-difficulty">
+        <div style="background: rgba(30, 27, 75, 0.4); border: 1.5px solid #4f46e5; border-radius: 10px; padding: 14px; margin-bottom: 16px;">
+          <h3 style="font-size: 15px; color: #a5b4fc; margin-bottom: 4px;">⚙️ クラスの実態に合わせたハンディキャップ・ブースト</h3>
+          <p style="font-size: 12.5px; color: #cbd5e1;">苦手な子が多いクラスには時間を伸ばし、得意なクラスには挑戦的なハード設定に調整できます。</p>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 16px; max-width: 600px;">
+          <!-- 制限時間 -->
+          <div style="background: rgba(15, 23, 42, 0.8); border: 1.5px solid #334155; border-radius: 8px; padding: 12px 16px;">
+            <div style="font-size: 14px; font-weight: bold; color: #ffd700; margin-bottom: 6px;">⏱️ 1問あたりの制限時間</div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <label style="cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px;">
+                <input type="radio" name="teacher-opt-time" value="20" onchange="updateTeacherDifficulty()"> 20秒（⚡ 上級チャレンジ）
+              </label>
+              <label style="cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px;">
+                <input type="radio" name="teacher-opt-time" value="30" checked onchange="updateTeacherDifficulty()"> 30秒（🌱 標準）
+              </label>
+              <label style="cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px;">
+                <input type="radio" name="teacher-opt-time" value="45" onchange="updateTeacherDifficulty()"> 45秒（🤝 じっくりサポート）
+              </label>
+              <label style="cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px;">
+                <input type="radio" name="teacher-opt-time" value="60" onchange="updateTeacherDifficulty()"> 60秒（🐢 ゆったり安心）
+              </label>
+            </div>
+          </div>
+
+          <!-- ヒント設定 -->
+          <div style="background: rgba(15, 23, 42, 0.8); border: 1.5px solid #334155; border-radius: 8px; padding: 12px 16px;">
+            <div style="font-size: 14px; font-weight: bold; color: #00e5ff; margin-bottom: 6px;">💡 ふりがなヒント補助</div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <label style="cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px;">
+                <input type="radio" name="teacher-opt-hint" value="none" checked onchange="updateTeacherDifficulty()"> ヒントなし（標準テスト）
+              </label>
+              <label style="cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px;">
+                <input type="radio" name="teacher-opt-hint" value="first" onchange="updateTeacherDifficulty()"> 頭文字のみ表示（例: 「あ〇〇〇」）
+              </label>
+            </div>
+          </div>
+
+          <!-- 敵のスピード -->
+          <div style="background: rgba(15, 23, 42, 0.8); border: 1.5px solid #334155; border-radius: 8px; padding: 12px 16px;">
+            <div style="font-size: 14px; font-weight: bold; color: #00ff88; margin-bottom: 6px;">🚀 敵の接近スピード</div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <label style="cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px;">
+                <input type="radio" name="teacher-opt-speed" value="slow" onchange="updateTeacherDifficulty()"> ゆっくり（低学年・安心）
+              </label>
+              <label style="cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px;">
+                <input type="radio" name="teacher-opt-speed" value="normal" checked onchange="updateTeacherDifficulty()"> 標準スピード
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- タブ4: はなまる学習証明書（賞状） -->
+      <div class="teacher-tab-content" id="teacher-tab-cert">
+        <div style="background: rgba(30, 27, 75, 0.4); border: 1.5px solid #4f46e5; border-radius: 10px; padding: 14px; margin-bottom: 16px;">
+          <h3 style="font-size: 15px; color: #a5b4fc; margin-bottom: 4px;">💮 先生のはなまるスタンプ付き 完全制覇証明書</h3>
+          <p style="font-size: 12.5px; color: #cbd5e1;">目標を達成した児童に先生からのはなまるスタンプ付き賞状を授与！A4用紙に印刷できます。</p>
+        </div>
+
+        <!-- 賞状入力フォーム -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 14px;">
+          <div>
+            <label style="font-size: 12px; color: #94a3b8; display: block; margin-bottom: 4px;">表彰名（児童の二つ名など）:</label>
+            <input type="text" id="cert-form-student-name" style="width: 100%; padding: 7px 10px; background: #0f172a; border: 1px solid #4f46e5; border-radius: 6px; color: #fff; font-size: 13px;">
+          </div>
+          <div>
+            <label style="font-size: 12px; color: #94a3b8; display: block; margin-bottom: 4px;">学年・クラス:</label>
+            <input type="text" id="cert-form-class-name" placeholder="例: 3年1組" style="width: 100%; padding: 7px 10px; background: #0f172a; border: 1px solid #4f46e5; border-radius: 6px; color: #fff; font-size: 13px;">
+          </div>
+          <div>
+            <label style="font-size: 12px; color: #94a3b8; display: block; margin-bottom: 4px;">先生のお名前:</label>
+            <input type="text" id="cert-form-teacher-name" placeholder="例: 担任 田中先生" style="width: 100%; padding: 7px 10px; background: #0f172a; border: 1px solid #4f46e5; border-radius: 6px; color: #fff; font-size: 13px;">
+          </div>
+          <div>
+            <label style="font-size: 12px; color: #94a3b8; display: block; margin-bottom: 4px;">先生スタンプ:</label>
+            <select id="cert-form-stamp-type" class="pilot-select" style="width: 100%; padding: 7px 10px; font-size: 13px;" onchange="renderCertificatePreview()">
+              <option value="hanamaru">💮 たいへんよくできました</option>
+              <option value="master">🌟 漢字マスター認定</option>
+              <option value="kaiden">✨ 免許皆伝</option>
+            </select>
+          </div>
+        </div>
+        <div style="margin-bottom: 16px;">
+          <label style="font-size: 12px; color: #94a3b8; display: block; margin-bottom: 4px;">先生からの一言メッセージ:</label>
+          <input type="text" id="cert-form-message" value="毎日コツコツ集中してよくがんばりました！たいへん立派です！" style="width: 100%; padding: 7px 10px; background: #0f172a; border: 1px solid #4f46e5; border-radius: 6px; color: #fff; font-size: 13px;" oninput="renderCertificatePreview()">
+        </div>
+
+        <!-- プレビュー表示 -->
+        <div id="teacher-cert-preview-box" style="margin-bottom: 14px;"></div>
+
+        <!-- 印刷ボタン -->
+        <div style="text-align: center;">
+          <button class="start-btn" onclick="printTeacherCertificate()" style="padding: 10px 28px; font-size: 15px; background: linear-gradient(135deg, #b45309, #d97706); color: #fff; font-weight: bold;">
+            🖨️ A4で印刷する（PDF保存）
+          </button>
+        </div>
+      </div>
+
+      <!-- タブ5: データ管理・リセット -->
+      <div class="teacher-tab-content" id="teacher-tab-data">
+        <div style="background: rgba(30, 27, 75, 0.4); border: 1.5px solid #4f46e5; border-radius: 10px; padding: 14px; margin-bottom: 16px;">
+          <h3 style="font-size: 15px; color: #a5b4fc; margin-bottom: 4px;">💾 アプリ内データの一括管理 & バックアップ</h3>
+          <p style="font-size: 12.5px; color: #cbd5e1;">端末内に保存されている学習履歴の保存や、新学期・単元終了時のリフレッシュを行えます。</p>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 14px; max-width: 600px;">
+          <div style="background: rgba(15, 23, 42, 0.8); border: 1.5px solid #334155; border-radius: 8px; padding: 14px;">
+            <div style="font-size: 14px; font-weight: bold; color: #00e5ff; margin-bottom: 6px;">📁 学習進捗のバックアップ</div>
+            <p style="font-size: 12px; color: #94a3b8; margin-bottom: 10px;">現在の学習履歴・クリア状況をJSONファイルとして保存します。</p>
+            <button class="action-sub-btn" onclick="exportTeacherData()" style="padding: 8px 16px; font-size: 13px; border-color: #00e5ff; color: #00e5ff;">💾 バックアップをダウンロード</button>
+          </div>
+
+          <div style="background: rgba(15, 23, 42, 0.8); border: 1.5px solid #334155; border-radius: 8px; padding: 14px;">
+            <div style="font-size: 14px; font-weight: bold; color: #ffd700; margin-bottom: 6px;">📥 バックアップから復元</div>
+            <p style="font-size: 12px; color: #94a3b8; margin-bottom: 10px;">以前保存したバックアップJSONファイルからデータを復元します。</p>
+            <input type="file" id="teacher-import-file" accept=".json" style="display: none;" onchange="importTeacherData(this)">
+            <button class="action-sub-btn" onclick="document.getElementById('teacher-import-file').click()" style="padding: 8px 16px; font-size: 13px; border-color: #ffd700; color: #ffd700;">📂 JSONファイルを選択して復元</button>
+          </div>
+
+          <div style="background: rgba(69, 10, 10, 0.5); border: 1.5px solid #ef4444; border-radius: 8px; padding: 14px;">
+            <div style="font-size: 14px; font-weight: bold; color: #f87171; margin-bottom: 6px;">🗑️ 学習データの一括リセット（新学期・単元終了時）</div>
+            <p style="font-size: 12px; color: #fca5a5; margin-bottom: 10px;">「漢字の部屋」のマスター記録や誤答履歴を消去して初期状態に戻します。（機体設定や二つ名は維持されます）</p>
+            <button class="start-btn" onclick="confirmResetStudentData()" style="padding: 8px 16px; font-size: 13px; background: #dc2626;">⚠️ データをリセットする</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 印刷用コンテナ（@media print 時にのみ可視化される） -->
+  <div id="print-certificate-wrapper" style="display: none;"></div>
 
 </div>
 
@@ -5967,6 +6433,11 @@ function buildQuestionList() {
   const shuffle = (arr) => [...arr].sort(() => Math.random() - 0.5);
   const mistakes = getMistakes();
 
+  // 先生指定ターゲットモード（強制フォーカス出題）
+  if (teacherTargetMode && teacherTargetKanji.length > 0) {
+    return buildTeacherTargetQuestionList();
+  }
+
   if (gameMode === 'revenge') {
     return [...lastRunMistakes];
   }
@@ -6182,8 +6653,11 @@ function loadQuestion(index) {
 
   elTargetLabel.textContent = `TARGET 0${index + 1}`;
   elTargetKanji.textContent = q.kanji;
-  // ユーザー要望: 出題中にヒントは一切出さず、答えが丸わかりになるのを防止
-  if (elTargetHint) {
+  // 先生モードのふりがなヒント設定の反映
+  if (elTargetHint && teacherTargetMode && teacherDifficulty.hint === 'first') {
+    elTargetHint.textContent = `💡 ヒント: 「${q.kana[0]}${'〇'.repeat(Math.max(0, q.kana.length - 1))}」`;
+    elTargetHint.style.display = 'block';
+  } else if (elTargetHint) {
     elTargetHint.textContent = '';
     elTargetHint.style.display = 'none';
   }
@@ -6216,7 +6690,8 @@ function loadQuestion(index) {
 
   elKanjiPanel.style.transform = "translate(-50%, -50%) scale(1)";
 
-  startTimer(30.0);
+  const qTime = (teacherTargetMode && teacherDifficulty.time) ? teacherDifficulty.time : 30.0;
+  startTimer(qTime);
 }
 
 function startTimer(seconds) {
@@ -6246,7 +6721,8 @@ function startTimer(seconds) {
 }
 
 function updateTimerUI() {
-  const percent = Math.max(0, (timerSeconds / 30.0) * 100);
+  const maxT = (teacherTargetMode && teacherDifficulty.time) ? teacherDifficulty.time : 30.0;
+  const percent = Math.max(0, (timerSeconds / maxT) * 100);
   elTimerBar.style.width = `${percent}%`;
   elTimerNumber.textContent = `${timerSeconds.toFixed(1)}s`;
 
@@ -8104,22 +8580,36 @@ function evaluateCurrentStrokeStep() {
   }
 
   let dirName = "良好な筆筋";
-  if (evalRes.direction === "right") dirName = "美しい横画";
-  else if (evalRes.direction === "down") dirName = "力強い縦画";
-  else if (evalRes.direction === "down-left") dirName = "伸びやかな左払い";
-  else if (evalRes.direction === "down-right") dirName = "しっかりした右払い";
+  if (evalRes.direction === "right") dirName = "横画";
+  else if (evalRes.direction === "down") dirName = "縦画";
+  else if (evalRes.direction === "down-left") dirName = "左払い";
+  else if (evalRes.direction === "down-right") dirName = "右払い";
 
-  const hookText = evalRes.hasHook ? "（トメ・ハネ良好！）" : "";
+  let detailMsg = "";
+  let col = "#00ffff";
+
+  if (evalRes.advice) {
+    detailMsg = `💡 ${evalRes.advice}`;
+    col = "#fde047";
+  } else if (evalRes.hasHook) {
+    detailMsg = `見事な跳ね上がり！（トメ・ハネ良好！）`;
+    col = "#00ff88";
+  } else if (evalRes.direction === "down-left" || evalRes.direction === "down-right") {
+    detailMsg = `伸びやかな払い！（トメ・ハネ良好！）`;
+    col = "#00ff88";
+  } else {
+    detailMsg = `きれいに書けています！`;
+  }
 
   if (strokeNum === targetStrokes) {
-    updateHwFeedback(`第${strokeNum}画: ${dirName}${hookText}`, "すべての画を書き終えました！「✅ AI採点する」を押してください！", "#00ff88");
+    updateHwFeedback(`第${strokeNum}画: ${dirName}`, `${detailMsg} すべての画を終えました！「✅ AI採点する」を押そう！`, "#00ff88");
   } else {
-    updateHwFeedback(`第${strokeNum}画: ${dirName}${hookText}`, `次は 第${strokeNum + 1}画目を書いてください（全${targetStrokes}画）`, "#00ffff");
+    updateHwFeedback(`第${strokeNum}画: ${dirName}`, `${detailMsg} 次は第${strokeNum + 1}画目（全${targetStrokes}画）`, col);
   }
 }
 
 function evaluateStrokeGeometry(points) {
-  if (points.length < 2) return { direction: "dot", hasHook: false, len: 0 };
+  if (points.length < 2) return { direction: "dot", hasHook: false, isCurved: false, len: 0, advice: "" };
   const p0 = points[0];
   const p1 = points[points.length - 1];
   const dx = p1.x - p0.x;
@@ -8140,16 +8630,38 @@ function evaluateStrokeGeometry(points) {
     else direction = "up-left";
   }
 
+  // ハネの判定
   let hasHook = false;
   if (points.length >= 6) {
-    const endSlice = points.slice(-4);
+    const endSlice = points.slice(-5);
     const endDy = endSlice[endSlice.length - 1].y - endSlice[0].y;
-    if (dy > 30 && endDy < -7) {
+    if (dy > 25 && endDy < -6) {
       hasHook = true;
     }
   }
 
-  return { direction, len, hasHook };
+  // とめの曲がり・ブレ判定
+  let isCurved = false;
+  if (points.length >= 8) {
+    const midIdx = Math.floor(points.length / 2);
+    const midPoint = points[midIdx];
+    const lineLen = Math.hypot(dx, dy);
+    if (lineLen > 30) {
+      const dist = Math.abs(dy * midPoint.x - dx * midPoint.y + p1.x * p0.y - p1.y * p0.x) / lineLen;
+      if (dist > 18) {
+        isCurved = true;
+      }
+    }
+  }
+
+  let advice = "";
+  if (len < 25 && direction !== "dot") {
+    advice = "線が短すぎるよ！お手本のようにしっかり伸ばそう";
+  } else if (isCurved && (direction === "right" || direction === "down")) {
+    advice = "とめの部分で線が曲がっているよ！まっすぐピタッと止めよう";
+  }
+
+  return { direction, len, hasHook, isCurved, advice };
 }
 
 function updateHwFeedback(title, detail, color) {
@@ -8167,6 +8679,8 @@ function hwUndoStroke() {
     hwStrokes.pop();
     redrawHandwriteCanvas();
     const targetStrokes = getKanjiStrokeCount(hwCurrentChar);
+    const advicesEl = document.getElementById('hw-feedback-advices');
+    if (advicesEl) advicesEl.style.display = 'none';
     updateHwFeedback(`第${hwStrokes.length}画まで戻しました`, `次は第${hwStrokes.length + 1}画目を書いてください（全${targetStrokes}画）`, "#ffd700");
   }
 }
@@ -8176,6 +8690,8 @@ function hwClearCanvas() {
   hwCurrentStroke = null;
   redrawHandwriteCanvas();
   const targetStrokes = getKanjiStrokeCount(hwCurrentChar);
+  const advicesEl = document.getElementById('hw-feedback-advices');
+  if (advicesEl) advicesEl.style.display = 'none';
   updateHwFeedback("キャンバスを消去しました", `第1画目から書いてください (全${targetStrokes}画)`, "#00ffff");
 }
 
@@ -8190,6 +8706,8 @@ function hwToggleGuide() {
 function hwJudgeCurrent() {
   const targetStrokes = getKanjiStrokeCount(hwCurrentChar);
   const currentStrokes = hwStrokes.length;
+  const advicesEl = document.getElementById('hw-feedback-advices');
+  if (advicesEl) advicesEl.style.display = 'none';
 
   if (currentStrokes === 0) {
     updateHwFeedback("まだ何も書かれていません！", "マス目に漢字を手書きしてから採点してください。", "#ff5566");
@@ -8198,22 +8716,29 @@ function hwJudgeCurrent() {
 
   // 採点計算
   let score = 100;
-  // 画数ペナルティ
   const strokeDiff = Math.abs(currentStrokes - targetStrokes);
   score -= (strokeDiff * 25);
 
-  // 各画の長さ・形状チェック
+  const advices = [];
   let validStrokesCount = 0;
-  hwStrokes.forEach(s => {
+  hwStrokes.forEach((s, idx) => {
     const geo = evaluateStrokeGeometry(s);
     if (geo.len >= 20) validStrokesCount++;
+    if (geo.advice) {
+      advices.push(`第${idx + 1}画: ${geo.advice}`);
+    }
   });
 
   if (validStrokesCount < Math.min(2, targetStrokes)) {
     score -= 30;
   }
-
+  score -= (advices.length * 10);
   score = Math.max(10, Math.min(100, score));
+
+  if (advicesEl && advices.length > 0) {
+    advicesEl.innerHTML = advices.map(a => `<div>💡 ${a}</div>`).join('');
+    advicesEl.style.display = 'block';
+  }
 
   if (score >= 85) {
     sound.playLaser();
@@ -8226,7 +8751,7 @@ function hwJudgeCurrent() {
     addExp(15);
   } else {
     sound.playExplosion();
-    updateHwFeedback("👍 Bランク！もう一息！", `画数（${currentStrokes}/${targetStrokes}画）とトメ・ハネを意識してリトライしよう！得点: ${score}点`, "#ffaa00");
+    updateHwFeedback("👍 Bランク！もう一息！", `画数（${currentStrokes}/${targetStrokes}画）とトメ・ハネのアドバイスを確認してリトライしよう！得点: ${score}点`, "#ffaa00");
   }
 }
 
@@ -8280,6 +8805,493 @@ updateHomePilotDisplay();
 setupCurriculumSelect();
 stopSelectPropagation();
 
+/* ==========================================================================
+   システム⑤: 先生モード (Teacher Mode)
+   完全ローカル＆サーバーレス（個人情報ゼロ）
+   出題フォーカス、教科書プリセット、難易度調整、学習証明書発行、データ管理
+   ========================================================================== */
+const TEACHER_DEFAULT_PIN = "1234";
+let teacherSelectedKanji = new Set();
+let teacherActiveGrade = 1;
+let teacherDifficulty = {
+  time: 30,
+  hint: "none",
+  speed: "normal"
+};
+let teacherTargetMode = false;
+let teacherTargetKanji = [];
+let teacherCurrentUnit = "";
+
+const TEACHER_PRESETS = [
+  { id: 'm1_1', title: '光村 1年「漢字符出」', grade: 1, unit: '光村1年_漢字はじめ', kanji: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '日', '月', '火', '水', '木', '金', '土'] },
+  { id: 'm2_1', title: '光村 2年「スイミー」', grade: 2, unit: '光村2年_スイミー', kanji: ['海', '赤', '出', '目', '見', '魚', '生', '友', '岩', '木'] },
+  { id: 'm2_2', title: '光村 2年「お手紙」', grade: 2, unit: '光村2年_お手紙', kanji: ['手', '紙', '友', '待', '書', '読', '走', '家', '門', '風'] },
+  { id: 'm3_1', title: '光村 3年「きつつきの商売」', grade: 3, unit: '光村3年_きつつき', kanji: ['音', '聞', '声', '店', '森', '風', '雨', '木', '空', '春'] },
+  { id: 'm3_2', title: '光村 3年「ちいちゃんのかげおくり」', grade: 3, unit: '光村3年_ちいちゃん', kanji: ['青', '空', '手', '白', '花', '母', '兄', '声', '暗', '光'] },
+  { id: 'm4_1', title: '光村 4年「白いぼうし」', grade: 4, unit: '光村4年_白いぼうし', kanji: ['白', '車', '道', '夏', '虫', '飛', '花', '風', '光', '町'] },
+  { id: 'm4_2', title: '光村 4年「ごんぎつね」', grade: 4, unit: '光村4年_ごんぎつね', kanji: ['山', '村', '川', '秋', '火', '煙', '兵', '栗', '木', '雨'] },
+  { id: 'm5_1', title: '光村 5年「大造じいさんとガン」', grade: 5, unit: '光村5年_大造じいさん', kanji: ['鳥', '銃', '冬', '雪', '飛', '敵', '勇', '姿', '雲', '風'] },
+  { id: 'm6_1', title: '光村 6年「やまなし」', grade: 6, unit: '光村6年_やまなし', kanji: ['川', '水', '底', '魚', '月', '光', '幻', '影', '木', '波'] },
+  { id: 'k10', title: '漢検 10級（1年重要漢字）', grade: 1, unit: '漢検10級', kanji: ['青', '空', '雨', '水', '花', '火', '先', '生', '手', '足'] },
+  { id: 'k9', title: '漢検 9級（2年重要漢字）', grade: 2, unit: '漢検9級', kanji: ['海', '空', '風', '光', '走', '読', '書', '話', '言', '思'] },
+  { id: 'k8', title: '漢検 8級（3年重要漢字）', grade: 3, unit: '漢検8級', kanji: ['旅', '館', '駅', '道', '急', '乗', '発', '着', '待', '送'] },
+  { id: 'k7', title: '漢検 7級（4年重要漢字）', grade: 4, unit: '漢検7級', kanji: ['愛', '案', '以', '衣', '位', '茨', '印', '英', '栄', '塩'] },
+];
+
+function openTeacherAuthModal() {
+  document.getElementById('teacher-auth-modal').style.display = 'flex';
+  const pinInput = document.getElementById('teacher-pin-input');
+  if (pinInput) {
+    pinInput.value = '';
+    pinInput.focus();
+  }
+  const errEl = document.getElementById('teacher-pin-error');
+  if (errEl) errEl.style.display = 'none';
+}
+
+function closeTeacherAuthModal() {
+  document.getElementById('teacher-auth-modal').style.display = 'none';
+}
+
+function verifyTeacherPin() {
+  const pinInput = document.getElementById('teacher-pin-input');
+  const errEl = document.getElementById('teacher-pin-error');
+  const inputPin = pinInput ? pinInput.value.trim() : '';
+  const storedPin = localStorage.getItem('teacher_mode_pin') || TEACHER_DEFAULT_PIN;
+
+  if (inputPin === storedPin || inputPin === TEACHER_DEFAULT_PIN) {
+    closeTeacherAuthModal();
+    openTeacherPanelModal();
+  } else {
+    if (errEl) errEl.style.display = 'block';
+    if (pinInput) {
+      pinInput.select();
+      pinInput.focus();
+    }
+  }
+}
+
+function openTeacherPanelModal() {
+  document.getElementById('teacher-panel-modal').style.display = 'flex';
+  loadTeacherKanjiGrid(teacherActiveGrade);
+  renderTeacherPresets();
+  renderCertificatePreview();
+  updateTeacherQrAndUrl();
+}
+
+function closeTeacherPanelModal() {
+  document.getElementById('teacher-panel-modal').style.display = 'none';
+}
+
+function switchTeacherTab(tabName) {
+  const tabIds = ['target', 'preset', 'difficulty', 'cert', 'data'];
+  tabIds.forEach(id => {
+    const btn = document.getElementById(`tab-btn-${id}`);
+    const content = document.getElementById(`teacher-tab-${id}`);
+    const isActive = (id === tabName);
+    if (btn) btn.classList.toggle('active', isActive);
+    if (content) content.classList.toggle('active', isActive);
+  });
+  if (tabName === 'target') {
+    updateTeacherQrAndUrl();
+  } else if (tabName === 'preset') {
+    renderTeacherPresets();
+  } else if (tabName === 'cert') {
+    renderCertificatePreview();
+  }
+}
+
+function loadTeacherKanjiGrid(grade) {
+  teacherActiveGrade = grade;
+  for (let g = 1; g <= 6; g++) {
+    const btn = document.getElementById(`t-grade-btn-${g}`);
+    if (btn) {
+      btn.style.background = (g === grade) ? '#4f46e5' : '';
+      btn.style.borderColor = (g === grade) ? '#818cf8' : '';
+      btn.style.color = (g === grade) ? '#fff' : '';
+    }
+  }
+
+  const container = document.getElementById('teacher-kanji-grid-container');
+  if (!container) return;
+  container.innerHTML = '';
+
+  const list = ALL_GRADE_KANJI[grade] || [];
+  list.forEach(ch => {
+    const item = document.createElement('div');
+    item.className = 'teacher-kanji-item' + (teacherSelectedKanji.has(ch) ? ' selected' : '');
+    item.textContent = ch;
+    item.title = `${ch}（${grade}年）`;
+    item.onclick = () => {
+      if (teacherSelectedKanji.has(ch)) {
+        teacherSelectedKanji.delete(ch);
+        item.classList.remove('selected');
+      } else {
+        teacherSelectedKanji.add(ch);
+        item.classList.add('selected');
+      }
+      updateTeacherSelectedCount();
+      updateTeacherQrAndUrl();
+    };
+    container.appendChild(item);
+  });
+  updateTeacherSelectedCount();
+}
+
+function updateTeacherSelectedCount() {
+  const countEl = document.getElementById('teacher-selected-count');
+  if (countEl) countEl.textContent = teacherSelectedKanji.size;
+}
+
+function applyQuickKanjiInput() {
+  const input = document.getElementById('teacher-quick-kanji-input');
+  if (!input) return;
+  const text = input.value.trim();
+  if (!text) return;
+
+  const matches = text.match(/[\u4e00-\u9faf]/g);
+  if (matches) {
+    matches.forEach(ch => teacherSelectedKanji.add(ch));
+  }
+  loadTeacherKanjiGrid(teacherActiveGrade);
+  updateTeacherQrAndUrl();
+}
+
+function clearTeacherKanjiSelection() {
+  teacherSelectedKanji.clear();
+  const input = document.getElementById('teacher-quick-kanji-input');
+  if (input) input.value = '';
+  loadTeacherKanjiGrid(teacherActiveGrade);
+  updateTeacherQrAndUrl();
+}
+
+function renderTeacherPresets() {
+  const container = document.getElementById('teacher-presets-container');
+  if (!container) return;
+  container.innerHTML = '';
+
+  TEACHER_PRESETS.forEach(p => {
+    const card = document.createElement('div');
+    card.style.background = 'rgba(15, 23, 42, 0.85)';
+    card.style.border = '1.5px solid #334155';
+    card.style.borderRadius = '10px';
+    card.style.padding = '12px 14px';
+    card.style.display = 'flex';
+    card.style.flexDirection = 'column';
+    card.style.gap = '8px';
+
+    const kanjiStr = p.kanji.join(' ');
+    card.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 14px; font-weight: bold; color: #ffd700;">${p.title}</span>
+        <span style="font-size: 11px; background: #312e81; color: #a5b4fc; padding: 2px 8px; border-radius: 4px;">${p.grade}年配当</span>
+      </div>
+      <div style="font-size: 13px; color: #e2e8f0; letter-spacing: 2px; word-break: break-all;">
+        ${kanjiStr}
+      </div>
+      <button class="start-btn" style="padding: 6px 14px; font-size: 12px; background: #4f46e5; align-self: flex-start; margin-top: auto;" onclick="applyTeacherPreset('${p.id}')">
+        ✅ この単元を一括セット
+      </button>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function applyTeacherPreset(presetId) {
+  const preset = TEACHER_PRESETS.find(p => p.id === presetId);
+  if (!preset) return;
+
+  teacherSelectedKanji.clear();
+  preset.kanji.forEach(ch => teacherSelectedKanji.add(ch));
+  teacherCurrentUnit = preset.unit;
+
+  loadTeacherKanjiGrid(preset.grade);
+  switchTeacherTab('target');
+  updateTeacherQrAndUrl();
+  sound.playLaser();
+}
+
+function updateTeacherDifficulty() {
+  const timeRadio = document.querySelector('input[name="teacher-opt-time"]:checked');
+  if (timeRadio) teacherDifficulty.time = parseInt(timeRadio.value, 10) || 30;
+
+  const hintRadio = document.querySelector('input[name="teacher-opt-hint"]:checked');
+  if (hintRadio) teacherDifficulty.hint = hintRadio.value || 'none';
+
+  const speedRadio = document.querySelector('input[name="teacher-opt-speed"]:checked');
+  if (speedRadio) teacherDifficulty.speed = speedRadio.value || 'normal';
+
+  updateTeacherQrAndUrl();
+}
+
+function getTeacherGeneratedUrl() {
+  const baseUrl = window.location.origin + window.location.pathname;
+  const kanjiList = Array.from(teacherSelectedKanji);
+  if (kanjiList.length === 0) return baseUrl;
+
+  const params = new URLSearchParams();
+  params.set('focus', kanjiList.join(','));
+  if (teacherDifficulty.time !== 30) params.set('time', teacherDifficulty.time.toString());
+  if (teacherDifficulty.hint !== 'none') params.set('hint', teacherDifficulty.hint);
+  if (teacherDifficulty.speed !== 'normal') params.set('speed', teacherDifficulty.speed);
+  if (teacherCurrentUnit) params.set('unit', teacherCurrentUnit);
+
+  return `${baseUrl}?${params.toString()}`;
+}
+
+function updateTeacherQrAndUrl() {
+  const url = getTeacherGeneratedUrl();
+  const urlInput = document.getElementById('teacher-share-url-input');
+  if (urlInput) urlInput.value = url;
+
+  const qrBox = document.getElementById('teacher-qrcode-canvas-box');
+  if (qrBox) {
+    qrBox.innerHTML = '';
+    if (typeof QRCode !== 'undefined') {
+      try {
+        new QRCode(qrBox, {
+          text: url,
+          width: 140,
+          height: 140,
+          colorDark: "#000000",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.M
+        });
+      } catch (e) {
+        qrBox.innerHTML = `<div style="color:#000; font-size:11px; padding:20px;">QR生成中</div>`;
+      }
+    } else {
+      qrBox.innerHTML = `<div style="color:#000; font-size:11px; padding:20px;">QRコード準備中</div>`;
+    }
+  }
+}
+
+function copyTeacherShareUrl() {
+  const urlInput = document.getElementById('teacher-share-url-input');
+  if (!urlInput) return;
+  urlInput.select();
+  navigator.clipboard.writeText(urlInput.value).then(() => {
+    alert('📋 児童配布用URLをクリップボードにコピーしました！\nロイロノート、Google Classroom、電子黒板等に貼り付けて児童に配れます。');
+  }).catch(() => {
+    alert(`URLをコピーしてください:\n${urlInput.value}`);
+  });
+}
+
+function launchTeacherTargetOnCurrentDevice() {
+  const kanjiList = Array.from(teacherSelectedKanji);
+  if (kanjiList.length === 0) {
+    alert('出題する漢字を1字以上選択してください。');
+    return;
+  }
+  teacherTargetMode = true;
+  teacherTargetKanji = kanjiList;
+
+  showTeacherTargetBanner(kanjiList, teacherCurrentUnit);
+  closeTeacherPanelModal();
+  sound.playLaser();
+}
+
+function showTeacherTargetBanner(list, unitName) {
+  const banner = document.getElementById('teacher-target-mission-banner');
+  const displayEl = document.getElementById('teacher-target-kanji-display');
+  const metaEl = document.getElementById('teacher-target-meta-info');
+  const startBtn = document.getElementById('start-game-btn');
+
+  if (banner) banner.style.display = 'block';
+  if (displayEl) displayEl.textContent = list.join('  ');
+  if (metaEl) {
+    const uStr = unitName ? `【${unitName}】` : '';
+    metaEl.textContent = `${uStr} 指定漢字: 全${list.length}字 ｜ 制限時間: ${teacherDifficulty.time}秒`;
+  }
+  if (startBtn) {
+    startBtn.innerHTML = `🎯 先生の指定漢字で出撃！ (START)`;
+    startBtn.style.background = 'linear-gradient(135deg, #4338ca, #6366f1)';
+  }
+}
+
+function clearTeacherTargetMode() {
+  teacherTargetMode = false;
+  teacherTargetKanji = [];
+  teacherCurrentUnit = '';
+  teacherDifficulty.time = 30;
+  teacherDifficulty.hint = 'none';
+
+  const banner = document.getElementById('teacher-target-mission-banner');
+  if (banner) banner.style.display = 'none';
+
+  updateStartButton();
+}
+
+function buildTeacherTargetQuestionList() {
+  const pool = [];
+  const targetSet = new Set(teacherTargetKanji);
+
+  // 全学年のデータベースからターゲット漢字を含む熟語を探索
+  for (let g = 1; g <= 6; g++) {
+    (KANJI_DATABASE[`grade${g}`] || []).forEach(q => {
+      if ([...q.kanji].some(ch => targetSet.has(ch))) {
+        pool.push(q);
+      }
+    });
+  }
+
+  // 熟語が不足しているターゲット漢字について、単漢字問題を自動生成
+  teacherTargetKanji.forEach(ch => {
+    const hasWord = pool.some(q => q.kanji.includes(ch));
+    if (!hasWord) {
+      const rd = ALL_KANJI_READINGS_DATA[ch];
+      let reading = "—";
+      if (rd) {
+        reading = (rd.kun && rd.kun !== "—") ? rd.kun.split('、')[0] : (rd.on && rd.on !== "—") ? rd.on.split('、')[0] : "—";
+      }
+      if (reading !== "—") {
+        pool.push({
+          kanji: ch,
+          kana: reading,
+          grade: "特訓",
+          hint: `${ch}の読み方`
+        });
+      }
+    }
+  });
+
+  const shuffle = (arr) => [...arr].sort(() => Math.random() - 0.5);
+  return shuffle(pool).slice(0, Math.max(5, Math.min(15, pool.length)));
+}
+
+/* 賞状プレビュー＆印刷 */
+function renderCertificatePreview() {
+  const box = document.getElementById('teacher-cert-preview-box');
+  if (!box) return;
+
+  const studentName = document.getElementById('cert-form-student-name')?.value.trim() || getPilotName();
+  const className = document.getElementById('cert-form-class-name')?.value.trim() || '小学校';
+  const teacherName = document.getElementById('cert-form-teacher-name')?.value.trim() || '担任より';
+  const message = document.getElementById('cert-form-message')?.value.trim() || '毎日集中してよくがんばりました！';
+  const stampType = document.getElementById('cert-form-stamp-type')?.value || 'hanamaru';
+
+  let stampText = '💮<br>たいへん<br>よくできました';
+  if (stampType === 'master') stampText = '🌟<br>漢字マスター<br>認定';
+  else if (stampType === 'kaiden') stampText = '✨<br>免許皆伝<br>合格';
+
+  const today = new Date();
+  const dateStr = `令和${today.getFullYear() - 2018}年 ${today.getMonth() + 1}月 ${today.getDate()}日`;
+
+  const html = `
+    <div class="cert-frame" style="text-align: center; margin: 0 auto; max-width: 640px;">
+      <div style="font-size: 26px; font-weight: 900; letter-spacing: 6px; margin-bottom: 12px; color: #78350f;">
+        証　明　書
+      </div>
+      <div style="font-size: 15px; margin-bottom: 8px; color: #451a03; text-align: left; padding-left: 10px;">
+        ${className}　<strong>${studentName}</strong> 殿
+      </div>
+      <div style="font-size: 13.5px; line-height: 1.8; color: #292524; text-align: justify; margin-bottom: 18px; padding: 0 10px;">
+        あなたは「ファイブツアーズジェット 漢字バトル」において、漢字の読みと正しい筆順を修得し、優秀な成績を収めました。<br>
+        よってここに努力を讃え、完全制覇を証明します。
+      </div>
+      <div style="font-size: 12.5px; color: #0284c7; font-weight: bold; margin-bottom: 14px; text-align: left; padding-left: 10px;">
+        💬 先生より: 「${message}」
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; padding: 0 10px; font-size: 12px; color: #57534e;">
+        <div>${dateStr}</div>
+        <div style="font-size: 14px; font-weight: bold; color: #1c1917;">${teacherName}</div>
+      </div>
+      <div class="cert-hanamaru-stamp">
+        ${stampText}
+      </div>
+    </div>
+  `;
+
+  box.innerHTML = html;
+}
+
+function printTeacherCertificate() {
+  const previewBox = document.getElementById('teacher-cert-preview-box');
+  const printWrapper = document.getElementById('print-certificate-wrapper');
+  if (!previewBox || !printWrapper) return;
+
+  printWrapper.innerHTML = previewBox.innerHTML;
+  printWrapper.style.display = 'flex';
+
+  window.print();
+
+  setTimeout(() => {
+    printWrapper.style.display = 'none';
+  }, 1000);
+}
+
+/* データ管理 */
+function exportTeacherData() {
+  const data = {
+    exportedAt: new Date().toISOString(),
+    kanjiRoom: JSON.parse(localStorage.getItem('kanji_room_data_v2') || '{}'),
+    pilot: localStorage.getItem('pilot_name_data_v1') || '',
+    curriculum: localStorage.getItem('curriculum_preference_v1') || 'standard',
+    mistakes: JSON.parse(localStorage.getItem('kanji_mistakes_v1') || '{}')
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `kanji_learning_backup_${new Date().toISOString().slice(0, 10)}.json`;
+  a.click();
+}
+
+function importTeacherData(input) {
+  const file = input.files && input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (data.kanjiRoom) localStorage.setItem('kanji_room_data_v2', JSON.stringify(data.kanjiRoom));
+      if (data.pilot) localStorage.setItem('pilot_name_data_v1', data.pilot);
+      if (data.curriculum) localStorage.setItem('curriculum_preference_v1', data.curriculum);
+      if (data.mistakes) localStorage.setItem('kanji_mistakes_v1', JSON.stringify(data.mistakes));
+      alert('✅ データの復元が完了しました！');
+      updateHomeUI();
+      updateHomePilotDisplay();
+    } catch (err) {
+      alert('ファイルの読み込みに失敗しました。正しいバックアップJSONファイルを選択してください。');
+    }
+  };
+  reader.readAsText(file);
+}
+
+function confirmResetStudentData() {
+  if (confirm('【教員確認】本当に学習進捗データをリセットしますか？\n「漢字の部屋」の記録や誤答履歴が初期化されます。（この操作は取り消せません）')) {
+    localStorage.removeItem('kanji_room_data_v2');
+    localStorage.removeItem('kanji_mistakes_v1');
+    alert('✅ 学習データをリセットしました。新学期の学習を開始できます！');
+    updateHomeUI();
+    closeTeacherPanelModal();
+  }
+}
+
+/* URLパラメータ解析（児童端末同期） */
+function checkUrlParams() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const focus = params.get('focus');
+    const time = params.get('time');
+    const hint = params.get('hint');
+    const speed = params.get('speed');
+    const unit = params.get('unit');
+
+    if (focus) {
+      const list = focus.split(',').map(s => s.trim()).filter(Boolean);
+      if (list.length > 0) {
+        teacherTargetMode = true;
+        teacherTargetKanji = list;
+        if (time) teacherDifficulty.time = parseInt(time, 10) || 30;
+        if (hint) teacherDifficulty.hint = hint;
+        if (speed) teacherDifficulty.speed = speed;
+
+        showTeacherTargetBanner(list, unit);
+      }
+    }
+  } catch (e) {}
+}
+
 // ユーザー操作時のBGM確実再生ハンドラ（ブラウザの自動再生ブロックを即時解除）
 function ensureBgmPlayback() {
   sound.init();
@@ -8311,6 +9323,7 @@ window.addEventListener('DOMContentLoaded', () => {
   stopSelectPropagation();
   sound.init();
   sound.playHomeBgm();
+  checkUrlParams();
 });
 
 </script>

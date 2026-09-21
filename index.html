@@ -1499,6 +1499,87 @@
       margin: 1px 0;
     }
 
+    /* === 提案1: パイロットカード (ホーム画面ヘッダー用) === */
+    .home-pilot-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(135deg, rgba(14, 30, 60, 0.85) 0%, rgba(6, 16, 35, 0.95) 100%);
+      border: 1.5px solid rgba(0, 229, 255, 0.45);
+      border-radius: 12px;
+      padding: 6px 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+    }
+    .home-pilot-card:hover {
+      border-color: #00e5ff;
+      background: linear-gradient(135deg, rgba(20, 45, 85, 0.95) 0%, rgba(10, 24, 50, 0.98) 100%);
+      box-shadow: 0 0 16px rgba(0, 229, 255, 0.35);
+      transform: translateY(-1px);
+    }
+    .home-pilot-card-info {
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    /* === 提案1: マイハンガー パイロットセクション === */
+    .hangar-pilot-section {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+    @media (max-width: 768px) {
+      .hangar-pilot-section {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* === 提案2: 漢字ミュージアム 大タブナビゲーション === */
+    .museum-tab-nav {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      border-bottom: 2px solid rgba(0, 229, 255, 0.3);
+      padding-bottom: 4px;
+      flex-shrink: 0;
+    }
+    .museum-tab-btn {
+      flex: 1;
+      background: rgba(10, 24, 50, 0.65);
+      border: 1.5px solid rgba(0, 229, 255, 0.3);
+      border-bottom: none;
+      border-radius: 10px 10px 0 0;
+      color: #94a3b8;
+      font-size: 13.5px;
+      font-weight: bold;
+      padding: 10px 14px;
+      cursor: pointer;
+      transition: all 0.18s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .museum-tab-btn:hover {
+      background: rgba(0, 229, 255, 0.15);
+      color: #fff;
+    }
+    .museum-tab-btn.active {
+      background: linear-gradient(180deg, rgba(0, 229, 255, 0.28) 0%, rgba(13, 30, 56, 0.95) 100%);
+      border-color: #00e5ff;
+      color: #ffd700;
+      box-shadow: 0 -2px 10px rgba(0, 229, 255, 0.25);
+    }
+    .museum-content-pane {
+      flex: 1;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      padding-right: 4px;
+    }
 
     /* === ホーム画面 整理されたナビゲーションメニュー === */
     .home-nav-container {
@@ -3156,13 +3237,28 @@
           </div>
         </div>
 
-        <!-- 整理されたステータスドック -->
-        <div class="home-status-bar" style="margin: 0; padding: 6px 14px;">
-          <div class="status-row-top" style="gap: 12px; align-items: center;">
+        <!-- 整理されたステータスドック: パイロットカード + 学習ステータス -->
+        <div class="home-status-bar" style="margin: 0; padding: 6px 12px; gap: 8px;">
+          <!-- 🧑‍🚀 パイロットカード（クリックでマイハンガー起動） -->
+          <div class="home-pilot-card" onclick="openHangarModal('pilot')" title="クリックで『マイハンガー』を開く（アバター・二つ名・機体・ビームをカスタマイズ）">
             <!-- アバターサークル表示 -->
-            <div class="avatar-icon-circle" id="home-avatar-icon" style="width: 38px; height: 38px; flex-shrink: 0;" onclick="openAvatarTab()" title="アバターをカスタマイズ！">
+            <div class="avatar-icon-circle" id="home-avatar-icon" style="width: 38px; height: 38px; flex-shrink: 0;">
               <!-- SVG挿入 -->
             </div>
+            <div class="home-pilot-card-info">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span id="home-pilot-name" style="font-size: 13px; font-weight: 900; color: #ffd700; text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);">⚡ 疾風のハヤブサ01号</span>
+                <span style="font-size: 10px; color: #00e5ff; background: rgba(0, 229, 255, 0.2); padding: 1px 6px; border-radius: 4px; border: 1px solid rgba(0, 229, 255, 0.4);">⚙️ ハンガー</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px; font-size: 11.5px;">
+                <span style="color: #94a3b8;">愛機:</span>
+                <span id="home-custom-display" style="color: var(--neon-yellow); font-weight: bold;">✈️ ブルーホーク</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 📊 学習ステータスバー -->
+          <div class="status-row-top" style="gap: 10px; align-items: center;">
             <!-- じぶんの学年セレクター (適正学年スコアリング用) -->
             <div class="my-grade-select-wrapper" title="自分の学年を設定すると、適正難易度や背伸びチャレンジで高スコアを獲得できます！">
               <span style="font-size: 11.5px; color: #ffd700;">🧑‍🎓 じぶん:</span>
@@ -3182,16 +3278,6 @@
             <div class="home-status-item">
               <span class="status-label">EXP:</span>
               <span class="status-val" id="home-exp-display" style="color:#00e5ff; font-weight:900;">0</span>
-            </div>
-          </div>
-          <div class="status-row-bottom" style="gap: 12px; margin-top: 4px; align-items: center;">
-            <div class="home-status-item clickable" onclick="openPilotNameModal()" title="パイロット二つ名を変更">
-              <span class="status-label">パイロット:</span>
-              <span class="status-val" id="home-pilot-name" style="color: #ffd700; font-weight: bold;">⚡ 疾風のハヤブサ01号</span>
-            </div>
-            <div class="home-status-item clickable" onclick="openCustomModal()" title="機体やアバターをカスタマイズ">
-              <span class="status-label">そうび:</span>
-              <span class="status-val" id="home-custom-display" style="color: var(--neon-yellow);">✈️ ブルーホーク</span>
             </div>
             <span class="privacy-guarantee-badge" onclick="openPrivacyModal()" title="100%外部通信・本名入力なし">
               🛡️ 個人情報ゼロ保証
@@ -3323,21 +3409,18 @@
         </div>
       </div>
 
-      <!-- 下部整理されたナビゲーションメニュー（横一列にすっきり配置） -->
+      <!-- 下部整理されたナビゲーションメニュー（5ボタンにスッキリ集約） -->
       <div class="home-nav-container" style="margin-top: 8px;">
         <div class="home-nav-btns" style="display: flex; gap: 10px; width: 100%; flex-wrap: wrap;">
-          <a href="kakijun.html" class="home-nav-btn highlight" style="flex: 1.2; text-align: center; justify-content: center; font-size: 13.5px; padding: 10px 14px;" title="小学校全1026字の書き順アニメ＆なぞり書き練習">
+          <button class="home-nav-btn" onclick="openHangarModal('ship')" style="flex: 1.1; text-align: center; justify-content: center; font-size: 13.5px; padding: 10px 14px;" title="機体カラー・ビーム・アバター・二つ名をカスタマイズ">
+            🚀 マイハンガー (機体・アバター・二つ名)
+          </button>
+          <button class="home-nav-btn" onclick="openKanjiMuseum('kanji')" style="flex: 1.2; text-align: center; justify-content: center; font-size: 13.5px; padding: 10px 14px;" title="全1026字図鑑・AI弱点分析・マスター認定証">
+            🏛️ 漢字ミュージアム (図鑑・AI分析・賞状)
+          </button>
+          <a href="kakijun.html" class="home-nav-btn highlight" style="flex: 1.1; text-align: center; justify-content: center; font-size: 13.5px; padding: 10px 14px;" title="小学校全1026字の書き順アニメ＆なぞり書き練習">
             ✏️ 筆順・手書き練習 (全1,026字)
           </a>
-          <button class="home-nav-btn" onclick="openKanjiRoom()" style="flex: 1.1; text-align: center; justify-content: center; font-size: 13.5px; padding: 10px 14px;">
-            🏛️ 漢字の部屋 (全1026字・認定証)
-          </button>
-          <button class="home-nav-btn" onclick="openCustomModal()" style="flex: 1; text-align: center; justify-content: center; font-size: 13.5px; padding: 10px 14px;">
-            🚀 機体カスタム (機体３〜７)
-          </button>
-          <button class="home-nav-btn" onclick="openAiReportModal()" style="flex: 1; text-align: center; justify-content: center; font-size: 13.5px; padding: 10px 14px;">
-            📊 AI学習分析
-          </button>
           <button class="home-nav-btn sub" onclick="openHowToModal()" style="flex: 0 0 auto; text-align: center; justify-content: center; font-size: 12.5px; padding: 10px 16px;">
             ❓ あそびかた
           </button>
@@ -3379,102 +3462,227 @@
       <div id="result-mastery-summary" style="font-size: 13px; color: #00ffaa; margin-bottom: 10px; font-weight: bold;"></div>
       <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 10px;">
         <button class="start-btn" onclick="returnToTitle()" style="padding: 10px 24px; font-size: 16px;">もう一度挑戦！</button>
-        <button class="action-sub-btn" onclick="openAiReportModal()" style="padding: 10px 16px; font-size: 14px; border-color: #00ff88; color: #00ff88;">📊 AI弱点分析</button>
-        <button class="action-sub-btn" onclick="openKanjiRoom()" style="padding: 10px 16px; font-size: 14px;">🏛️ 漢字の部屋</button>
-        <button class="action-sub-btn" id="btn-result-cert" onclick="openCertModal()" style="display: none; padding: 10px 18px; font-size: 15px; border-color: #ffd700; color: #ffd700;">🎖️ 認定証を見る</button>
+        <button class="action-sub-btn" onclick="openKanjiMuseum('kanji')" style="padding: 10px 16px; font-size: 14px;">🏛️ 漢字ミュージアム</button>
+        <button class="action-sub-btn" onclick="openKanjiMuseum('ai')" style="padding: 10px 16px; font-size: 14px; border-color: #00ff88; color: #00ff88;">📊 AI弱点分析</button>
+        <button class="action-sub-btn" id="btn-result-cert" onclick="openKanjiMuseum('cert')" style="display: none; padding: 10px 18px; font-size: 15px; border-color: #ffd700; color: #ffd700;">🎖️ 認定証を見る</button>
       </div>
     </div>
   </div>
 
-  <!-- 漢字の部屋モーダル (全1026字コレクション & 進捗確認) -->
+  <!-- 🏛️ 漢字ミュージアム（学習記録室）モーダル: 図鑑・AI分析・賞状を統合 -->
   <div class="modal-overlay" id="kanji-room-modal" style="display: none;">
     <div class="modal-card modal-card-room">
       <div class="room-header">
         <div class="room-title-box">
-          <h2 class="room-title">🏛️ 漢字の部屋 (学習進捗)</h2>
-          <p class="room-desc">正解した漢字がランク別に光るよ！目指せ全1026字ゴールドマスター！</p>
+          <h2 class="room-title">🏛️ 漢字ミュージアム (学習記録室)</h2>
+          <p class="room-desc">全1,026字の習得状況、AI弱点分析、マスター表彰状を完全コレクション！</p>
         </div>
-        <button class="room-close-btn" onclick="closeKanjiRoom()">✕ とじる</button>
+        <button class="room-close-btn" onclick="closeKanjiMuseum()">✕ とじる</button>
       </div>
 
-      <!-- 全体進捗バー & ランク内訳 -->
-      <div class="room-total-progress">
-        <div class="progress-info">
-          <span>🌟 小学校6年間の全漢字進捗</span>
-          <span id="room-total-stats">0 / 1026 字 (0.0%)</span>
-        </div>
-        <div class="progress-bar-bg">
-          <div class="progress-bar-fill" id="room-total-bar" style="width: 0%;"></div>
-        </div>
-        <div style="display: flex; justify-content: center; gap: 14px; margin-top: 6px; font-size: 11px; font-weight: bold;">
-          <span style="color: #ffd700;">🥇 金マスター(5回+): <span id="room-gold-count">0</span>字</span>
-          <span style="color: #b8cce4;">🥈 銀マスター(3回+): <span id="room-silver-count">0</span>字</span>
-          <span style="color: #ffaa66;">🥉 銅マスター(1回+): <span id="room-bronze-count">0</span>字</span>
-        </div>
+      <!-- 漢字ミュージアム 3大タブ -->
+      <div class="museum-tab-nav">
+        <button class="museum-tab-btn active" id="btn-museum-tab-kanji" onclick="switchMuseumTab('kanji')">
+          📖 漢字図鑑 (全1,026字)
+        </button>
+        <button class="museum-tab-btn" id="btn-museum-tab-ai" onclick="switchMuseumTab('ai')">
+          📊 AI学習分析
+        </button>
+        <button class="museum-tab-btn" id="btn-museum-tab-cert" onclick="switchMuseumTab('cert')">
+          🎖️ 漢字マスター認定証
+        </button>
       </div>
 
-      <!-- 学年タブ -->
-      <div class="room-grade-tabs">
-        <button class="room-tab active" data-grade="1" onclick="switchRoomGrade(1)">1年生</button>
-        <button class="room-tab" data-grade="2" onclick="switchRoomGrade(2)">2年生</button>
-        <button class="room-tab" data-grade="3" onclick="switchRoomGrade(3)">3年生</button>
-        <button class="room-tab" data-grade="4" onclick="switchRoomGrade(4)">4年生</button>
-        <button class="room-tab" data-grade="5" onclick="switchRoomGrade(5)">5年生</button>
-        <button class="room-tab" data-grade="6" onclick="switchRoomGrade(6)">6年生</button>
-      </div>
-
-      <!-- 選択学年の進捗バー & 音訓表ボタン & 認定証ボタン -->
-      <div class="room-grade-progress">
-        <div class="progress-info" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
-          <span id="room-current-grade-label">🌱 1年生の漢字</span>
-          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-            <button id="btn-show-g1-table" class="room-table-btn" onclick="openGradeTableModal()">📋 音訓一覧表</button>
-            <button class="room-table-btn" onclick="openGradeCertificate()" style="border-color: #ffd700; color: #ffd700; background: rgba(255, 215, 0, 0.15);">🎖️ 表彰状を見る</button>
-            <span id="room-grade-stats">0 / 80 字 (0%)</span>
+      <!-- タブ1: 漢字図鑑 -->
+      <div id="museum-tab-content-kanji" class="museum-content-pane">
+        <!-- 全体進捗バー & ランク内訳 -->
+        <div class="room-total-progress">
+          <div class="progress-info">
+            <span>🌟 小学校6年間の全漢字進捗</span>
+            <span id="room-total-stats">0 / 1026 字 (0.0%)</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="room-total-bar" style="width: 0%;"></div>
+          </div>
+          <div style="display: flex; justify-content: center; gap: 14px; margin-top: 6px; font-size: 11px; font-weight: bold;">
+            <span style="color: #ffd700;">🥇 金マスター(5回+): <span id="room-gold-count">0</span>字</span>
+            <span style="color: #b8cce4;">🥈 銀マスター(3回+): <span id="room-silver-count">0</span>字</span>
+            <span style="color: #ffaa66;">🥉 銅マスター(1回+): <span id="room-bronze-count">0</span>字</span>
           </div>
         </div>
-        <div class="progress-bar-bg" style="margin-top: 6px;">
-          <div class="progress-bar-fill grade-bar" id="room-grade-bar" style="width: 0%;"></div>
+
+        <!-- 学年タブ -->
+        <div class="room-grade-tabs">
+          <button class="room-tab active" data-grade="1" onclick="switchRoomGrade(1)">1年生</button>
+          <button class="room-tab" data-grade="2" onclick="switchRoomGrade(2)">2年生</button>
+          <button class="room-tab" data-grade="3" onclick="switchRoomGrade(3)">3年生</button>
+          <button class="room-tab" data-grade="4" onclick="switchRoomGrade(4)">4年生</button>
+          <button class="room-tab" data-grade="5" onclick="switchRoomGrade(5)">5年生</button>
+          <button class="room-tab" data-grade="6" onclick="switchRoomGrade(6)">6年生</button>
+        </div>
+
+        <!-- 選択学年の進捗バー & 音訓表ボタン & 認定証ボタン -->
+        <div class="room-grade-progress">
+          <div class="progress-info" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
+            <span id="room-current-grade-label">🌱 1年生の漢字</span>
+            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+              <button id="btn-show-g1-table" class="room-table-btn" onclick="openGradeTableModal()">📋 音訓一覧表</button>
+              <button class="room-table-btn" onclick="switchMuseumTab('cert')" style="border-color: #ffd700; color: #ffd700; background: rgba(255, 215, 0, 0.15);">🎖️ 表彰状を見る</button>
+              <span id="room-grade-stats">0 / 80 字 (0%)</span>
+            </div>
+          </div>
+          <div class="progress-bar-bg" style="margin-top: 6px;">
+            <div class="progress-bar-fill grade-bar" id="room-grade-bar" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <!-- 漢字グリッド一覧 -->
+        <div class="kanji-grid-container" id="room-kanji-grid">
+          <!-- 漢字タイル動的挿入 -->
+        </div>
+
+        <!-- 漢字詳細カード (タイル選択時に表示) -->
+        <div class="kanji-detail-card" id="kanji-detail-card" style="display: none;">
+          <div class="detail-char-box" id="detail-char-box">花</div>
+          <div class="detail-info">
+            <div class="detail-title-row">
+              <span class="detail-grade-tag" id="detail-grade-tag">🌱 1年生</span>
+              <span class="detail-status-tag" id="detail-status-tag">⭕ 撃破済み (3回)</span>
+              <span id="detail-tier-badge" style="font-size: 12px; font-weight: bold; color: #ffd700;">🥇 ゴールド</span>
+            </div>
+            <div class="detail-readings-row">
+              <div><span class="reading-label">音読み:</span><span class="reading-text" id="detail-on-text">カ</span></div>
+              <div><span class="reading-label">訓読み:</span><span class="reading-text" id="detail-kun-text">はな</span></div>
+            </div>
+            <div id="detail-example-row" style="margin-top: 4px; font-size: 12px; color: #a4c8e0;">
+              <span class="reading-label">例文:</span> <span id="detail-example-text">きれいな花が咲く。</span>
+            </div>
+            <div style="margin-top: 6px; display: flex; gap: 6px; flex-wrap: wrap;">
+              <button class="action-sub-btn" id="btn-detail-handwrite" onclick="startHandwriteForCurrentDetail()" style="font-size: 11px; padding: 3px 10px; border-color: #00e5ff; color: #00e5ff; background: rgba(0, 229, 255, 0.1);">
+                ✍️ この漢字を手書き特訓する
+              </button>
+              <button class="action-sub-btn" id="btn-detail-kakijun" onclick="openKakijunForCurrentDetail()" style="font-size: 11px; padding: 3px 10px; border-color: #ffe600; color: #ffe600; background: rgba(255, 230, 0, 0.1);">
+                ✏️ 書き順をみる・練習する
+              </button>
+            </div>
+          </div>
+          <button class="detail-close-btn" onclick="closeKanjiDetail()">✕</button>
+        </div>
+
+        <!-- フッター操作 -->
+        <div class="room-footer">
+          <span class="room-hint">💡 🥉銅(1回) 🥈銀(3回) 🥇金(5回以上)！何度も復習して完全制覇しよう！</span>
+          <button class="room-reset-btn" onclick="resetKanjiProgress()">進捗をリセット</button>
         </div>
       </div>
 
-      <!-- 漢字グリッド一覧 -->
-      <div class="kanji-grid-container" id="room-kanji-grid">
-        <!-- 漢字タイル動的挿入 -->
-      </div>
-
-      <!-- 漢字詳細カード (タイル選択時に表示) -->
-      <div class="kanji-detail-card" id="kanji-detail-card" style="display: none;">
-        <div class="detail-char-box" id="detail-char-box">花</div>
-        <div class="detail-info">
-          <div class="detail-title-row">
-            <span class="detail-grade-tag" id="detail-grade-tag">🌱 1年生</span>
-            <span class="detail-status-tag" id="detail-status-tag">⭕ 撃破済み (3回)</span>
-            <span id="detail-tier-badge" style="font-size: 12px; font-weight: bold; color: #ffd700;">🥇 ゴールド</span>
-          </div>
-          <div class="detail-readings-row">
-            <div><span class="reading-label">音読み:</span><span class="reading-text" id="detail-on-text">カ</span></div>
-            <div><span class="reading-label">訓読み:</span><span class="reading-text" id="detail-kun-text">はな</span></div>
-          </div>
-          <div id="detail-example-row" style="margin-top: 4px; font-size: 12px; color: #a4c8e0;">
-            <span class="reading-label">例文:</span> <span id="detail-example-text">きれいな花が咲く。</span>
-          </div>
-          <div style="margin-top: 6px; display: flex; gap: 6px; flex-wrap: wrap;">
-            <button class="action-sub-btn" id="btn-detail-handwrite" onclick="startHandwriteForCurrentDetail()" style="font-size: 11px; padding: 3px 10px; border-color: #00e5ff; color: #00e5ff; background: rgba(0, 229, 255, 0.1);">
-              ✍️ この漢字を手書き特訓する
-            </button>
-            <button class="action-sub-btn" id="btn-detail-kakijun" onclick="openKakijunForCurrentDetail()" style="font-size: 11px; padding: 3px 10px; border-color: #ffe600; color: #ffe600; background: rgba(255, 230, 0, 0.1);">
-              ✏️ 書き順をみる・練習する
-            </button>
+      <!-- タブ2: AI学習分析 -->
+      <div id="museum-tab-content-ai" class="museum-content-pane" style="display: none;">
+        <!-- AI教官アドバイスバナー -->
+        <div class="ai-coach-banner">
+          <div class="ai-coach-avatar">🤖</div>
+          <div class="ai-coach-msg" id="ai-coach-advice-text">
+            パイロットの出撃データを分析中… 弱点を克服して最強の漢字マスターを目指そう！
           </div>
         </div>
-        <button class="detail-close-btn" onclick="closeKanjiDetail()">✕</button>
+
+        <!-- 統計サマリー4マス -->
+        <div class="ai-stat-grid">
+          <div class="ai-stat-box">
+            <div class="ai-stat-box-lbl">マスター漢字</div>
+            <div class="ai-stat-box-val" id="ai-stat-mastered">0 / 1026</div>
+          </div>
+          <div class="ai-stat-box">
+            <div class="ai-stat-box-lbl">にがて漢字</div>
+            <div class="ai-stat-box-val" id="ai-stat-mistakes" style="color: #ff5566;">0問</div>
+          </div>
+          <div class="ai-stat-box">
+            <div class="ai-stat-box-lbl">弱点克服率</div>
+            <div class="ai-stat-box-val" id="ai-stat-resolved-rate" style="color: #00ff88;">100%</div>
+          </div>
+          <div class="ai-stat-box">
+            <div class="ai-stat-box-lbl">デイリー継続</div>
+            <div class="ai-stat-box-val" id="ai-stat-streak" style="color: #ffaa00;">🔥 1日</div>
+          </div>
+        </div>
+
+        <!-- 苦手部首ヒートマップ・ランキング -->
+        <div class="ai-report-card">
+          <div style="font-weight: 900; font-size: 14px; color: #ffd700; margin-bottom: 6px;">
+            🎯 弱点部首・つまずき傾向ワースト分析
+          </div>
+          <div id="ai-radars-list" class="ai-radars-container">
+            <!-- JSで動的生成 -->
+          </div>
+        </div>
+
+        <!-- つまずきパターン診断 -->
+        <div class="ai-report-card" style="margin-top: 10px;">
+          <div style="font-weight: 900; font-size: 14px; color: #00e5ff; margin-bottom: 6px;">
+            🧠 つまずきパターンAI診断
+          </div>
+          <div id="ai-pattern-diagnosis" style="font-size: 13px; color: #d0e8ff; line-height: 1.6;">
+            診断中…
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 12px; justify-content: center; margin-top: 14px; flex-wrap: wrap;">
+          <button class="start-btn" id="btn-ai-focus-train" onclick="startAiFocusTraining()" style="padding: 10px 24px; font-size: 15px;">
+            ⚡ AIおすすめ！にがて部首を集中特訓する！
+          </button>
+        </div>
       </div>
 
-      <!-- フッター操作 -->
-      <div class="room-footer">
-        <span class="room-hint">💡 🥉銅(1回) 🥈銀(3回) 🥇金(5回以上)！何度も復習して完全制覇しよう！</span>
-        <button class="room-reset-btn" onclick="resetKanjiProgress()">進捗をリセット</button>
+      <!-- タブ3: 漢字マスター認定証 -->
+      <div id="museum-tab-content-cert" class="museum-content-pane" style="display: none;">
+        <div class="cert-print-hide">
+          <p class="room-desc" style="margin-bottom: 10px;">各学年の漢字をすべて撃破（100%達成）すると、公式認定証が授与され印刷（PDF保存）できます！</p>
+          <!-- 認定証セレクタータブ一覧（達成済みは金色、未達成はロック） -->
+          <div class="cert-tabs-grid" id="cert-tabs-container">
+            <!-- JSで動的生成 -->
+          </div>
+        </div>
+
+        <!-- 達成時：印刷対応の賞状本体 -->
+        <div class="cert-container" id="cert-print-area" style="display: none; margin: 12px auto;">
+          <div class="cert-title">表　彰　状</div>
+          <div class="cert-recipient">
+            <span class="cert-recipient-badge" id="cert-rank-recipient">漢字マスター</span> 殿
+          </div>
+          <div class="cert-text" id="cert-text-body">
+            あなたは「ファイブツアーズJET 漢字バトル」において<br>
+            <strong id="cert-grade-title" style="color: #b8860b; font-size: 18px;">第１学年 配当漢字 全80字</strong> の<br>
+            読みと意味を完全に見極め、宇宙の平和に大きく貢献しました。<br>
+            よってここに「銀河漢字マスター」として認定し、その栄誉を讃えます。
+          </div>
+          <div style="display: flex; justify-content: space-around; align-items: center; margin-top: 20px;">
+            <div style="font-size: 14px; text-align: left; color: #555;">
+              <div id="cert-date-display">2026年 9月 20日</div>
+              <div style="font-weight: bold; margin-top: 4px;">宇宙連合 漢字防衛軍 司令部</div>
+            </div>
+            <div class="cert-seal">
+              認　定<br>司令官印
+            </div>
+          </div>
+        </div>
+
+        <!-- 未達成時：ロック案内パネル -->
+        <div class="cert-locked-panel" id="cert-locked-area" style="display: none; margin: 12px auto;">
+          <div class="cert-locked-icon">🔒</div>
+          <div class="cert-locked-title" id="cert-locked-title">第１学年 認定証はロックされています</div>
+          <div class="cert-locked-desc" id="cert-locked-desc">
+            この認定証を受け取るには、該当学年の漢字をすべて撃破する必要があります。<br>
+            現在の達成状況: <strong id="cert-locked-count" style="color: #ffd700;">0 / 80 字</strong>（あと <span id="cert-locked-remain" style="color: #ff5566;">80</span> 字）<br>
+            学年コースに出撃して、すべての漢字をマスターしよう！
+          </div>
+        </div>
+
+        <!-- フッター操作 -->
+        <div class="cert-print-hide" style="display: flex; gap: 12px; justify-content: center; margin-top: 14px;">
+          <button class="start-btn" id="btn-cert-print" onclick="window.print()" style="display: none; padding: 10px 24px; font-size: 16px; background: linear-gradient(90deg, #b8860b 0%, #ffd700 100%); color: #000; font-weight: 900;">
+            🖨️ 表彰状を印刷する（PDF保存）
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -3569,25 +3777,25 @@
     </div>
   </div>
 
-  <!-- ジェット機＆レーザー ＆ パイロットアバター カスタマイズ モーダル -->
+  <!-- 🚀 マイハンガー（格納庫）モーダル: 機体＆レーザー ＆ パイロットアバター ＆ 二つ名コードネームを完全集約 -->
   <div class="modal-overlay" id="custom-modal" style="display: none; z-index: 125;">
     <div class="modal-card modal-card-custom">
       <!-- 固定ヘッダー -->
       <div class="custom-modal-header">
         <div class="room-title-box">
-          <h2 class="room-title">🚀 機体 ＆ 🧑‍🚀 パイロット カスタマイズ</h2>
-          <p class="room-desc">適正学年やにがて復習をクリアして、限定機体やアバターパーツを解放しよう！</p>
+          <h2 class="room-title">🚀 マイハンガー (機体・アバター・二つ名)</h2>
+          <p class="room-desc">自分だけの戦闘機やパイロットアバター、二つ名コードネームをカスタマイズ！</p>
         </div>
         <button class="room-close-btn" onclick="closeCustomModal()">✕ とじる</button>
       </div>
 
       <!-- 切り替えタブ -->
       <div class="custom-tab-buttons" style="padding: 0 16px;">
+        <button class="custom-tab-btn" id="btn-tab-avatar" onclick="switchCustomMainTab('pilot')">
+          🧑‍🚀 パイロット設定 (アバター＆二つ名)
+        </button>
         <button class="custom-tab-btn active" id="btn-tab-ship" onclick="switchCustomMainTab('ship')">
           ✈️ ジェット機＆ビーム
-        </button>
-        <button class="custom-tab-btn" id="btn-tab-avatar" onclick="switchCustomMainTab('avatar')">
-          🧑‍🚀 パイロットアバター (福笑い)
         </button>
       </div>
 
@@ -3615,30 +3823,69 @@
           </div>
         </div>
 
-        <!-- 2. パイロットアバター タブコンテンツ -->
+        <!-- 2. パイロット設定 タブコンテンツ（アバター福笑い ＋ 二つ名コードネーム） -->
         <div id="custom-tab-content-avatar" style="display: none;">
-          <!-- 福笑いリアルタイムプレビュー -->
-          <div class="avatar-preview-container">
-            <div id="avatar-full-preview" style="width: 140px; height: 140px; display: flex; align-items: center; justify-content: center;">
-              <!-- SVGレンダリング -->
-            </div>
-            <div style="margin-top: 6px; font-size: 13px; font-weight: bold; color: #ffd700;" id="avatar-custom-pilot-name">
-              ⚡ 疾風のハヤブサ01号
-            </div>
-            <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">パーツを組み合わせて自分だけのパイロットを作ろう！</div>
-          </div>
+          <div class="hangar-pilot-section">
+            <!-- 左側: アバタープレビュー ＆ 二つ名スロット -->
+            <div style="background: rgba(10, 20, 42, 0.7); border: 1.5px solid rgba(0, 229, 255, 0.3); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; align-items: center; gap: 10px;">
+              <div class="avatar-preview-container" style="padding: 0; background: none; border: none; box-shadow: none;">
+                <div id="avatar-full-preview" style="width: 130px; height: 130px; display: flex; align-items: center; justify-content: center;">
+                  <!-- SVGレンダリング -->
+                </div>
+              </div>
 
-          <!-- アバターパーツカテゴリー切り替え -->
-          <div class="avatar-category-nav">
-            <button class="avatar-cat-btn active" id="cat-btn-base" onclick="switchAvatarCategory('base')">👤 かお・はだ</button>
-            <button class="avatar-cat-btn" id="cat-btn-hair" onclick="switchAvatarCategory('hair')">💇 かみがた</button>
-            <button class="avatar-cat-btn" id="cat-btn-suit" onclick="switchAvatarCategory('suit')">🥋 パイロットスーツ</button>
-            <button class="avatar-cat-btn" id="cat-btn-acc" onclick="switchAvatarCategory('accessory')">✨ そうしょく・オーラ</button>
-          </div>
+              <!-- 二つ名（コードネーム）編成 -->
+              <div style="width: 100%; border-top: 1px solid rgba(0, 229, 255, 0.2); padding-top: 8px;">
+                <div style="font-size: 11px; color: #8cb0d0; letter-spacing: 1px; font-weight: bold;">PILOT CODENAME</div>
+                <div class="pilot-preview-name" id="pilot-modal-preview" style="font-size: 16px; margin: 4px 0;">疾風のハヤブサ01号</div>
+                <div style="font-size: 10.5px; color: #00ff88; margin-bottom: 8px;">🛡️ 個人情報ゼロ認証</div>
 
-          <!-- パーツ選択グリッド -->
-          <div class="avatar-parts-grid" id="avatar-parts-grid">
-            <!-- JS動的生成 -->
+                <!-- 3つのスロット選択 -->
+                <div style="display: flex; flex-direction: column; gap: 6px; width: 100%; text-align: left;">
+                  <div>
+                    <span style="font-size: 10px; color: #8cb0d0;">① しょうごう</span>
+                    <select id="pilot-slot-adj" class="pilot-select" style="width: 100%; padding: 5px 8px; font-size: 12px;" onchange="updatePilotModalPreview()" onmousedown="event.stopPropagation()" onclick="event.stopPropagation()">
+                      <!-- JS生成 -->
+                    </select>
+                  </div>
+                  <div>
+                    <span style="font-size: 10px; color: #8cb0d0;">② コールサイン</span>
+                    <select id="pilot-slot-noun" class="pilot-select" style="width: 100%; padding: 5px 8px; font-size: 12px;" onchange="updatePilotModalPreview()" onmousedown="event.stopPropagation()" onclick="event.stopPropagation()">
+                      <!-- JS生成 -->
+                    </select>
+                  </div>
+                  <div>
+                    <span style="font-size: 10px; color: #8cb0d0;">③ ナンバー</span>
+                    <select id="pilot-slot-num" class="pilot-select" style="width: 100%; padding: 5px 8px; font-size: 12px;" onchange="updatePilotModalPreview()" onmousedown="event.stopPropagation()" onclick="event.stopPropagation()">
+                      <!-- JS生成 -->
+                    </select>
+                  </div>
+                </div>
+
+                <div style="display: flex; gap: 6px; justify-content: center; margin-top: 8px;">
+                  <button class="action-sub-btn" onclick="randomizePilotName()" style="font-size: 12px; padding: 6px 14px; width: 100%;">🎲 おまかせサイコロ</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 右側: アバターパーツ選択 -->
+            <div>
+              <div style="font-size: 12px; color: #94a3b8; margin-bottom: 8px; text-align: left;">
+                パーツを組み合わせて自分だけのパイロットを作ろう！（適正学年・にがて克服でアンロック）
+              </div>
+              <!-- アバターパーツカテゴリー切り替え -->
+              <div class="avatar-category-nav" style="margin-bottom: 8px;">
+                <button class="avatar-cat-btn active" id="cat-btn-base" onclick="switchAvatarCategory('base')">👤 かお・はだ</button>
+                <button class="avatar-cat-btn" id="cat-btn-hair" onclick="switchAvatarCategory('hair')">💇 かみがた</button>
+                <button class="avatar-cat-btn" id="cat-btn-suit" onclick="switchAvatarCategory('suit')">🥋 スーツ</button>
+                <button class="avatar-cat-btn" id="cat-btn-acc" onclick="switchAvatarCategory('accessory')">✨ そうしょく</button>
+              </div>
+
+              <!-- パーツ選択グリッド -->
+              <div class="avatar-parts-grid" id="avatar-parts-grid" style="max-height: 440px; overflow-y: auto;">
+                <!-- JS動的生成 -->
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -3721,67 +3968,8 @@
     </div>
   </div>
 
-  <!-- 漢字マスター認定証（表彰状）モーダル -->
-  <div class="modal-overlay" id="cert-modal" style="display: none; z-index: 130;">
-    <div class="modal-card" style="max-width: 760px; background: rgba(10, 15, 25, 0.96);">
-      <div class="cert-print-hide">
-        <div class="room-header" style="margin-bottom: 10px;">
-          <div class="room-title-box">
-            <h2 class="room-title">🎖️ 漢字マスター認定証 授与室</h2>
-            <p class="room-desc">各学年の漢字をすべて撃破（100%達成）すると、公式認定証が授与され印刷（PDF保存）できます！</p>
-          </div>
-          <button class="room-close-btn" onclick="closeCertModal()">✕ とじる</button>
-        </div>
-
-        <!-- 認定証セレクタータブ一覧（達成済みは金色、未達成はロック） -->
-        <div class="cert-tabs-grid" id="cert-tabs-container">
-          <!-- JSで動的生成 -->
-        </div>
-      </div>
-
-      <!-- 達成時：印刷対応の賞状本体 -->
-      <div class="cert-container" id="cert-print-area" style="display: none;">
-        <div class="cert-title">表　彰　状</div>
-        <div class="cert-recipient">
-          <span class="cert-recipient-badge" id="cert-rank-recipient">漢字マスター</span> 殿
-        </div>
-        <div class="cert-text" id="cert-text-body">
-          あなたは「ファイブツアーズJET 漢字バトル」において<br>
-          <strong id="cert-grade-title" style="color: #b8860b; font-size: 18px;">第１学年 配当漢字 全80字</strong> の<br>
-          読みと意味を完全に見極め、宇宙の平和に大きく貢献しました。<br>
-          よってここに「銀河漢字マスター」として認定し、その栄誉を讃えます。
-        </div>
-        <div style="display: flex; justify-content: space-around; align-items: center; margin-top: 20px;">
-          <div style="font-size: 14px; text-align: left; color: #555;">
-            <div id="cert-date-display">2026年 9月 20日</div>
-            <div style="font-weight: bold; margin-top: 4px;">宇宙連合 漢字防衛軍 司令部</div>
-          </div>
-          <div class="cert-seal">
-            認　定<br>司令官印
-          </div>
-        </div>
-      </div>
-
-      <!-- 未達成時：ロック案内パネル -->
-      <div class="cert-locked-panel" id="cert-locked-area" style="display: none;">
-        <div class="cert-locked-icon">🔒</div>
-        <div class="cert-locked-title" id="cert-locked-title">第１学年 認定証はロックされています</div>
-        <div class="cert-locked-desc" id="cert-locked-desc">
-          この認定証を受け取るには、該当学年の漢字をすべて撃破する必要があります。<br>
-          現在の達成状況: <strong id="cert-locked-count" style="color: #ffd700;">0 / 80 字</strong>（あと <span id="cert-locked-remain" style="color: #ff5566;">80</span> 字）<br>
-          学年コースに出撃して、すべての漢字をマスターしよう！
-        </div>
-      </div>
-
-      <!-- フッター操作 -->
-      <div class="cert-print-hide" style="display: flex; gap: 12px; justify-content: center; margin-top: 14px;">
-        <button class="start-btn" id="btn-cert-print" onclick="window.print()" style="display: none; padding: 10px 24px; font-size: 16px; background: linear-gradient(90deg, #b8860b 0%, #ffd700 100%); color: #000; font-weight: 900;">
-          🖨️ 表彰状を印刷する（PDF保存）
-        </button>
-        <button class="action-sub-btn" onclick="closeCertModal()" style="padding: 10px 20px; font-size: 15px;">とじる</button>
-      </div>
-    </div>
-  </div>
+  <!-- 旧 漢字マスター認定証モーダル (漢字ミュージアム内に統合済み・互換用ダミー) -->
+  <div class="modal-overlay" id="cert-modal" style="display: none;"></div>
 
   <!-- 手書き筆順・トメハネ採点AI 特訓モーダル -->
   <div class="modal-overlay" id="handwrite-modal" style="display: none; z-index: 135;">
@@ -3844,126 +4032,11 @@
     </div>
   </div>
 
-  <!-- ローカルAI学習分析レポート モーダル -->
-  <div class="modal-overlay" id="ai-report-modal" style="display: none; z-index: 130;">
-    <div class="modal-card" style="max-width: 680px; background: rgba(8, 16, 32, 0.98);">
-      <div class="room-header" style="margin-bottom: 8px;">
-        <div class="room-title-box">
-          <h2 class="room-title">📊 パイロット学習分析レポート</h2>
-          <p class="room-desc">完全ローカルAIがあなたの誤答傾向や部首の弱点を解析！外部通信ゼロで安心安全！</p>
-        </div>
-        <button class="room-close-btn" onclick="closeAiReportModal()">✕ とじる</button>
-      </div>
+  <!-- 旧 AI学習分析レポートモーダル (漢字ミュージアム内に統合済み・互換用ダミー) -->
+  <div class="modal-overlay" id="ai-report-modal" style="display: none;"></div>
 
-      <!-- AI教官アドバイスバナー -->
-      <div class="ai-coach-banner">
-        <div class="ai-coach-avatar">🤖</div>
-        <div class="ai-coach-msg" id="ai-coach-advice-text">
-          パイロットの出撃データを分析中… 弱点を克服して最強の漢字マスターを目指そう！
-        </div>
-      </div>
-
-      <!-- 統計サマリー4マス -->
-      <div class="ai-stat-grid">
-        <div class="ai-stat-box">
-          <div class="ai-stat-box-lbl">マスター漢字</div>
-          <div class="ai-stat-box-val" id="ai-stat-mastered">0 / 1026</div>
-        </div>
-        <div class="ai-stat-box">
-          <div class="ai-stat-box-lbl">にがて漢字</div>
-          <div class="ai-stat-box-val" id="ai-stat-mistakes" style="color: #ff5566;">0問</div>
-        </div>
-        <div class="ai-stat-box">
-          <div class="ai-stat-box-lbl">弱点克服率</div>
-          <div class="ai-stat-box-val" id="ai-stat-resolved-rate" style="color: #00ff88;">100%</div>
-        </div>
-        <div class="ai-stat-box">
-          <div class="ai-stat-box-lbl">デイリー継続</div>
-          <div class="ai-stat-box-val" id="ai-stat-streak" style="color: #ffaa00;">🔥 1日</div>
-        </div>
-      </div>
-
-      <!-- 苦手部首ヒートマップ・ランキング -->
-      <div class="ai-report-card">
-        <div style="font-weight: 900; font-size: 14px; color: #ffd700; margin-bottom: 6px;">
-          🎯 弱点部首・つまずき傾向ワースト分析
-        </div>
-        <div id="ai-radars-list" class="ai-radars-container">
-          <!-- JSで動的生成 -->
-        </div>
-      </div>
-
-      <!-- つまずきパターン診断 -->
-      <div class="ai-report-card" style="margin-top: 10px;">
-        <div style="font-weight: 900; font-size: 14px; color: #00e5ff; margin-bottom: 6px;">
-          🧠 つまずきパターンAI診断
-        </div>
-        <div id="ai-pattern-diagnosis" style="font-size: 13px; color: #d0e8ff; line-height: 1.6;">
-          診断中…
-        </div>
-      </div>
-
-      <div style="display: flex; gap: 12px; justify-content: center; margin-top: 14px; flex-wrap: wrap;">
-        <button class="start-btn" id="btn-ai-focus-train" onclick="startAiFocusTraining()" style="padding: 10px 24px; font-size: 15px;">
-          ⚡ AIおすすめ！にがて部首を集中特訓する！
-        </button>
-        <button class="action-sub-btn" onclick="closeAiReportModal()" style="padding: 10px 20px; font-size: 15px;">とじる</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- パイロット二つ名（コードネーム）編成モーダル -->
-  <div class="modal-overlay" id="pilot-name-modal" style="display: none; z-index: 140;">
-    <div class="modal-card" style="max-width: 550px; background: rgba(8, 16, 32, 0.98);">
-      <div class="room-header" style="margin-bottom: 8px;">
-        <div class="room-title-box">
-          <h2 class="room-title">🧑‍🚀 パイロット二つ名（コードネーム）</h2>
-          <p class="room-desc">本名やニックネームの自由入力を物理的にシャットアウト！かっこいい単語を組み合わせて宇宙唯一のコードネームを作ろう！</p>
-        </div>
-        <button class="room-close-btn" onclick="closePilotNameModal()">✕ とじる</button>
-      </div>
-
-      <div class="pilot-name-builder">
-        <!-- プレビュー -->
-        <div class="pilot-preview-card">
-          <div class="pilot-preview-title">CURRENT PILOT CODENAME</div>
-          <div class="pilot-preview-name" id="pilot-modal-preview">疾風のハヤブサ01号</div>
-          <div style="font-size: 12px; color: #00ff88;">🛡️ 個人情報ゼロ認証済みコードネーム</div>
-        </div>
-
-        <!-- 3つのスロット選択 -->
-        <div class="pilot-select-row">
-          <div>
-            <div style="font-size: 11px; color: #8cb0d0; margin-bottom: 3px;">① しょうごう</div>
-            <select id="pilot-slot-adj" class="pilot-select" onchange="updatePilotModalPreview()" onmousedown="event.stopPropagation()" onclick="event.stopPropagation()">
-              <!-- JS生成 -->
-            </select>
-          </div>
-          <div>
-            <div style="font-size: 11px; color: #8cb0d0; margin-bottom: 3px;">② コールサイン</div>
-            <select id="pilot-slot-noun" class="pilot-select" onchange="updatePilotModalPreview()" onmousedown="event.stopPropagation()" onclick="event.stopPropagation()">
-              <!-- JS生成 -->
-            </select>
-          </div>
-          <div>
-            <div style="font-size: 11px; color: #8cb0d0; margin-bottom: 3px;">③ ナンバー</div>
-            <select id="pilot-slot-num" class="pilot-select" onchange="updatePilotModalPreview()" onmousedown="event.stopPropagation()" onclick="event.stopPropagation()">
-              <!-- JS生成 -->
-            </select>
-          </div>
-        </div>
-
-        <div style="display: flex; gap: 8px; justify-content: center; margin-top: 6px;">
-          <button class="action-sub-btn" onclick="randomizePilotName()" style="font-size: 13px; padding: 7px 16px;">🎲 おまかせサイコロ</button>
-        </div>
-      </div>
-
-      <div style="display: flex; gap: 12px; justify-content: center; margin-top: 14px;">
-        <button class="start-btn" onclick="savePilotName()" style="padding: 10px 28px; font-size: 15px;">この二つ名で登録！</button>
-        <button class="action-sub-btn" onclick="closePilotNameModal()" style="padding: 10px 20px; font-size: 15px;">とじる</button>
-      </div>
-    </div>
-  </div>
+  <!-- 旧 パイロット二つ名モーダル (マイハンガー内に統合済み・互換用ダミー) -->
+  <div class="modal-overlay" id="pilot-name-modal" style="display: none;"></div>
 
   <!-- 個人情報ゼロ安心保証 ガイドモーダル -->
   <div class="modal-overlay" id="privacy-modal" style="display: none; z-index: 145;">
@@ -6225,17 +6298,21 @@ function randomizePilotName() {
 }
 
 function openPilotNameModal() {
-  initPilotNameModal();
-  document.getElementById('pilot-name-modal').style.display = 'flex';
+  if (typeof openHangarModal === 'function') {
+    openHangarModal('pilot');
+  } else {
+    initPilotNameModal();
+    const m = document.getElementById('custom-modal') || document.getElementById('pilot-name-modal');
+    if (m) m.style.display = 'flex';
+  }
 }
 
 function closePilotNameModal() {
-  document.getElementById('pilot-name-modal').style.display = 'none';
-  if (isPausedForRoom) {
-    isPausedForRoom = false;
-    if (timerSeconds > 0 && crewLives > 0 && !isAnswerLocked) {
-      startTimer(timerSeconds);
-    }
+  if (typeof closeCustomModal === 'function') {
+    closeCustomModal();
+  } else {
+    const m = document.getElementById('pilot-name-modal');
+    if (m) m.style.display = 'none';
   }
 }
 
@@ -7928,19 +8005,45 @@ function recordMasteredKanji(kanjiStr) {
   return newlyMasteredCount;
 }
 
-function openKanjiRoom(grade) {
-  if (grade) currentRoomGrade = grade;
-  renderKanjiRoom();
+let currentMuseumTab = 'kanji';
+
+function switchMuseumTab(tab) {
+  currentMuseumTab = tab;
+  ['kanji', 'ai', 'cert'].forEach(t => {
+    const btn = document.getElementById(`btn-museum-tab-${t}`);
+    const pane = document.getElementById(`museum-tab-content-${t}`);
+    if (btn) btn.classList.toggle('active', t === tab);
+    if (pane) pane.style.display = (t === tab) ? 'block' : 'none';
+  });
+
+  if (tab === 'kanji') {
+    renderKanjiRoom();
+  } else if (tab === 'ai') {
+    if (typeof renderAiReport === 'function') renderAiReport();
+  } else if (tab === 'cert') {
+    if (typeof renderCertModal === 'function') renderCertModal();
+  }
+}
+
+function openKanjiMuseum(tab = 'kanji', grade) {
+  if (grade) {
+    currentRoomGrade = grade;
+    if (typeof selectedCertKey !== 'undefined') selectedCertKey = grade;
+  }
+  switchMuseumTab(tab);
+
   // ゲーム中に部屋を開いた場合はタイマー一時停止
   if (timerInterval) {
     clearInterval(timerInterval);
     isPausedForRoom = true;
   }
-  document.getElementById('kanji-room-modal').style.display = 'flex';
+  const m = document.getElementById('kanji-room-modal');
+  if (m) m.style.display = 'flex';
 }
 
-function closeKanjiRoom() {
-  document.getElementById('kanji-room-modal').style.display = 'none';
+function closeKanjiMuseum() {
+  const m = document.getElementById('kanji-room-modal');
+  if (m) m.style.display = 'none';
   // ゲーム中の一時停止だった場合はタイマー再開
   if (isPausedForRoom) {
     isPausedForRoom = false;
@@ -7948,6 +8051,14 @@ function closeKanjiRoom() {
       startTimer(timerSeconds);
     }
   }
+}
+
+function openKanjiRoom(grade) {
+  openKanjiMuseum('kanji', grade);
+}
+
+function closeKanjiRoom() {
+  closeKanjiMuseum();
 }
 
 function switchRoomGrade(grade) {
@@ -8551,14 +8662,18 @@ function updateAllAvatarDisplays() {
   if (customPilotName) {
     customPilotName.textContent = `⚡ ${getPilotName()}`;
   }
+  const modalPilotPreview = document.getElementById('pilot-modal-preview');
+  if (modalPilotPreview) {
+    modalPilotPreview.textContent = getPilotName();
+  }
   const resPilot = document.getElementById('result-pilot-badge');
   if (resPilot) {
     resPilot.innerHTML = `<span style="display:inline-block; vertical-align:middle; margin-right:6px;">${renderAvatarSvg(current, 28)}</span> ⚡ パイロット: ${getPilotName()}`;
   }
 }
 
-// カスタムモーダルのメインタブ切り替え
-let currentCustomTab = 'ship';
+// マイハンガー（機体・アバター・二つ名）のメインタブ切り替え
+let currentCustomTab = 'pilot';
 let currentAvatarCategory = 'base';
 
 function switchCustomMainTab(tab) {
@@ -8575,18 +8690,49 @@ function switchCustomMainTab(tab) {
     if (contentAv) contentAv.style.display = 'none';
     renderCustomPreview();
   } else {
+    // 'pilot' または 'avatar'
     if (btnShip) btnShip.classList.remove('active');
     if (btnAv) btnAv.classList.add('active');
     if (contentShip) contentShip.style.display = 'none';
     if (contentAv) contentAv.style.display = 'block';
+    if (typeof initPilotNameModal === 'function') initPilotNameModal();
     renderAvatarPartsGrid();
     updateAllAvatarDisplays();
   }
 }
 
+function openHangarModal(tab = 'pilot') {
+  renderCustomModal();
+  if (typeof initPilotNameModal === 'function') initPilotNameModal();
+  updateAllAvatarDisplays();
+  switchCustomMainTab(tab === 'ship' ? 'ship' : 'pilot');
+
+  // ゲーム中の一時停止処理
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    isPausedForRoom = true;
+  }
+  const m = document.getElementById('custom-modal');
+  if (m) m.style.display = 'flex';
+}
+
+function openCustomModal() {
+  openHangarModal('ship');
+}
+
 function openAvatarTab() {
-  openCustomModal();
-  switchCustomMainTab('avatar');
+  openHangarModal('pilot');
+}
+
+function closeCustomModal() {
+  const m = document.getElementById('custom-modal');
+  if (m) m.style.display = 'none';
+  if (isPausedForRoom) {
+    isPausedForRoom = false;
+    if (timerSeconds > 0 && crewLives > 0 && !isAnswerLocked) {
+      startTimer(timerSeconds);
+    }
+  }
 }
 
 function switchAvatarCategory(cat) {
@@ -8643,17 +8789,6 @@ function renderAvatarPartsGrid() {
 
     grid.appendChild(card);
   });
-}
-
-/* === 機体＆アバター カスタマイズ モーダル === */
-function openCustomModal() {
-  renderCustomModal();
-  updateAllAvatarDisplays();
-  document.getElementById('custom-modal').style.display = 'flex';
-}
-
-function closeCustomModal() {
-  document.getElementById('custom-modal').style.display = 'none';
 }
 
 function renderCustomModal() {
@@ -9413,8 +9548,13 @@ function openCertModal(targetGrade) {
   } else {
     selectedCertKey = 1;
   }
-  renderCertModal();
-  document.getElementById('cert-modal').style.display = 'flex';
+  if (typeof openKanjiMuseum === 'function') {
+    openKanjiMuseum('cert', selectedCertKey);
+  } else {
+    renderCertModal();
+    const m = document.getElementById('kanji-room-modal') || document.getElementById('cert-modal');
+    if (m) m.style.display = 'flex';
+  }
 }
 
 function selectCertGrade(key) {
@@ -9521,7 +9661,12 @@ function openGradeCertificate() {
 }
 
 function closeCertModal() {
-  document.getElementById('cert-modal').style.display = 'none';
+  if (typeof closeKanjiMuseum === 'function') {
+    closeKanjiMuseum();
+  } else {
+    const m = document.getElementById('cert-modal');
+    if (m) m.style.display = 'none';
+  }
 }
 
 /* ==========================================================================
@@ -9570,17 +9715,21 @@ function analyzeMistakeRadicals() {
 }
 
 function openAiReportModal() {
-  renderAiReport();
-  document.getElementById('ai-report-modal').style.display = 'flex';
+  if (typeof openKanjiMuseum === 'function') {
+    openKanjiMuseum('ai');
+  } else {
+    renderAiReport();
+    const m = document.getElementById('kanji-room-modal') || document.getElementById('ai-report-modal');
+    if (m) m.style.display = 'flex';
+  }
 }
 
 function closeAiReportModal() {
-  document.getElementById('ai-report-modal').style.display = 'none';
-  if (isPausedForRoom) {
-    isPausedForRoom = false;
-    if (timerSeconds > 0 && crewLives > 0 && !isAnswerLocked) {
-      startTimer(timerSeconds);
-    }
+  if (typeof closeKanjiMuseum === 'function') {
+    closeKanjiMuseum();
+  } else {
+    const m = document.getElementById('ai-report-modal');
+    if (m) m.style.display = 'none';
   }
 }
 

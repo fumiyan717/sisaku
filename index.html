@@ -703,19 +703,111 @@
     }
 
     .home-dashboard-left {
-      flex: 0 0 400px;
+      flex: 0 0 350px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      justify-content: space-between;
+      gap: 10px;
+      justify-content: flex-start;
     }
 
     .home-dashboard-right {
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
       min-width: 0;
+    }
+
+    /* ホーム画面セクション見出し（児童向けに役割を明示） */
+    .dashboard-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 2px 4px 2px;
+      border-bottom: 1.5px solid rgba(0, 229, 255, 0.25);
+      margin-bottom: 4px;
+    }
+    .dashboard-section-header .section-title {
+      font-size: 14.5px;
+      font-weight: 900;
+      color: #00e5ff;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .dashboard-section-header.special .section-title {
+      color: #ffd700;
+    }
+    .dashboard-section-header .section-hint, .dashboard-section-header .section-badge {
+      font-size: 11px;
+      color: #a5b4fc;
+    }
+    .dashboard-section-header .section-badge {
+      background: rgba(255, 215, 0, 0.18);
+      color: #ffeb3b;
+      border: 1px solid rgba(255, 215, 0, 0.5);
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-weight: 800;
+    }
+
+    /* 右カラム専用ド迫力発進ボタン（児童が直感的に押せるメインボタン） */
+    .hero-launch-btn {
+      width: 100%;
+      min-height: 56px;
+      background: linear-gradient(135deg, #ff7a00 0%, #ff3d00 50%, #d50000 100%);
+      border: 2.5px solid #ffe082;
+      border-radius: 14px;
+      color: #ffffff;
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 10px 22px;
+      box-shadow: 0 6px 22px rgba(255, 87, 34, 0.55), 0 0 15px rgba(255, 215, 0, 0.4);
+      transition: all 0.18s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+      margin-top: 4px;
+      animation: heroLaunchPulse 2.4s infinite ease-in-out;
+    }
+    @keyframes heroLaunchPulse {
+      0%, 100% {
+        box-shadow: 0 6px 20px rgba(255, 87, 34, 0.5), 0 0 14px rgba(255, 215, 0, 0.35);
+        transform: scale(1);
+      }
+      50% {
+        box-shadow: 0 8px 30px rgba(255, 87, 34, 0.8), 0 0 24px rgba(255, 215, 0, 0.65);
+        transform: scale(1.012);
+      }
+    }
+    .hero-launch-btn:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 10px 34px rgba(255, 87, 34, 0.85), 0 0 28px rgba(255, 215, 0, 0.85);
+      border-color: #ffffff;
+    }
+    .hero-launch-btn:active {
+      transform: scale(0.98);
+      box-shadow: 0 3px 12px rgba(255, 87, 34, 0.6);
+    }
+    .hero-launch-btn .launch-icon {
+      font-size: 26px;
+      display: inline-block;
+      animation: rocketBounce 1.6s infinite ease-in-out;
+    }
+    @keyframes rocketBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px) scale(1.1); }
+    }
+    .hero-launch-btn .launch-arrow {
+      font-size: 16px;
+      opacity: 0.9;
+      margin-left: auto;
     }
 
     @media (max-width: 960px) {
@@ -793,11 +885,33 @@
       justify-content: space-between;
     }
 
-    .mode-btn:hover, .mode-btn.active {
+    .mode-btn:hover {
       border-color: var(--primary-cyan);
       background: rgba(0, 229, 255, 0.22);
       box-shadow: 0 0 16px rgba(0, 229, 255, 0.5);
       transform: translateY(-2px);
+    }
+
+    .mode-btn.active {
+      border: 2.5px solid #00e5ff;
+      background: linear-gradient(145deg, rgba(0, 229, 255, 0.3) 0%, rgba(16, 45, 95, 0.95) 100%);
+      box-shadow: 0 0 22px rgba(0, 229, 255, 0.7), inset 0 0 14px rgba(0, 229, 255, 0.35);
+      transform: translateY(-2px);
+    }
+
+    .mode-btn.active::after {
+      content: "✓ えらび中";
+      position: absolute;
+      top: 6px;
+      right: 8px;
+      background: #00e5ff;
+      color: #051026;
+      font-size: 10px;
+      font-weight: 900;
+      padding: 2px 7px;
+      border-radius: 999px;
+      box-shadow: 0 0 8px rgba(0, 229, 255, 0.8);
+      letter-spacing: 0.5px;
     }
 
     .card-kakijun-shortcut {
@@ -3288,57 +3402,63 @@
 
       <!-- メインエリア：2カラムダッシュボード（横幅フル活用） -->
       <div class="home-dashboard-layout">
-        <!-- 左カラム：設定・ミッション・発進ボタン -->
+        <!-- 左カラム：特別ミッション（デイリー・にがて特訓・クラス作戦本部） -->
         <div class="home-dashboard-left">
-          <!-- ⚡ 最優先！朝学習・給食後サクッと1分「クイック出撃デイリーミッション」 -->
+          <div class="dashboard-section-header special">
+            <span class="section-title">⚡ 特別ミッション</span>
+            <span class="section-badge">1タップで出撃</span>
+          </div>
+
+          <!-- ⚡ デイリー防衛 -->
           <button class="hero-daily-btn" id="btn-hero-daily" onclick="startDailyMission()" title="1タップで即ロード！朝学習や給食後の1〜2分で遊べるデイリー防衛！">
             <div>
-              <div style="font-size: 12px; letter-spacing: 1px; color: #ffeb3b; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">⚡ 1タップで即発進！朝学習・スキマ1分</div>
-              <div style="font-size: 18px; font-weight: 900; margin-top: 2px;">🎯 今日のデイリー防衛 (厳選5問)</div>
+              <div style="font-size: 11.5px; letter-spacing: 1px; color: #ffeb3b; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">⚡ 朝学習・スキマ1分 (厳選5問)</div>
+              <div style="font-size: 17.5px; font-weight: 900; margin-top: 2px;">🎯 今日のデイリー防衛</div>
             </div>
-            <div style="font-size: 26px;">🚀 GO!</div>
+            <div style="font-size: 22px; font-weight: 900; background: rgba(0,0,0,0.25); padding: 4px 10px; border-radius: 8px;">出撃 🚀</div>
           </button>
 
-          <!-- 🏫 クラス合算スコアミニバナー (クリックで大型提示装置用全画面ダッシュボード) -->
+          <!-- 🔁 にがて特訓リベンジ -->
+          <div class="special-mode-btn" onclick="startMistakesMode()" id="btn-mistakes-mode" style="width: 100%;" title="まちがえた漢字を集中撃破！">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div class="special-mode-title">🔁 にがて特訓リベンジ</div>
+              <span style="font-size: 10px; background: rgba(255, 215, 0, 0.25); color: #ffd700; border: 1px solid rgba(255,215,0,0.6); padding: 1px 6px; border-radius: 999px; font-weight: 900;">EXP 2.5倍!</span>
+            </div>
+            <div class="special-mode-desc" id="mistakes-mode-desc">まちがえた漢字を集中撃破して苦手を克服！</div>
+          </div>
+
+          <!-- 🏫 クラス合算スコアミニバナー -->
           <div class="class-score-banner" onclick="openClassDashboardModal()" title="大型提示装置・電子黒板にクラス全体の撃破メーターを映し出します！">
             <div style="display: flex; align-items: center; gap: 8px;">
               <span style="font-size: 20px;">🏫</span>
               <div style="text-align: left;">
-                <div style="font-size: 11.5px; color: #c7d2fe; font-weight: bold;">今日のクラス防衛作戦本部</div>
-                <div style="font-size: 13.5px; color: #ffd700; font-weight: 900;">
+                <div style="font-size: 11px; color: #c7d2fe; font-weight: bold;">今日のクラス防衛作戦本部</div>
+                <div style="font-size: 13px; color: #ffd700; font-weight: 900;">
                   クラス合計: <span id="home-class-score-text">0 / 500 字</span> 撃破！
                 </div>
               </div>
             </div>
-            <span style="background: rgba(99, 102, 241, 0.35); border: 1px solid #818cf8; color: #fff; font-size: 11px; padding: 4px 8px; border-radius: 6px; white-space: nowrap;">📺 大画面表示</span>
+            <span style="background: rgba(99, 102, 241, 0.35); border: 1px solid #818cf8; color: #fff; font-size: 10.5px; padding: 3px 7px; border-radius: 6px; white-space: nowrap;">📺 大画面</span>
           </div>
 
           <!-- 先生指定ターゲットバナー (URLパラメータ等で指定時のみ表示) -->
-          <div id="teacher-target-mission-banner" class="teacher-target-banner" style="display: none; margin-bottom: 8px;">
+          <div id="teacher-target-mission-banner" class="teacher-target-banner" style="display: none; margin-bottom: 4px;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-              <span style="font-size: 13.5px; font-weight: 900; color: #ffd700;">🎯 先生からの特別ミッション発動中！</span>
+              <span style="font-size: 13px; font-weight: 900; color: #ffd700;">🎯 先生からの特別ミッション発動中！</span>
               <button class="target-exit-btn" onclick="clearTeacherTargetMode()">✕ 解除</button>
             </div>
-            <div id="teacher-target-kanji-display" style="font-size: 16px; font-weight: bold; color: #fff; margin-top: 4px; letter-spacing: 2px;"></div>
-            <div id="teacher-target-meta-info" style="font-size: 11px; color: #a5b4fc; margin-top: 3px;"></div>
-          </div>
-          <div class="special-modes-row" style="margin: 0 0 6px 0;">
-            <div class="special-mode-btn" onclick="startMistakesMode()" id="btn-mistakes-mode" style="width: 100%;">
-              <div class="special-mode-title">🔁 にがて特訓リベンジ</div>
-              <div class="special-mode-desc" id="mistakes-mode-desc">過去に間違えた漢字に集中挑戦！ボーナスEXP 2.5倍！</div>
-            </div>
-          </div>
-
-          <!-- メイン発進ボタン -->
-          <div style="display: flex; flex-direction: column; gap: 6px;">
-            <button class="start-btn" id="start-game-btn" onclick="startGame()" style="width: 100%; font-size: 19px; padding: 13px 18px;">
-              🌱 １年生コースで発進！ (START)
-            </button>
+            <div id="teacher-target-kanji-display" style="font-size: 15px; font-weight: bold; color: #fff; margin-top: 3px; letter-spacing: 2px;"></div>
+            <div id="teacher-target-meta-info" style="font-size: 10.5px; color: #a5b4fc; margin-top: 2px;"></div>
           </div>
         </div>
 
-        <!-- 右カラム：学年コース選択グリッド（広々と全6学年＋全学年を表示） -->
+        <!-- 右カラム：学年コース選択グリッド＆メイン発進ボタン（視線移動のない直感的一直線動線） -->
         <div class="home-dashboard-right">
+          <div class="dashboard-section-header">
+            <span class="section-title">🗺️ 学年コースをえらぼう</span>
+            <span class="section-hint">学年をタップして、下の「発進ボタン」を押そう！</span>
+          </div>
+
           <div class="mode-select-grid">
             <div class="mode-btn active" data-mode="grade1" onclick="selectMode('grade1')">
               <span class="grade-badge g1">1ねんせい</span>
@@ -3381,6 +3501,13 @@
               <div class="mode-desc">1年生〜6年生の全範囲からバランス良く出題！全10問の完全制覇ツアー！</div>
             </div>
           </div>
+
+          <!-- メイン発進ボタン（選択した学年コースの真下に大きく配置！） -->
+          <button class="hero-launch-btn" id="start-game-btn" onclick="startGame()">
+            <span class="launch-icon">🚀</span>
+            <span class="launch-title">🌱 １年生コースで発進！ (START)</span>
+            <span class="launch-arrow">▶</span>
+          </button>
         </div>
       </div>
 
@@ -5560,7 +5687,7 @@ class SoundEngine {
     if (!this.enabled) return;
     this.init();
     try {
-      if (this.battleBgm && !this.battleBgm.paused) {
+      if (this.battleBgm) {
         this.battleBgm.pause();
         this.battleBgm.currentTime = 0;
       }
@@ -5568,6 +5695,10 @@ class SoundEngine {
         const p = this.homeBgm.play();
         if (p !== undefined) {
           p.then(() => {
+            if (this.currentBgmType !== 'home') {
+              this.homeBgm.pause();
+              return;
+            }
             this.isBgmPlaying = true;
             this.updateBgmButtonUI();
           }).catch(e => {
@@ -5584,7 +5715,7 @@ class SoundEngine {
     if (!this.enabled) return;
     this.init();
     try {
-      if (this.homeBgm && !this.homeBgm.paused) {
+      if (this.homeBgm) {
         this.homeBgm.pause();
         this.homeBgm.currentTime = 0;
       }
@@ -5592,6 +5723,11 @@ class SoundEngine {
         const p = this.battleBgm.play();
         if (p !== undefined) {
           p.then(() => {
+            if (this.currentBgmType !== 'battle') {
+              this.battleBgm.pause();
+              this.battleBgm.currentTime = 0;
+              return;
+            }
             this.isBgmPlaying = true;
             this.updateBgmButtonUI();
           }).catch(e => {
@@ -6780,9 +6916,18 @@ function updateHomeUI() {
   }
 
   // 発進ボタン文言
+  updateStartButtonText();
+}
+
+function updateStartButtonText() {
   const startBtn = document.getElementById('start-game-btn');
-  if (startBtn) {
-    startBtn.textContent = `${COURSE_NAMES[gameMode] || "コース"}で発進！ (START)`;
+  if (!startBtn) return;
+  const courseText = `${COURSE_NAMES[gameMode] || "コース"}で発進！ (START)`;
+  const titleSpan = startBtn.querySelector('.launch-title');
+  if (titleSpan) {
+    titleSpan.textContent = courseText;
+  } else {
+    startBtn.innerHTML = `<span class="launch-icon">🚀</span><span class="launch-title">${courseText}</span><span class="launch-arrow">▶</span>`;
   }
 }
 
@@ -6800,10 +6945,7 @@ function selectMode(mode) {
   document.querySelectorAll('.mode-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.mode === mode);
   });
-  const startBtn = document.getElementById('start-game-btn');
-  if (startBtn) {
-    startBtn.textContent = `${COURSE_NAMES[gameMode] || "コース"}で発進！ (START)`;
-  }
+  updateStartButtonText();
 }
 
 function quickStart(mode) {
@@ -7009,9 +7151,18 @@ function buildQuestionList() {
   return pickAdaptiveQuestions(basePool, 10, 2);
 }
 
+let isGameActive = false;
+let questionTransitionTimeout = null;
+
 function startGame() {
   document.getElementById('start-modal').style.display = 'none';
   document.getElementById('result-modal').style.display = 'none';
+
+  isGameActive = true;
+  if (questionTransitionTimeout) {
+    clearTimeout(questionTransitionTimeout);
+    questionTransitionTimeout = null;
+  }
 
   updateStreak();
 
@@ -7150,6 +7301,7 @@ function updateAnswerDisplay() {
 }
 
 function loadQuestion(index) {
+  if (!isGameActive) return;
   if (index >= currentQuestionList.length) {
     showGameResult(true);
     return;
@@ -7226,6 +7378,7 @@ function loadQuestion(index) {
 }
 
 function startTimer(seconds) {
+  if (!isGameActive) return;
   clearInterval(timerInterval);
   timerSeconds = seconds;
   updateTimerUI();
@@ -7421,6 +7574,7 @@ function handleCorrectAnswer(q) {
   // レーザー発射 & 大爆発
   spawnLaserBeam();
   setTimeout(() => {
+    if (!isGameActive) return;
     targetVisual.defeated = true;
     screenShake = 1.2;
     spawnExplosion(canvas.width * 0.5, canvas.height * 0.36);
@@ -7430,7 +7584,9 @@ function handleCorrectAnswer(q) {
     elKanjiPanel.style.transform = "translate(-50%, -50%) scale(0)";
   }, 200);
 
-  setTimeout(() => {
+  if (questionTransitionTimeout) clearTimeout(questionTransitionTimeout);
+  questionTransitionTimeout = setTimeout(() => {
+    if (!isGameActive) return;
     currentQuestionIndex++;
     loadQuestion(currentQuestionIndex);
   }, 1400);
@@ -7450,7 +7606,7 @@ function handleWrongAnswer() {
 }
 
 function handleTimeOut() {
-  if (isAnswerLocked) return;
+  if (!isGameActive || isAnswerLocked) return;
   isAnswerLocked = true;
   currentCombo = 0;
 
@@ -7492,7 +7648,9 @@ function handleTimeOut() {
     elTimeoutTipBox.style.display = 'block';
   }
 
-  setTimeout(() => {
+  if (questionTransitionTimeout) clearTimeout(questionTransitionTimeout);
+  questionTransitionTimeout = setTimeout(() => {
+    if (!isGameActive) return;
     slots.forEach(s => {
       s.classList.remove('wrong');
       s.style.color = "";
@@ -7516,7 +7674,17 @@ function triggerFlash(type) {
 }
 
 function showGameResult(isWin) {
-  clearInterval(timerInterval);
+  isGameActive = false;
+  if (questionTransitionTimeout) {
+    clearTimeout(questionTransitionTimeout);
+    questionTransitionTimeout = null;
+  }
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
+  timerSeconds = 0;
+  isAnswerLocked = true;
   sound.stopBgm();
 
   // 正規終了時（全問クリアまたは撃墜ゲームオーバー）にのみ確定保存！
@@ -7661,44 +7829,97 @@ function showGameResult(isWin) {
 }
 
 function returnToTitle() {
+  isGameActive = false;
+  if (questionTransitionTimeout) {
+    clearTimeout(questionTransitionTimeout);
+    questionTransitionTimeout = null;
+  }
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
+  timerSeconds = 0;
+  isAnswerLocked = true;
+
   document.getElementById('result-modal').style.display = 'none';
   document.getElementById('start-modal').style.display = 'flex';
+  sound.stopBgm();
   sound.playHomeBgm();
   updateHomeUI();
 }
 
-/* === ゲーム中断・メニューに戻る機能（途中退出時は進捗を未学習扱いに破棄） === */
+/* === ゲーム中断・メニューに戻る機能（途中退出時は進捗を未学習扱いに破棄し、タイマー・BGM・処理を完全停止） === */
 function confirmReturnToMenu() {
-  clearInterval(timerInterval);
+  if (timerInterval) {
+    clearInterval(timerInterval);
+  }
   document.getElementById('confirm-quit-modal').style.display = 'flex';
 }
 
 function cancelReturnToMenu() {
   document.getElementById('confirm-quit-modal').style.display = 'none';
   // 解答中であればタイマーを残り秒数から再開
-  if (timerSeconds > 0 && crewLives > 0 && !isAnswerLocked) {
+  if (isGameActive && timerSeconds > 0 && crewLives > 0 && !isAnswerLocked) {
     startTimer(timerSeconds);
   }
 }
 
 function executeReturnToMenu() {
   document.getElementById('confirm-quit-modal').style.display = 'none';
-  clearInterval(timerInterval);
+
+  // ★最重要: ゲーム実行フラグを即座に落とす
+  isGameActive = false;
+
+  // ★未完了のタイマーや非同期遷移をすべてクリア
+  if (questionTransitionTimeout) {
+    clearTimeout(questionTransitionTimeout);
+    questionTransitionTimeout = null;
+  }
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
+  timerSeconds = 0;
+  isAnswerLocked = true;
+  isPausedForRoom = false;
+
+  // BGMを確実にホームBGMへ切り替え
+  sound.stopBgm();
   sound.playHomeBgm();
 
-  // ★重要: セッション中の一時データを破棄（そこまで正解した漢字もすべて未学習扱いのまま）
+  // セッション中の一時データを破棄（そこまで正解した漢字もすべて未学習扱いのまま）
   sessionMasteredKanji = [];
   sessionEarnedExp = 0;
   sessionResolvedMistakes = [];
   sessionNewMistakes = [];
   solvedHistory = [];
   currentCombo = 0;
-  isAnswerLocked = false;
 
-  // HUD・アニメーションを初期状態にリセット
-  elKanjiPanel.style.transform = "translate(-50%, -50%) scale(1)";
-  elKanjiPanel.style.animation = "";
-  elSlotsContainer.style.animation = "";
+  // HUD・アニメーション・UIを初期状態にリセット
+  if (elKanjiPanel) {
+    elKanjiPanel.style.transform = "translate(-50%, -50%) scale(1)";
+    elKanjiPanel.style.animation = "";
+  }
+  if (elSlotsContainer) {
+    elSlotsContainer.innerHTML = "";
+    elSlotsContainer.style.animation = "";
+  }
+  if (elCharBlocksContainer) {
+    elCharBlocksContainer.innerHTML = "";
+  }
+  if (elTimeoutTipBox) {
+    elTimeoutTipBox.style.display = 'none';
+  }
+  if (elTimerBar) {
+    elTimerBar.style.width = '0%';
+    elTimerBar.classList.remove('warning');
+  }
+  if (elTimerNumber) {
+    elTimerNumber.textContent = '0.0s';
+  }
+  currentAnswer = "";
+  romajiBuffer = "";
+  composingText = "";
 
   document.getElementById('result-modal').style.display = 'none';
   document.getElementById('start-modal').style.display = 'flex';
@@ -8871,6 +9092,9 @@ function setMyGrade(grade) {
 
 function changeMyGrade(val) {
   setMyGrade(val);
+  if (typeof selectMode === 'function') {
+    selectMode('grade' + val);
+  }
   showComboEffect(`🧑‍🎓 じぶんの学年を【${val}年生】に設定しました`, 'rank-up');
   sound.playCorrect();
 }
@@ -10898,8 +11122,12 @@ window.addEventListener('DOMContentLoaded', () => {
     updateAllAvatarDisplays();
   }
   if (typeof getMyGrade === 'function') {
+    const myG = getMyGrade();
     const sel = document.getElementById('user-my-grade-select');
-    if (sel) sel.value = getMyGrade().toString();
+    if (sel) sel.value = myG.toString();
+    if (typeof selectMode === 'function') {
+      selectMode('grade' + myG);
+    }
   }
 
   sound.init();

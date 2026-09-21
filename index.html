@@ -2710,11 +2710,271 @@
         box-shadow: none !important;
         page-break-inside: avoid !important;
       }
-      .no-print {
-        display: none !important;
-      }
+    /* === アバター（福笑いシステム）スタイル === */
+    .avatar-icon-circle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      overflow: hidden;
+      background: radial-gradient(circle, rgba(0, 229, 255, 0.2) 0%, rgba(10, 20, 40, 0.9) 100%);
+      border: 1.5px solid var(--primary-cyan);
+      box-shadow: 0 0 8px rgba(0, 229, 255, 0.4);
+      vertical-align: middle;
+      cursor: pointer;
     }
-</style>
+    .avatar-preview-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      background: radial-gradient(circle, rgba(0, 229, 255, 0.15) 0%, rgba(10, 15, 30, 0.85) 90%);
+      border: 1.5px solid rgba(0, 229, 255, 0.35);
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+    .custom-tab-buttons {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid rgba(0, 229, 255, 0.25);
+      padding-bottom: 8px;
+    }
+    .custom-tab-btn {
+      flex: 1;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: bold;
+      border-radius: 8px;
+      border: 1px solid rgba(0, 229, 255, 0.2);
+      background: rgba(15, 23, 42, 0.7);
+      color: #94a3b8;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .custom-tab-btn.active {
+      background: linear-gradient(135deg, rgba(0, 229, 255, 0.25), rgba(79, 70, 229, 0.35));
+      border-color: #00e5ff;
+      color: #fff;
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+    }
+    .avatar-category-nav {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 10px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+    .avatar-cat-btn {
+      padding: 5px 12px;
+      font-size: 11.5px;
+      font-weight: bold;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(30, 41, 59, 0.6);
+      color: #cbd5e1;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .avatar-cat-btn.active {
+      background: #00e5ff;
+      color: #051026;
+      border-color: #00e5ff;
+      box-shadow: 0 0 8px rgba(0, 229, 255, 0.5);
+    }
+    .avatar-parts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 8px;
+      max-height: 240px;
+      overflow-y: auto;
+      padding: 4px;
+    }
+    .avatar-part-card {
+      background: rgba(15, 23, 42, 0.75);
+      border: 1.5px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      padding: 8px 6px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+    .avatar-part-card:hover:not(.locked) {
+      border-color: #00e5ff;
+      transform: translateY(-2px);
+    }
+    .avatar-part-card.active {
+      border-color: #ffd700;
+      background: rgba(255, 215, 0, 0.12);
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+    }
+    .avatar-part-card.locked {
+      opacity: 0.65;
+      background: rgba(10, 15, 25, 0.85);
+      border-color: #475569;
+      cursor: not-allowed;
+    }
+
+    /* === じぶんの学年セレクター === */
+    .my-grade-select-wrapper {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1.5px solid #ffd700;
+      border-radius: 8px;
+      padding: 4px 10px;
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+    }
+    .my-grade-select {
+      background: transparent;
+      border: none;
+      color: #ffd700;
+      font-weight: 900;
+      font-size: 13px;
+      cursor: pointer;
+      outline: none;
+    }
+    .my-grade-select option {
+      background: #0f172a;
+      color: #fff;
+    }
+
+    /* === クイック即出撃デイリーボタン (ホーム最優先) === */
+    .hero-daily-btn {
+      background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 50%, #ff8c00 100%);
+      border: 2px solid #fff;
+      border-radius: 12px;
+      padding: 14px 18px;
+      color: #fff;
+      font-size: 17px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(255, 75, 43, 0.6);
+      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      width: 100%;
+      text-align: left;
+      margin-bottom: 8px;
+      animation: pulseHeroBtn 2.2s infinite ease-in-out;
+    }
+    @keyframes pulseHeroBtn {
+      0%, 100% { box-shadow: 0 0 16px rgba(255, 75, 43, 0.5); transform: scale(1); }
+      50% { box-shadow: 0 0 26px rgba(255, 75, 43, 0.85); transform: scale(1.015); }
+    }
+    .hero-daily-btn:hover {
+      transform: scale(1.025);
+      filter: brightness(1.1);
+    }
+
+    /* === 防衛惑星選択モーダル === */
+    .planet-select-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 10px;
+      max-height: 55vh;
+      overflow-y: auto;
+      padding: 6px;
+    }
+    .planet-card {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1.5px solid rgba(0, 229, 255, 0.25);
+      border-radius: 10px;
+      padding: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+    }
+    .planet-card:hover {
+      border-color: #00e5ff;
+      background: rgba(0, 229, 255, 0.1);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(0, 229, 255, 0.25);
+    }
+    .planet-card.active {
+      border-color: #ffd700;
+      background: rgba(255, 215, 0, 0.12);
+      box-shadow: 0 0 12px rgba(255, 215, 0, 0.35);
+    }
+
+    /* === クラス合算スコアバー（ホーム画面ミニバナー） === */
+    .class-score-banner {
+      background: linear-gradient(90deg, rgba(30, 27, 75, 0.85), rgba(49, 46, 129, 0.85));
+      border: 1px solid #6366f1;
+      border-radius: 8px;
+      padding: 7px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      cursor: pointer;
+      margin-bottom: 8px;
+      transition: all 0.2s;
+    }
+    .class-score-banner:hover {
+      border-color: #a5b4fc;
+      box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
+    }
+
+    /* === 大型提示装置用全画面ダッシュボード === */
+    .class-dashboard-card {
+      max-width: 960px;
+      width: 95vw;
+      background: radial-gradient(circle at center, #0b132b 0%, #050814 100%);
+      border: 2px solid #6366f1;
+      box-shadow: 0 0 40px rgba(99, 102, 241, 0.5);
+      border-radius: 16px;
+      padding: 24px 30px;
+      text-align: center;
+    }
+    .class-defense-counter-big {
+      font-size: 72px;
+      font-weight: 900;
+      color: #ffd700;
+      line-height: 1;
+      text-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+      margin: 10px 0;
+      font-family: 'Arial Black', sans-serif;
+    }
+    .class-defense-meter-outer {
+      width: 100%;
+      height: 32px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 2px solid #6366f1;
+      border-radius: 16px;
+      overflow: hidden;
+      margin: 14px 0 20px 0;
+      position: relative;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.6);
+    }
+    .class-defense-meter-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #4f46e5 0%, #06b6d4 50%, #10b981 100%);
+      border-radius: 14px;
+      transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 0 16px rgba(6, 182, 212, 0.6);
+    }
+    .class-feed-box {
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 10px 14px;
+      max-height: 140px;
+      overflow-y: auto;
+      text-align: left;
+      font-size: 13px;
+    }
+  </style>
 <script src="assets/qrcode.min.js"></script>
 </head>
 <body>
@@ -2898,26 +3158,38 @@
 
         <!-- 整理されたステータスドック -->
         <div class="home-status-bar" style="margin: 0; padding: 6px 14px;">
-          <div class="status-row-top" style="gap: 14px;">
+          <div class="status-row-top" style="gap: 12px; align-items: center;">
+            <!-- アバターサークル表示 -->
+            <div class="avatar-icon-circle" id="home-avatar-icon" style="width: 38px; height: 38px; flex-shrink: 0;" onclick="openAvatarTab()" title="アバターをカスタマイズ！">
+              <!-- SVG挿入 -->
+            </div>
+            <!-- じぶんの学年セレクター (適正学年スコアリング用) -->
+            <div class="my-grade-select-wrapper" title="自分の学年を設定すると、適正難易度や背伸びチャレンジで高スコアを獲得できます！">
+              <span style="font-size: 11.5px; color: #ffd700;">🧑‍🎓 じぶん:</span>
+              <select id="user-my-grade-select" class="my-grade-select" onchange="changeMyGrade(this.value)" onmousedown="event.stopPropagation()" onclick="event.stopPropagation()">
+                <option value="1">1年生</option>
+                <option value="2">2年生</option>
+                <option value="3">3年生</option>
+                <option value="4">4年生</option>
+                <option value="5">5年生</option>
+                <option value="6">6年生</option>
+              </select>
+            </div>
             <div class="home-status-item">
               <span class="status-label">まいにち:</span>
               <span class="status-val streak-val" id="home-streak-display">🔥 1日目</span>
-            </div>
-            <div class="home-status-item">
-              <span class="status-label">しょうごう:</span>
-              <span class="status-val rank-val" id="home-rank-display">🧑‍🚀 みならいパイロット</span>
             </div>
             <div class="home-status-item">
               <span class="status-label">EXP:</span>
               <span class="status-val" id="home-exp-display" style="color:#00e5ff; font-weight:900;">0</span>
             </div>
           </div>
-          <div class="status-row-bottom" style="gap: 14px; margin-top: 4px;">
+          <div class="status-row-bottom" style="gap: 12px; margin-top: 4px; align-items: center;">
             <div class="home-status-item clickable" onclick="openPilotNameModal()" title="パイロット二つ名を変更">
               <span class="status-label">パイロット:</span>
               <span class="status-val" id="home-pilot-name" style="color: #ffd700; font-weight: bold;">⚡ 疾風のハヤブサ01号</span>
             </div>
-            <div class="home-status-item clickable" onclick="openCustomModal()" title="機体をカスタマイズ">
+            <div class="home-status-item clickable" onclick="openCustomModal()" title="機体やアバターをカスタマイズ">
               <span class="status-label">そうび:</span>
               <span class="status-val" id="home-custom-display" style="color: var(--neon-yellow);">✈️ ブルーホーク</span>
             </div>
@@ -2932,6 +3204,35 @@
       <div class="home-dashboard-layout">
         <!-- 左カラム：設定・ミッション・発進ボタン -->
         <div class="home-dashboard-left">
+          <!-- ⚡ 最優先！朝学習・給食後サクッと1分「クイック出撃デイリーミッション」 -->
+          <button class="hero-daily-btn" id="btn-hero-daily" onclick="startDailyMission()" title="1タップで即ロード！朝学習や給食後の1〜2分で遊べるデイリー防衛！">
+            <div>
+              <div style="font-size: 12px; letter-spacing: 1px; color: #ffeb3b; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">⚡ 1タップで即発進！朝学習・スキマ1分</div>
+              <div style="font-size: 18px; font-weight: 900; margin-top: 2px;">🎯 今日のデイリー防衛 (厳選5問)</div>
+            </div>
+            <div style="font-size: 26px;">🚀 GO!</div>
+          </button>
+
+          <!-- 🏫 クラス合算スコアミニバナー (クリックで大型提示装置用全画面ダッシュボード) -->
+          <div class="class-score-banner" onclick="openClassDashboardModal()" title="大型提示装置・電子黒板にクラス全体の撃破メーターを映し出します！">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 20px;">🏫</span>
+              <div style="text-align: left;">
+                <div style="font-size: 11.5px; color: #c7d2fe; font-weight: bold;">今日のクラス防衛作戦本部</div>
+                <div style="font-size: 13.5px; color: #ffd700; font-weight: 900;">
+                  クラス合計: <span id="home-class-score-text">0 / 500 字</span> 撃破！
+                </div>
+              </div>
+            </div>
+            <span style="background: rgba(99, 102, 241, 0.35); border: 1px solid #818cf8; color: #fff; font-size: 11px; padding: 4px 8px; border-radius: 6px; white-space: nowrap;">📺 大画面表示</span>
+          </div>
+
+          <!-- 🪐 自己決定: 防衛する星（単元）をえらぶボタン -->
+          <button class="action-sub-btn" onclick="openPlanetSelectModal()" style="width: 100%; padding: 10px 14px; font-size: 14px; margin-bottom: 8px; border-color: #00e5ff; color: #00e5ff; background: rgba(0, 229, 255, 0.12); display: flex; align-items: center; justify-content: center; gap: 8px;" title="今日はどの星（単元）を防衛するか子ども自身が選んで出撃！">
+            <span style="font-size: 18px;">🪐</span>
+            <span>防衛する星（単元テーマ）をえらぶ</span>
+          </button>
+
           <!-- 先生指定ターゲットバナー (URLパラメータ等で指定時のみ表示) -->
           <div id="teacher-target-mission-banner" class="teacher-target-banner" style="display: none;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -2943,7 +3244,7 @@
           </div>
 
           <!-- 学習カリキュラムセレクター -->
-          <div class="curriculum-bar" id="curriculum-bar" style="margin: 0;">
+          <div class="curriculum-bar" id="curriculum-bar" style="margin: 0 0 6px 0;">
             <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
               <span class="curriculum-label">📖 学習カリキュラム:</span>
               <select id="curriculum-select" class="curriculum-select" onchange="changeCurriculum(this.value)" onmousedown="event.stopPropagation()" onclick="event.stopPropagation()">
@@ -2959,21 +3260,17 @@
             </div>
           </div>
 
-          <!-- 特別ミッション (デイリー & にがて特訓) -->
-          <div class="special-modes-row" style="margin: 0;">
-            <div class="special-mode-btn" id="btn-daily-mission" onclick="startDailyMission()">
-              <div class="special-mode-title" id="daily-mission-title">🎯 今日のデイリー (5問)</div>
-              <div class="special-mode-desc" id="daily-mission-desc">1日1回ボーナスEXP！全学年から厳選出題！</div>
-            </div>
-            <div class="special-mode-btn" onclick="startMistakesMode()" id="btn-mistakes-mode">
+          <!-- 特別ミッション (にがて特訓) -->
+          <div class="special-modes-row" style="margin: 0 0 6px 0;">
+            <div class="special-mode-btn" onclick="startMistakesMode()" id="btn-mistakes-mode" style="width: 100%;">
               <div class="special-mode-title">🔁 にがて特訓リベンジ</div>
-              <div class="special-mode-desc" id="mistakes-mode-desc">過去に間違えた漢字に集中挑戦！</div>
+              <div class="special-mode-desc" id="mistakes-mode-desc">過去に間違えた漢字に集中挑戦！ボーナスEXP 2.5倍！</div>
             </div>
           </div>
 
           <!-- メイン発進ボタン -->
           <div style="display: flex; flex-direction: column; gap: 6px;">
-            <button class="start-btn" id="start-game-btn" onclick="startGame()" style="width: 100%; font-size: 20px; padding: 16px 20px;">
+            <button class="start-btn" id="start-game-btn" onclick="startGame()" style="width: 100%; font-size: 19px; padding: 13px 18px;">
               🌱 １年生コースで発進！ (START)
             </button>
           </div>
@@ -3272,43 +3569,154 @@
     </div>
   </div>
 
-  <!-- ジェット機＆レーザー カスタマイズ モーダル -->
+  <!-- ジェット機＆レーザー ＆ パイロットアバター カスタマイズ モーダル -->
   <div class="modal-overlay" id="custom-modal" style="display: none; z-index: 125;">
     <div class="modal-card modal-card-custom">
-      <!-- 固定ヘッダー（常に画面上部に固定） -->
+      <!-- 固定ヘッダー -->
       <div class="custom-modal-header">
         <div class="room-title-box">
-          <h2 class="room-title">🚀 機体＆レーザー カスタマイズ</h2>
-          <p class="room-desc">漢字をたくさん撃破して、かっこいい機体とビームを解放しよう！</p>
+          <h2 class="room-title">🚀 機体 ＆ 🧑‍🚀 パイロット カスタマイズ</h2>
+          <p class="room-desc">適正学年やにがて復習をクリアして、限定機体やアバターパーツを解放しよう！</p>
         </div>
         <button class="room-close-btn" onclick="closeCustomModal()">✕ とじる</button>
       </div>
 
-      <!-- スクロール可能なボディエリア（機体が増えても快適に閲覧） -->
+      <!-- 切り替えタブ -->
+      <div class="custom-tab-buttons" style="padding: 0 16px;">
+        <button class="custom-tab-btn active" id="btn-tab-ship" onclick="switchCustomMainTab('ship')">
+          ✈️ ジェット機＆ビーム
+        </button>
+        <button class="custom-tab-btn" id="btn-tab-avatar" onclick="switchCustomMainTab('avatar')">
+          🧑‍🚀 パイロットアバター (福笑い)
+        </button>
+      </div>
+
+      <!-- スクロール可能なボディエリア -->
       <div class="custom-modal-body">
-        <!-- リアルタイム プレビュードック -->
-        <div class="custom-preview-dock" id="custom-preview-dock">
-          <canvas id="custom-preview-canvas" class="custom-preview-canvas" width="320" height="110"></canvas>
-          <div class="custom-preview-names">
-            <span>機体: <strong id="custom-preview-ship-name" style="color: #00e5ff;">ブルーホーク</strong></span>
-            <span>ビーム: <strong id="custom-preview-laser-name" style="color: #00e5ff;">蒼光シアン</strong></span>
+        <!-- 1. ジェット機＆レーザー タブコンテンツ -->
+        <div id="custom-tab-content-ship">
+          <!-- リアルタイム プレビュードック -->
+          <div class="custom-preview-dock" id="custom-preview-dock">
+            <canvas id="custom-preview-canvas" class="custom-preview-canvas" width="320" height="110"></canvas>
+            <div class="custom-preview-names">
+              <span>機体: <strong id="custom-preview-ship-name" style="color: #00e5ff;">ブルーホーク</strong></span>
+              <span>ビーム: <strong id="custom-preview-laser-name" style="color: #00e5ff;">蒼光シアン</strong></span>
+            </div>
+          </div>
+
+          <h3 style="font-size: 14.5px; color: var(--neon-yellow); margin: 12px 0 6px 0; text-align: left;">✈️ 戦闘機の機体・カラー (適正学年・質の高い学習で解放！)</h3>
+          <div class="custom-row" id="custom-ship-row">
+            <!-- JS動的生成 -->
+          </div>
+
+          <h3 style="font-size: 14.5px; color: var(--primary-cyan); margin: 16px 0 6px 0; text-align: left;">⚡ レーザービームのカラー</h3>
+          <div class="custom-row" id="custom-laser-row">
+            <!-- JS動的生成 -->
           </div>
         </div>
 
-        <h3 style="font-size: 15px; color: var(--neon-yellow); margin: 12px 0 6px 0; text-align: left;">✈️ ジェット機の機体・カラー</h3>
-        <div class="custom-row" id="custom-ship-row">
-          <!-- JS動的生成 -->
-        </div>
+        <!-- 2. パイロットアバター タブコンテンツ -->
+        <div id="custom-tab-content-avatar" style="display: none;">
+          <!-- 福笑いリアルタイムプレビュー -->
+          <div class="avatar-preview-container">
+            <div id="avatar-full-preview" style="width: 140px; height: 140px; display: flex; align-items: center; justify-content: center;">
+              <!-- SVGレンダリング -->
+            </div>
+            <div style="margin-top: 6px; font-size: 13px; font-weight: bold; color: #ffd700;" id="avatar-custom-pilot-name">
+              ⚡ 疾風のハヤブサ01号
+            </div>
+            <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">パーツを組み合わせて自分だけのパイロットを作ろう！</div>
+          </div>
 
-        <h3 style="font-size: 15px; color: var(--primary-cyan); margin: 16px 0 6px 0; text-align: left;">⚡ レーザービームのカラー</h3>
-        <div class="custom-row" id="custom-laser-row">
-          <!-- JS動的生成 -->
+          <!-- アバターパーツカテゴリー切り替え -->
+          <div class="avatar-category-nav">
+            <button class="avatar-cat-btn active" id="cat-btn-base" onclick="switchAvatarCategory('base')">👤 かお・はだ</button>
+            <button class="avatar-cat-btn" id="cat-btn-hair" onclick="switchAvatarCategory('hair')">💇 かみがた</button>
+            <button class="avatar-cat-btn" id="cat-btn-suit" onclick="switchAvatarCategory('suit')">🥋 パイロットスーツ</button>
+            <button class="avatar-cat-btn" id="cat-btn-acc" onclick="switchAvatarCategory('accessory')">✨ そうしょく・オーラ</button>
+          </div>
+
+          <!-- パーツ選択グリッド -->
+          <div class="avatar-parts-grid" id="avatar-parts-grid">
+            <!-- JS動的生成 -->
+          </div>
         </div>
       </div>
 
-      <!-- 固定フッター（常に画面内に常駐し、絶対に押せる決定・戻るボタン） -->
+      <!-- 固定フッター -->
       <div class="custom-modal-footer">
         <button class="start-btn" onclick="closeCustomModal()" style="padding: 11px 40px; font-size: 16.5px;">✅ 決定して戻る</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🪐 防衛惑星（単元）選択モーダル（自己決定学習） -->
+  <div class="modal-overlay" id="planet-select-modal" style="display: none; z-index: 128;">
+    <div class="modal-card" style="max-width: 780px; background: rgba(8, 14, 28, 0.98);">
+      <div class="room-header" style="margin-bottom: 8px;">
+        <div class="room-title-box">
+          <h2 class="room-title">🪐 今日はどの星（単元）を防衛する？</h2>
+          <p class="room-desc">自分で挑戦する星を選んで出撃しよう！単元ごとに集中防衛して習得率UP！</p>
+        </div>
+        <button class="room-close-btn" onclick="closePlanetSelectModal()">✕ とじる</button>
+      </div>
+
+      <!-- 惑星一覧グリッド -->
+      <div class="planet-select-grid" id="planet-select-grid">
+        <!-- JS動的生成 -->
+      </div>
+
+      <div style="margin-top: 14px; text-align: center; display: flex; justify-content: center; gap: 12px;">
+        <button class="action-sub-btn" onclick="closePlanetSelectModal()" style="padding: 9px 24px;">もどる</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🏫 クラス防衛大型ダッシュボード モーダル (大型提示装置・電子黒板用) -->
+  <div class="modal-overlay" id="class-dashboard-modal" style="display: none; z-index: 170;">
+    <div class="modal-card class-dashboard-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 32px;">🏫</span>
+          <div style="text-align: left;">
+            <h2 style="margin: 0; font-size: 24px; color: #fff;" id="class-dash-room-title">5年1組 漢字防衛作戦本部</h2>
+            <div style="font-size: 12px; color: #a5b4fc;" id="class-dash-date-display">本日の作戦状況</div>
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button class="action-sub-btn" onclick="toggleDashboardFullScreen()" style="font-size: 12px; padding: 6px 12px;">⛶ 全画面</button>
+          <button class="room-close-btn" onclick="closeClassDashboardModal()">✕ とじる</button>
+        </div>
+      </div>
+
+      <!-- 巨大カウンター -->
+      <div style="font-size: 16px; color: #c7d2fe; letter-spacing: 2px; font-weight: bold; margin-top: 10px;">
+        CLASS TOTAL DEFEATED
+      </div>
+      <div class="class-defense-counter-big" id="class-dash-counter">
+        0 <span style="font-size: 32px; color: #94a3b8; font-weight: normal;">/ 500 字</span>
+      </div>
+
+      <!-- 巨大防衛達成率メーター -->
+      <div class="class-defense-meter-outer">
+        <div class="class-defense-meter-fill" id="class-dash-meter-fill"></div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; font-size: 15px; font-weight: bold; margin-bottom: 16px; padding: 0 4px;">
+        <span style="color: #67e8f9;" id="class-dash-percent">防衛達成率: 0%</span>
+        <span style="color: #ffd700;" id="class-dash-status-msg">🚀 全員で協力して目標500字を突破しよう！</span>
+      </div>
+
+      <!-- リアルタイム撃破速報ログ -->
+      <div style="text-align: left; font-size: 12px; color: #94a3b8; margin-bottom: 4px; font-weight: bold;">
+        ⚡ リアルタイム撃破速報ログ
+      </div>
+      <div class="class-feed-box" id="class-dash-feed">
+        <div style="color: #64748b; text-align: center; padding: 12px;">作戦開始！みんなで漢字を撃破しよう！</div>
+      </div>
+
+      <div style="margin-top: 16px; display: flex; justify-content: center; gap: 14px;">
+        <button class="start-btn" onclick="closeClassDashboardModal()" style="padding: 10px 36px; font-size: 16px;">出撃画面へもどる</button>
       </div>
     </div>
   </div>
@@ -3631,6 +4039,7 @@
         <button class="teacher-tab-btn" id="tab-btn-preset" onclick="switchTeacherTab('preset')">📚 教科書単元別プリセット</button>
         <button class="teacher-tab-btn" id="tab-btn-difficulty" onclick="switchTeacherTab('difficulty')">⚙️ クラス難易度設定</button>
         <button class="teacher-tab-btn" id="tab-btn-cert" onclick="switchTeacherTab('cert')">💮 はなまる学習証明書（賞状）</button>
+        <button class="teacher-tab-btn" id="tab-btn-firebase" onclick="switchTeacherTab('firebase')">🔥 クラス合算・Firebase</button>
         <button class="teacher-tab-btn" id="tab-btn-data" onclick="switchTeacherTab('data')">💾 データ管理・リセット</button>
       </div>
 
@@ -3827,6 +4236,49 @@
             <div style="font-size: 14px; font-weight: bold; color: #f87171; margin-bottom: 6px;">🗑️ 学習データの一括リセット（新学期・単元終了時）</div>
             <p style="font-size: 12px; color: #fca5a5; margin-bottom: 10px;">「漢字の部屋」のマスター記録や誤答履歴を消去して初期状態に戻します。（機体設定や二つ名は維持されます）</p>
             <button class="start-btn" onclick="confirmResetStudentData()" style="padding: 8px 16px; font-size: 13px; background: #dc2626;">⚠️ データをリセットする</button>
+          </div>
+      <!-- タブ6: クラス合算・Firebase設定 -->
+      <div class="teacher-tab-content" id="teacher-tab-firebase">
+        <div style="background: rgba(30, 27, 75, 0.4); border: 1.5px solid #6366f1; border-radius: 10px; padding: 14px; margin-bottom: 14px; text-align: left;">
+          <h3 style="font-size: 15px; color: #a5b4fc; margin-bottom: 6px;">🔥 帰りの会で大活躍！クラス全員の合算撃破メーター</h3>
+          <p style="font-size: 12.5px; color: #cbd5e1; line-height: 1.6;">
+            クラス全員が今日撃破した漢字の合計数をリアルタイムに合算して大型提示装置（電子黒板・プロジェクター）に映し出せます。<br>
+            「今日はみんなで500字も撃破してるやん！」と先生が絶賛フィードバックでき、子どもたちの一体感と自己効力感が劇的に向上します。<br>
+            ※Firebase Realtime DatabaseのURLを設定すれば全児童端末と完全クラウド同期。未設定でもローカル端末・同一ブラウザ間で自動連携します。
+          </p>
+          <div style="margin-top: 10px;">
+            <button class="start-btn" onclick="openClassDashboardModal()" style="padding: 10px 24px; font-size: 14px; background: linear-gradient(135deg, #4f46e5, #06b6d4);">
+              📺 大型提示装置用全画面ダッシュボードを開く
+            </button>
+          </div>
+        </div>
+
+        <div style="text-align: left; background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 16px;">
+          <h4 style="color: #ffd700; margin: 0 0 12px 0; font-size: 14px;">⚙️ クラス防衛設定</h4>
+          
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div>
+              <label style="font-size: 12px; color: #94a3b8; display: block; margin-bottom: 4px;">🏫 クラス表示名:</label>
+              <input type="text" id="teacher-class-name-input" placeholder="例: 5年1組 防衛作戦本部" style="width: 100%; max-width: 400px; padding: 8px 12px; background: #0f172a; border: 1px solid #475569; border-radius: 6px; color: #fff; font-size: 14px;">
+            </div>
+
+            <div>
+              <label style="font-size: 12px; color: #94a3b8; display: block; margin-bottom: 4px;">🎯 今日のクラス目標撃破数 (字):</label>
+              <input type="number" id="teacher-class-target-input" value="500" min="50" max="5000" step="50" style="width: 160px; padding: 8px 12px; background: #0f172a; border: 1px solid #475569; border-radius: 6px; color: #fff; font-size: 14px;">
+            </div>
+
+            <div>
+              <label style="font-size: 12px; color: #94a3b8; display: block; margin-bottom: 4px;">🔥 Firebase Realtime Database URL (任意):</label>
+              <input type="text" id="teacher-firebase-url-input" placeholder="https://your-project-default-rtdb.firebaseio.com" style="width: 100%; max-width: 500px; padding: 8px 12px; background: #0f172a; border: 1px solid #475569; border-radius: 6px; color: #fff; font-size: 13px;">
+              <div style="font-size: 11px; color: #64748b; margin-top: 4px;">
+                ※空欄の場合は「ローカル/校内同一ネットワーク連携モード」として動作します。FirebaseのURLを入力すると、全児童のChromebook/iPadからリアルタイム合算されます。
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 8px; flex-wrap: wrap;">
+              <button class="start-btn" onclick="saveClassDefenseSettings()" style="padding: 9px 24px; font-size: 13.5px; background: #4f46e5;">設定を保存する</button>
+              <button class="action-sub-btn" onclick="resetTodayClassScore()" style="padding: 9px 18px; font-size: 13px; color: #f87171; border-color: #ef4444;">本日の撃破数をリセット (0字へ)</button>
+            </div>
           </div>
         </div>
       </div>
@@ -6473,6 +6925,33 @@ function buildQuestionList() {
     return shuffle(list);
   }
 
+  // 防衛惑星（自己決定テーマ）モード
+  if (gameMode && gameMode.startsWith('planet_')) {
+    const planetId = gameMode.replace('planet_', '');
+    const planet = DEFENSE_PLANETS.find(p => p.id === planetId);
+    if (planet) {
+      const myGrade = getMyGrade();
+      const pool = [];
+      const charSet = new Set([...planet.chars]);
+      (KANJI_DATABASE[`grade${myGrade}`] || []).forEach(q => {
+        if ([...q.kanji].some(ch => charSet.has(ch))) {
+          pool.push(q);
+        }
+      });
+      if (pool.length < 10) {
+        for (let g = 1; g <= 6; g++) {
+          if (g === myGrade) continue;
+          (KANJI_DATABASE[`grade${g}`] || []).forEach(q => {
+            if ([...q.kanji].some(ch => charSet.has(ch)) && !pool.some(p => p.kanji === q.kanji)) {
+              pool.push(q);
+            }
+          });
+        }
+      }
+      return pickAdaptiveQuestions(pool.length > 0 ? pool : (KANJI_DATABASE[`grade${myGrade}`] || KANJI_DATABASE.grade1), 10, 2);
+    }
+  }
+
   // 通常学年コース: にがて最大2問ブレンド ＋ 未学習漢字最優先！
   const basePool = KANJI_DATABASE[gameMode] || KANJI_DATABASE.grade1;
   return pickAdaptiveQuestions(basePool, 10, 2);
@@ -6843,28 +7322,45 @@ function handleCorrectAnswer(q) {
   // コンボ加算
   currentCombo++;
   if (currentCombo > maxComboInRun) maxComboInRun = currentCombo;
+  const currentMaxCombo = parseInt(localStorage.getItem('kanji_jet_alltime_combo') || '0', 10);
+  if (currentCombo > currentMaxCombo) {
+    localStorage.setItem('kanji_jet_alltime_combo', currentCombo.toString());
+  }
 
-  // EXP計算
-  let earned = 10;
+  // 復習判定（過去に間違えた漢字か）
+  const mistakes = getMistakes();
+  const isReview = !!mistakes[q.kanji] || (typeof lastRunMistakes !== 'undefined' && lastRunMistakes.some(m => m.kanji === q.kanji));
+
+  // 学年連動スコアリング計算（低学年荒稼ぎ防止 ＆ チャレンジ・復習大ボーナス）
+  const scoreResult = calculateExpForAnswer(q, elapsedSec, currentCombo, isReview);
+  const earned = scoreResult.finalExp;
+
   if (currentCombo >= 2) {
-    earned += currentCombo * 2;
-    showComboEffect(`🔥 ${currentCombo} COMBO!`);
     sound.playCombo(currentCombo);
   }
   if (elapsedSec <= 5.0) {
-    earned += 10;
-    showSpeedBonusEffect();
     sound.playSpeedBonus();
   }
+
+  // 画面上に獲得EXPとボーナス・適正学年フィードバックを表示
+  showComboEffect(`+${earned} EXP ${scoreResult.label}`, scoreResult.bonusType);
+
   runEarnedExp += earned;
   sessionEarnedExp += earned;
-  sessionResolvedMistakes.push(q.kanji);
+  if (isReview) {
+    sessionResolvedMistakes.push(q.kanji);
+  }
+
+  // クラス全員の合算撃破メーター（Firebase / ローカル）にリアルタイム加算！
+  ClassDefenseManager.recordDefeat(q.kanji, scoreResult.kanjiGrade, isReview);
 
   solvedHistory.push({
     kanji: q.kanji,
     kana: q.kana,
     hint: q.hint,
-    success: true
+    success: true,
+    earnedExp: earned,
+    bonusLabel: scoreResult.label
   });
 
   // セッション一時バッファに蓄積（※クリアまたはゲームオーバー時のみ確定保存）
@@ -7073,12 +7569,33 @@ function showGameResult(isWin) {
     list.appendChild(row);
   });
 
-  const courseTitle = COURSE_NAMES[gameMode] || "ツアーズ";
+  // 実績カウンター更新（ノーミス撃破 & にがて克服）
+  if (isWin && winCount === currentQuestionList.length) {
+    const pr = parseInt(localStorage.getItem('kanji_jet_perfect_runs') || '0', 10) + 1;
+    localStorage.setItem('kanji_jet_perfect_runs', pr.toString());
+  }
+  if (sessionResolvedMistakes.length > 0) {
+    const mr = parseInt(localStorage.getItem('kanji_jet_resolved_mistakes_count') || '0', 10) + sessionResolvedMistakes.length;
+    localStorage.setItem('kanji_jet_resolved_mistakes_count', mr.toString());
+  }
+
+  // アバター表示更新
+  updateAllAvatarDisplays();
+
+  // コースタイトル解決
+  let courseTitle = COURSE_NAMES[gameMode] || "ツアーズ";
+  if (gameMode && gameMode.startsWith('planet_')) {
+    const pId = gameMode.replace('planet_', '');
+    const p = DEFENSE_PLANETS.find(x => x.id === pId);
+    if (p) courseTitle = p.name;
+  }
+
   if (isWin) {
     icon.textContent = "🏆";
-    title.textContent = "MISSION COMPLETE!";
+    title.textContent = (winCount === currentQuestionList.length) ? "👑 PERFECT MISSION COMPLETE!" : "MISSION COMPLETE!";
     title.style.color = "var(--neon-yellow)";
-    msg.textContent = `おめでとう！【${courseTitle}】全ターゲットを完全撃破！`;
+    const classData = ClassDefenseManager.getTodayData();
+    msg.innerHTML = `おめでとう！【${courseTitle}】全ターゲットを撃破！<br><span style="color: #a5b4fc; font-size: 13px;">🏫 今日のクラス合計: <strong>${classData.count}字</strong> 防衛完了！</span>`;
     sound.playCorrect();
   } else {
     icon.textContent = "💥";
@@ -7711,9 +8228,427 @@ function closeHowToModal() {
   document.getElementById('how-to-modal').style.display = 'none';
 }
 
-/* === 機体＆レーザー カスタマイズ モーダル === */
+/* ==========================================================================
+   アバター（福笑い式レイヤー）＆ 適正難易度アンロック システム
+   ========================================================================== */
+
+const AVATAR_PARTS = {
+  base: [
+    { id: 0, name: "ルーキーフェイス", desc: "元気いっぱいの標準フェイス", unlock: { reqExp: 0 } },
+    { id: 1, name: "クールフェイス", desc: "知的な眼差しの美白フェイス", unlock: { type: 'grade_count', grade: 2, count: 20, desc: "2年生以上の漢字を20字マスター" } },
+    { id: 2, name: "パッションフェイス", desc: "闘志あふれる小麦色フェイス", unlock: { type: 'grade_count', grade: 4, count: 30, desc: "4年生以上の漢字を30字マスター" } },
+    { id: 3, name: "サイボーグフェイス", desc: "電脳光彩のメカニカルフェイス", unlock: { type: 'grade_count', grade: 5, count: 40, desc: "5年生以上の漢字を40字マスター！" } },
+  ],
+  hair: [
+    { id: 0, name: "ショートヘア", desc: "軽快なブラウンショート", unlock: { reqExp: 0 } },
+    { id: 1, name: "スパイクヘア", desc: "熱血ゴールドスパイク", unlock: { reqExp: 0 } },
+    { id: 2, name: "ポニーテール", desc: "気鋭のクリムゾンポニー", unlock: { type: 'grade_count', grade: 3, count: 20, desc: "3年生以上の漢字を20字マスター" } },
+    { id: 3, name: "ツインテール", desc: "軽やかなシアングラデ", unlock: { type: 'mistake_resolved', count: 5, desc: "にがて漢字を5字克服！" } },
+    { id: 4, name: "パイロットキャップ", desc: "歴戦のネイビーキャップ", unlock: { type: 'grade_count', grade: 5, count: 30, desc: "5年生以上の漢字を30字マスター！" } },
+    { id: 5, name: "サイバーネオン", desc: "量子ホログラムネオンヘア", unlock: { type: 'streak', days: 2, desc: "まいにちストリーク2日連続" } },
+  ],
+  suit: [
+    { id: 0, name: "ルーキースーツ", desc: "地球防衛軍の標準パイロット服", unlock: { reqExp: 0 } },
+    { id: 1, name: "フレイムアーマー", desc: "紅蓮の耐熱コンバットスーツ", unlock: { type: 'grade_count', grade: 3, count: 30, desc: "3年生以上の漢字を30字マスター" } },
+    { id: 2, name: "エメラルドガード", desc: "高機動フォレストガード", unlock: { type: 'mistake_resolved', count: 10, desc: "にがて漢字を10字克服！" } },
+    { id: 3, name: "ナイトシャドウ", desc: "ステルス暗黒迷彩スーツ", unlock: { type: 'grade_count', grade: 5, count: 50, desc: "5年生の漢字を50字マスター！" } },
+    { id: 4, name: "ゴールデンマスター", desc: "銀河最高司令官の黄金礼装", unlock: { type: 'perfect_run', count: 2, desc: "ステージ全問ノーミスクリアを2回達成！" } },
+  ],
+  accessory: [
+    { id: 0, name: "なし", desc: "軽装スタイル", unlock: { reqExp: 0 } },
+    { id: 1, name: "コムヘッドセット", desc: "管制塔と交信するインカム", unlock: { type: 'grade_count', grade: 2, count: 15, desc: "2年生以上の漢字を15字マスター" } },
+    { id: 2, name: "フライトゴーグル", desc: "レトロフューチャー二連ゴーグル", unlock: { type: 'combo', count: 7, desc: "7連続COMBO達成！" } },
+    { id: 3, name: "サイバースカウター", desc: "敵漢字の画数を分析するHUD", unlock: { type: 'grade_count', grade: 4, count: 30, desc: "4年生以上の漢字を30字マスター" } },
+    { id: 4, name: "スターオーラ", desc: "パイロットを包む星屑のきらめき", unlock: { type: 'perfect_run', count: 1, desc: "ステージ全問ノーミスクリア！" } },
+    { id: 5, name: "エースヘルメット", desc: "宇宙空間対応の耐圧ヘルメット", unlock: { type: 'grade_count', grade: 5, count: 50, desc: "5年生の漢字を50字マスター！" } },
+    { id: 6, name: "ゴールド勲章", desc: "英雄の胸に輝く栄誉の星メダル", unlock: { type: 'grade_count', grade: 6, count: 40, desc: "6年生の漢字を40字マスター！" } }
+  ]
+};
+
+// 機体・レーザーの質の高い学習アンロック条件
+const SHIP_UNLOCK_CONDITIONS = {
+  ship3: { reqExp: 0, desc: "初期解放" },
+  ship4: { type: 'grade_count', grade: 2, count: 30, desc: "2年生以上の漢字を30字マスター" },
+  ship5: { type: 'grade_count', grade: 4, count: 30, desc: "4年生以上の漢字を30字マスター" },
+  ship6: { type: 'grade_count', grade: 5, count: 50, desc: "5年生の漢字を50字マスター！" },
+  ship7: { type: 'perfect_and_grade', grade: 6, count: 30, desc: "6年生30字マスター ＆ ノーミスクリア達成！" },
+  starhawk1: { reqExp: 0, desc: "初期解放" },
+  starhawk2: { type: 'mistake_resolved', count: 10, desc: "にがて漢字を10字克服！" },
+  blue: { reqExp: 0, desc: "初期解放" },
+  red: { type: 'grade_count', grade: 3, count: 20, desc: "3年生以上の漢字を20字マスター" },
+  green: { type: 'grade_count', grade: 4, count: 25, desc: "4年生以上の漢字を25字マスター" },
+  gold: { type: 'streak', days: 3, desc: "まいにちストリーク3日連続出撃" },
+  rainbow: { type: 'grade_count', grade: 6, count: 50, desc: "6年生の漢字を50字マスター！" }
+};
+
+const LASER_UNLOCK_CONDITIONS = {
+  cyan: { reqExp: 0, desc: "初期解放" },
+  red: { type: 'grade_count', grade: 3, count: 15, desc: "3年生以上の漢字を15字マスター" },
+  yellow: { type: 'combo', count: 8, desc: "8連続COMBO達成！" },
+  rainbow: { type: 'perfect_run', count: 1, desc: "全問ノーミスクリア達成！" }
+};
+
+// アンロック判定関数
+function checkUnlockStatus(cond) {
+  if (!cond || cond.reqExp === 0) {
+    return { unlocked: true, progressText: "解放済み", percent: 100 };
+  }
+  const mastered = getMasteredKanji();
+  const perfectRuns = parseInt(localStorage.getItem('kanji_jet_perfect_runs') || '0', 10);
+  const resolvedMistakes = parseInt(localStorage.getItem('kanji_jet_resolved_mistakes_count') || '0', 10);
+  const streak = getStreakData().count || 0;
+  const maxCombo = parseInt(localStorage.getItem('kanji_jet_alltime_combo') || '0', 10);
+
+  if (cond.type === 'grade_count') {
+    let count = 0;
+    for (let g = cond.grade; g <= 6; g++) {
+      (ALL_GRADE_KANJI[g] || []).forEach(ch => {
+        if (mastered[ch]) count++;
+      });
+    }
+    const unlocked = count >= cond.count;
+    return {
+      unlocked,
+      progressText: `${Math.min(count, cond.count)} / ${cond.count}字`,
+      percent: Math.min(100, Math.round((count / cond.count) * 100)),
+      desc: cond.desc
+    };
+  }
+  if (cond.type === 'mistake_resolved') {
+    const unlocked = resolvedMistakes >= cond.count;
+    return {
+      unlocked,
+      progressText: `${Math.min(resolvedMistakes, cond.count)} / ${cond.count}字`,
+      percent: Math.min(100, Math.round((resolvedMistakes / cond.count) * 100)),
+      desc: cond.desc
+    };
+  }
+  if (cond.type === 'perfect_run') {
+    const unlocked = perfectRuns >= cond.count;
+    return {
+      unlocked,
+      progressText: `${Math.min(perfectRuns, cond.count)} / ${cond.count}回`,
+      percent: Math.min(100, Math.round((perfectRuns / cond.count) * 100)),
+      desc: cond.desc
+    };
+  }
+  if (cond.type === 'perfect_and_grade') {
+    let count = 0;
+    (ALL_GRADE_KANJI[cond.grade] || []).forEach(ch => { if (mastered[ch]) count++; });
+    const unlocked = (count >= cond.count) && (perfectRuns >= 1);
+    return {
+      unlocked,
+      progressText: `${Math.min(count, cond.count)}/${cond.count}字 & ノーミス${perfectRuns > 0 ? '済' : '未'}`,
+      percent: unlocked ? 100 : Math.round((count / cond.count) * 50),
+      desc: cond.desc
+    };
+  }
+  if (cond.type === 'combo') {
+    const unlocked = maxCombo >= cond.count;
+    return {
+      unlocked,
+      progressText: `${Math.min(maxCombo, cond.count)} / ${cond.count}コンボ`,
+      percent: Math.min(100, Math.round((maxCombo / cond.count) * 100)),
+      desc: cond.desc
+    };
+  }
+  if (cond.type === 'streak') {
+    const unlocked = streak >= cond.days;
+    return {
+      unlocked,
+      progressText: `${Math.min(streak, cond.days)} / ${cond.days}日`,
+      percent: Math.min(100, Math.round((streak / cond.days) * 100)),
+      desc: cond.desc
+    };
+  }
+  return { unlocked: true, progressText: "解放済み", percent: 100 };
+}
+
+// アバターSVG生成エンジン（福笑い式レイヤー）
+function renderAvatarSvg(avatar, size = 120) {
+  const av = avatar || getAvatarSetting();
+  const b = av.base || 0;
+  const h = av.hair || 0;
+  const s = av.suit || 0;
+  const a = av.accessory || 0;
+
+  const baseSkins = ["#ffd8b3", "#ffeedd", "#d89668", "#94a3b8"];
+  const baseEyes = ["#1e293b", "#0284c7", "#451a03", "#00e5ff"];
+  const skinColor = baseSkins[b] || baseSkins[0];
+  const eyeColor = baseEyes[b] || baseEyes[0];
+  const isCyborg = (b === 3);
+
+  const hairColors = ["#452c1e", "#eab308", "#dc2626", "#06b6d4", "#1e293b", "#c084fc"];
+  const hColor = hairColors[h] || hairColors[0];
+
+  const suitBases = ["#f8fafc", "#dc2626", "#047857", "#0f172a", "#d97706"];
+  const suitLines = ["#00e5ff", "#f59e0b", "#10b981", "#a855f7", "#ffd700"];
+  const sBase = suitBases[s] || suitBases[0];
+  const sLine = suitLines[s] || suitLines[0];
+
+  let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="${size}" height="${size}">
+    <defs>
+      <radialGradient id="av-glow-${b}-${h}-${s}" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="rgba(0, 229, 255, 0.35)"/>
+        <stop offset="100%" stop-color="rgba(10, 20, 40, 0.9)"/>
+      </radialGradient>
+    </defs>
+    <circle cx="80" cy="80" r="76" fill="url(#av-glow-${b}-${h}-${s})" stroke="${sLine}" stroke-width="2.5" />`;
+
+  // アクセサリー4: スターオーラ（背景側）
+  if (a === 4) {
+    svg += `
+      <g opacity="0.85">
+        <circle cx="80" cy="80" r="68" fill="none" stroke="#ffd700" stroke-width="2" stroke-dasharray="6,6" />
+        <polygon points="30,40 33,48 41,51 33,54 30,62 27,54 19,51 27,48" fill="#ffd700"/>
+        <polygon points="130,40 133,48 141,51 133,54 130,62 127,54 119,51 127,48" fill="#00e5ff"/>
+        <polygon points="40,125 42,130 47,132 42,134 40,139 38,134 33,132 38,130" fill="#ffd700"/>
+        <polygon points="120,125 122,130 127,132 122,134 120,139 118,134 113,132 118,130" fill="#00e5ff"/>
+      </g>
+    `;
+  }
+
+  // スーツ体・肩・首
+  svg += `
+    <path d="M 28 155 Q 35 115 80 115 Q 125 115 132 155 Z" fill="${sBase}" stroke="${sLine}" stroke-width="2.5"/>
+    <path d="M 50 155 L 65 122 L 95 122 L 110 155 Z" fill="${sLine}" opacity="0.8"/>
+    <path d="M 72 122 L 88 122 L 84 155 L 76 155 Z" fill="#0f172a"/>
+    <rect x="71" y="98" width="18" height="20" rx="4" fill="${skinColor}" stroke="${skinColor}" />
+  `;
+
+  // 顔・輪郭・耳
+  svg += `
+    <ellipse cx="80" cy="72" rx="34" ry="38" fill="${skinColor}" stroke="#1e293b" stroke-width="1.8"/>
+    <circle cx="45" cy="74" r="7" fill="${skinColor}" stroke="#1e293b" stroke-width="1.2"/>
+    <circle cx="115" cy="74" r="7" fill="${skinColor}" stroke="#1e293b" stroke-width="1.2"/>
+  `;
+
+  if (isCyborg) {
+    svg += `
+      <path d="M 98 52 L 108 58 L 108 80 L 98 88" fill="none" stroke="#00e5ff" stroke-width="2" opacity="0.9"/>
+      <circle cx="108" cy="68" r="2.5" fill="#00e5ff"/>
+    `;
+  }
+
+  // 眉毛・目・ほっぺ・口
+  svg += `
+    <path d="M 56 60 Q 66 57 73 61" fill="none" stroke="#1e293b" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M 87 61 Q 94 57 104 60" fill="none" stroke="#1e293b" stroke-width="2.5" stroke-linecap="round"/>
+    <ellipse cx="64" cy="70" rx="6" ry="7" fill="${eyeColor}"/>
+    <circle cx="62" cy="68" r="2.2" fill="#ffffff"/>
+    <ellipse cx="96" cy="70" rx="6" ry="7" fill="${isCyborg ? '#00e5ff' : eyeColor}"/>
+    <circle cx="94" cy="68" r="2.2" fill="#ffffff"/>
+    <ellipse cx="55" cy="79" rx="4.5" ry="2.5" fill="#f43f5e" opacity="${b === 0 ? '0.4' : '0.2'}"/>
+    <ellipse cx="105" cy="79" rx="4.5" ry="2.5" fill="#f43f5e" opacity="${b === 0 ? '0.4' : '0.2'}"/>
+    <path d="M 80 72 L 78 77 L 82 77" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M 72 85 Q 80 92 88 85" fill="${b === 0 || b === 2 ? '#b91c1c' : 'none'}" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
+  `;
+
+  // 髪型
+  if (h === 0) {
+    svg += `
+      <path d="M 44 68 Q 42 38 80 36 Q 118 38 116 68 Q 106 48 80 48 Q 54 48 44 68 Z" fill="${hColor}" stroke="#1e293b" stroke-width="1.8"/>
+      <path d="M 50 48 Q 65 58 75 50 Q 88 58 108 48 Q 98 40 80 40 Q 60 40 50 48 Z" fill="${hColor}"/>
+    `;
+  } else if (h === 1) {
+    svg += `
+      <path d="M 44 68 L 38 46 L 52 46 L 50 30 L 68 36 L 80 20 L 92 36 L 110 30 L 108 46 L 122 46 L 116 68 Q 98 48 80 48 Q 62 48 44 68 Z" fill="${hColor}" stroke="#1e293b" stroke-width="1.8"/>
+    `;
+  } else if (h === 2) {
+    svg += `
+      <path d="M 44 68 Q 42 36 80 36 Q 118 36 116 68 Q 105 48 80 48 Q 55 48 44 68 Z" fill="${hColor}" stroke="#1e293b" stroke-width="1.8"/>
+      <circle cx="112" cy="42" r="6" fill="#f59e0b"/>
+      <path d="M 116 42 Q 142 40 138 75 Q 130 65 116 48 Z" fill="${hColor}" stroke="#1e293b" stroke-width="1.5"/>
+    `;
+  } else if (h === 3) {
+    svg += `
+      <path d="M 44 68 Q 42 36 80 36 Q 118 36 116 68 Q 105 48 80 48 Q 55 48 44 68 Z" fill="${hColor}" stroke="#1e293b" stroke-width="1.8"/>
+      <circle cx="46" cy="48" r="5" fill="#f59e0b"/>
+      <circle cx="114" cy="48" r="5" fill="#f59e0b"/>
+      <path d="M 44 50 Q 20 60 25 90 Q 32 75 46 54 Z" fill="${hColor}" stroke="#1e293b" stroke-width="1.5"/>
+      <path d="M 116 50 Q 140 60 135 90 Q 128 75 114 54 Z" fill="${hColor}" stroke="#1e293b" stroke-width="1.5"/>
+    `;
+  } else if (h === 4) {
+    svg += `
+      <path d="M 42 66 Q 40 32 80 32 Q 120 32 118 66 Z" fill="#1e293b" stroke="#00e5ff" stroke-width="2"/>
+      <path d="M 44 55 Q 80 46 116 55 L 114 62 Q 80 54 46 62 Z" fill="#00e5ff" opacity="0.8"/>
+      <path d="M 52 56 Q 66 66 76 56 Q 90 66 106 56" fill="none" stroke="${hColor}" stroke-width="4" stroke-linecap="round"/>
+    `;
+  } else if (h === 5) {
+    svg += `
+      <path d="M 44 68 Q 40 28 80 28 Q 120 28 116 68 Q 105 46 80 46 Q 55 46 44 68 Z" fill="${hColor}" stroke="#c084fc" stroke-width="2"/>
+      <path d="M 50 42 Q 80 32 110 42" fill="none" stroke="#fff" stroke-width="2.5" opacity="0.75"/>
+    `;
+  }
+
+  // アクセサリー
+  if (a === 1) {
+    svg += `
+      <path d="M 42 74 Q 40 46 80 45 Q 100 45 118 60" fill="none" stroke="#64748b" stroke-width="3" stroke-linecap="round"/>
+      <rect x="38" y="66" width="10" height="18" rx="4" fill="#0284c7" stroke="#38bdf8" stroke-width="1.5"/>
+      <path d="M 42 78 Q 55 92 72 90" fill="none" stroke="#64748b" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="73" cy="90" r="3.5" fill="#38bdf8"/>
+    `;
+  } else if (a === 2) {
+    svg += `
+      <path d="M 46 48 L 114 48" stroke="#78350f" stroke-width="5"/>
+      <rect x="52" y="42" width="24" height="16" rx="6" fill="#0f172a" stroke="#f59e0b" stroke-width="2.5"/>
+      <rect x="84" y="42" width="24" height="16" rx="6" fill="#0f172a" stroke="#f59e0b" stroke-width="2.5"/>
+      <ellipse cx="64" cy="50" rx="9" ry="5" fill="#38bdf8" opacity="0.85"/>
+      <ellipse cx="96" cy="50" rx="9" ry="5" fill="#38bdf8" opacity="0.85"/>
+    `;
+  } else if (a === 3) {
+    svg += `
+      <path d="M 86 64 L 112 64 L 110 78 L 92 78 Z" fill="rgba(0, 229, 255, 0.4)" stroke="#00e5ff" stroke-width="2"/>
+      <circle cx="114" cy="70" r="5" fill="#0f172a" stroke="#00e5ff" stroke-width="2"/>
+      <line x1="90" y1="71" x2="106" y2="71" stroke="#fff" stroke-width="1.5" stroke-dasharray="2,2"/>
+    `;
+  } else if (a === 5) {
+    svg += `
+      <path d="M 38 70 Q 36 20 80 20 Q 124 20 122 70 Q 124 95 110 108 L 50 108 Q 36 95 38 70 Z" fill="none" stroke="#ffd700" stroke-width="3"/>
+      <path d="M 44 60 Q 80 50 116 60 Q 118 85 80 88 Q 42 85 44 60 Z" fill="rgba(6, 182, 212, 0.35)" stroke="#38bdf8" stroke-width="2"/>
+      <ellipse cx="65" cy="68" rx="14" ry="4" fill="#ffffff" opacity="0.4"/>
+    `;
+  } else if (a === 6) {
+    svg += `
+      <polygon points="80,126 84,136 95,137 87,144 89,155 80,149 71,155 73,144 65,137 76,136" fill="#ffd700" stroke="#b45309" stroke-width="1.5"/>
+      <circle cx="80" cy="141" r="3.5" fill="#ef4444"/>
+    `;
+  }
+
+  svg += `</svg>`;
+  return svg;
+}
+
+// アバター設定の取得・保存
+function getAvatarSetting() {
+  try {
+    const raw = localStorage.getItem('kanji_jet_avatar');
+    return raw ? JSON.parse(raw) : { base: 0, hair: 0, suit: 0, accessory: 0 };
+  } catch (e) {
+    return { base: 0, hair: 0, suit: 0, accessory: 0 };
+  }
+}
+
+function saveAvatarSetting(avatar) {
+  try {
+    localStorage.setItem('kanji_jet_avatar', JSON.stringify(avatar));
+  } catch (e) {}
+  updateAllAvatarDisplays();
+}
+
+function updateAllAvatarDisplays() {
+  const current = getAvatarSetting();
+  const homeIcon = document.getElementById('home-avatar-icon');
+  if (homeIcon) {
+    homeIcon.innerHTML = renderAvatarSvg(current, 38);
+  }
+  const customPrev = document.getElementById('avatar-full-preview');
+  if (customPrev) {
+    customPrev.innerHTML = renderAvatarSvg(current, 130);
+  }
+  const customPilotName = document.getElementById('avatar-custom-pilot-name');
+  if (customPilotName) {
+    customPilotName.textContent = `⚡ ${getPilotName()}`;
+  }
+  const resPilot = document.getElementById('result-pilot-badge');
+  if (resPilot) {
+    resPilot.innerHTML = `<span style="display:inline-block; vertical-align:middle; margin-right:6px;">${renderAvatarSvg(current, 28)}</span> ⚡ パイロット: ${getPilotName()}`;
+  }
+}
+
+// カスタムモーダルのメインタブ切り替え
+let currentCustomTab = 'ship';
+let currentAvatarCategory = 'base';
+
+function switchCustomMainTab(tab) {
+  currentCustomTab = tab;
+  const btnShip = document.getElementById('btn-tab-ship');
+  const btnAv = document.getElementById('btn-tab-avatar');
+  const contentShip = document.getElementById('custom-tab-content-ship');
+  const contentAv = document.getElementById('custom-tab-content-avatar');
+
+  if (tab === 'ship') {
+    if (btnShip) btnShip.classList.add('active');
+    if (btnAv) btnAv.classList.remove('active');
+    if (contentShip) contentShip.style.display = 'block';
+    if (contentAv) contentAv.style.display = 'none';
+    renderCustomPreview();
+  } else {
+    if (btnShip) btnShip.classList.remove('active');
+    if (btnAv) btnAv.classList.add('active');
+    if (contentShip) contentShip.style.display = 'none';
+    if (contentAv) contentAv.style.display = 'block';
+    renderAvatarPartsGrid();
+    updateAllAvatarDisplays();
+  }
+}
+
+function openAvatarTab() {
+  openCustomModal();
+  switchCustomMainTab('avatar');
+}
+
+function switchAvatarCategory(cat) {
+  currentAvatarCategory = cat;
+  ['base', 'hair', 'suit', 'acc'].forEach(c => {
+    const btn = document.getElementById(`cat-btn-${c}`);
+    if (btn) btn.classList.toggle('active', (c === cat || (c === 'acc' && cat === 'accessory')));
+  });
+  renderAvatarPartsGrid();
+}
+
+function renderAvatarPartsGrid() {
+  const grid = document.getElementById('avatar-parts-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+
+  const catKey = (currentAvatarCategory === 'acc') ? 'accessory' : currentAvatarCategory;
+  const parts = AVATAR_PARTS[catKey] || [];
+  const currentAvatar = getAvatarSetting();
+  const activeId = currentAvatar[catKey] || 0;
+
+  parts.forEach(part => {
+    const status = checkUnlockStatus(part.unlock);
+    const isActive = (activeId === part.id);
+
+    const card = document.createElement('div');
+    card.className = `avatar-part-card ${isActive ? 'active' : ''} ${!status.unlocked ? 'locked' : ''}`;
+
+    const previewAvatar = { ...currentAvatar, [catKey]: part.id };
+    const miniSvg = renderAvatarSvg(previewAvatar, 48);
+
+    card.innerHTML = `
+      <div style="display: flex; justify-content: center; margin-bottom: 4px;">${miniSvg}</div>
+      <div style="font-weight: bold; font-size: 11px; color: ${isActive ? '#ffd700' : '#fff'};">${part.name}</div>
+      <div style="font-size: 9.5px; color: #94a3b8; margin-top: 2px;">
+        ${!status.unlocked ? `<span style="color: #f87171;">🔒 ${status.desc || '条件未達成'}<br>(${status.progressText})</span>` : (isActive ? '✨ 装備中' : '選択可能')}
+      </div>
+    `;
+
+    if (status.unlocked) {
+      card.onclick = () => {
+        currentAvatar[catKey] = part.id;
+        saveAvatarSetting(currentAvatar);
+        renderAvatarPartsGrid();
+        updateAllAvatarDisplays();
+        sound.playCorrect();
+      };
+    } else {
+      card.onclick = () => {
+        sound.playWrong();
+        showComboEffect(`🔒 解放条件: ${status.desc} (${status.progressText})`, 'penalty');
+      };
+    }
+
+    grid.appendChild(card);
+  });
+}
+
+/* === 機体＆アバター カスタマイズ モーダル === */
 function openCustomModal() {
   renderCustomModal();
+  updateAllAvatarDisplays();
   document.getElementById('custom-modal').style.display = 'flex';
 }
 
@@ -7722,7 +8657,6 @@ function closeCustomModal() {
 }
 
 function renderCustomModal() {
-  const exp = getExp();
   const current = getCustomSetting();
 
   // ジェット機選択リスト
@@ -7731,11 +8665,12 @@ function renderCustomModal() {
     shipRow.innerHTML = "";
 
     Object.entries(SHIP_COLORS).forEach(([key, cfg]) => {
-      const isLocked = exp < cfg.reqExp;
+      const cond = SHIP_UNLOCK_CONDITIONS[key] || { reqExp: cfg.reqExp || 0 };
+      const status = checkUnlockStatus(cond);
       const isActive = current.ship === key;
 
       const card = document.createElement('div');
-      card.className = `custom-card ${isActive ? 'active' : ''} ${isLocked ? 'locked' : ''}`;
+      card.className = `custom-card ${isActive ? 'active' : ''} ${!status.unlocked ? 'locked' : ''}`;
 
       let visualHtml = '';
       if (cfg.src) {
@@ -7751,14 +8686,20 @@ function renderCustomModal() {
       card.innerHTML = `
         ${visualHtml}
         <div style="font-weight: bold; font-size: 11.5px; color: ${cfg.stroke}; white-space: nowrap;">${cfg.name}</div>
-        <div style="font-size: 10px; color: #8bb5e0; margin-top: 2px;">
-          ${isLocked ? `🔒 ${cfg.reqExp} EXP必要` : (isActive ? '装備中' : '選択可能')}
+        <div style="font-size: 9.5px; color: #8bb5e0; margin-top: 2px;">
+          ${!status.unlocked ? `<span style="color: #f87171;">🔒 ${status.desc || '条件未達成'}<br>(${status.progressText})</span>` : (isActive ? '装備中' : '選択可能')}
         </div>
       `;
-      if (!isLocked) {
+      if (status.unlocked) {
         card.addEventListener('click', () => {
           saveCustomSetting(key, current.laser);
           renderCustomModal();
+          sound.playCorrect();
+        });
+      } else {
+        card.addEventListener('click', () => {
+          sound.playWrong();
+          showComboEffect(`🔒 解放条件: ${status.desc} (${status.progressText})`, 'penalty');
         });
       }
       shipRow.appendChild(card);
@@ -7770,22 +8711,29 @@ function renderCustomModal() {
   if (laserRow) {
     laserRow.innerHTML = "";
     Object.entries(LASER_COLORS).forEach(([key, cfg]) => {
-      const isLocked = exp < cfg.reqExp;
+      const cond = LASER_UNLOCK_CONDITIONS[key] || { reqExp: cfg.reqExp || 0 };
+      const status = checkUnlockStatus(cond);
       const isActive = current.laser === key;
 
       const card = document.createElement('div');
-      card.className = `custom-card ${isActive ? 'active' : ''} ${isLocked ? 'locked' : ''}`;
+      card.className = `custom-card ${isActive ? 'active' : ''} ${!status.unlocked ? 'locked' : ''}`;
       card.innerHTML = `
         <div class="custom-color-circle" style="background: ${cfg.stroke}; border-color: ${cfg.core};"></div>
         <div style="font-weight: bold; font-size: 12px; color: ${cfg.stroke};">${cfg.name}</div>
-        <div style="font-size: 10px; color: #8bb5e0; margin-top: 2px;">
-          ${isLocked ? `🔒 ${cfg.reqExp} EXP必要` : (isActive ? '装備中' : '選択可能')}
+        <div style="font-size: 9.5px; color: #8bb5e0; margin-top: 2px;">
+          ${!status.unlocked ? `<span style="color: #f87171;">🔒 ${status.desc}<br>(${status.progressText})</span>` : (isActive ? '装備中' : '選択可能')}
         </div>
       `;
-      if (!isLocked) {
+      if (status.unlocked) {
         card.addEventListener('click', () => {
           saveCustomSetting(current.ship, key);
           renderCustomModal();
+          sound.playCorrect();
+        });
+      } else {
+        card.addEventListener('click', () => {
+          sound.playWrong();
+          showComboEffect(`🔒 解放条件: ${status.desc} (${status.progressText})`, 'penalty');
         });
       }
       laserRow.appendChild(card);
@@ -7793,6 +8741,494 @@ function renderCustomModal() {
   }
 
   renderCustomPreview();
+}
+
+/* ==========================================================================
+   学年連動スコアリングエンジン (低学年荒稼ぎ防止 ＆ チャレンジ・復習大ボーナス)
+   ========================================================================== */
+
+function getMyGrade() {
+  const g = parseInt(localStorage.getItem('kanji_jet_my_grade') || '3', 10);
+  return (g >= 1 && g <= 6) ? g : 3;
+}
+
+function setMyGrade(grade) {
+  const num = parseInt(grade, 10) || 3;
+  localStorage.setItem('kanji_jet_my_grade', num.toString());
+  const sel = document.getElementById('user-my-grade-select');
+  if (sel) sel.value = num.toString();
+}
+
+function changeMyGrade(val) {
+  setMyGrade(val);
+  showComboEffect(`🧑‍🎓 じぶんの学年を【${val}年生】に設定しました`, 'rank-up');
+  sound.playCorrect();
+}
+
+function calculateExpForAnswer(q, elapsedSec, currentCombo, isReview) {
+  const myGrade = getMyGrade();
+  let kanjiGrade = 1;
+  if (q.grade) {
+    kanjiGrade = parseInt(q.grade.replace(/[^0-9]/g, '')) || 1;
+  } else {
+    for (let g = 1; g <= 6; g++) {
+      if ((ALL_GRADE_KANJI[g] || []).some(ch => q.kanji.includes(ch))) {
+        kanjiGrade = g;
+        break;
+      }
+    }
+  }
+
+  let baseExp = 10;
+  if (currentCombo >= 2) {
+    baseExp += currentCombo * 2;
+  }
+  if (elapsedSec <= 5.0) {
+    baseExp += 10;
+  }
+
+  let mult = 1.0;
+  let label = "🎯 適正学年ボーナス (100%)";
+  let bonusType = "normal";
+
+  if (isReview) {
+    mult = 2.5;
+    label = "🔥 にがて克服特大ボーナス！(250%)";
+    bonusType = "review";
+  } else {
+    const diff = kanjiGrade - myGrade;
+    if (diff === 0) {
+      mult = 1.0;
+      label = "🎯 適正学年ボーナス (100%)";
+      bonusType = "normal";
+    } else if (diff > 0) {
+      mult = 1.5;
+      label = `🌟 チャレンジボーナス！(+${diff}学年 150%)`;
+      bonusType = "challenge";
+    } else if (diff === -1) {
+      mult = 0.5;
+      label = "⚠️ 1学年下 (EXP 50%)";
+      bonusType = "penalty";
+    } else if (diff === -2) {
+      mult = 0.15;
+      label = "⚠️ 2学年下 (EXP 15%)";
+      bonusType = "penalty";
+    } else {
+      mult = 0.02; // 3学年以上下（5年生が1年生を解いた場合など）
+      label = "⚠️ 3学年以上下 (EXP 2%・適正学年に挑もう！)";
+      bonusType = "heavy-penalty";
+    }
+  }
+
+  const finalExp = Math.max(1, Math.round(baseExp * mult));
+  return { finalExp, label, bonusType, kanjiGrade, myGrade, mult };
+}
+
+/* ==========================================================================
+   防衛惑星（単元）自己決定システム
+   ========================================================================== */
+
+const DEFENSE_PLANETS = [
+  {
+    id: "terra",
+    icon: "🪐",
+    name: "第1星: 自然と四季の星（テラ・ナチュラ）",
+    desc: "山・川・空・雨・雪・花・春・夏・秋・冬など、自然の漢字を防衛！",
+    chars: "山川空雨雪花草森木林日夕春秋冬海風光天池地原波潮岩氷温泉島雲星雷震",
+    color: "#34d399"
+  },
+  {
+    id: "vita",
+    icon: "🌏",
+    name: "第2星: 生活と言葉の星（ビータ・リングア）",
+    desc: "家・言・話・読・書・食・友・歩・作・買など、生活や対話の漢字を防衛！",
+    chars: "家言話読書食友歩走買売作音歌教習聞見思考昼夜朝夕衣服住室門戸宿店旅帰",
+    color: "#38bdf8"
+  },
+  {
+    id: "polis",
+    icon: "🌕",
+    name: "第3星: 社会と町の星（シビリス・ポリス）",
+    desc: "町・市・村・国・校・道・車・社・公・県など、町や社会の漢字を防衛！",
+    chars: "町市村国校道車社公会区県府京都民兵役所商工農業鉄駅港橋船航法制治選挙議",
+    color: "#fbbf24"
+  },
+  {
+    id: "techno",
+    icon: "☄️",
+    name: "第4星: 科学と数字の星（クアンタ・テクノ）",
+    desc: "算・理・科・度・数・量・線・電・機・力など、数理の漢字を防衛！",
+    chars: "算理科度数量線点角形丸倍半分万億兆電機器具術技力動速発化的一質測験",
+    color: "#f472b6"
+  },
+  {
+    id: "anima",
+    icon: "💫",
+    name: "第5星: 人と心の星（アニマ・スピリト）",
+    desc: "心・情・愛・感・親・父・母・体・頭・目など、心やからだの漢字を防衛！",
+    chars: "心情愛感親父母兄弟姉妹男女身頭目耳口手足命信望勇気楽苦喜怒願悲態真",
+    color: "#a78bfa"
+  },
+  {
+    id: "blackhole",
+    icon: "🔥",
+    name: "衛星: にがてブラックホール（弱点克服）",
+    desc: "あなたが過去に間違えた漢字を集中迎撃！克服ボーナスEXP 2.5倍！",
+    special: "mistakes",
+    color: "#f87171"
+  },
+  {
+    id: "galaxy",
+    icon: "👑",
+    name: "全域防衛: ギャラクシーツアー（学年総合）",
+    desc: "学年の全範囲からバランス良く出題！全10問の完全制覇作戦！",
+    special: "all",
+    color: "#ffd700"
+  }
+];
+window.DEFENSE_PLANETS = DEFENSE_PLANETS;
+
+let selectedPlanetId = null;
+
+function openPlanetSelectModal() {
+  renderPlanetGrid();
+  document.getElementById('planet-select-modal').style.display = 'flex';
+}
+
+function closePlanetSelectModal() {
+  document.getElementById('planet-select-modal').style.display = 'none';
+}
+
+function renderPlanetGrid() {
+  const grid = document.getElementById('planet-select-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+
+  const myGrade = getMyGrade();
+  const mastered = getMasteredKanji();
+  const mistakes = getMistakes();
+
+  DEFENSE_PLANETS.forEach(planet => {
+    const card = document.createElement('div');
+    card.className = `planet-card ${selectedPlanetId === planet.id ? 'active' : ''}`;
+
+    let progressInfo = '';
+    if (planet.special === 'mistakes') {
+      const count = Object.keys(mistakes).length;
+      progressInfo = `<div style="font-size: 11px; color: #fca5a5;">現在のにがて漢字: <strong>${count}字</strong></div>`;
+    } else if (planet.special === 'all') {
+      const list = ALL_GRADE_KANJI[myGrade] || [];
+      const mCount = list.filter(ch => mastered[ch]).length;
+      const pct = list.length > 0 ? Math.round((mCount / list.length) * 100) : 0;
+      progressInfo = `
+        <div style="display: flex; justify-content: space-between; font-size: 11px; color: #cbd5e1;">
+          <span>${myGrade}年生総合防衛率</span><span>${pct}% (${mCount}/${list.length}字)</span>
+        </div>
+        <div style="height: 6px; background: rgba(255,255,255,0.15); border-radius: 3px; overflow: hidden; margin-top: 3px;">
+          <div style="height: 100%; width: ${pct}%; background: ${planet.color};"></div>
+        </div>
+      `;
+    } else {
+      const themeChars = [...planet.chars].filter(ch => {
+        return (ALL_GRADE_KANJI[myGrade] || []).includes(ch);
+      });
+      const total = Math.max(1, themeChars.length);
+      const mCount = themeChars.filter(ch => mastered[ch]).length;
+      const pct = Math.round((mCount / total) * 100);
+      progressInfo = `
+        <div style="display: flex; justify-content: space-between; font-size: 11px; color: #cbd5e1;">
+          <span>${myGrade}年テーマ防衛率</span><span>${pct}% (${mCount}/${total}字)</span>
+        </div>
+        <div style="height: 6px; background: rgba(255,255,255,0.15); border-radius: 3px; overflow: hidden; margin-top: 3px;">
+          <div style="height: 100%; width: ${pct}%; background: ${planet.color};"></div>
+        </div>
+      `;
+    }
+
+    card.innerHTML = `
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 24px;">${planet.icon}</span>
+        <div>
+          <div style="font-size: 14px; font-weight: bold; color: ${planet.color};">${planet.name}</div>
+          <div style="font-size: 11px; color: #94a3b8; line-height: 1.3;">${planet.desc}</div>
+        </div>
+      </div>
+      <div style="margin-top: 6px;">${progressInfo}</div>
+      <button class="start-btn" style="margin-top: 6px; padding: 7px 14px; font-size: 13px; width: 100%; background: ${planet.color}; color: #051026;">
+        🚀 この星を防衛する！ (10問・出撃)
+      </button>
+    `;
+
+    card.querySelector('button').onclick = (e) => {
+      e.stopPropagation();
+      startPlanetDefense(planet.id);
+    };
+    card.onclick = () => {
+      startPlanetDefense(planet.id);
+    };
+
+    grid.appendChild(card);
+  });
+}
+
+function startPlanetDefense(planetId) {
+  selectedPlanetId = planetId;
+  closePlanetSelectModal();
+
+  if (planetId === 'blackhole') {
+    startMistakesMode();
+    return;
+  }
+  if (planetId === 'galaxy') {
+    selectMode('all');
+    startGame();
+    return;
+  }
+
+  gameMode = `planet_${planetId}`;
+  startGame();
+}
+
+/* ==========================================================================
+   Firebase クラス合算スコア ＆ 大型提示装置用ダッシュボード
+   ========================================================================== */
+
+const ClassDefenseManager = {
+  channel: null,
+
+  init() {
+    try {
+      if (window.BroadcastChannel) {
+        this.channel = new BroadcastChannel('kanji_jet_class_bus');
+        this.channel.onmessage = (e) => {
+          if (e.data && e.data.type === 'DEFEAT_UPDATE') {
+            this.handleIncomingDefeat(e.data.payload);
+          }
+        };
+      }
+    } catch (err) {
+      console.warn("BroadcastChannel not supported", err);
+    }
+    this.updateHomeBanner();
+  },
+
+  getConfig() {
+    try {
+      const raw = localStorage.getItem('kanji_jet_class_config');
+      return raw ? JSON.parse(raw) : {
+        className: "5年1組 防衛作戦本部",
+        target: 500,
+        firebaseUrl: ""
+      };
+    } catch (e) {
+      return { className: "5年1組 防衛作戦本部", target: 500, firebaseUrl: "" };
+    }
+  },
+
+  saveConfig(cfg) {
+    try {
+      localStorage.setItem('kanji_jet_class_config', JSON.stringify(cfg));
+    } catch (e) {}
+    this.updateHomeBanner();
+  },
+
+  getTodayKey() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  },
+
+  getTodayData() {
+    const key = `kanji_jet_class_score_${this.getTodayKey()}`;
+    try {
+      const raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : { count: 0, logs: [] };
+    } catch (e) {
+      return { count: 0, logs: [] };
+    }
+  },
+
+  saveTodayData(data) {
+    const key = `kanji_jet_class_score_${this.getTodayKey()}`;
+    try {
+      localStorage.setItem(key, JSON.stringify(data));
+    } catch (e) {}
+    this.updateHomeBanner();
+    this.updateDashboardUI();
+  },
+
+  recordDefeat(kanji, grade, isReview) {
+    const data = this.getTodayData();
+    data.count = (data.count || 0) + 1;
+    const pilotName = getPilotName();
+    const newLog = {
+      pilot: pilotName,
+      kanji,
+      grade,
+      isReview,
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+    };
+    data.logs = [newLog, ...(data.logs || [])].slice(0, 30);
+    this.saveTodayData(data);
+
+    if (this.channel) {
+      try {
+        this.channel.postMessage({
+          type: 'DEFEAT_UPDATE',
+          payload: { count: data.count, log: newLog }
+        });
+      } catch (err) {}
+    }
+
+    const cfg = this.getConfig();
+    if (cfg.firebaseUrl && cfg.firebaseUrl.trim().startsWith('http')) {
+      this.syncToFirebase(cfg.firebaseUrl.trim(), kanji, grade, isReview);
+    }
+  },
+
+  async syncToFirebase(baseUrl, kanji, grade, isReview) {
+    try {
+      const cleanUrl = baseUrl.replace(/\/+$/, '');
+      const today = this.getTodayKey();
+      const endpoint = `${cleanUrl}/classes/today_${today}.json`;
+      
+      const res = await fetch(endpoint);
+      let currentCount = 0;
+      if (res.ok) {
+        const d = await res.json();
+        if (d && typeof d.count === 'number') currentCount = d.count;
+      }
+      const newCount = currentCount + 1;
+      await fetch(endpoint, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          count: newCount,
+          lastUpdated: Date.now()
+        })
+      });
+    } catch (e) {
+      console.warn("Firebase sync error:", e);
+    }
+  },
+
+  handleIncomingDefeat(payload) {
+    const data = this.getTodayData();
+    if (payload.count && payload.count > data.count) {
+      data.count = payload.count;
+    }
+    if (payload.log) {
+      data.logs = [payload.log, ...(data.logs || [])].slice(0, 30);
+    }
+    this.saveTodayData(data);
+  },
+
+  updateHomeBanner() {
+    const cfg = this.getConfig();
+    const data = this.getTodayData();
+    const bannerText = document.getElementById('home-class-score-text');
+    if (bannerText) {
+      bannerText.textContent = `${data.count} / ${cfg.target} 字`;
+    }
+  },
+
+  updateDashboardUI() {
+    const cfg = this.getConfig();
+    const data = this.getTodayData();
+    const titleEl = document.getElementById('class-dash-room-title');
+    if (titleEl) titleEl.textContent = cfg.className || "5年1組 防衛作戦本部";
+
+    const dateEl = document.getElementById('class-dash-date-display');
+    if (dateEl) {
+      const now = new Date();
+      dateEl.textContent = `${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日 作戦状況`;
+    }
+
+    const counterEl = document.getElementById('class-dash-counter');
+    if (counterEl) {
+      counterEl.innerHTML = `${data.count} <span style="font-size: 32px; color: #94a3b8; font-weight: normal;">/ ${cfg.target} 字</span>`;
+    }
+
+    const pct = Math.min(100, Math.round((data.count / Math.max(1, cfg.target)) * 100));
+    const fillEl = document.getElementById('class-dash-meter-fill');
+    if (fillEl) fillEl.style.width = `${pct}%`;
+
+    const pctEl = document.getElementById('class-dash-percent');
+    if (pctEl) pctEl.textContent = `防衛達成率: ${pct}%`;
+
+    const statusMsg = document.getElementById('class-dash-status-msg');
+    if (statusMsg) {
+      if (data.count >= cfg.target) {
+        statusMsg.innerHTML = "🎉 <strong style='color:#00ff88;'>本日の目標達成！みんなで地球を守り抜いた！</strong>";
+      } else {
+        const remaining = cfg.target - data.count;
+        statusMsg.textContent = `🚀 あと ${remaining} 字で目標達成！全員で突破しよう！`;
+      }
+    }
+
+    const feedEl = document.getElementById('class-dash-feed');
+    if (feedEl) {
+      if (!data.logs || data.logs.length === 0) {
+        feedEl.innerHTML = '<div style="color: #64748b; text-align: center; padding: 12px;">作戦開始！みんなで漢字を撃破しよう！</div>';
+      } else {
+        feedEl.innerHTML = data.logs.slice(0, 8).map(log => `
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.06);">
+            <div>
+              <span style="color: #ffd700; font-weight: bold;">⚡ ${log.pilot}</span> が
+              <span style="color: #00e5ff; font-weight: bold;">「${log.kanji}」</span>（${log.grade}年）を
+              ${log.isReview ? '<span style="color: #f87171; font-weight: bold;">【にがて克服！】</span>' : '撃破！'}
+            </div>
+            <span style="color: #64748b; font-size: 11px;">${log.time || ''}</span>
+          </div>
+        `).join('');
+      }
+    }
+  }
+};
+window.ClassDefenseManager = ClassDefenseManager;
+
+function openClassDashboardModal() {
+  ClassDefenseManager.updateDashboardUI();
+  document.getElementById('class-dashboard-modal').style.display = 'flex';
+}
+
+function closeClassDashboardModal() {
+  document.getElementById('class-dashboard-modal').style.display = 'none';
+}
+
+function toggleDashboardFullScreen() {
+  const modal = document.getElementById('class-dashboard-modal');
+  if (!document.fullscreenElement) {
+    if (modal.requestFullscreen) {
+      modal.requestFullscreen();
+    } else if (modal.webkitRequestFullscreen) {
+      modal.webkitRequestFullscreen();
+    }
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    }
+  }
+}
+
+function saveClassDefenseSettings() {
+  const nameInput = document.getElementById('teacher-class-name-input');
+  const targetInput = document.getElementById('teacher-class-target-input');
+  const firebaseUrlInput = document.getElementById('teacher-firebase-url-input');
+
+  const cfg = {
+    className: (nameInput && nameInput.value.trim()) || "5年1組 防衛作戦本部",
+    target: (targetInput && parseInt(targetInput.value, 10)) || 500,
+    firebaseUrl: (firebaseUrlInput && firebaseUrlInput.value.trim()) || ""
+  };
+  ClassDefenseManager.saveConfig(cfg);
+  alert("✅ クラス防衛設定を保存しました！\n大型提示装置用ダッシュボードやホーム画面に反映されます。");
+}
+
+function resetTodayClassScore() {
+  if (confirm("⚠️ 本日のクラス撃破数を 0 字にリセットしますか？")) {
+    ClassDefenseManager.saveTodayData({ count: 0, logs: [] });
+    alert("本日の撃破数をリセットしました。");
+  }
 }
 
 function renderCustomPreview() {
@@ -8884,7 +10320,7 @@ function closeTeacherPanelModal() {
 }
 
 function switchTeacherTab(tabName) {
-  const tabIds = ['target', 'preset', 'difficulty', 'cert', 'data'];
+  const tabIds = ['target', 'preset', 'difficulty', 'cert', 'firebase', 'data'];
   tabIds.forEach(id => {
     const btn = document.getElementById(`tab-btn-${id}`);
     const content = document.getElementById(`teacher-tab-${id}`);
@@ -8898,6 +10334,14 @@ function switchTeacherTab(tabName) {
     renderTeacherPresets();
   } else if (tabName === 'cert') {
     renderCertificatePreview();
+  } else if (tabName === 'firebase') {
+    const cfg = ClassDefenseManager.getConfig();
+    const nameInput = document.getElementById('teacher-class-name-input');
+    const targetInput = document.getElementById('teacher-class-target-input');
+    const firebaseUrlInput = document.getElementById('teacher-firebase-url-input');
+    if (nameInput) nameInput.value = cfg.className || '';
+    if (targetInput) targetInput.value = cfg.target || 500;
+    if (firebaseUrlInput) firebaseUrlInput.value = cfg.firebaseUrl || '';
   }
 }
 
@@ -9321,6 +10765,19 @@ window.addEventListener('DOMContentLoaded', () => {
   updateHomePilotDisplay();
   setupCurriculumSelect();
   stopSelectPropagation();
+  
+  // アバター・学年・クラス防衛の初期化
+  if (typeof ClassDefenseManager !== 'undefined') {
+    ClassDefenseManager.init();
+  }
+  if (typeof updateAllAvatarDisplays === 'function') {
+    updateAllAvatarDisplays();
+  }
+  if (typeof getMyGrade === 'function') {
+    const sel = document.getElementById('user-my-grade-select');
+    if (sel) sel.value = getMyGrade().toString();
+  }
+
   sound.init();
   sound.playHomeBgm();
   checkUrlParams();

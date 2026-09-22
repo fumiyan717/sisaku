@@ -7389,6 +7389,10 @@ function handleCorrectAnswer(q) {
     sound.playCorrect();
 
     triggerFlash('correct');
+    broadcastRaidAttack(q.kanji);
+    if (typeof isRaidMode !== 'undefined' && isRaidMode) {
+      showComboEffect('⚔️ BOSS -10 DAMAGE!!', 'rainbow');
+    }
     elKanjiPanel.style.transform = "translate(-50%, -50%) scale(0)";
   }, 200);
 
@@ -10898,7 +10902,38 @@ function confirmResetStudentData() {
   }
 }
 
-/* URLパラメータ解析（児童端末同期・先生オリジナル問題受取） */
+/* ==========================================================================
+   電子黒板 ライブ授業・レイドボス連携 (Step 2)
+   ========================================================================== */
+let isRaidMode = false;
+let raidChannelClient = null;
+
+function broadcastRaidAttack(kanji) {
+  try {
+    const pilotEl = document.getElementById('home-pilot-name');
+    const pilotName = (pilotEl && pilotEl.textContent) ? pilotEl.textContent.trim() : 'ハヤブサ01号';
+    const payload = {
+      type: 'raid_damage',
+      damage: 10,
+      kanji: kanji || '撃破',
+      pilot: pilotName,
+      timestamp: Date.now()
+    };
+
+    if (!raidChannelClient && typeof BroadcastChannel !== 'undefined') {
+      try {
+        raidChannelClient = new BroadcastChannel('kanji_jet_raid_channel');
+      } catch (e) {}
+    }
+    if (raidChannelClient) {
+      raidChannelClient.postMessage(payload);
+    }
+    // localStorage同期フォールバック
+    localStorage.setItem('kanji_jet_raid_event', JSON.stringify(payload));
+  } catch (err) {}
+}
+
+/* URLパラメータ解析（児童端末同期・先生オリジナル問題受取・ライブ授業受取） */
 function checkUrlParams() {
   try {
     const params = new URLSearchParams(window.location.search);
@@ -10908,6 +10943,39 @@ function checkUrlParams() {
     const hint = params.get('hint');
     const speed = params.get('speed');
     const unit = params.get('unit');
+    const diff = params.get('diff');
+    const raid = params.get('raid');
+
+    // ライブ授業・レイドボスモード (?raid=1)
+    if (raid === '1') {
+      isRaidMode = true;
+      const curBadge = document.getElementById('hud-curriculum-badge');
+      if (curBadge) {
+        curBadge.textContent = '⚔️ クラスレイド参戦中';
+        curBadge.style.background = 'rgba(239, 68, 68, 0.25)';
+        curBadge.style.borderColor = '#ef4444';
+        curBadge.style.color = '#f87171';
+      }
+    }
+
+    // ライブ授業・難易度別コース (?diff=easy|normal|hard)
+    if (diff) {
+      const courseTag = document.getElementById('stage-course');
+      if (diff === 'easy') {
+        teacherDifficulty.time = 45;
+        teacherDifficulty.hint = 'first_char';
+        if (courseTag) courseTag.textContent = '🌱 イージーコース';
+      } else if (diff === 'normal') {
+        teacherDifficulty.time = 30;
+        teacherDifficulty.hint = 'none';
+        if (courseTag) courseTag.textContent = '🚀 ノーマルコース';
+      } else if (diff === 'hard') {
+        teacherDifficulty.time = 15;
+        teacherDifficulty.hint = 'none';
+        teacherDifficulty.speed = 1.3;
+        if (courseTag) courseTag.textContent = '🔥 ハードコース';
+      }
+    }
 
     // 1. 先生作成オリジナル問題セット (?mission=...)
     if (mission) {
@@ -10926,9 +10994,9 @@ function checkUrlParams() {
         teacherCustomQuestions = data.questions;
         teacherCustomTitle = data.title || '先生の特別ミッション';
         teacherTargetMode = true;
-        if (data.time) teacherDifficulty.time = parseInt(data.time, 10) || 30;
-        if (data.hint) teacherDifficulty.hint = data.hint;
-        if (data.speed) teacherDifficulty.speed = data.speed;
+        if (data.time) teacherDifficulty.time = parseInt(data.time, 10) || teacherDifficulty.time || 30;
+        if (data.hint) teacherDifficulty.hint = data.hint || teacherDifficulty.hint;
+        if (data.speed) teacherDifficulty.speed = data.speed || teacherDifficulty.speed;
 
         showTeacherCustomMissionBanner(data);
         return;

@@ -2342,7 +2342,7 @@
       if (currentStep >= data.strokesCount) {
         setAnimStepDirect(0);
       }
-      runAnimNextStep(animToken);
+      runAnimationLoop(animToken);
     }
 
     function togglePlayPause() {
@@ -2377,7 +2377,8 @@
         const tip = document.getElementById(`anim-stroke-tip-${i}`);
         const hook = document.getElementById(`anim-stroke-hook-${i}`);
         if (!path) continue;
-        const len = path.getTotalLength();
+        let len = 0;
+        try { len = path.getTotalLength(); } catch (e) {}
 
         if (i < step) {
           path.style.strokeDashoffset = 0;
@@ -2403,128 +2404,212 @@
       updateAnimGuideUI();
     }
 
-    function runAnimNextStep(token) {
+    /* ==========================================================================
+       中央司令室（async/await 一本化ループ ＆ Promise + 保険タイマー）
+       ========================================================================== */
+    async function runAnimationLoop(token) {
       if (!isPlaying || token !== animToken) return;
       const data = currentGradeList[currentIndex];
 
-      // すべての画を描き終えた場合
-      if (currentStep >= data.strokesCount) {
-        updateAnimGuideUI();
-        updatePermanentPinsVisibility(data.strokesCount);
-        updateStrokeStepBar(-1);
-        playSound('fanfare');
-        stopAnimation(); // 完了状態で停止
-        return;
-      }
+      while (isPlaying && token === animToken && currentStep < data.strokesCount) {
+        const strokeIdx = currentStep;
 
-      const strokeIdx = currentStep;
-      const strokeData = data.strokes[strokeIdx];
-      const inst = getBrushInstruction(strokeData, data.kanji, strokeIdx + 1, data.strokesCount);
-      const path = document.getElementById(`anim-stroke-${strokeIdx}`);
-      const num = document.getElementById(`anim-num-${strokeIdx}`);
-      const tip = document.getElementById(`anim-stroke-tip-${strokeIdx}`);
-      const hook = document.getElementById(`anim-stroke-hook-${strokeIdx}`);
-      if (!path) return;
+        // 1画をPromise+保険タイマーで確実に描画（例外や極小パスでも必ず安全完了）
+        await animateSingleStroke(strokeIdx, token);
 
-      // 前の画の終点インジケーターを非表示にして、新しい画に集中
-      hideBrushIndicators();
+        if (!isPlaying || token !== animToken) break;
 
-      // 筆使いカットイン大バッジ表示！
-      triggerBrushCutin(inst, strokeIdx);
-      updateStrokeStepBar(strokeIdx);
+        currentStep++;
+        updatePermanentPinsVisibility(currentStep);
 
-      // ガイドテキストを描いている画の筆使いにリアルタイム更新！
-      const hint = document.getElementById('anim-guide-text');
-      const badge = document.getElementById('anim-step-badge');
-      const detailStr = strokeData.detail ? `（${strokeData.detail}）` : (inst.detail ? `（${inst.detail}）` : '');
-      hint.innerHTML = `<span class="guide-stroke-num">${strokeIdx + 1}画目を描いています:</span> <span class="guide-type-badge ${inst.kind}">${inst.badgeText}</span> <span class="guide-detail">${detailStr}</span>`;
-      badge.textContent = `${strokeIdx + 1} / ${data.strokesCount} 画`;
-
-      if (num) num.style.opacity = '1';
-      playSound('stroke');
-
-      const len = path.getTotalLength();
-      // 筆使いに応じたアニメーション時間微調整
-      const baseDuration = inst.kind === 'hane' ? 620 : inst.kind === 'harai' ? 560 : 590;
-      const duration = baseDuration / animSpeed;
-      const startTime = performance.now();
-
-      function drawFrame(now) {
-        if (!isPlaying || token !== animToken) return;
-        const elapsed = now - startTime;
-        const progress = Math.min(1, elapsed / duration);
-
-        // 筆使い（とめ・はね・はらい）別のイージング計算
-        let ease;
-        if (inst.kind === 'hane') {
-          // はね：途中でグッとタメを作り、最後キュッと跳ね上がる
-          if (progress < 0.74) {
-            ease = (progress / 0.74) * 0.72;
-          } else {
-            const p2 = (progress - 0.74) / 0.26;
-            ease = 0.72 + 0.28 * Math.pow(p2, 2.0);
-          }
-        } else if (inst.kind === 'harai') {
-          // はらい：終端に向かってスーーッと筆が抜けていく
-          ease = Math.pow(progress, 1.35);
-        } else {
-          // とめる：自然な減速でピタッと止まる
-          ease = 1 - Math.pow(1 - progress, 2.4);
+        // 全画描き終えたかチェック
+        if (currentStep >= data.strokesCount) {
+          const hint = document.getElementById('anim-guide-text');
+          const badge = document.getElementById('anim-step-badge');
+          const pin = document.getElementById('pin-marker');
+          if (hint) hint.innerHTML = `🎉 <strong>全 ${data.strokesCount} 画 完成！</strong>`;
+          if (badge) badge.textContent = `${data.strokesCount} / ${data.strokesCount} 画`;
+          if (pin) pin.style.display = 'none';
+          updateStrokeStepBar(-1);
+          playSound('fanfare');
+          stopAnimation();
+          return;
         }
 
-        const curLen = len * ease;
-        path.style.strokeDashoffset = len * (1 - ease);
+        // 次の画への待機インターバル（安全タイマー付き）
+        const nextStroke = data.strokes[strokeIdx];
+        const inst = getBrushInstruction(nextStroke, data.kanji, strokeIdx + 1, data.strokesCount);
+        const waitTime = (inst.kind === 'tome' ? 440 : inst.kind === 'hane' ? 420 : 380) / animSpeed;
 
-        // 動く筆先カーソルの座標更新
-        const pt = path.getPointAtLength(Math.min(len, Math.max(0, curLen)));
-        updateBrushPenPosition(pt.x, pt.y);
+        await new Promise((resolve) => {
+          animTimeoutId = setTimeout(() => {
+            animTimeoutId = null;
+            resolve();
+          }, waitTime);
+        });
+      }
+    }
 
-        if (progress < 1) {
-          animFrameId = requestAnimationFrame(drawFrame);
-        } else {
-          path.style.strokeDashoffset = 0;
-          if (tip) tip.style.opacity = '1';
+    /* 1画のアニメーション描画（Promise + フェールセーフ安全タイマー + 長さ0スキップ） */
+    function animateSingleStroke(strokeIdx, token) {
+      return new Promise((resolve) => {
+        let isResolved = false;
+        let safeTimer = null;
 
-          // はねフックのアニメーション描画
-          if (hook) {
-            hook.style.opacity = '1';
-            hook.style.strokeDashoffset = '0';
+        const finish = () => {
+          if (isResolved) return;
+          isResolved = true;
+          if (safeTimer) clearTimeout(safeTimer);
+          if (animFrameId) {
+            cancelAnimationFrame(animFrameId);
+            animFrameId = null;
           }
+          resolve();
+        };
 
-          // 終点インジケーター表示（とめ・はね・はらいのバッジを即座に表示！）
-          const endPt = path.getPointAtLength(len);
-          showBrushIndicator(endPt.x, endPt.y, inst);
+        if (!isPlaying || token !== animToken) {
+          finish();
+          return;
+        }
 
-          // 筆先の完了アクション（留まる・跳ねる・抜ける）
-          triggerBrushPenAction(inst.kind);
+        const data = currentGradeList[currentIndex];
+        if (!data || !data.strokes || !data.strokes[strokeIdx]) {
+          finish();
+          return;
+        }
 
-          // 専用サウンド（トメ：トン！、ハネ：キュッ！、ハライ：シュッ！）
+        const strokeData = data.strokes[strokeIdx];
+        const inst = getBrushInstruction(strokeData, data.kanji, strokeIdx + 1, data.strokesCount);
+        const path = document.getElementById(`anim-stroke-${strokeIdx}`);
+        const num = document.getElementById(`anim-num-${strokeIdx}`);
+        const tip = document.getElementById(`anim-stroke-tip-${strokeIdx}`);
+        const hook = document.getElementById(`anim-stroke-hook-${strokeIdx}`);
+
+        if (!path) {
+          finish();
+          return;
+        }
+
+        // 前の画の終点インジケーターを非表示
+        hideBrushIndicators();
+
+        // 筆使いカットイン大バッジ
+        triggerBrushCutin(inst, strokeIdx);
+        updateStrokeStepBar(strokeIdx);
+
+        // ガイドテキスト
+        const hint = document.getElementById('anim-guide-text');
+        const badge = document.getElementById('anim-step-badge');
+        const detailStr = strokeData.detail ? `（${strokeData.detail}）` : (inst.detail ? `（${inst.detail}）` : '');
+        if (hint) {
+          hint.innerHTML = `<span class="guide-stroke-num">${strokeIdx + 1}画目を描いています:</span> <span class="guide-type-badge ${inst.kind}">${inst.badgeText}</span> <span class="guide-detail">${detailStr}</span>`;
+        }
+        if (badge) {
+          badge.textContent = `${strokeIdx + 1} / ${data.strokesCount} 画`;
+        }
+
+        if (num) num.style.opacity = '1';
+        playSound('stroke');
+
+        // 長さ取得と見えないゴミ・極小パス対策（チェックポイント 4）
+        let len = 0;
+        try {
+          len = path.getTotalLength();
+        } catch (e) {
+          len = 0;
+        }
+
+        // 長さが0または極小パスの場合は即座に描画完了してスキップ
+        if (len <= 2 || isNaN(len)) {
+          try {
+            path.style.strokeDashoffset = '0';
+            if (tip) tip.style.opacity = '1';
+            if (hook) { hook.style.opacity = '1'; hook.style.strokeDashoffset = '0'; }
+          } catch (e) {}
           playSound(inst.kind);
+          finish();
+          return;
+        }
 
-          currentStep++;
-          updatePermanentPinsVisibility(currentStep);
+        path.style.strokeDasharray = len;
+        path.style.strokeDashoffset = len;
 
-          // 全画完了か判定
-          if (currentStep >= data.strokesCount) {
-            hint.innerHTML = `🎉 <strong>全 ${data.strokesCount} 画 完成！</strong>`;
-            badge.textContent = `${data.strokesCount} / ${data.strokesCount} 画`;
-            const pin = document.getElementById('pin-marker');
-            if (pin) pin.style.display = 'none';
-            updateStrokeStepBar(-1);
-            playSound('fanfare');
-            stopAnimation();
+        const baseDuration = inst.kind === 'hane' ? 620 : inst.kind === 'harai' ? 560 : 590;
+        const duration = Math.max(100, baseDuration / animSpeed);
+        const startTime = performance.now();
+
+        // ★ 保険タイマー（フェールセーフ・チェックポイント 1）:
+        // アニメーション時間 + 350ms で強制完了し、バトンの迷子を物理的にゼロ化！
+        safeTimer = setTimeout(() => {
+          if (!isResolved && isPlaying && token === animToken) {
+            try {
+              path.style.strokeDashoffset = '0';
+              if (tip) tip.style.opacity = '1';
+              if (hook) { hook.style.opacity = '1'; hook.style.strokeDashoffset = '0'; }
+            } catch (err) {}
+            finish();
+          }
+        }, duration + 350);
+
+        function drawFrame(now) {
+          if (!isPlaying || token !== animToken) {
+            finish();
             return;
           }
 
-          // 次の画へ（とめ・はね・はらいで心地よいリズム）
-          const waitTime = inst.kind === 'tome' ? 440 : inst.kind === 'hane' ? 420 : 380;
-          animTimeoutId = setTimeout(() => {
-            runAnimNextStep(token);
-          }, waitTime / animSpeed);
-        }
-      }
+          const elapsed = now - startTime;
+          const progress = Math.min(1, elapsed / duration);
 
-      animFrameId = requestAnimationFrame(drawFrame);
+          // イージング計算
+          let ease;
+          if (inst.kind === 'hane') {
+            if (progress < 0.74) {
+              ease = (progress / 0.74) * 0.72;
+            } else {
+              const p2 = (progress - 0.74) / 0.26;
+              ease = 0.72 + 0.28 * Math.pow(p2, 2.0);
+            }
+          } else if (inst.kind === 'harai') {
+            ease = Math.pow(progress, 1.35);
+          } else {
+            ease = 1 - Math.pow(1 - progress, 2.4);
+          }
+
+          const curLen = len * ease;
+          path.style.strokeDashoffset = len * (1 - ease);
+
+          // 筆先カーソルの座標更新（try-catch で保護）
+          try {
+            const pt = path.getPointAtLength(Math.min(len, Math.max(0, curLen)));
+            updateBrushPenPosition(pt.x, pt.y);
+          } catch (e) {}
+
+          if (progress < 1) {
+            animFrameId = requestAnimationFrame(drawFrame);
+          } else {
+            // 描画完了処理
+            path.style.strokeDashoffset = '0';
+            if (tip) tip.style.opacity = '1';
+
+            if (hook) {
+              hook.style.opacity = '1';
+              hook.style.strokeDashoffset = '0';
+            }
+
+            try {
+              const endPt = path.getPointAtLength(len);
+              showBrushIndicator(endPt.x, endPt.y, inst);
+            } catch (e) {}
+
+            triggerBrushPenAction(inst.kind);
+            playSound(inst.kind);
+
+            finish();
+          }
+        }
+
+        animFrameId = requestAnimationFrame(drawFrame);
+      });
     }
 
     function updateAnimGuideUI() {

@@ -5550,6 +5550,18 @@ const bgVideo = document.getElementById('game-bg-video');
 function initBackgroundVideo() {
   if (!bgVideo) return;
   try {
+    bgVideo.loop = true;
+    bgVideo.muted = true;
+    bgVideo.playsInline = true;
+
+    // ブラウザごとの loop 属性挙動差異を防ぎ、確実に何回でも無限ループ再生させる
+    bgVideo.addEventListener('ended', () => {
+      bgVideo.currentTime = 0;
+      if (isGameActive) {
+        bgVideo.play().catch(() => {});
+      }
+    });
+
     const videoUrl = getAssetUrl('assets/問題背景.mp4');
     if (!bgVideo.src) {
       bgVideo.src = videoUrl;
@@ -5563,6 +5575,7 @@ function initBackgroundVideo() {
 function playBackgroundVideo() {
   if (!bgVideo) return;
   try {
+    bgVideo.loop = true;
     if (!bgVideo.src) {
       bgVideo.src = getAssetUrl('assets/問題背景.mp4');
     }

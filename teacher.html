@@ -1232,6 +1232,14 @@ window.addEventListener('DOMContentLoaded', () => {
               <option value="first">頭文字のみ表示 (例:「あ〇〇〇」)</option>
             </select>
           </div>
+          <div class="form-group" style="flex: 1.2;">
+            <label for="mission-trace-difficulty">✍️ 手書き・筆順の判定基準</label>
+            <select id="mission-trace-difficulty" onchange="onTeacherDifficultyChange(this.value)">
+              <option value="easy" selected>🌱 やさしい（低学年・ゆらぎ許容）</option>
+              <option value="normal">🚶 ふつう（標準）</option>
+              <option value="strict">🔥 きびしい（正確な運筆）</option>
+            </select>
+          </div>
         </div>
 
         <!-- テーブル -->
@@ -3502,6 +3510,20 @@ function loadQuestionsFromStorage() {
   } catch (e) {}
 }
 
+function onTeacherDifficultyChange(val) {
+  try {
+    localStorage.setItem('kakijun_trace_difficulty', val);
+  } catch (e) {}
+}
+
+function initTeacherDifficultySetting() {
+  try {
+    const diff = localStorage.getItem('kakijun_trace_difficulty') || 'easy';
+    const sel = document.getElementById('mission-trace-difficulty');
+    if (sel) sel.value = diff;
+  } catch (e) {}
+}
+
 /* ==========================================================================
    配布（QRコード・ワンクリックURL生成）
    ========================================================================== */
@@ -3515,16 +3537,20 @@ function openDistributeModal() {
   const titleInput = document.getElementById('mission-title');
   const timeSelect = document.getElementById('mission-time');
   const hintSelect = document.getElementById('mission-hint');
+  const diffSelect = document.getElementById('mission-trace-difficulty');
 
   const missionTitle = titleInput.value.trim() || '先生の特別ミッション';
   const timeLimit = parseInt(timeSelect.value, 10) || 30;
   const hintMode = hintSelect.value || 'none';
+  const traceDiff = (diffSelect ? diffSelect.value : 'easy') || 'easy';
+  onTeacherDifficultyChange(traceDiff);
 
   // ペイロード構築
   const payload = {
     title: missionTitle,
     time: timeLimit,
     hint: hintMode,
+    traceDifficulty: traceDiff,
     questions: customQuestions
   };
 
@@ -3535,7 +3561,7 @@ function openDistributeModal() {
   // 児童画面の絶対URLを生成
   const loc = window.location;
   const basePath = loc.pathname.substring(0, loc.pathname.lastIndexOf('/') + 1);
-  const targetUrl = `${loc.protocol}//${loc.host}${basePath}index.html?mission=${encoded}`;
+  const targetUrl = `${loc.protocol}//${loc.host}${basePath}index.html?mission=${encoded}&traceDiff=${traceDiff}`;
 
   // QRコード描画
   const qrBox = document.getElementById('distribute-qr-box');
@@ -4360,6 +4386,7 @@ window.addEventListener('DOMContentLoaded', () => {
   checkAuth();
   loadQuestionsFromStorage();
   renderQuestionTable();
+  initTeacherDifficultySetting();
 
   // クラス防衛設定の復元
   const cName = localStorage.getItem('kanji_jet_class_name');

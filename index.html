@@ -9072,6 +9072,9 @@ let hwCanvas = null;
 let hwCtx = null;
 let hwIsDrawing = false;
 let hwGuideVisible = true;
+let hwActivePointerId = null;
+let isHwPenActive = false;
+let hwPenResetTimer = null;
 
 function getKanjiStrokeCount(ch) {
   if (KANJI_STROKE_COUNT_MAP[ch]) return KANJI_STROKE_COUNT_MAP[ch];
@@ -9223,14 +9226,40 @@ function initHandwriteCanvas() {
       return {
         x: (e.clientX - rect.left) * scaleX,
         y: (e.clientY - rect.top) * scaleY,
-        t: performance.now()
+        t: performance.now(),
+        pointerType: e.pointerType,
+        width: e.width || 0,
+        height: e.height || 0
       };
     };
 
     hwCanvas.addEventListener('pointerdown', (e) => {
+      // 1. スタイラスペン（タッチペン）優先とパームリジェクション
+      if (e.pointerType === 'pen') {
+        isHwPenActive = true;
+        if (hwPenResetTimer) clearTimeout(hwPenResetTimer);
+        hwPenResetTimer = setTimeout(() => { isHwPenActive = false; }, 3000);
+      } else if (isHwPenActive && e.pointerType === 'touch') {
+        return; // 手のひら接触をリジェクト
+      }
+
+      // 2. 接触面積によるパームリジェクション（大面積タッチは無視）
+      if (e.pointerType === 'touch' && (e.width > 38 || e.height > 38)) {
+        return;
+      }
+
+      // 3. マルチタッチ防止（2点目以降の接触を無視）
+      if (hwIsDrawing && hwActivePointerId !== null) {
+        return;
+      }
+
       e.preventDefault();
       hwIsDrawing = true;
-      hwCanvas.setPointerCapture(e.pointerId);
+      hwActivePointerId = e.pointerId;
+      try {
+        if (hwCanvas.setPointerCapture) hwCanvas.setPointerCapture(e.pointerId);
+      } catch (err) {}
+
       const pt = getCanvasPos(e);
       hwCurrentStroke = [pt];
       hwStrokes.push(hwCurrentStroke);
@@ -9238,16 +9267,53 @@ function initHandwriteCanvas() {
     });
 
     hwCanvas.addEventListener('pointermove', (e) => {
-      if (!hwIsDrawing || !hwCurrentStroke) return;
+      if (!hwIsDrawing || !hwCurrentStroke || e.pointerId !== hwActivePointerId) return;
       e.preventDefault();
-      const pt = getCanvasPos(e);
-      hwCurrentStroke.push(pt);
+
+      // Coalesced Events（高速運筆時のサブサンプリングイベント）を取得
+      const events = (e.getCoalescedEvents && e.getCoalescedEvents().length > 0) ? e.getCoalescedEvents() : [e];
+
+      for (let i = 0; i < events.length; i++) {
+        const pt = getCanvasPos(events[i]);
+        const last = hwCurrentStroke[hwCurrentStroke.length - 1];
+
+        if (!last) {
+          hwCurrentStroke.push(pt);
+          continue;
+        }
+
+        const dist = Math.hypot(pt.x - last.x, pt.y - last.y);
+
+        // 速い「はらい」などで点が飛んだ場合の線形補間（Lerp）スムージング
+        if (dist > 7) {
+          const steps = Math.min(16, Math.floor(dist / 5));
+          for (let s = 1; s <= steps; s++) {
+            const t = s / (steps + 1);
+            hwCurrentStroke.push({
+              x: last.x + (pt.x - last.x) * t,
+              y: last.y + (pt.y - last.y) * t,
+              t: last.t + (pt.t - last.t) * t
+            });
+          }
+        }
+
+        if (dist >= 1.5) {
+          hwCurrentStroke.push(pt);
+        }
+      }
+
       redrawHandwriteCanvas();
     });
 
     const finishStroke = (e) => {
-      if (!hwIsDrawing) return;
+      if (!hwIsDrawing || (hwActivePointerId !== null && e.pointerId !== hwActivePointerId)) return;
       hwIsDrawing = false;
+      hwActivePointerId = null;
+
+      try {
+        if (hwCanvas.releasePointerCapture) hwCanvas.releasePointerCapture(e.pointerId);
+      } catch (err) {}
+
       if (hwCurrentStroke && hwCurrentStroke.length >= 2) {
         evaluateCurrentStrokeStep();
       }
@@ -9277,9 +9343,19 @@ function redrawHandwriteCanvas() {
 
     hwCtx.beginPath();
     hwCtx.moveTo(stroke[0].x, stroke[0].y);
-    for (let i = 1; i < stroke.length; i++) {
-      hwCtx.lineTo(stroke[i].x, stroke[i].y);
+
+    if (stroke.length === 2) {
+      hwCtx.lineTo(stroke[1].x, stroke[1].y);
+    } else {
+      // 中点（Midpoint）を用いた2次ベジェ曲線補間によるなめらか描画
+      for (let i = 1; i < stroke.length - 1; i++) {
+        const midX = (stroke[i].x + stroke[i + 1].x) / 2;
+        const midY = (stroke[i].y + stroke[i + 1].y) / 2;
+        hwCtx.quadraticCurveTo(stroke[i].x, stroke[i].y, midX, midY);
+      }
+      hwCtx.lineTo(stroke[stroke.length - 1].x, stroke[stroke.length - 1].y);
     }
+
     hwCtx.stroke();
     hwCtx.restore();
   });
@@ -9336,7 +9412,7 @@ function evaluateStrokeGeometry(points) {
   const len = Math.hypot(dx, dy);
 
   let direction = "unknown";
-  if (len < 16) {
+  if (len < 12) {
     direction = "dot";
   } else if (Math.abs(dx) > Math.abs(dy) * 1.5) {
     direction = dx > 0 ? "right" : "left";
@@ -9349,35 +9425,36 @@ function evaluateStrokeGeometry(points) {
     else direction = "up-left";
   }
 
-  // ハネの判定
+  // ハネの判定（終端ベクトルの跳ね上がりを柔軟・寛容に検出）
   let hasHook = false;
-  if (points.length >= 6) {
-    const endSlice = points.slice(-5);
+  if (points.length >= 4) {
+    const endSlice = points.slice(-Math.min(6, points.length));
     const endDy = endSlice[endSlice.length - 1].y - endSlice[0].y;
-    if (dy > 25 && endDy < -6) {
+    const endDx = endSlice[endSlice.length - 1].x - endSlice[0].x;
+    if (dy > 18 && (endDy < -3 || (endDy < 0 && Math.abs(endDx) > 4))) {
       hasHook = true;
     }
   }
 
-  // とめの曲がり・ブレ判定
+  // とめの曲がり・ブレ判定（ゆらぎを許容）
   let isCurved = false;
   if (points.length >= 8) {
     const midIdx = Math.floor(points.length / 2);
     const midPoint = points[midIdx];
     const lineLen = Math.hypot(dx, dy);
-    if (lineLen > 30) {
+    if (lineLen > 35) {
       const dist = Math.abs(dy * midPoint.x - dx * midPoint.y + p1.x * p0.y - p1.y * p0.x) / lineLen;
-      if (dist > 18) {
+      if (dist > 28) {
         isCurved = true;
       }
     }
   }
 
   let advice = "";
-  if (len < 25 && direction !== "dot") {
-    advice = "線が短すぎるよ！お手本のようにしっかり伸ばそう";
+  if (len < 16 && direction !== "dot") {
+    advice = "線が短めだよ！お手本のようにしっかり伸ばしてみよう";
   } else if (isCurved && (direction === "right" || direction === "down")) {
-    advice = "とめの部分で線が曲がっているよ！まっすぐピタッと止めよう";
+    advice = "線の最後をまっすぐピタッと止めてみよう！";
   }
 
   return { direction, len, hasHook, isCurved, advice };
@@ -10057,6 +10134,13 @@ function checkUrlParams() {
     const unit = params.get('unit');
     const diff = params.get('diff');
     const raid = params.get('raid');
+    const traceDiff = params.get('traceDiff');
+
+    if (traceDiff && ['easy', 'normal', 'strict'].includes(traceDiff)) {
+      try {
+        localStorage.setItem('kakijun_trace_difficulty', traceDiff);
+      } catch (err) {}
+    }
 
     // ライブ授業・レイドボスモード (?raid=1)
     if (raid === '1') {
@@ -10109,6 +10193,11 @@ function checkUrlParams() {
         if (data.time) teacherDifficulty.time = parseInt(data.time, 10) || teacherDifficulty.time || 30;
         if (data.hint) teacherDifficulty.hint = data.hint || teacherDifficulty.hint;
         if (data.speed) teacherDifficulty.speed = data.speed || teacherDifficulty.speed;
+        if (data.traceDifficulty) {
+          try {
+            localStorage.setItem('kakijun_trace_difficulty', data.traceDifficulty);
+          } catch (err) {}
+        }
 
         showTeacherCustomMissionBanner(data);
         return;

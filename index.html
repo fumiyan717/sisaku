@@ -46,6 +46,30 @@
       overflow: hidden;
     }
 
+    /* 問題画面 背景動画 & オーバーレイ */
+    .game-bg-video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 1;
+      pointer-events: none;
+      filter: brightness(0.82) contrast(1.06);
+    }
+
+    .game-bg-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 50% 40%, rgba(5, 12, 24, 0.2) 0%, rgba(3, 8, 18, 0.5) 100%);
+      z-index: 2;
+      pointer-events: none;
+    }
+
     /* 上部HUDステータスバー */
     .hud-top {
       position: absolute;
@@ -3179,6 +3203,13 @@
   <audio id="bgm-battle" src="./assets/bgm_battle.mp3" preload="auto" loop playsinline></audio>
 
 <div id="game-container">
+  <!-- 問題画面の背景動画 (assets/問題背景.mp4) -->
+  <video id="game-bg-video" class="game-bg-video" autoplay loop muted playsinline preload="auto">
+    <source src="assets/問題背景.mp4" type="video/mp4">
+    <source src="問題背景.mp4" type="video/mp4">
+  </video>
+  <div class="game-bg-overlay"></div>
+
   <!-- 上部ステータスバー -->
   <header class="hud-top">
     <div class="stage-badge">
@@ -5512,6 +5543,50 @@ class SoundEngine {
 const sound = new SoundEngine();
 
 /* ==========================================================================
+   問題画面 背景動画マネージャー (問題背景.mp4)
+   ========================================================================== */
+const bgVideo = document.getElementById('game-bg-video');
+
+function initBackgroundVideo() {
+  if (!bgVideo) return;
+  try {
+    const videoUrl = getAssetUrl('assets/問題背景.mp4');
+    if (!bgVideo.src) {
+      bgVideo.src = videoUrl;
+    }
+    bgVideo.playbackRate = 1.0;
+  } catch (e) {
+    console.warn("Background video init error:", e);
+  }
+}
+
+function playBackgroundVideo() {
+  if (!bgVideo) return;
+  try {
+    if (!bgVideo.src) {
+      bgVideo.src = getAssetUrl('assets/問題背景.mp4');
+    }
+    const p = bgVideo.play();
+    if (p && typeof p.catch === 'function') {
+      p.catch(err => {
+        // 自動再生ポリシーなどの一時的なブロックを安全にハンドリング
+        console.log("Background video waiting for interaction:", err);
+      });
+    }
+  } catch (e) {}
+}
+
+function pauseBackgroundVideo() {
+  if (!bgVideo) return;
+  try {
+    bgVideo.pause();
+  } catch (e) {}
+}
+
+// 初期化実行
+initBackgroundVideo();
+
+/* ==========================================================================
    Canvas 3D風 宇宙・ジェット機・エフェクト描画
    ========================================================================== */
 const canvas = document.getElementById('game-canvas');
@@ -6908,6 +6983,7 @@ function startGame() {
     currentQuestionList = (KANJI_DATABASE.grade1 || []).slice(0, 5);
   }
   sound.playBattleBgm();
+  playBackgroundVideo();
 
   loadQuestion(currentQuestionIndex);
   focusHiddenInput();
@@ -7405,6 +7481,7 @@ function showGameResult(isWin) {
   timerSeconds = 0;
   isAnswerLocked = true;
   sound.stopBgm();
+  pauseBackgroundVideo();
 
   // 正規終了時（全問クリアまたは撃墜ゲームオーバー）にのみ確定保存！
   sessionMasteredKanji.forEach(k => recordMasteredKanji(k));
@@ -7553,6 +7630,7 @@ function showGameResult(isWin) {
 
 function returnToTitle() {
   isGameActive = false;
+  pauseBackgroundVideo();
   if (questionTransitionTimeout) {
     clearTimeout(questionTransitionTimeout);
     questionTransitionTimeout = null;
@@ -7576,6 +7654,7 @@ function confirmReturnToMenu() {
   if (timerInterval) {
     clearInterval(timerInterval);
   }
+  pauseBackgroundVideo();
   document.getElementById('confirm-quit-modal').style.display = 'flex';
 }
 
@@ -7583,6 +7662,7 @@ function cancelReturnToMenu() {
   document.getElementById('confirm-quit-modal').style.display = 'none';
   // 解答中であればタイマーを残り秒数から再開
   if (isGameActive && timerSeconds > 0 && crewLives > 0 && !isAnswerLocked) {
+    playBackgroundVideo();
     startTimer(timerSeconds);
   }
 }
@@ -7592,6 +7672,7 @@ function executeReturnToMenu() {
 
   // ★最重要: ゲーム実行フラグを即座に落とす
   isGameActive = false;
+  pauseBackgroundVideo();
 
   // ★未完了のタイマーや非同期遷移をすべてクリア
   if (questionTransitionTimeout) {
@@ -7955,6 +8036,7 @@ function openKanjiMuseum(tab = 'kanji', grade) {
   if (timerInterval) {
     clearInterval(timerInterval);
     isPausedForRoom = true;
+    pauseBackgroundVideo();
   }
   const m = document.getElementById('kanji-room-modal');
   if (m) m.style.display = 'flex';
@@ -7967,6 +8049,7 @@ function closeKanjiMuseum() {
   if (isPausedForRoom) {
     isPausedForRoom = false;
     if (timerSeconds > 0 && crewLives > 0 && !isAnswerLocked) {
+      playBackgroundVideo();
       startTimer(timerSeconds);
     }
   }

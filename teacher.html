@@ -575,7 +575,158 @@ window.addEventListener('DOMContentLoaded', () => {
       letter-spacing: 1px;
     }
 
-    /* PIN認証オーバーレイ */
+    .preset-card.active-preset {
+      border-color: #06b6d4;
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.18) 0%, rgba(30, 41, 59, 0.95) 100%);
+      box-shadow: 0 0 16px rgba(6, 182, 212, 0.45);
+      position: relative;
+    }
+    .preset-card.active-preset::after {
+      content: '🎯 選択中';
+      position: absolute;
+      top: -9px;
+      right: 12px;
+      background: linear-gradient(135deg, #06b6d4, #3b82f6);
+      color: #fff;
+      font-size: 10.5px;
+      font-weight: 900;
+      padding: 2px 8px;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    }
+    .badge-hero-active {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(6, 182, 212, 0.2);
+      border: 1.5px solid #06b6d4;
+      color: #38bdf8;
+      font-size: 13px;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 9999px;
+    }
+
+    /* 折りたたみアコーディオン */
+    details.collapse-panel {
+      background: var(--panel-bg);
+      border: 1.5px solid var(--border-color);
+      border-radius: 14px;
+      margin-bottom: 20px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      transition: all 0.2s ease;
+    }
+    details.collapse-panel[open] {
+      border-color: rgba(99, 102, 241, 0.6);
+    }
+    details.collapse-panel summary {
+      padding: 16px 20px;
+      font-size: 15px;
+      font-weight: 800;
+      color: #e2e8f0;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      background: rgba(15, 23, 42, 0.6);
+      transition: background 0.15s ease;
+    }
+    details.collapse-panel summary:hover {
+      background: rgba(30, 41, 59, 0.8);
+      color: #38bdf8;
+    }
+    details.collapse-panel summary::-webkit-details-marker {
+      display: none;
+    }
+    details.collapse-panel summary::after {
+      content: '▼';
+      font-size: 12px;
+      color: #94a3b8;
+      transition: transform 0.2s ease;
+    }
+    details.collapse-panel[open] summary::after {
+      transform: rotate(180deg);
+      color: #38bdf8;
+    }
+    .collapse-content {
+      padding: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      animation: fadeIn 0.2s ease-in-out;
+    }
+
+    /* モーダル内タブ */
+    .modal-tab-nav {
+      display: flex;
+      gap: 8px;
+      border-bottom: 2px solid #334155;
+      margin-bottom: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .modal-tab-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 14.5px;
+      font-weight: 800;
+      padding: 10px 18px;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s;
+    }
+    .modal-tab-btn:hover {
+      color: #fff;
+    }
+    .modal-tab-btn.active {
+      color: #00ff88;
+    }
+    .modal-tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: #00ff88;
+      border-radius: 2px;
+    }
+
+    /* 先生用トースト通知 */
+    #teacher-toast-box {
+      position: fixed;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10000;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .teacher-toast {
+      background: #0f172a;
+      border: 1.5px solid #00ff88;
+      color: #f8fafc;
+      padding: 12px 24px;
+      border-radius: 30px;
+      box-shadow: 0 8px 30px rgba(0, 255, 136, 0.35);
+      font-weight: bold;
+      font-size: 14.5px;
+      animation: toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1), toastOut 0.3s cubic-bezier(0.16, 1, 0.3, 1) 2.7s forwards;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(-20px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes toastOut {
+      from { opacity: 1; transform: translateY(0) scale(1); }
+      to { opacity: 0; transform: translateY(-20px) scale(0.95); }
+    }
     #pin-auth-overlay {
       position: fixed;
       inset: 0;
@@ -1097,10 +1248,7 @@ window.addEventListener('DOMContentLoaded', () => {
     <!-- タブメニュー -->
     <div class="tab-nav">
       <button class="tab-btn active" onclick="switchTab('custom')" id="tab-btn-custom">
-        ✍️ オリジナル問題をつくる＆配布
-      </button>
-      <button class="tab-btn" onclick="switchTab('textbook')" id="tab-btn-textbook">
-        📚 教科書・1026字から選ぶ
+        📖 単元から選んで出題・QR配布（メイン）
       </button>
       <button class="tab-btn" onclick="switchTab('print')" id="tab-btn-print">
         🖨️ AI対応プリント自動生成
@@ -1116,19 +1264,23 @@ window.addEventListener('DOMContentLoaded', () => {
       </button>
     </div>
 
-    <!-- タブ1: ✍️ オリジナル問題作成＆配布（メイン！） -->
+    <!-- タブ1: 📖 教科書単元から選んで出題・QR配布（メイン！） -->
     <div class="tab-content active" id="tab-content-custom">
       <!-- 最優先：配布用ド迫力カード -->
       <div class="distribute-hero-card">
-        <div>
-          <div class="distribute-info-title">🚀 児童への一斉配布（電子黒板・Classroom・ロイロ対応）</div>
+        <div style="display: flex; flex-direction: column; gap: 8px; flex: 1.5; min-width: 280px;">
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <span class="badge-hero-active" id="hero-active-unit-badge">📖 単元未選択</span>
+            <span style="color: #94a3b8; font-size: 13px;">出題数: <strong style="color:#00ff88; font-size: 16px;" id="hero-question-count">0問</strong></span>
+          </div>
+          <div class="distribute-info-title" style="font-size: 19px;">🎯 単元を選んでワンクリック！児童が選べる3コースQR配布</div>
           <div class="distribute-info-desc">
-            現在リストにある問題（<strong style="color:#00ff88;" id="hero-question-count">0問</strong>）を配布します。大画面QRコードやURLのほか、AI対応プリントとしても印刷できます。
+            下の教科書単元リストからポチッと選ぶだけで完了！「イージー・ノーマル・ハード」の3コース一括QRを電子黒板に映すだけで、子どもたちが自律的に挑戦できます。
           </div>
         </div>
-        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-          <button class="btn-distribute-large" onclick="openDistributeModal()">
-            <span>📱 大画面QR・配布URL</span>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+          <button class="btn-distribute-large" onclick="open3CourseModal()" style="background: linear-gradient(135deg, #10b981 0%, #06b6d4 50%, #f43f5e 100%); box-shadow: 0 4px 20px rgba(6, 182, 212, 0.4);">
+            <span style="font-size: 16px;">🎯 3コース一括QRを表示（電子黒板）</span>
             <span>▶</span>
           </button>
           <button class="btn-distribute-large" onclick="switchTab('print')" style="background: linear-gradient(135deg, #059669 0%, #0d9488 100%);">
@@ -1136,114 +1288,57 @@ window.addEventListener('DOMContentLoaded', () => {
             <span>▶</span>
           </button>
           <button class="btn-distribute-large" onclick="switchTab('live')" style="background: linear-gradient(135deg, #7c3aed 0%, #db2777 100%);">
-            <span>📺 電子黒板ライブ</span>
+            <span>📺 電子黒板レイド戦</span>
+            <span>▶</span>
+          </button>
+          <button class="btn-distribute-large" onclick="openDistributeModal('single')" style="background: rgba(30, 41, 59, 0.8); border: 1px solid #475569;">
+            <span style="font-size: 13px;">📱 単一QR・URL</span>
             <span>▶</span>
           </button>
         </div>
       </div>
 
-      <!-- 問題入力パネル -->
-      <div class="panel-card">
-        <div class="panel-header">
-          <span class="panel-title">✏️ 新しい問題を追加する</span>
-          <div style="display: flex; gap: 8px;">
-            <button class="btn-action secondary" onclick="loadSampleQuestions()" style="font-size: 12.5px; padding: 6px 12px;">
-              🎲 サンプル問題（5問）を読み込む
-            </button>
+      <!-- 【主役】単元プリセット -->
+      <div class="panel-card" id="preset-section-panel">
+        <div class="panel-header" style="flex-direction: column; align-items: flex-start; gap: 10px;">
+          <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; flex-wrap: wrap; gap: 8px;">
+            <div>
+              <span class="panel-title">📖 教科書単元別プリセット（光村図書 87単元・漢検 4種）</span>
+              <div style="font-size: 12.5px; color: var(--text-sub); margin-top: 2px;">
+                単元をタップすると、配当漢字（自動よみ・ヒント付き）がセットされ、すぐに3コースQRやプリントを発行できます
+              </div>
+            </div>
+            <input type="text" id="preset-search-input" placeholder="🔍 単元名・漢字で検索..." oninput="onPresetSearch(this.value)" style="padding: 7px 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.15); background: rgba(15,23,42,0.6); color: #fff; font-size: 13px; width: 240px;">
+          </div>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;" id="preset-grade-filter-btns">
+            <button class="btn-header primary" onclick="filterPresets('all')">すべて (91)</button>
+            <button class="btn-header" onclick="filterPresets(1)">1年 (9)</button>
+            <button class="btn-header" onclick="filterPresets(2)">2年 (11)</button>
+            <button class="btn-header" onclick="filterPresets(3)">3年 (12)</button>
+            <button class="btn-header" onclick="filterPresets(4)">4年 (19)</button>
+            <button class="btn-header" onclick="filterPresets(5)">5年 (17)</button>
+            <button class="btn-header" onclick="filterPresets(6)">6年 (19)</button>
+            <button class="btn-header" onclick="filterPresets('k')">漢検 (4)</button>
           </div>
         </div>
-
-        <div class="form-row">
-          <div class="form-group" style="flex: 1.2;">
-            <label for="input-kanji">漢字（出題される文字・熟語）<span style="color:#ef4444;">*</span></label>
-            <input type="text" id="input-kanji" placeholder="例: 森林、青空、川" style="font-size: 16px; font-weight: bold; color: #ffd700;">
-          </div>
-          <div class="form-group" style="flex: 1.2;">
-            <label for="input-kana">よみがな（すべて「ひらがな」で入力）<span style="color:#ef4444;">*</span></label>
-            <input type="text" id="input-kana" placeholder="例: しんりん、あおぞら、かわ" style="font-size: 16px; font-weight: bold; color: #38bdf8;">
-          </div>
-          <div class="form-group" style="flex: 0.8;">
-            <label for="input-grade">学年目安</label>
-            <select id="input-grade">
-              <option value="1年">1年生</option>
-              <option value="2年">2年生</option>
-              <option value="3年" selected>3年生</option>
-              <option value="4年">4年生</option>
-              <option value="5年">5年生</option>
-              <option value="6年">6年生</option>
-              <option value="特訓">特訓（学年不問）</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group" style="flex: 1;">
-            <label for="input-hint">ヒント・例文（ゲーム中ヒントとして表示されます）</label>
-            <input type="text" id="input-hint" placeholder="例: 木がたくさん集まっているところ。自然がいっぱい！">
-          </div>
-          <div style="display: flex; align-items: flex-end;">
-            <button class="btn-action success" onclick="addQuestionToList()" style="padding: 10px 24px;">
-              ＋ 問題リストに追加
-            </button>
-          </div>
-        </div>
-
-        <!-- 漢字入力時の熟語・短文自動サジェスト表示エリア -->
-        <div id="kanji-suggestions-box" style="display: none; margin-top: 14px; padding: 14px; background: rgba(56, 189, 248, 0.08); border: 1px dashed rgba(56, 189, 248, 0.4); border-radius: 8px;">
-          <div style="font-size: 13px; font-weight: bold; color: #38bdf8; margin-bottom: 6px;">💡 よく使われる熟語・用例（クリックで漢字と読みを自動セット）:</div>
-          <div id="suggested-compounds-list" style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px;"></div>
-          <div style="font-size: 13px; font-weight: bold; color: #ffd700; margin-bottom: 6px;">📖 代表的な短文・例文（クリックでヒントにセット）:</div>
-          <div id="suggested-sentences-list" style="display: flex; flex-direction: column; gap: 5px;"></div>
-        </div>
+        <div class="preset-grid" id="preset-cards-container" style="max-height: 460px; overflow-y: auto; padding-right: 4px;"></div>
       </div>
 
       <!-- 出題設定＆作成済み問題一覧 -->
       <div class="panel-card">
         <div class="panel-header">
           <div style="display: flex; align-items: center; gap: 12px;">
-            <span class="panel-title">📋 作成中ミッション問題一覧 (<span id="table-question-count">0</span>問)</span>
+            <span class="panel-title">📋 現在セットされている出題漢字一覧 (<span id="table-question-count">0</span>問)</span>
           </div>
           <div style="display: flex; gap: 8px;">
             <button class="btn-action danger" onclick="clearAllQuestions()" style="font-size: 12px; padding: 5px 12px;">
-              🗑️ 全問クリア
+              🗑️ リストを空にする
             </button>
           </div>
         </div>
 
-        <!-- ミッションメタ設定 -->
-        <div class="form-row" style="background: rgba(15, 23, 42, 0.6); padding: 12px 14px; border-radius: 8px; margin-bottom: 12px; align-items: center;">
-          <div class="form-group" style="flex: 1.5;">
-            <label for="mission-title">ミッションのタイトル（児童画面に表示されます）</label>
-            <input type="text" id="mission-title" value="先生の特別ミッション" placeholder="例: 今週の漢字テスト、スイミー重要漢字">
-          </div>
-          <div class="form-group" style="flex: 1;">
-            <label for="mission-time">1問あたりの制限時間</label>
-            <select id="mission-time">
-              <option value="20">20秒 (⚡ スピード挑戦)</option>
-              <option value="30" selected>30秒 (🌱 標準)</option>
-              <option value="45">45秒 (🤝 じっくりサポート)</option>
-              <option value="60">60秒 (🐢 ゆったり安心)</option>
-            </select>
-          </div>
-          <div class="form-group" style="flex: 1;">
-            <label for="mission-hint">ヒント表示設定</label>
-            <select id="mission-hint">
-              <option value="none" selected>ヒントなし (通常)</option>
-              <option value="first">頭文字のみ表示 (例:「あ〇〇〇」)</option>
-            </select>
-          </div>
-          <div class="form-group" style="flex: 1.2;">
-            <label for="mission-trace-difficulty">✍️ 手書き・筆順の判定基準</label>
-            <select id="mission-trace-difficulty" onchange="onTeacherDifficultyChange(this.value)">
-              <option value="easy" selected>🌱 やさしい（低学年・ゆらぎ許容）</option>
-              <option value="normal">🚶 ふつう（標準）</option>
-              <option value="strict">🔥 きびしい（正確な運筆）</option>
-            </select>
-          </div>
-        </div>
-
         <!-- テーブル -->
-        <div style="max-height: 400px; overflow-y: auto;">
+        <div style="max-height: 320px; overflow-y: auto;">
           <table class="question-list-table">
             <thead>
               <tr>
@@ -1258,69 +1353,138 @@ window.addEventListener('DOMContentLoaded', () => {
             <tbody id="question-table-body">
               <tr>
                 <td colspan="6" style="text-align: center; color: #64748b; padding: 24px;">
-                  まだ問題が追加されていません。上のフォームから問題を入力するか、「サンプル問題を読み込む」を押してください。
+                  上の単元リストから単元を選んでください。自動的に問題がセットされます。
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
-    </div>
 
-    <!-- タブ2: 📚 教科書・1026字から選ぶ -->
-    <div class="tab-content" id="tab-content-textbook">
-      <!-- 単元プリセット -->
-      <div class="panel-card">
-        <div class="panel-header" style="flex-direction: column; align-items: flex-start; gap: 10px;">
-          <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; flex-wrap: wrap; gap: 8px;">
-            <div>
-              <span class="panel-title">📖 教科書単元別プリセット（光村図書 87単元・漢検 4種）</span>
-              <div style="font-size: 12px; color: var(--text-sub); margin-top: 2px;">
-                単元をクリックすると配当漢字（自動よみ・ヒント付き）がオリジナル問題リストへ即座に取り込まれます
-              </div>
-            </div>
-            <input type="text" id="preset-search-input" placeholder="🔍 単元名・漢字で検索..." oninput="onPresetSearch(this.value)" style="padding: 6px 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.15); background: rgba(15,23,42,0.6); color: #fff; font-size: 13px; width: 220px;">
-          </div>
-          <div style="display: flex; gap: 6px; flex-wrap: wrap;" id="preset-grade-filter-btns">
-            <button class="btn-header primary" onclick="filterPresets('all')">すべて (91)</button>
-            <button class="btn-header" onclick="filterPresets(1)">1年 (9)</button>
-            <button class="btn-header" onclick="filterPresets(2)">2年 (11)</button>
-            <button class="btn-header" onclick="filterPresets(3)">3年 (12)</button>
-            <button class="btn-header" onclick="filterPresets(4)">4年 (19)</button>
-            <button class="btn-header" onclick="filterPresets(5)">5年 (17)</button>
-            <button class="btn-header" onclick="filterPresets(6)">6年 (19)</button>
-            <button class="btn-header" onclick="filterPresets('k')">漢検 (4)</button>
-          </div>
-        </div>
-        <div class="preset-grid" id="preset-cards-container"></div>
-      </div>
-
-      <!-- 全学年1026字グリッド -->
-      <div class="panel-card">
-        <div class="panel-header">
-          <span class="panel-title">🗂️ 小学校1026字から選んで問題に追加</span>
-          <div style="display: flex; gap: 6px;" id="grade-filter-btns">
-            <button class="btn-header primary" onclick="loadKanjiGrid(1)">1年</button>
-            <button class="btn-header" onclick="loadKanjiGrid(2)">2年</button>
-            <button class="btn-header" onclick="loadKanjiGrid(3)">3年</button>
-            <button class="btn-header" onclick="loadKanjiGrid(4)">4年</button>
-            <button class="btn-header" onclick="loadKanjiGrid(5)">5年</button>
-            <button class="btn-header" onclick="loadKanjiGrid(6)">6年</button>
-          </div>
-        </div>
-
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-          <span style="font-size: 13px; color: #a5b4fc;">漢字をタップして選択してください（複数選択可）:</span>
-          <div style="display: flex; gap: 8px; align-items: center;">
-            <span style="font-size: 13px; font-weight: bold; color: #ffd700;">選択中: <span id="selected-kanji-count">0</span>字</span>
-            <button class="btn-action success" onclick="importSelectedKanjiToQuestions()" style="font-size: 12.5px; padding: 6px 14px;">
-              📥 選択した漢字を問題リストに追加
+      <!-- 【折りたたみ】独自の問題を手動入力・1026字から選択（自由作成） -->
+      <details class="collapse-panel" id="manual-create-details">
+        <summary>
+          <span>✏️ 独自の問題を手動で追加・編集する（自由作成・1026字グリッド選択）</span>
+        </summary>
+        <div class="collapse-content">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+            <span style="font-size: 13.5px; color: #cbd5e1;">教科書以外の独自熟語・新出漢字を手動で作成・追加できます:</span>
+            <button class="btn-action secondary" onclick="loadSampleQuestions()" style="font-size: 12px; padding: 5px 12px;">
+              🎲 サンプル問題（5問）を読み込む
             </button>
           </div>
-        </div>
 
-        <div class="kanji-grid" id="kanji-grid-container"></div>
-      </div>
+          <div class="form-row">
+            <div class="form-group" style="flex: 1.2;">
+              <label for="input-kanji">漢字（出題される文字・熟語）<span style="color:#ef4444;">*</span></label>
+              <input type="text" id="input-kanji" placeholder="例: 森林、青空、川" style="font-size: 16px; font-weight: bold; color: #ffd700;">
+            </div>
+            <div class="form-group" style="flex: 1.2;">
+              <label for="input-kana">よみがな（すべて「ひらがな」で入力）<span style="color:#ef4444;">*</span></label>
+              <input type="text" id="input-kana" placeholder="例: しんりん、あおぞら、かわ" style="font-size: 16px; font-weight: bold; color: #38bdf8;">
+            </div>
+            <div class="form-group" style="flex: 0.8;">
+              <label for="input-grade">学年目安</label>
+              <select id="input-grade">
+                <option value="1年">1年生</option>
+                <option value="2年">2年生</option>
+                <option value="3年" selected>3年生</option>
+                <option value="4年">4年生</option>
+                <option value="5年">5年生</option>
+                <option value="6年">6年生</option>
+                <option value="特訓">特訓（学年不問）</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group" style="flex: 1;">
+              <label for="input-hint">ヒント・例文（ゲーム中ヒントとして表示されます）</label>
+              <input type="text" id="input-hint" placeholder="例: 木がたくさん集まっているところ。自然がいっぱい！">
+            </div>
+            <div style="display: flex; align-items: flex-end;">
+              <button class="btn-action success" onclick="addQuestionToList()" style="padding: 10px 24px;">
+                ＋ 問題リストに追加
+              </button>
+            </div>
+          </div>
+
+          <!-- 漢字入力時の熟語・短文自動サジェスト表示エリア -->
+          <div id="kanji-suggestions-box" style="display: none; margin-top: 14px; padding: 14px; background: rgba(56, 189, 248, 0.08); border: 1px dashed rgba(56, 189, 248, 0.4); border-radius: 8px;">
+            <div style="font-size: 13px; font-weight: bold; color: #38bdf8; margin-bottom: 6px;">💡 よく使われる熟語・用例（クリックで漢字と読みを自動セット）:</div>
+            <div id="suggested-compounds-list" style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px;"></div>
+            <div style="font-size: 13px; font-weight: bold; color: #ffd700; margin-bottom: 6px;">📖 代表的な短文・例文（クリックでヒントにセット）:</div>
+            <div id="suggested-sentences-list" style="display: flex; flex-direction: column; gap: 5px;"></div>
+          </div>
+
+          <!-- 全学年1026字グリッド -->
+          <div style="margin-top: 24px; padding-top: 18px; border-top: 1px dashed rgba(255, 255, 255, 0.15);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+              <span style="font-size: 14px; font-weight: bold; color: #a5b4fc;">🗂️ 小学校1026字から選んで追加:</span>
+              <div style="display: flex; gap: 6px;" id="grade-filter-btns">
+                <button class="btn-header primary" onclick="loadKanjiGrid(1)">1年</button>
+                <button class="btn-header" onclick="loadKanjiGrid(2)">2年</button>
+                <button class="btn-header" onclick="loadKanjiGrid(3)">3年</button>
+                <button class="btn-header" onclick="loadKanjiGrid(4)">4年</button>
+                <button class="btn-header" onclick="loadKanjiGrid(5)">5年</button>
+                <button class="btn-header" onclick="loadKanjiGrid(6)">6年</button>
+              </div>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+              <span style="font-size: 12.5px; color: #94a3b8;">漢字をタップして選択してください（複数選択可）:</span>
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <span style="font-size: 13px; font-weight: bold; color: #ffd700;">選択中: <span id="selected-kanji-count">0</span>字</span>
+                <button class="btn-action success" onclick="importSelectedKanjiToQuestions()" style="font-size: 12.5px; padding: 6px 14px;">
+                  📥 選択した漢字を問題リストに追加
+                </button>
+              </div>
+            </div>
+            <div class="kanji-grid" id="kanji-grid-container" style="max-height: 240px; overflow-y: auto;"></div>
+          </div>
+        </div>
+      </details>
+
+      <!-- 【折りたたみ】ミッション詳細設定（手動パラメーター調整） -->
+      <details class="collapse-panel" id="advanced-settings-details">
+        <summary>
+          <span>⚙️ 詳細オプション（ミッション名・制限時間・ヒント・判定基準を手動指定する場合）</span>
+        </summary>
+        <div class="collapse-content">
+          <div style="font-size: 12px; color: #94a3b8; margin-bottom: 12px;">
+            ※通常は上記の「🎯 3コース一括QR」を使うことで児童側で難易度を自律選択できるため、本項目の設定は不要です。特定の制限時間や判定基準を一律強制したい場合のみ設定してください。
+          </div>
+          <div class="form-row" style="background: rgba(15, 23, 42, 0.6); padding: 12px 14px; border-radius: 8px; align-items: center;">
+            <div class="form-group" style="flex: 1.5;">
+              <label for="mission-title">ミッションのタイトル（児童画面に表示されます）</label>
+              <input type="text" id="mission-title" value="先生の特別ミッション" placeholder="例: 今週の漢字テスト、スイミー重要漢字">
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label for="mission-time">1問あたりの制限時間</label>
+              <select id="mission-time">
+                <option value="20">20秒 (⚡ スピード挑戦)</option>
+                <option value="30" selected>30秒 (🌱 標準)</option>
+                <option value="45">45秒 (🤝 じっくりサポート)</option>
+                <option value="60">60秒 (🐢 ゆったり安心)</option>
+              </select>
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label for="mission-hint">ヒント表示設定</label>
+              <select id="mission-hint">
+                <option value="none" selected>ヒントなし (通常)</option>
+                <option value="first">頭文字のみ表示 (例:「あ〇〇〇」)</option>
+              </select>
+            </div>
+            <div class="form-group" style="flex: 1.2;">
+              <label for="mission-trace-difficulty">✍️ 手書き・筆順の判定基準</label>
+              <select id="mission-trace-difficulty" onchange="onTeacherDifficultyChange(this.value)">
+                <option value="easy" selected>🌱 やさしい（低学年・ゆらぎ許容）</option>
+                <option value="normal">🚶 ふつう（標準）</option>
+                <option value="strict">🔥 きびしい（正確な運筆）</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </details>
     </div>
 
     <!-- タブ3: 🖨️ AI対応プリント自動生成 (Step 1) -->
@@ -1549,41 +1713,67 @@ window.addEventListener('DOMContentLoaded', () => {
 
   <!-- 📱 電子黒板・大画面QRコード＆配布URL モーダル -->
   <div class="modal-overlay" id="distribute-modal">
-    <div class="modal-card fullscreen-qr">
+    <div class="modal-card fullscreen-qr" style="max-width: 1100px;">
       <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #334155; padding-bottom: 12px; margin-bottom: 12px;">
         <h2 style="font-size: 20px; color: #ffd700;" id="modal-distribute-title">🎯 児童配布用 大画面QRコード</h2>
         <button class="btn-header" onclick="closeDistributeModal()">✕ とじる</button>
       </div>
 
-      <p style="font-size: 14px; color: #cbd5e1; margin-bottom: 8px;">
-        電子黒板やプロジェクターに映し、児童のタブレット・端末のカメラで読み取らせてください。
-      </p>
-
-      <!-- 巨大QRコードコンテナ -->
-      <div class="qr-container" id="distribute-qr-box"></div>
-
-      <!-- 配布URL -->
-      <div style="margin-top: 12px; text-align: left; background: #090e1a; border: 1px solid #334155; border-radius: 10px; padding: 12px 16px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-          <span style="font-size: 12.5px; font-weight: bold; color: #38bdf8;">🔗 Classroom / ロイロノート配布用URL:</span>
-          <button class="btn-action success" onclick="copyDistributeUrl()" style="font-size: 12px; padding: 4px 12px;">
-            📋 URLをコピー
-          </button>
-        </div>
-        <input type="text" id="distribute-url-input" readonly style="width: 100%; font-size: 12px; color: #00ff88; background: #070d19; border: 1px solid #1e293b;" onclick="this.select()">
+      <!-- モーダル内タブ切り替え -->
+      <div class="modal-tab-nav">
+        <button class="modal-tab-btn active" id="modal-tab-btn-3courses" onclick="switchModalDistributeTab('3courses')">
+          🎯 おすすめ！難易度別 3コース一括QR (児童自己選択)
+        </button>
+        <button class="modal-tab-btn" id="modal-tab-btn-single" onclick="switchModalDistributeTab('single')">
+          📱 単一QR・URL (一律設定)
+        </button>
       </div>
 
-      <!-- アクション -->
-      <div style="margin-top: 16px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
-        <a id="btn-test-play" href="#" target="_blank" class="btn-action primary" style="font-size: 14px; padding: 10px 22px;">
-          🚀 この端末で今すぐテスト出撃
-        </a>
-        <button class="btn-action secondary" onclick="toggleQrFullscreen()">
-          🔍 QRコードをさらに超特大化
-        </button>
+      <!-- 1. 難易度別 3コース一括QRビュー（デフォルト＆おすすめ！） -->
+      <div id="modal-view-3courses">
+        <p style="font-size: 14px; color: #cbd5e1; margin-bottom: 16px;">
+          電子黒板やプロジェクターに映すだけ！児童が「自分のレベルに合ったコース」を自分で選んで挑戦できます。
+        </p>
+        <div class="courses-3col-grid" id="modal-courses-3col-container">
+          <!-- JSでイージー・ノーマル・ハードの3つのQRコードを生成 -->
+        </div>
+      </div>
+
+      <!-- 2. 単一QRビュー -->
+      <div id="modal-view-single" style="display: none;">
+        <p style="font-size: 14px; color: #cbd5e1; margin-bottom: 8px;">
+          全員共通の制限時間・手書き判定基準で出撃させるための単一QRコードです。
+        </p>
+
+        <!-- 巨大QRコードコンテナ -->
+        <div class="qr-container" id="distribute-qr-box"></div>
+
+        <!-- 配布URL -->
+        <div style="margin-top: 12px; text-align: left; background: #090e1a; border: 1px solid #334155; border-radius: 10px; padding: 12px 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <span style="font-size: 12.5px; font-weight: bold; color: #38bdf8;">🔗 Classroom / ロイロノート配布用URL:</span>
+            <button class="btn-action success" onclick="copyDistributeUrl()" style="font-size: 12px; padding: 4px 12px;">
+              📋 URLをコピー
+            </button>
+          </div>
+          <input type="text" id="distribute-url-input" readonly style="width: 100%; font-size: 12px; color: #00ff88; background: #070d19; border: 1px solid #1e293b;" onclick="this.select()">
+        </div>
+
+        <!-- アクション -->
+        <div style="margin-top: 16px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+          <a id="btn-test-play" href="#" target="_blank" class="btn-action primary" style="font-size: 14px; padding: 10px 22px;">
+            🚀 この端末で今すぐテスト出撃
+          </a>
+          <button class="btn-action secondary" onclick="toggleQrFullscreen()">
+            🔍 QRコードをさらに超特大化
+          </button>
+        </div>
       </div>
     </div>
   </div>
+
+  <!-- 先生用トースト通知コンテナ -->
+  <div id="teacher-toast-box"></div>
 
   <!-- 🔑 PINコード変更モーダル -->
   <div class="modal-overlay" id="pin-change-modal">
@@ -3370,9 +3560,54 @@ function saveNewPin() {
 }
 
 /* ==========================================================================
+   トースト通知＆状態管理
+   ========================================================================== */
+let currentSelectedPresetId = null;
+
+function showToast(message) {
+  const box = document.getElementById('teacher-toast-box');
+  if (!box) return;
+  const toast = document.createElement('div');
+  toast.className = 'teacher-toast';
+  toast.innerHTML = message;
+  box.appendChild(toast);
+  setTimeout(() => {
+    if (toast.parentNode) toast.parentNode.removeChild(toast);
+  }, 3000);
+}
+
+function updateHeroUnitBadge(preset, count) {
+  const badge = document.getElementById('hero-active-unit-badge');
+  if (!badge) return;
+  const total = (count !== undefined) ? count : (customQuestions ? customQuestions.length : 0);
+  if (!preset) {
+    if (total > 0) {
+      badge.innerHTML = `✏️ カスタム出題 (${total}問)`;
+      badge.style.borderColor = '#818cf8';
+      badge.style.color = '#c7d2fe';
+    } else {
+      badge.innerHTML = `📖 単元未選択`;
+      badge.style.borderColor = '#64748b';
+      badge.style.color = '#94a3b8';
+    }
+    return;
+  }
+  const gradeLabel = preset.grade ? `${preset.grade}年` : '';
+  badge.innerHTML = `📚 光村図書 ${gradeLabel}：${escapeHtml(preset.title)} (${total}字)`;
+  badge.style.borderColor = '#06b6d4';
+  badge.style.color = '#38bdf8';
+}
+
+/* ==========================================================================
    タブ切り替え
    ========================================================================== */
 function switchTab(tabId) {
+  if (tabId === 'textbook') {
+    tabId = 'custom';
+    const el = document.getElementById('preset-section-panel');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  }
+
   document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
 
@@ -3381,9 +3616,8 @@ function switchTab(tabId) {
   if (activeBtn) activeBtn.classList.add('active');
   if (activeContent) activeContent.classList.add('active');
 
-  if (tabId === 'textbook') {
+  if (tabId === 'custom') {
     renderPresets();
-    loadKanjiGrid(currentActiveGridGrade);
   } else if (tabId === 'print') {
     renderAiPrintSheet();
   } else if (tabId === 'live') {
@@ -3420,8 +3654,11 @@ function addQuestionToList() {
   }
 
   customQuestions.push({ kanji, kana, grade, hint });
+  currentSelectedPresetId = null;
   saveQuestionsToStorage();
   renderQuestionTable();
+  renderPresets();
+  showToast(`✅ 「${escapeHtml(kanji)}」を問題リストに追加しました！`);
 
   // 入力欄クリア
   kanjiEl.value = '';
@@ -3431,9 +3668,12 @@ function addQuestionToList() {
 }
 
 function removeQuestion(index) {
-  customQuestions.splice(index, 1);
+  const removed = customQuestions.splice(index, 1);
   saveQuestionsToStorage();
   renderQuestionTable();
+  if (removed && removed[0]) {
+    showToast(`🗑️ 「${escapeHtml(removed[0].kanji)}」を削除しました`);
+  }
 }
 
 function moveQuestion(index, direction) {
@@ -3450,14 +3690,23 @@ function clearAllQuestions() {
   if (customQuestions.length === 0) return;
   if (!confirm('問題リストをすべて消去しますか？')) return;
   customQuestions = [];
+  currentSelectedPresetId = null;
   saveQuestionsToStorage();
   renderQuestionTable();
+  renderPresets();
+  updateHeroUnitBadge(null, 0);
+  showToast('🗑️ 問題リストを空にしました');
 }
 
 function loadSampleQuestions() {
   customQuestions = JSON.parse(JSON.stringify(SAMPLE_QUESTIONS));
+  currentSelectedPresetId = null;
+  document.getElementById('mission-title').value = 'サンプル問題（宇宙編）';
   saveQuestionsToStorage();
   renderQuestionTable();
+  renderPresets();
+  updateHeroUnitBadge({ title: 'サンプル問題（宇宙編）', grade: '3' }, customQuestions.length);
+  showToast('🎲 サンプル問題（5問）を読み込みました！');
 }
 
 function renderQuestionTable() {
@@ -3468,11 +3717,22 @@ function renderQuestionTable() {
   countEl.textContent = customQuestions.length;
   heroCountEl.textContent = `${customQuestions.length}問`;
 
+  // プリセットとバッジの同期
+  if (currentSelectedPresetId && typeof TEACHER_PRESETS !== 'undefined') {
+    const p = TEACHER_PRESETS.find(item => item.id === currentSelectedPresetId);
+    if (p) updateHeroUnitBadge(p, customQuestions.length);
+  } else if (customQuestions.length > 0) {
+    const curTitle = document.getElementById('mission-title') ? document.getElementById('mission-title').value : '';
+    updateHeroUnitBadge(curTitle ? { title: curTitle } : null, customQuestions.length);
+  } else {
+    updateHeroUnitBadge(null, 0);
+  }
+
   if (customQuestions.length === 0) {
     tbody.innerHTML = `
       <tr>
         <td colspan="6" style="text-align: center; color: #64748b; padding: 24px;">
-          まだ問題が追加されていません。上のフォームから問題を入力するか、「サンプル問題を読み込む」を押してください。
+          上の単元リストから単元を選んでください。自動的に問題がセットされます。
         </td>
       </tr>
     `;
@@ -3498,6 +3758,11 @@ function renderQuestionTable() {
 function saveQuestionsToStorage() {
   try {
     localStorage.setItem('teacher_custom_questions', JSON.stringify(customQuestions));
+    if (currentSelectedPresetId) {
+      localStorage.setItem('teacher_selected_preset_id', currentSelectedPresetId);
+    } else {
+      localStorage.removeItem('teacher_selected_preset_id');
+    }
   } catch (e) {}
 }
 
@@ -3506,6 +3771,10 @@ function loadQuestionsFromStorage() {
     const data = localStorage.getItem('teacher_custom_questions');
     if (data) {
       customQuestions = JSON.parse(data);
+    }
+    const pid = localStorage.getItem('teacher_selected_preset_id');
+    if (pid) {
+      currentSelectedPresetId = pid;
     }
   } catch (e) {}
 }
@@ -3527,9 +3796,13 @@ function initTeacherDifficultySetting() {
 /* ==========================================================================
    配布（QRコード・ワンクリックURL生成）
    ========================================================================== */
-function openDistributeModal() {
+function open3CourseModal() {
+  openDistributeModal('3courses');
+}
+
+function openDistributeModal(initialTab = '3courses') {
   if (customQuestions.length === 0) {
-    alert('配布する問題がありません。先に問題を1問以上作成してください。');
+    alert('配布する問題がありません。上の教科書単元リストから単元を選択してください。');
     return;
   }
 
@@ -3545,7 +3818,15 @@ function openDistributeModal() {
   const traceDiff = (diffSelect ? diffSelect.value : 'easy') || 'easy';
   onTeacherDifficultyChange(traceDiff);
 
-  // ペイロード構築
+  document.getElementById('modal-distribute-title').textContent = `🎯 児童配布用 大画面QRコード: 【${missionTitle}】(全${customQuestions.length}問)`;
+
+  // タブ切り替え
+  switchModalDistributeTab(initialTab);
+
+  // 1. 3コース一括QRの生成
+  renderModal3CourseQRs(missionTitle);
+
+  // 2. 単一QRの生成（単一タブ用）
   const payload = {
     title: missionTitle,
     time: timeLimit,
@@ -3553,17 +3834,13 @@ function openDistributeModal() {
     traceDifficulty: traceDiff,
     questions: customQuestions
   };
-
-  // URLエンコード
   const jsonStr = JSON.stringify(payload);
   const encoded = encodeURIComponent(jsonStr);
 
-  // 児童画面の絶対URLを生成
   const loc = window.location;
   const basePath = loc.pathname.substring(0, loc.pathname.lastIndexOf('/') + 1);
   const targetUrl = `${loc.protocol}//${loc.host}${basePath}index.html?mission=${encoded}&traceDiff=${traceDiff}`;
 
-  // QRコード描画
   const qrBox = document.getElementById('distribute-qr-box');
   qrBox.innerHTML = '';
   new QRCode(qrBox, {
@@ -3575,16 +3852,142 @@ function openDistributeModal() {
     correctLevel: QRCode.CorrectLevel.M
   });
 
-  // URL入力欄とテスト出撃ボタンにセット
   const urlInput = document.getElementById('distribute-url-input');
   urlInput.value = targetUrl;
 
   const testBtn = document.getElementById('btn-test-play');
   testBtn.href = targetUrl;
 
-  document.getElementById('modal-distribute-title').textContent = `🎯 配布用QRコード: 【${missionTitle}】(全${customQuestions.length}問)`;
-
   modal.style.display = 'flex';
+}
+
+function switchModalDistributeTab(tab) {
+  const btn3Courses = document.getElementById('modal-tab-btn-3courses');
+  const btnSingle = document.getElementById('modal-tab-btn-single');
+  const view3Courses = document.getElementById('modal-view-3courses');
+  const viewSingle = document.getElementById('modal-view-single');
+
+  if (tab === '3courses') {
+    if (btn3Courses) btn3Courses.classList.add('active');
+    if (btnSingle) btnSingle.classList.remove('active');
+    if (view3Courses) view3Courses.style.display = 'block';
+    if (viewSingle) viewSingle.style.display = 'none';
+  } else {
+    if (btn3Courses) btn3Courses.classList.remove('active');
+    if (btnSingle) btnSingle.classList.add('active');
+    if (view3Courses) view3Courses.style.display = 'none';
+    if (viewSingle) viewSingle.style.display = 'block';
+  }
+}
+
+function renderModal3CourseQRs(missionTitle) {
+  const container = document.getElementById('modal-courses-3col-container');
+  if (!container) return;
+
+  const loc = window.location;
+  const basePath = loc.pathname.substring(0, loc.pathname.lastIndexOf('/') + 1);
+  const baseUrl = `${loc.protocol}//${loc.host}${basePath}index.html`;
+
+  let list = (customQuestions && customQuestions.length > 0) ? customQuestions : SAMPLE_QUESTIONS;
+  const title = missionTitle || (document.getElementById('mission-title') ? document.getElementById('mission-title').value.trim() : '漢字ミッション');
+
+  const courses = [
+    {
+      id: 'easy',
+      name: '🌱 イージーコース',
+      sub: '初級パイロット',
+      badgeClass: 'easy',
+      color: '#10b981',
+      time: 45,
+      hint: 'first_char',
+      speed: 0.8,
+      traceDiff: 'easy',
+      desc: '制限時間45秒 / 最初のひらがなヒントあり / ゆっくり運筆'
+    },
+    {
+      id: 'normal',
+      name: '🚀 ノーマルコース',
+      sub: '一等パイロット',
+      badgeClass: 'normal',
+      color: '#06b6d4',
+      time: 30,
+      hint: 'none',
+      speed: 1.0,
+      traceDiff: 'normal',
+      desc: '制限時間30秒 / 標準バトル / 腕試し'
+    },
+    {
+      id: 'hard',
+      name: '🔥 ハードコース',
+      sub: 'エースパイロット',
+      badgeClass: 'hard',
+      color: '#ef4444',
+      time: 15,
+      hint: 'none',
+      speed: 1.3,
+      traceDiff: 'strict',
+      desc: '制限時間15秒 / ヒントなし / スピード勝負！'
+    }
+  ];
+
+  container.innerHTML = courses.map(c => {
+    const payload = {
+      title: `${title} (${c.name})`,
+      time: c.time,
+      hint: c.hint,
+      speed: c.speed,
+      traceDifficulty: c.traceDiff,
+      questions: list
+    };
+    const encoded = encodeURIComponent(JSON.stringify(payload));
+    const targetUrl = `${baseUrl}?mission=${encoded}&diff=${c.id}&traceDiff=${c.traceDiff}`;
+
+    return `
+      <div class="course-live-card ${c.id}" style="background: rgba(15, 23, 42, 0.9); border-width: 2px;">
+        <span class="course-badge ${c.badgeClass}">${escapeHtml(c.name)}</span>
+        <div style="font-size: 11.5px; color: var(--text-sub); margin-bottom: 8px;">${escapeHtml(c.desc)}</div>
+        <div class="course-qr-holder" id="modal-course-qr-${c.id}"></div>
+        <div style="font-size: 11px; color: #94a3b8; margin: 4px 0 10px;">
+          ${escapeHtml(c.sub)}
+        </div>
+        <div style="display: flex; gap: 8px; justify-content: center; width: 100%;">
+          <a href="${targetUrl}" target="_blank" class="btn-action primary" style="font-size: 12px; padding: 6px 14px; text-decoration: none;">
+            🚀 出撃
+          </a>
+          <button class="btn-action secondary" onclick="navigator.clipboard.writeText('${targetUrl}').then(()=>alert('📋 URLをコピーしました！'))" style="font-size: 12px; padding: 6px 12px;">
+            📋 コピー
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // 各QRコードを描画
+  courses.forEach(c => {
+    const qrHolder = document.getElementById(`modal-course-qr-${c.id}`);
+    if (qrHolder) {
+      const payload = {
+        title: `${title} (${c.name})`,
+        time: c.time,
+        hint: c.hint,
+        speed: c.speed,
+        traceDifficulty: c.traceDiff,
+        questions: list
+      };
+      const encoded = encodeURIComponent(JSON.stringify(payload));
+      const targetUrl = `${baseUrl}?mission=${encoded}&diff=${c.id}&traceDiff=${c.traceDiff}`;
+
+      qrHolder.innerHTML = '';
+      new QRCode(qrHolder, {
+        text: targetUrl,
+        width: 180,
+        height: 180,
+        colorDark: "#050b17",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.M
+      });
+    }
+  });
 }
 
 function closeDistributeModal() {
@@ -3713,44 +4116,48 @@ function renderPresets() {
     return;
   }
 
-  container.innerHTML = filtered.map(p => `
-    <div class="preset-card" onclick="importPreset('${p.id}')">
-      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
-        <div class="preset-title">📚 ${escapeHtml(p.title)}</div>
-        <span style="background: rgba(56,189,248,0.2); color: #38bdf8; font-size: 11px; padding: 2px 7px; border-radius: 4px; font-weight: bold; white-space: nowrap; margin-left: 6px;">${p.kanji.length}字</span>
+  container.innerHTML = filtered.map(p => {
+    const isSelected = (p.id === currentSelectedPresetId);
+    return `
+      <div class="preset-card ${isSelected ? 'active-preset' : ''}" onclick="importPreset('${p.id}')">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
+          <div class="preset-title">📚 ${escapeHtml(p.title)}</div>
+          <span style="background: rgba(56,189,248,0.2); color: #38bdf8; font-size: 11px; padding: 2px 7px; border-radius: 4px; font-weight: bold; white-space: nowrap; margin-left: 6px;">${p.kanji.length}字</span>
+        </div>
+        <div class="preset-kanji-preview">${p.kanji.join(' ')}</div>
+        <div style="font-size: 11.5px; color: ${isSelected ? '#00ff88' : '#38bdf8'}; margin-top: 8px; display: flex; align-items: center; gap: 4px; font-weight: bold;">
+          <span>${isSelected ? '✓ 現在セット中（タップで再セット）' : 'タップで即座に出題セット'}</span>
+          <span>▶</span>
+        </div>
       </div>
-      <div class="preset-kanji-preview">${p.kanji.join(' ')}</div>
-      <div style="font-size: 11px; color: #38bdf8; margin-top: 8px; display: flex; align-items: center; gap: 4px;">
-        <span>クリックで問題リストへ取り込み</span>
-        <span>▶</span>
-      </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
 
 function importPreset(presetId) {
   const p = TEACHER_PRESETS.find(item => item.id === presetId);
   if (!p) return;
 
-  let addedCount = 0;
-  p.kanji.forEach(ch => {
-    if (!customQuestions.some(q => q.kanji === ch)) {
-      const reading = getKanjiAutoReading(ch);
-      customQuestions.push({
-        kanji: ch,
-        kana: reading.kana,
-        grade: `${p.grade}年`,
-        hint: `単元「${p.unit}」配当漢字（${reading.hint}）`
-      });
-      addedCount++;
-    }
+  // 単元配当漢字をスマートにセット
+  customQuestions = p.kanji.map(ch => {
+    const reading = getKanjiAutoReading(ch);
+    return {
+      kanji: ch,
+      kana: reading.kana,
+      grade: `${p.grade}年`,
+      hint: `単元「${p.unit}」配当漢字（${reading.hint}）`
+    };
   });
+
+  currentSelectedPresetId = presetId;
+  const titleInput = document.getElementById('mission-title');
+  if (titleInput) titleInput.value = p.title;
 
   saveQuestionsToStorage();
   renderQuestionTable();
-  document.getElementById('mission-title').value = p.title;
-  switchTab('custom');
-  alert(`✅ 「${p.title}」の漢字（${p.kanji.length}字）を取り込みました！\n（新規追加: ${addedCount}問）`);
+  renderPresets();
+  updateHeroUnitBadge(p, p.kanji.length);
+  showToast(`✅ 単元「${escapeHtml(p.title)}」（${p.kanji.length}字）を出題セットしました！`);
 }
 
 function loadKanjiGrid(grade) {
@@ -4385,6 +4792,8 @@ function escapeHtml(str) {
 window.addEventListener('DOMContentLoaded', () => {
   checkAuth();
   loadQuestionsFromStorage();
+  renderPresets();
+  loadKanjiGrid(1);
   renderQuestionTable();
   initTeacherDifficultySetting();
 

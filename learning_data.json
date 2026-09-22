@@ -126,6 +126,7 @@
   "音": {
     "grade": 1,
     "compounds": [
+      "足音",
       "発音",
       "小音",
       "福音",
@@ -135,16 +136,18 @@
       "音楽"
     ],
     "sentences": [
+      "遠くから足音が聞こえる。",
       "選手に声援をおくる。",
       "大きな声で発声練習。"
     ],
-    "primaryCompound": "発音",
-    "primaryKana": "はつおん",
-    "primarySentence": "選手に声援をおくる。"
+    "primaryCompound": "足音",
+    "primaryKana": "あしおと",
+    "primarySentence": "遠くから足音が聞こえる。"
   },
   "下": {
     "grade": 1,
     "compounds": [
+      "下校",
       "下位",
       "下流",
       "上下",
@@ -158,14 +161,15 @@
       "下手"
     ],
     "sentences": [
+      "友達と一緒に下校する。",
       "下を見下ろす。",
       "下級生と坂道を下る。",
       "本の下巻を借りる。",
       "友達と下校する。"
     ],
-    "primaryCompound": "下位",
-    "primaryKana": "かい",
-    "primarySentence": "下を見下ろす。"
+    "primaryCompound": "下校",
+    "primaryKana": "げこう",
+    "primarySentence": "友達と一緒に下校する。"
   },
   "火": {
     "grade": 1,
@@ -741,13 +745,14 @@
       "耳元"
     ],
     "sentences": [
+      "その話を聞くのは初耳だ。",
       "耳をすまして聞く。",
       "ウサギの長い耳。",
       "パンの耳をかじる。"
     ],
-    "primaryCompound": "外耳",
-    "primaryKana": "がいじ",
-    "primarySentence": "耳をすまして聞く。"
+    "primaryCompound": "初耳",
+    "primaryKana": "はつみみ",
+    "primarySentence": "その話を聞くのは初耳だ。"
   },
   "七": {
     "grade": 1,
@@ -841,12 +846,13 @@
       "二十日"
     ],
     "sentences": [
+      "十月に学校の運動会がある。",
       "十時七分に起きる。",
       "十年間の義務教育。"
     ],
     "primaryCompound": "十月",
     "primaryKana": "じゅうがつ",
-    "primarySentence": "十時七分に起きる。"
+    "primarySentence": "十月に学校の運動会がある。"
   },
   "出": {
     "grade": 1,
@@ -2000,12 +2006,13 @@
       "手引き"
     ],
     "sentences": [
+      "算数の時間に引き算を習う。",
       "辞書を引く。",
       "綱引きをする。"
     ],
     "primaryCompound": "引き算",
     "primaryKana": "ひきざん",
-    "primarySentence": "辞書を引く。"
+    "primarySentence": "算数の時間に引き算を習う。"
   },
   "羽": {
     "grade": 2,
@@ -2031,6 +2038,7 @@
   "雲": {
     "grade": 2,
     "compounds": [
+      "雨雲",
       "雲海",
       "暗雲",
       "雲梯",
@@ -2040,13 +2048,14 @@
       "積乱雲"
     ],
     "sentences": [
+      "空に雨雲が垂れこめる。",
       "白い雲がうかぶ。",
       "雨雲が垂れこめる。",
       "雲間から日生がさす。"
     ],
-    "primaryCompound": "雲海",
-    "primaryKana": "うんかい",
-    "primarySentence": "白い雲がうかぶ。"
+    "primaryCompound": "雨雲",
+    "primaryKana": "あまぐも",
+    "primarySentence": "空に雨雲が垂れこめる。"
   },
   "園": {
     "grade": 2,
@@ -2258,13 +2267,14 @@
       "遠回り"
     ],
     "sentences": [
+      "車輪が激しく回転する。",
       "水車が回る。",
       "目を回す。",
       "会議を何回も開く。"
     ],
     "primaryCompound": "回転",
     "primaryKana": "かいてん",
-    "primarySentence": "水車が回る。"
+    "primarySentence": "車輪が激しく回転する。"
   },
   "会": {
     "grade": 2,
@@ -2371,12 +2381,13 @@
       "角"
     ],
     "sentences": [
+      "四角い箱に本をしまう。",
       "四つの角がある。",
       "角を曲がる。"
     ],
     "primaryCompound": "四角",
     "primaryKana": "しかく",
-    "primarySentence": "四つの角がある。"
+    "primarySentence": "四角い箱に本をしまう。"
   },
   "楽": {
     "grade": 2,
@@ -3361,13 +3372,14 @@
       "微細"
     ],
     "sentences": [
+      "竹で細工を作る。",
       "細い糸を通す。",
       "細かい注意を払う。",
       "細かく砕く。"
     ],
     "primaryCompound": "細工",
     "primaryKana": "さいく",
-    "primarySentence": "細い糸を通す。"
+    "primarySentence": "竹で細工を作る。"
   },
   "作": {
     "grade": 2,
@@ -3440,12 +3452,13 @@
       "行き止まり"
     ],
     "sentences": [
+      "雨で遠足が中止になる。",
       "通行止めにする。",
       "歩みを止める。"
     ],
     "primaryCompound": "中止",
     "primaryKana": "ちゅうし",
-    "primarySentence": "通行止めにする。"
+    "primarySentence": "雨で遠足が中止になる。"
   },
   "市": {
     "grade": 2,
@@ -7307,6 +7320,7 @@
   "次": {
     "grade": 3,
     "compounds": [
+      "次回",
       "つぎの",
       "順序",
       "次席",
@@ -7323,14 +7337,15 @@
       "次男"
     ],
     "sentences": [
+      "次回の放送をお楽しみに。",
       "次のバスを待つ。",
       "東京に次ぐ大都市。",
       "次はぼくの番だ。",
       "次回をお楽しみに。"
     ],
-    "primaryCompound": "次席",
-    "primaryKana": "じせき",
-    "primarySentence": "次のバスを待つ。"
+    "primaryCompound": "次回",
+    "primaryKana": "じかい",
+    "primarySentence": "次回の放送をお楽しみに。"
   },
   "事": {
     "grade": 3,
@@ -8424,6 +8439,7 @@
       "息子"
     ],
     "sentences": [
+      "困って大きいため息をつく。",
       "寒い日の白い息。",
       "苦しくて息が切れる。",
       "ペンギンの生息地。",
@@ -8431,7 +8447,7 @@
     ],
     "primaryCompound": "ため息",
     "primaryKana": "ためいき",
-    "primarySentence": "寒い日の白い息。"
+    "primarySentence": "困って大きいため息をつく。"
   },
   "速": {
     "grade": 3,
@@ -12761,13 +12777,14 @@
       "浅薄"
     ],
     "sentences": [
+      "川の浅瀬で魚をつかまえる。",
       "水の浅い場所で泳ぐ。",
       "浅緑色の茶葉。",
       "考えが浅はかだ。"
     ],
     "primaryCompound": "浅瀬",
     "primaryKana": "あさせ",
-    "primarySentence": "水の浅い場所で泳ぐ。"
+    "primarySentence": "川の浅瀬で魚をつかまえる。"
   },
   "戦": {
     "grade": 4,
@@ -14512,11 +14529,12 @@
       "夜桜"
     ],
     "sentences": [
+      "春に桜の花が美しく咲く。",
       "桜の花が咲く。"
     ],
-    "primaryCompound": "山桜",
-    "primaryKana": "やまざくら",
-    "primarySentence": "桜の花が咲く。"
+    "primaryCompound": "桜",
+    "primaryKana": "さくら",
+    "primarySentence": "春に桜の花が美しく咲く。"
   },
   "可": {
     "grade": 5,
@@ -14596,12 +14614,13 @@
       "過失"
     ],
     "sentences": [
+      "過去の出来事を振り返る。",
       "自分の過ちに気づく。",
       "電車が通り過ぎる。"
     ],
     "primaryCompound": "過去",
     "primaryKana": "かこ",
-    "primarySentence": "自分の過ちに気づく。"
+    "primarySentence": "過去の出来事を振り返る。"
   },
   "快": {
     "grade": 5,
@@ -14629,11 +14648,12 @@
       "解説"
     ],
     "sentences": [
+      "テストの解答用紙を提出する。",
       "問題を解く。"
     ],
     "primaryCompound": "解答",
     "primaryKana": "かいとう",
-    "primarySentence": "問題を解く。"
+    "primarySentence": "テストの解答用紙を提出する。"
   },
   "格": {
     "grade": 5,
@@ -14662,11 +14682,12 @@
       "確立"
     ],
     "sentences": [
+      "安全をしっかり確認する。",
       "健康状態を確かめる。"
     ],
     "primaryCompound": "確認",
     "primaryKana": "かくにん",
-    "primarySentence": "健康状態を確かめる。"
+    "primarySentence": "安全をしっかり確認する。"
   },
   "額": {
     "grade": 5,
@@ -14678,12 +14699,13 @@
       "定額"
     ],
     "sentences": [
+      "お買い物の合計金額を確かめる。",
       "絵を額に入れる。",
       "金客を確かめる。"
     ],
     "primaryCompound": "金額",
     "primaryKana": "きんがく",
-    "primarySentence": "絵を額に入れる。"
+    "primarySentence": "お買い物の合計金額を確かめる。"
   },
   "刊": {
     "grade": 5,
@@ -14880,11 +14902,12 @@
       "逆光"
     ],
     "sentences": [
+      "試合の最後に逆転勝ちする。",
       "逆立ちをする。"
     ],
     "primaryCompound": "逆転",
     "primaryKana": "ぎゃくてん",
-    "primarySentence": "逆立ちをする。"
+    "primarySentence": "試合の最後に逆転勝ちする。"
   },
   "久": {
     "grade": 5,
@@ -14948,11 +14971,12 @@
       "皇居"
     ],
     "sentences": [
+      "家族みんなで居間に集まる。",
       "部屋に居合わせる。"
     ],
     "primaryCompound": "居間",
     "primaryKana": "いま",
-    "primarySentence": "部屋に居合わせる。"
+    "primarySentence": "家族みんなで居間に集まる。"
   },
   "許": {
     "grade": 5,
@@ -15188,11 +15212,12 @@
       "減給"
     ],
     "sentences": [
+      "ごみの量を減少させる。",
       "体重が減る。"
     ],
     "primaryCompound": "減少",
     "primaryKana": "げんしょう",
-    "primarySentence": "体重が減る。"
+    "primarySentence": "ごみの量を減少させる。"
   },
   "故": {
     "grade": 5,
@@ -15286,11 +15311,12 @@
       "耕うん"
     ],
     "sentences": [
+      "作物を育てるために耕作する。",
       "田畑を耕す。"
     ],
     "primaryCompound": "耕作",
     "primaryKana": "こうさく",
-    "primarySentence": "田畑を耕す。"
+    "primarySentence": "作物を育てるために耕作する。"
   },
   "航": {
     "grade": 5,
@@ -15690,11 +15716,12 @@
       "志向"
     ],
     "sentences": [
+      "将来の志望をしっかり決める。",
       "志を高くもつ。"
     ],
     "primaryCompound": "志望",
     "primaryKana": "しぼう",
-    "primarySentence": "志を高くもつ。"
+    "primarySentence": "将来の志望をしっかり決める。"
   },
   "枝": {
     "grade": 5,
@@ -15705,11 +15732,12 @@
       "枝分かれ"
     ],
     "sentences": [
+      "鳥が小枝をくわえて巣を作る。",
       "木の枝が伸びる。"
     ],
-    "primaryCompound": "枝葉",
-    "primaryKana": "えだは",
-    "primarySentence": "木の枝が伸びる。"
+    "primaryCompound": "小枝",
+    "primaryKana": "こえだ",
+    "primarySentence": "鳥が小枝をくわえて巣を作る。"
   },
   "師": {
     "grade": 5,
@@ -15770,11 +15798,12 @@
       "示談"
     ],
     "sentences": [
+      "先生の指示に従って行動する。",
       "指で示す。"
     ],
     "primaryCompound": "指示",
     "primaryKana": "しじ",
-    "primarySentence": "指で示す。"
+    "primarySentence": "先生の指示に従って行動する。"
   },
   "似": {
     "grade": 5,
@@ -15785,11 +15814,12 @@
       "似合う"
     ],
     "sentences": [
+      "友達の似顔絵を描いて贈る。",
       "似たような形。"
     ],
-    "primaryCompound": "類似",
-    "primaryKana": "るいじ",
-    "primarySentence": "似たような形。"
+    "primaryCompound": "似顔絵",
+    "primaryKana": "にがおえ",
+    "primarySentence": "友達の似顔絵を描いて贈る。"
   },
   "識": {
     "grade": 5,
@@ -15885,11 +15915,12 @@
       "修身"
     ],
     "sentences": [
+      "壊れた自転車を修理する。",
       "修学旅行に行く。"
     ],
     "primaryCompound": "修理",
     "primaryKana": "しゅうり",
-    "primarySentence": "修学旅行に行く。"
+    "primarySentence": "壊れた自転車を修理する。"
   },
   "述": {
     "grade": 5,
@@ -15901,11 +15932,12 @@
       "述懐"
     ],
     "sentences": [
+      "実験の結果を詳しく記述する。",
       "意見を述べる。"
     ],
     "primaryCompound": "記述",
     "primaryKana": "きじゅつ",
-    "primarySentence": "意見を述べる。"
+    "primarySentence": "実験の結果を詳しく記述する。"
   },
   "術": {
     "grade": 5,
@@ -16316,11 +16348,12 @@
       "絶望"
     ],
     "sentences": [
+      "野生動物の絶滅を防ぐ。",
       "絶好の機会。"
     ],
-    "primaryCompound": "絶叫",
-    "primaryKana": "ぜっきょう",
-    "primarySentence": "絶好の機会。"
+    "primaryCompound": "絶滅",
+    "primaryKana": "ぜつめつ",
+    "primarySentence": "野生動物の絶滅を防ぐ。"
   },
   "祖": {
     "grade": 5,
@@ -16364,11 +16397,12 @@
       "総額"
     ],
     "sentences": [
+      "総合的な学習の時間に取り組む。",
       "総力を挙げて戦う。"
     ],
     "primaryCompound": "総合",
     "primaryKana": "そうごう",
-    "primarySentence": "総力を挙げて戦う。"
+    "primarySentence": "総合的な学習の時間に取り組む。"
   },
   "造": {
     "grade": 5,
@@ -16614,11 +16648,12 @@
       "主張"
     ],
     "sentences": [
+      "自分の意見をはっきり主張する。",
       "テントを設営する。"
     ],
     "primaryCompound": "主張",
     "primaryKana": "しゅちょう",
-    "primarySentence": "テントを設営する。"
+    "primarySentence": "自分の意見をはっきり主張する。"
   },
   "停": {
     "grade": 5,
@@ -16800,12 +16835,13 @@
       "独占"
     ],
     "sentences": [
+      "アメリカの独立記念日を祝う。",
       "独り言を言う。",
       "独学で資格を取る。"
     ],
     "primaryCompound": "独立",
     "primaryKana": "どくりつ",
-    "primarySentence": "独り言を言う。"
+    "primarySentence": "アメリカの独立記念日を祝う。"
   },
   "任": {
     "grade": 5,
@@ -16833,11 +16869,12 @@
       "燃え殻"
     ],
     "sentences": [
+      "自動車に燃料を補給する。",
       "燃えるごみを出す。"
     ],
     "primaryCompound": "燃料",
     "primaryKana": "ねんりょう",
-    "primarySentence": "燃えるごみを出す。"
+    "primarySentence": "自動車に燃料を補給する。"
   },
   "能": {
     "grade": 5,
@@ -16915,11 +16952,12 @@
       "限定版"
     ],
     "sentences": [
+      "図工の時間に木版画を彫る。",
       "新しい版を発行する。"
     ],
-    "primaryCompound": "出版",
-    "primaryKana": "しゅっぱん",
-    "primarySentence": "新しい版を発行する。"
+    "primaryCompound": "版画",
+    "primaryKana": "はんが",
+    "primarySentence": "図工の時間に木版画を彫る。"
   },
   "比": {
     "grade": 5,
@@ -16931,11 +16969,12 @@
       "恵比寿"
     ],
     "sentences": [
+      "二つの製品の値段を比較する。",
       "他人と比べる。"
     ],
     "primaryCompound": "比較",
     "primaryKana": "ひかく",
-    "primarySentence": "他人と比べる。"
+    "primarySentence": "二つの製品の値段を比較する。"
   },
   "肥": {
     "grade": 5,
@@ -16998,12 +17037,13 @@
       "備品"
     ],
     "sentences": [
+      "遠足の準備を前日に済ませる。",
       "台風に備える。",
       "冷暖房完備の部屋。"
     ],
     "primaryCompound": "準備",
     "primaryKana": "じゅんび",
-    "primarySentence": "台風に備える。"
+    "primarySentence": "遠足の準備を前日に済ませる。"
   },
   "評": {
     "grade": 5,
@@ -17031,11 +17071,12 @@
       "極貧"
     ],
     "sentences": [
+      "世界から貧困をなくそう。",
       "貧しい暮らし。"
     ],
     "primaryCompound": "貧困",
     "primaryKana": "ひんこん",
-    "primarySentence": "貧しい暮らし。"
+    "primarySentence": "世界から貧困をなくそう。"
   },
   "布": {
     "grade": 5,
@@ -17194,11 +17235,12 @@
       "保持"
     ],
     "sentences": [
+      "貴重品を金庫で保管する。",
       "かさを常備保全する。"
     ],
     "primaryCompound": "保管",
     "primaryKana": "ほかん",
-    "primarySentence": "かさを常備保全する。"
+    "primarySentence": "貴重品を金庫で保管する。"
   },
   "墓": {
     "grade": 5,
@@ -17259,12 +17301,13 @@
       "堤防"
     ],
     "sentences": [
+      "学校で防災訓練を行う。",
       "防寒具を身につける。",
       "交通事故を防ぐ。"
     ],
     "primaryCompound": "防災",
     "primaryKana": "ぼうさい",
-    "primarySentence": "防寒具を身につける。"
+    "primarySentence": "学校で防災訓練を行う。"
   },
   "貿": {
     "grade": 5,
@@ -17324,11 +17367,12 @@
       "職務"
     ],
     "sentences": [
+      "国民の三大義務を学習する。",
       "業務に励む。"
     ],
     "primaryCompound": "義務",
     "primaryKana": "ぎむ",
-    "primarySentence": "業務に励む。"
+    "primarySentence": "国民の三大義務を学習する。"
   },
   "夢": {
     "grade": 5,
@@ -17374,12 +17418,13 @@
       "木綿"
     ],
     "sentences": [
+      "肌触りの良い木綿の服を着る。",
       "綿毛を飛ばす植物。",
       "綿のシャツを着る。"
     ],
     "primaryCompound": "木綿",
     "primaryKana": "もめん",
-    "primarySentence": "綿毛を飛ばす植物。"
+    "primarySentence": "肌触りの良い木綿の服を着る。"
   },
   "輸": {
     "grade": 5,
@@ -18555,13 +18600,14 @@
       "白骨"
     ],
     "sentences": [
+      "転んで腕を骨折する。",
       "恐竜の骨の化石。",
       "骨と筋肉の働き。",
       "気骨のある少年。"
     ],
-    "primaryCompound": "骨格",
-    "primaryKana": "こっかく",
-    "primarySentence": "恐竜の骨の化石。"
+    "primaryCompound": "骨折",
+    "primaryKana": "こっせつ",
+    "primarySentence": "転んで腕を骨折する。"
   },
   "困": {
     "grade": 6,

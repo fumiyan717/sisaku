@@ -819,88 +819,148 @@ window.addEventListener('DOMContentLoaded', () => {
     .sheet-header {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
-      border-bottom: 2.5px solid #000;
+      align-items: flex-end;
+      border-bottom: 2px solid #000;
       padding-bottom: 8px;
       margin-bottom: 12px;
+      gap: 16px;
     }
     .sheet-title-area {
       flex: 1;
+      min-width: 0;
     }
     .sheet-main-title {
-      font-size: 21px;
-      font-weight: bold;
+      font-size: 22px;
+      font-weight: 900;
       letter-spacing: 2px;
-      margin-bottom: 4px;
       color: #000;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 5px;
+      line-height: 1.2;
     }
     .sheet-sub-title {
-      font-size: 10px;
-      color: #444;
+      font-size: 11px;
+      color: #333;
       font-family: sans-serif;
+      white-space: nowrap;
+      display: flex;
+      gap: 8px;
+      align-items: center;
     }
 
     .sheet-student-info {
       display: flex;
-      gap: 8px;
+      gap: 6px;
       align-items: flex-end;
+      flex-shrink: 0;
     }
     .info-box {
       border: 1px solid #000;
-      padding: 4px 8px;
-      font-size: 11px;
+      padding: 3px 6px;
+      font-size: 10px;
       color: #000;
       font-family: sans-serif;
     }
     .name-box {
       border: 1.5px solid #000;
-      width: 48mm;
-      height: 15mm;
+      width: 44mm;
+      height: 14mm;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: 2px 6px;
-      font-size: 10px;
+      padding: 2px 5px;
+      font-size: 9px;
       color: #000;
       font-family: sans-serif;
     }
     .score-box {
       border: 2px solid #000;
-      width: 24mm;
-      height: 15mm;
+      width: 20mm;
+      height: 14mm;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       font-weight: bold;
-      font-size: 10px;
+      font-size: 9px;
       color: #000;
       font-family: sans-serif;
     }
     .score-val {
-      font-size: 16px;
+      font-size: 15px;
     }
 
-    /* テスト識別用QRコード枠 */
-    .sheet-qr-area {
-      margin-left: 8px;
+    /* 用紙右下のフッター領域（AI採点照合コード・識別コード） */
+    .sheet-footer {
+      margin-top: auto;
+      padding-top: 8px;
+      border-top: 1.5px solid #000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: sans-serif;
+    }
+    .sheet-footer-left {
+      flex: 1;
+      font-size: 8.5px;
+      color: #333;
+      line-height: 1.5;
+      padding-right: 12px;
+    }
+    .sheet-footer-note {
+      font-weight: bold;
+      color: #000;
+    }
+    .sheet-footer-sub {
+      color: #666;
+      margin-top: 2px;
+    }
+    .sheet-footer-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 3px 8px;
+      border: 1px solid #000;
+      border-radius: 4px;
+      background: #fafafa;
+      flex-shrink: 0;
+    }
+    .sheet-qr-box {
+      width: 50px;
+      height: 50px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .sheet-qr-box img, .sheet-qr-box canvas {
+      width: 50px !important;
+      height: 50px !important;
+      display: block;
+    }
+    .sheet-qr-info {
       display: flex;
       flex-direction: column;
-      align-items: center;
-    }
-    .sheet-qr-code {
-      width: 58px;
-      height: 58px;
-      border: 1px solid #000;
-      padding: 2px;
-      background: #fff;
+      justify-content: center;
+      text-align: right;
     }
     .sheet-qr-label {
-      font-size: 7.5px;
-      color: #555;
-      font-family: sans-serif;
-      margin-top: 2px;
+      font-size: 8px;
+      font-weight: bold;
+      color: #000;
       letter-spacing: -0.2px;
+      white-space: nowrap;
+    }
+    .sheet-test-id {
+      font-size: 11px;
+      font-weight: 900;
+      color: #000;
+      font-family: monospace;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+      margin-top: 2px;
     }
 
     /* 問題一覧グリッド */
@@ -1159,17 +1219,24 @@ window.addEventListener('DOMContentLoaded', () => {
       color: #94a3b8;
     }
 
-    /* 印刷スタイル（A4完全適合） */
+    /* 印刷スタイル（A4完全適合・余白ゼロで1枚完結） */
     @media print {
       @page {
         size: A4 portrait;
         margin: 0;
       }
-      body {
+      *, *::before, *::after {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      html, body {
+        width: 210mm !important;
+        height: 297mm !important;
+        margin: 0 !important;
+        padding: 0 !important;
         background: #ffffff !important;
         color: #000000 !important;
-        padding: 0 !important;
-        margin: 0 !important;
+        overflow: hidden !important;
       }
       body * {
         visibility: hidden;
@@ -1182,12 +1249,22 @@ window.addEventListener('DOMContentLoaded', () => {
         left: 0;
         top: 0;
         width: 210mm;
+        height: 297mm;
         margin: 0;
         padding: 0;
       }
       .ai-print-sheet {
+        width: 210mm !important;
+        height: 297mm !important;
+        min-height: 297mm !important;
+        max-height: 297mm !important;
+        padding: 12mm 15mm !important;
         box-shadow: none !important;
-        page-break-after: always;
+        box-sizing: border-box !important;
+        page-break-after: avoid !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        overflow: hidden !important;
       }
     }
   </style>
@@ -1487,8 +1564,58 @@ window.addEventListener('DOMContentLoaded', () => {
       </details>
     </div>
 
-    <!-- タブ3: 🖨️ AI対応プリント自動生成 (Step 1) -->
+    <!-- タブ3: 🖨️ AI対応プリント自動生成 (Step 1〜Step 3) -->
     <div class="tab-content" id="tab-content-print">
+      <!-- 🛒 テスト問題ショッピングカート & 漢字検索UI (Step 3) -->
+      <div class="cart-search-panel" style="background: var(--panel-bg); border: 1.5px solid #0284c7; border-radius: 14px; padding: 18px 20px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(2, 132, 199, 0.15);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 24px;">🛒</span>
+            <div>
+              <h3 style="font-size: 16px; font-weight: bold; color: #38bdf8; margin: 0;">テスト問題ショッピングカート</h3>
+              <div style="font-size: 11.5px; color: #94a3b8; margin-top: 2px;">出題したい漢字・問題をストックし、選んだ問題だけで即座にプリントを生成できます</div>
+            </div>
+            <span id="cart-count-badge" style="background: #0284c7; color: #fff; font-size: 12px; font-weight: bold; padding: 2px 10px; border-radius: 12px; margin-left: 6px;">0問</span>
+          </div>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <button class="btn-action primary" onclick="generatePrintFromCart()" style="font-size: 13.5px; padding: 8px 18px; font-weight: bold;">
+              🖨️ カートの問題でプリント生成
+            </button>
+            <button class="btn-action secondary" onclick="clearCartQuestions()" style="font-size: 12px; padding: 8px 12px; opacity: 0.85;">
+              🗑️ カートを空にする
+            </button>
+          </div>
+        </div>
+
+        <!-- カート内ストック一覧プレビュー -->
+        <div id="cart-items-preview" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; min-height: 40px; padding: 10px; background: rgba(15, 23, 42, 0.6); border-radius: 8px; border: 1px dashed rgba(56, 189, 248, 0.4); align-items: center;">
+          <span style="font-size: 12px; color: #94a3b8;" id="cart-empty-message">※下の検索バーから漢字（例：「構」「桜」「修理」）を検索し、問題にチェックを入れるとここにストックされます。</span>
+        </div>
+
+        <!-- 🔍 漢字・問題検索バー -->
+        <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 14px;">
+          <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 12px;">
+            <div style="flex: 1; min-width: 260px; position: relative;">
+              <input type="text" id="cart-kanji-search-input" placeholder="🔍 漢字または言葉で検索（例: 構, 桜, 修理, 航海, 5年）..." oninput="onCartSearchInput()" style="width: 100%; padding: 10px 14px; font-size: 14px; border-radius: 8px; border: 1.5px solid #0284c7; background: #0f172a; color: #fff; box-sizing: border-box;">
+            </div>
+            <div style="display: flex; gap: 4px; flex-wrap: wrap;" id="cart-grade-filter-btns">
+              <button class="btn-header primary" onclick="setCartGradeFilter('all')">全学年</button>
+              <button class="btn-header" onclick="setCartGradeFilter('1')">1年</button>
+              <button class="btn-header" onclick="setCartGradeFilter('2')">2年</button>
+              <button class="btn-header" onclick="setCartGradeFilter('3')">3年</button>
+              <button class="btn-header" onclick="setCartGradeFilter('4')">4年</button>
+              <button class="btn-header" onclick="setCartGradeFilter('5')">5年</button>
+              <button class="btn-header" onclick="setCartGradeFilter('6')">6年</button>
+            </div>
+          </div>
+
+          <!-- 検索結果グリッド -->
+          <div id="cart-search-results-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; max-height: 260px; overflow-y: auto; padding-right: 4px;">
+            <!-- JSで動的レンダリング -->
+          </div>
+        </div>
+      </div>
+
       <!-- 操作コントロールバー -->
       <div class="print-ctrl-panel">
         <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
@@ -3619,6 +3746,8 @@ function switchTab(tabId) {
   if (tabId === 'custom') {
     renderPresets();
   } else if (tabId === 'print') {
+    renderCartUI();
+    renderCartSearchResults();
     renderAiPrintSheet();
   } else if (tabId === 'live') {
     render3CourseQRs();
@@ -4421,11 +4550,286 @@ function saveClassSettings() {
 }
 
 /* ==========================================================================
-   AI対応 漢字小テストプリント自動生成 (Step 1)
+   テスト問題ショッピングカート & 漢字クイック検索 (Step 3)
+   ========================================================================== */
+let testCartQuestions = [];
+let currentCartGradeFilter = 'all';
+
+function setCartGradeFilter(grade) {
+  currentCartGradeFilter = grade;
+  const btns = document.querySelectorAll('#cart-grade-filter-btns button');
+  btns.forEach(btn => {
+    const text = btn.textContent;
+    const isMatch = (grade === 'all' && text.includes('全学年')) || (grade !== 'all' && text.includes(grade + '年'));
+    btn.classList.toggle('primary', isMatch);
+  });
+  renderCartSearchResults();
+}
+
+function onCartSearchInput() {
+  renderCartSearchResults();
+}
+
+/**
+ * 漢字・言葉から出題候補を高速検索
+ */
+function searchKanjiQuestions(query, gradeFilter) {
+  if (typeof KANJI_LEARNING_DATA === 'undefined') return [];
+  const qClean = (query || "").trim();
+  const results = [];
+  const addedKeys = new Set();
+
+  for (const ch in KANJI_LEARNING_DATA) {
+    const ld = KANJI_LEARNING_DATA[ch];
+    if (!ld) continue;
+
+    const gStr = String(ld.grade || "");
+    if (gradeFilter !== 'all' && gStr !== String(gradeFilter)) {
+      continue;
+    }
+
+    let isMatch = false;
+    if (!qClean) {
+      isMatch = true;
+    } else {
+      const inChar = (ch === qClean || ch.includes(qClean));
+      const inComp = (ld.primaryCompound && ld.primaryCompound.includes(qClean)) || (ld.compounds && ld.compounds.some(c => c.includes(qClean)));
+      const inKana = (ld.primaryKana && ld.primaryKana.includes(qClean));
+      const inSent = (ld.primarySentence && ld.primarySentence.includes(qClean)) || (ld.sentences && ld.sentences.some(s => s.includes(qClean)));
+      const inGrade = (gStr + "年").includes(qClean) || gStr === qClean;
+
+      isMatch = inChar || inComp || inKana || inSent || inGrade;
+    }
+
+    if (isMatch) {
+      let score = 0;
+      if (qClean) {
+        if (ch === qClean) score += 100;
+        else if (ch.includes(qClean)) score += 60;
+      }
+
+      // メインの代表問題
+      const mainWord = ld.primaryCompound || ch;
+      const mainKana = ld.primaryKana || getKanjiAutoReading(mainWord).kana;
+      const mainSent = ld.primarySentence || (ld.sentences && ld.sentences[0]) || "";
+      const itemKey = `${ch}_${mainWord}`;
+
+      let mainScore = score;
+      if (qClean) {
+        if (mainWord === qClean) mainScore += 80;
+        else if (mainWord.includes(qClean)) mainScore += 40;
+        if (mainKana === qClean) mainScore += 50;
+        else if (mainKana.includes(qClean)) mainScore += 25;
+        if (mainSent && mainSent.includes(qClean)) mainScore += 20;
+      }
+
+      if (!addedKeys.has(itemKey)) {
+        addedKeys.add(itemKey);
+        results.push({
+          targetKanji: ch,
+          kanji: mainWord,
+          kana: mainKana,
+          sentence: mainSent,
+          grade: `${ld.grade}年`,
+          hint: mainSent,
+          score: mainScore
+        });
+      }
+
+      // クエリが熟語を指している、または特定漢字の他の熟語もあれば追加
+      if (qClean && ld.compounds) {
+        ld.compounds.forEach(compWord => {
+          if (compWord !== mainWord && (compWord.includes(qClean) || ch.includes(qClean))) {
+            const subKey = `${ch}_${compWord}`;
+            if (!addedKeys.has(subKey)) {
+              addedKeys.add(subKey);
+              let subScore = score;
+              if (compWord === qClean) subScore += 70;
+              else if (compWord.includes(qClean)) subScore += 35;
+              const matchSent = (ld.sentences || []).find(s => s.includes(compWord)) || `${compWord}を使った文を覚えよう。`;
+              if (matchSent.includes(qClean)) subScore += 15;
+
+              results.push({
+                targetKanji: ch,
+                kanji: compWord,
+                kana: getKanjiAutoReading(compWord).kana,
+                sentence: matchSent,
+                grade: `${ld.grade}年`,
+                hint: matchSent,
+                score: subScore
+              });
+            }
+          }
+        });
+      }
+    }
+  }
+
+  if (qClean) {
+    results.sort((a, b) => b.score - a.score);
+  }
+
+  return results.slice(0, 60);
+}
+
+function isQuestionInCart(q) {
+  return testCartQuestions.some(item => (item.kanji === q.kanji && item.targetKanji === q.targetKanji));
+}
+
+function toggleQuestionInCart(targetKanji, kanji, kana, sentence, grade) {
+  const existingIdx = testCartQuestions.findIndex(item => item.kanji === kanji && item.targetKanji === targetKanji);
+  if (existingIdx >= 0) {
+    testCartQuestions.splice(existingIdx, 1);
+    showToast(`🛒 「${escapeHtml(kanji)}」をカートから外しました`);
+  } else {
+    testCartQuestions.push({
+      targetKanji,
+      kanji,
+      kana,
+      sentence,
+      grade,
+      hint: sentence
+    });
+    showToast(`🛒 「${escapeHtml(kanji)}」をカートに追加しました（計${testCartQuestions.length}問）`);
+  }
+  renderCartUI();
+  renderCartSearchResults();
+  renderAiPrintSheet();
+}
+
+function removeQuestionFromCart(idx) {
+  if (idx >= 0 && idx < testCartQuestions.length) {
+    const removed = testCartQuestions.splice(idx, 1)[0];
+    showToast(`🛒 「${escapeHtml(removed.kanji)}」を削除しました`);
+    renderCartUI();
+    renderCartSearchResults();
+    renderAiPrintSheet();
+  }
+}
+
+function clearCartQuestions() {
+  if (testCartQuestions.length === 0) return;
+  testCartQuestions = [];
+  renderCartUI();
+  renderCartSearchResults();
+  renderAiPrintSheet();
+  showToast('🗑️ テスト問題カートを空にしました');
+}
+
+function renderCartUI() {
+  const badge = document.getElementById('cart-count-badge');
+  const preview = document.getElementById('cart-items-preview');
+  if (!badge || !preview) return;
+
+  badge.textContent = `${testCartQuestions.length}問`;
+
+  if (testCartQuestions.length === 0) {
+    preview.innerHTML = '<span style="font-size: 12px; color: #94a3b8;" id="cart-empty-message">※下の検索バーから漢字（例：「構」「桜」「修理」）を検索し、問題にチェックを入れるとここにストックされます。</span>';
+    return;
+  }
+
+  preview.innerHTML = testCartQuestions.map((q, idx) => {
+    return `
+      <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(56, 189, 248, 0.18); border: 1px solid #38bdf8; border-radius: 6px; padding: 4px 8px; font-size: 12px; color: #f0f9ff;">
+        <span style="background: #0284c7; color: #fff; font-size: 10px; padding: 1px 4px; border-radius: 3px; font-weight: bold;">${escapeHtml(q.grade || '')}</span>
+        <strong style="color: #fff;">${escapeHtml(q.kanji)}</strong>
+        <span style="color: #bae6fd; font-size: 11px;">(${escapeHtml(q.kana)})</span>
+        <button type="button" onclick="removeQuestionFromCart(${idx})" style="background: none; border: none; color: #f87171; cursor: pointer; font-size: 13px; padding: 0 2px; font-weight: bold;" title="カートから削除">✕</button>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderCartSearchResults() {
+  const grid = document.getElementById('cart-search-results-grid');
+  if (!grid) return;
+
+  const query = document.getElementById('cart-kanji-search-input')?.value || '';
+  const results = searchKanjiQuestions(query, currentCartGradeFilter);
+
+  if (results.length === 0) {
+    grid.innerHTML = `
+      <div style="grid-column: 1 / -1; padding: 30px; text-align: center; color: #94a3b8; font-size: 13px;">
+        🔍 「${escapeHtml(query)}」に一致する漢字・問題が見つかりませんでした。<br>別の漢字（例：「構」「桜」「空」など）をお試しください。
+      </div>
+    `;
+    return;
+  }
+
+  grid.innerHTML = results.map(q => {
+    const inCart = isQuestionInCart(q);
+    const safeTarget = escapeHtml(q.targetKanji);
+    const safeKanji = escapeHtml(q.kanji);
+    const safeKana = escapeHtml(q.kana);
+    const safeSent = escapeHtml(q.sentence);
+    const safeGrade = escapeHtml(q.grade);
+
+    return `
+      <div class="cart-result-card" style="background: ${inCart ? 'rgba(2, 132, 199, 0.2)' : 'rgba(15, 23, 42, 0.6)'}; border: 1.5px solid ${inCart ? '#00ff88' : '#334155'}; border-radius: 8px; padding: 10px 12px; display: flex; flex-direction: column; justify-content: space-between; gap: 8px; transition: all 0.2s;">
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="font-size: 11px; background: rgba(56, 189, 248, 0.25); color: #38bdf8; padding: 1px 6px; border-radius: 4px; font-weight: bold;">${safeGrade}</span>
+              <span style="font-size: 11px; color: #94a3b8;">対象: <strong>${safeTarget}</strong></span>
+            </div>
+            <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 12px; color: ${inCart ? '#00ff88' : '#94a3b8'}; font-weight: bold;">
+              <input type="checkbox" ${inCart ? 'checked' : ''} onchange="toggleQuestionInCart('${safeTarget}', '${safeKanji}', '${safeKana}', '${safeSent}', '${safeGrade}')" style="cursor: pointer; width: 15px; height: 15px;">
+              ${inCart ? '選択済' : '選択'}
+            </label>
+          </div>
+          <div style="display: flex; align-items: baseline; gap: 6px; margin-bottom: 4px;">
+            <span style="font-size: 18px; font-weight: bold; color: #fff; letter-spacing: 1px;">${safeKanji}</span>
+            <span style="font-size: 12px; color: #38bdf8;">（${safeKana}）</span>
+          </div>
+          <div style="font-size: 12px; color: #cbd5e1; line-height: 1.4; background: rgba(0, 0, 0, 0.3); padding: 4px 8px; border-radius: 4px; border-left: 2px solid #0284c7;">
+            📖 ${safeSent || `${safeKanji}を使った問題`}
+          </div>
+        </div>
+        <button type="button" onclick="toggleQuestionInCart('${safeTarget}', '${safeKanji}', '${safeKana}', '${safeSent}', '${safeGrade}')" style="width: 100%; font-size: 11.5px; padding: 5px 8px; border-radius: 5px; border: 1px solid ${inCart ? '#00ff88' : '#0284c7'}; background: ${inCart ? 'rgba(0, 255, 136, 0.15)' : 'rgba(2, 132, 199, 0.2)'}; color: ${inCart ? '#00ff88' : '#bae6fd'}; cursor: pointer; font-weight: bold;">
+          ${inCart ? '✓ カートから削除' : '＋ カートに追加'}
+        </button>
+      </div>
+    `;
+  }).join('');
+}
+
+function generatePrintFromCart() {
+  if (testCartQuestions.length === 0) {
+    alert('🛒 テスト問題カートが空です。\n上の検索バーから漢字（例：「構」「桜」）を検索し、出題したい問題にチェックを入れてカートに追加してください。');
+    return;
+  }
+
+  printQuestionsOrder = [...testCartQuestions];
+  const countSelect = document.getElementById('sheet-count-select');
+  if (countSelect) {
+    countSelect.value = 'all';
+  }
+
+  const titleInput = document.getElementById('sheet-title-input');
+  if (titleInput && (!titleInput.value || titleInput.value === '漢字チャレンジ小テスト')) {
+    titleInput.value = `特選漢字小テスト (${testCartQuestions.length}問)`;
+  }
+
+  renderAiPrintSheet();
+
+  const preview = document.getElementById('ai-print-sheet-preview');
+  if (preview) {
+    preview.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  showToast(`🖨️ カートの${testCartQuestions.length}問で小テストプリントを生成しました！`);
+}
+
+/* ==========================================================================
+   AI対応 漢字小テストプリント自動生成 (Step 1〜Step 3)
    ========================================================================== */
 let printQuestionsOrder = [];
 
 function getActivePrintQuestions() {
+  // カートに問題が入っている場合はカートの出題を最優先
+  if (testCartQuestions && testCartQuestions.length > 0) {
+    return testCartQuestions;
+  }
   let list = (customQuestions && customQuestions.length > 0) ? customQuestions : SAMPLE_QUESTIONS;
   if (printQuestionsOrder.length === list.length && list.every((item, i) => printQuestionsOrder[i] && printQuestionsOrder[i].kanji === item.kanji)) {
     return printQuestionsOrder;
@@ -4610,19 +5014,18 @@ function renderAiPrintSheet() {
         <div class="sheet-main-title">${escapeHtml(title)}${isModelAnswer ? '【模範解答】' : ''}</div>
         <div class="sheet-sub-title">
           <span>${escapeHtml(gradeText)}</span> ｜ 
-          <span>全${questions.length}問（各${pointsPerQuestion}点 / 100点満点）</span> ｜ 
-          <span>識別コード: ${testId}</span>
+          <span>全${questions.length}問（各${pointsPerQuestion}点 / 100点満点）</span>
         </div>
       </div>
 
       <div class="sheet-student-info">
         <div class="info-box">
           <div style="font-size: 8px; color: #555;">実施日</div>
-          <div style="font-size: 11px; min-width: 20mm; text-align: center;">　月　日</div>
+          <div style="font-size: 11px; min-width: 18mm; text-align: center;">　月　日</div>
         </div>
         <div class="info-box">
           <div style="font-size: 8px; color: #555;">年・組・番</div>
-          <div style="font-size: 11px; min-width: 22mm; text-align: center;">年　組　番</div>
+          <div style="font-size: 11px; min-width: 20mm; text-align: center;">年　組　番</div>
         </div>
         <div class="name-box">
           <div style="font-size: 8px; color: #555;">なまえ（ふりがな）</div>
@@ -4632,10 +5035,6 @@ function renderAiPrintSheet() {
           <div>得点</div>
           <div class="score-val">${isModelAnswer ? '<span style="color:#dc2626;">100</span>' : '　'}</div>
         </div>
-        <div class="sheet-qr-area">
-          <div class="sheet-qr-code" id="sheet-header-qr"></div>
-          <div class="sheet-qr-label">AI採点照合コード</div>
-        </div>
       </div>
     </div>
 
@@ -4644,21 +5043,30 @@ function renderAiPrintSheet() {
       ${problemsHtml}
     </div>
 
-    <!-- フッター注記 -->
-    <div style="margin-top: 10px; padding-top: 6px; border-top: 1px solid #ddd; font-size: 8px; color: #666; display: flex; justify-content: space-between; font-family: sans-serif;">
-      <span>※ 四隅の四角マーカー（■）とマス目の中央線（十字点線）に合わせて、枠内に丁寧な文字で書きましょう。</span>
-      <span>漢字ジェット AI採点対応フォーマット (Version 2.0)</span>
+    <!-- シートフッター（用紙右下にAI採点照合コードと識別コードを安全配置） -->
+    <div class="sheet-footer">
+      <div class="sheet-footer-left">
+        <div class="sheet-footer-note">※ 四隅の四角マーカー（■）とマス目の中央線（十字点線）に合わせて、枠内に丁寧な文字で書きましょう。</div>
+        <div class="sheet-footer-sub">漢字ジェット AI採点対応フォーマット (Version 2.0 / A4)</div>
+      </div>
+      <div class="sheet-footer-right">
+        <div class="sheet-qr-box" id="sheet-footer-qr"></div>
+        <div class="sheet-qr-info">
+          <div class="sheet-qr-label">AI採点照合コード</div>
+          <div class="sheet-test-id">${testId}</div>
+        </div>
+      </div>
     </div>
   `;
 
-  // QRコード描画
-  const qrBox = document.getElementById('sheet-header-qr');
+  // QRコード描画（用紙右下のフッター領域に確実描画）
+  const qrBox = document.getElementById('sheet-footer-qr');
   if (qrBox) {
     qrBox.innerHTML = '';
     new QRCode(qrBox, {
       text: qrPayload,
-      width: 54,
-      height: 54,
+      width: 50,
+      height: 50,
       colorDark: "#000000",
       colorLight: "#ffffff",
       correctLevel: QRCode.CorrectLevel.M
@@ -4943,6 +5351,8 @@ window.addEventListener('DOMContentLoaded', () => {
   loadKanjiGrid(1);
   renderQuestionTable();
   initTeacherDifficultySetting();
+  renderCartSearchResults();
+  renderCartUI();
 
   // クラス防衛設定の復元
   const cName = localStorage.getItem('kanji_jet_class_name');

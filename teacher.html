@@ -1566,20 +1566,20 @@ window.addEventListener('DOMContentLoaded', () => {
 
     <!-- タブ3: 🖨️ AI対応プリント自動生成 (Step 1〜Step 3) -->
     <div class="tab-content" id="tab-content-print">
-      <!-- 🛒 テスト問題ショッピングカート & 漢字検索UI (Step 3) -->
+      <!-- 🛒 テスト問題ショッピングカート & 学年別漢字選択UI (Step 3) -->
       <div class="cart-search-panel" style="background: var(--panel-bg); border: 1.5px solid #0284c7; border-radius: 14px; padding: 18px 20px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(2, 132, 199, 0.15);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
           <div style="display: flex; align-items: center; gap: 10px;">
             <span style="font-size: 24px;">🛒</span>
             <div>
               <h3 style="font-size: 16px; font-weight: bold; color: #38bdf8; margin: 0;">テスト問題ショッピングカート</h3>
-              <div style="font-size: 11.5px; color: #94a3b8; margin-top: 2px;">出題したい漢字・問題をストックし、選んだ問題だけで即座にプリントを生成できます</div>
+              <div style="font-size: 11.5px; color: #94a3b8; margin-top: 2px;">学年別漢字一覧から出題したい漢字をタップしてストック！選んだ漢字だけでプリントを即時作成できます</div>
             </div>
             <span id="cart-count-badge" style="background: #0284c7; color: #fff; font-size: 12px; font-weight: bold; padding: 2px 10px; border-radius: 12px; margin-left: 6px;">0問</span>
           </div>
           <div style="display: flex; gap: 8px; align-items: center;">
             <button class="btn-action primary" onclick="generatePrintFromCart()" style="font-size: 13.5px; padding: 8px 18px; font-weight: bold;">
-              🖨️ カートの問題でプリント生成
+              🖨️ カートの漢字でプリント生成
             </button>
             <button class="btn-action secondary" onclick="clearCartQuestions()" style="font-size: 12px; padding: 8px 12px; opacity: 0.85;">
               🗑️ カートを空にする
@@ -1589,13 +1589,52 @@ window.addEventListener('DOMContentLoaded', () => {
 
         <!-- カート内ストック一覧プレビュー -->
         <div id="cart-items-preview" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; min-height: 40px; padding: 10px; background: rgba(15, 23, 42, 0.6); border-radius: 8px; border: 1px dashed rgba(56, 189, 248, 0.4); align-items: center;">
-          <span style="font-size: 12px; color: #94a3b8;" id="cart-empty-message">※下の検索バーから漢字（例：「構」「桜」「修理」）を検索し、問題にチェックを入れるとここにストックされます。</span>
+          <span style="font-size: 12px; color: #94a3b8;" id="cart-empty-message">※下の学年別漢字一覧または検索から漢字を選ぶと、ここにストックされます。</span>
         </div>
 
-        <!-- 🔍 漢字・問題検索バー -->
-        <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 14px;">
+        <!-- カート追加方法のサブタブ切り替え -->
+        <div style="display: flex; gap: 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 10px; margin-bottom: 14px;">
+          <button type="button" class="btn-header primary" id="cart-mode-btn-grid" onclick="switchCartSelectMode('grid')" style="font-size: 13px; padding: 6px 14px;">
+            🗂️ 学年別漢字一覧から選ぶ（おすすめ）
+          </button>
+          <button type="button" class="btn-header" id="cart-mode-btn-search" onclick="switchCartSelectMode('search')" style="font-size: 13px; padding: 6px 14px;">
+            🔍 キーワード検索から選ぶ
+          </button>
+        </div>
+
+        <!-- 【モード1】学年別漢字一覧グリッド選択 -->
+        <div id="cart-section-grid" style="display: block;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+            <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;" id="cart-grid-grade-btns">
+              <button class="btn-header primary" onclick="setCartGridGrade(1)">1年生 (80字)</button>
+              <button class="btn-header" onclick="setCartGridGrade(2)">2年生 (160字)</button>
+              <button class="btn-header" onclick="setCartGridGrade(3)">3年生 (200字)</button>
+              <button class="btn-header" onclick="setCartGridGrade(4)">4年生 (202字)</button>
+              <button class="btn-header" onclick="setCartGridGrade(5)">5年生 (193字)</button>
+              <button class="btn-header" onclick="setCartGridGrade(6)">6年生 (191字)</button>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <button type="button" class="btn-action secondary" onclick="addRandomKanjiToCart(10)" style="font-size: 11.5px; padding: 5px 10px;">
+                🎲 この学年から10問ランダム追加
+              </button>
+              <button type="button" class="btn-action secondary" onclick="addAllCurrentGradeToCart()" style="font-size: 11.5px; padding: 5px 10px;">
+                ➕ この学年を全選択
+              </button>
+            </div>
+          </div>
+          <div style="font-size: 12px; color: #94a3b8; margin-bottom: 8px;">
+            漢字をタップするとカートに追加／解除されます（緑色ハイライト＝カート選択中）:
+          </div>
+          <!-- 漢字グリッド -->
+          <div class="kanji-grid" id="cart-kanji-grid" style="max-height: 280px; overflow-y: auto;">
+            <!-- JSで動的レンダリング -->
+          </div>
+        </div>
+
+        <!-- 【モード2】キーワード検索エリア -->
+        <div id="cart-section-search" style="display: none;">
           <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 12px;">
-            <div style="flex: 1; min-width: 260px; position: relative;">
+            <div style="flex: 1; min-width: 260px;">
               <input type="text" id="cart-kanji-search-input" placeholder="🔍 漢字または言葉で検索（例: 構, 桜, 修理, 航海, 5年）..." oninput="onCartSearchInput()" style="width: 100%; padding: 10px 14px; font-size: 14px; border-radius: 8px; border: 1.5px solid #0284c7; background: #0f172a; color: #fff; box-sizing: border-box;">
             </div>
             <div style="display: flex; gap: 4px; flex-wrap: wrap;" id="cart-grade-filter-btns">
@@ -1608,7 +1647,6 @@ window.addEventListener('DOMContentLoaded', () => {
               <button class="btn-header" onclick="setCartGradeFilter('6')">6年</button>
             </div>
           </div>
-
           <!-- 検索結果グリッド -->
           <div id="cart-search-results-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; max-height: 260px; overflow-y: auto; padding-right: 4px;">
             <!-- JSで動的レンダリング -->
@@ -3747,6 +3785,7 @@ function switchTab(tabId) {
     renderPresets();
   } else if (tabId === 'print') {
     renderCartUI();
+    renderCartKanjiGrid();
     renderCartSearchResults();
     renderAiPrintSheet();
   } else if (tabId === 'live') {
@@ -4550,10 +4589,169 @@ function saveClassSettings() {
 }
 
 /* ==========================================================================
-   テスト問題ショッピングカート & 漢字クイック検索 (Step 3)
+   テスト問題ショッピングカート & 学年別漢字選択 (Step 3)
    ========================================================================== */
 let testCartQuestions = [];
 let currentCartGradeFilter = 'all';
+let currentCartGridGrade = 1;
+let currentCartSelectMode = 'grid';
+
+function switchCartSelectMode(mode) {
+  currentCartSelectMode = mode;
+  const isGrid = (mode === 'grid');
+  const gridSection = document.getElementById('cart-section-grid');
+  const searchSection = document.getElementById('cart-section-search');
+  if (gridSection) gridSection.style.display = isGrid ? 'block' : 'none';
+  if (searchSection) searchSection.style.display = isGrid ? 'none' : 'block';
+
+  document.getElementById('cart-mode-btn-grid')?.classList.toggle('primary', isGrid);
+  document.getElementById('cart-mode-btn-search')?.classList.toggle('primary', !isGrid);
+
+  if (isGrid) {
+    renderCartKanjiGrid();
+  } else {
+    renderCartSearchResults();
+  }
+}
+
+function setCartGridGrade(grade) {
+  currentCartGridGrade = grade;
+  const btns = document.querySelectorAll('#cart-grid-grade-btns button');
+  btns.forEach((btn, idx) => {
+    btn.classList.toggle('primary', idx + 1 === grade);
+  });
+  renderCartKanjiGrid();
+}
+
+/**
+ * 学年別配当漢字一覧グリッドの描画
+ */
+function renderCartKanjiGrid() {
+  const container = document.getElementById('cart-kanji-grid');
+  if (!container || typeof ALL_GRADE_KANJI === 'undefined') return;
+
+  const list = ALL_GRADE_KANJI[currentCartGridGrade] || [];
+  container.innerHTML = list.map(ch => {
+    const ld = (typeof KANJI_LEARNING_DATA !== 'undefined') ? KANJI_LEARNING_DATA[ch] : null;
+    const inCart = testCartQuestions.some(q => q.targetKanji === ch || q.kanji === ch);
+    const word = (ld && ld.primaryCompound) ? ld.primaryCompound : ch;
+    const kana = (ld && ld.primaryKana) ? ld.primaryKana : '';
+
+    return `
+      <div class="kanji-cell ${inCart ? 'selected' : ''}" onclick="toggleKanjiFromGrid('${ch}')" title="${ch}（熟語: ${word} / ${kana}）" style="position: relative; user-select: none;">
+        <span>${ch}</span>
+        ${inCart ? '<span style="font-size: 11px; position: absolute; top: 1px; right: 3px; color: #00ff88; font-weight: 900;">✓</span>' : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+/**
+ * 漢字グリッドをタップしてカートに追加／解除
+ */
+function toggleKanjiFromGrid(ch) {
+  const existingIdx = testCartQuestions.findIndex(q => q.targetKanji === ch || q.kanji === ch);
+  const ld = (typeof KANJI_LEARNING_DATA !== 'undefined') ? KANJI_LEARNING_DATA[ch] : null;
+
+  if (existingIdx >= 0) {
+    const removed = testCartQuestions.splice(existingIdx, 1)[0];
+    showToast(`🛒 「${escapeHtml(removed.kanji)}」をカートから外しました`);
+  } else {
+    const targetWord = (ld && ld.primaryCompound) ? ld.primaryCompound : ch;
+    const targetKana = (ld && ld.primaryKana) ? ld.primaryKana : getKanjiAutoReading(targetWord).kana;
+    const targetSent = (ld && ld.primarySentence) ? ld.primarySentence : "";
+    const targetHint = targetSent || `${currentCartGridGrade}年配当漢字`;
+
+    testCartQuestions.push({
+      targetKanji: ch,
+      kanji: targetWord,
+      kana: targetKana,
+      grade: `${currentCartGridGrade}年`,
+      sentence: targetSent,
+      hint: targetHint
+    });
+    showToast(`🛒 「${escapeHtml(targetWord)}」をカートに追加しました（計${testCartQuestions.length}問）`);
+  }
+
+  renderCartUI();
+  renderCartKanjiGrid();
+  renderCartSearchResults();
+  renderAiPrintSheet();
+}
+
+/**
+ * 現在の学年から指定問数をランダム追加
+ */
+function addRandomKanjiToCart(count) {
+  if (typeof ALL_GRADE_KANJI === 'undefined') return;
+  const list = ALL_GRADE_KANJI[currentCartGridGrade] || [];
+  if (list.length === 0) return;
+
+  const notInCart = list.filter(ch => !testCartQuestions.some(q => q.targetKanji === ch || q.kanji === ch));
+  if (notInCart.length === 0) {
+    showToast(`ℹ️ ${currentCartGridGrade}年生の漢字は既にすべてカートに入っています`);
+    return;
+  }
+
+  const shuffled = [...notInCart].sort(() => Math.random() - 0.5);
+  const picked = shuffled.slice(0, count);
+
+  picked.forEach(ch => {
+    const ld = (typeof KANJI_LEARNING_DATA !== 'undefined') ? KANJI_LEARNING_DATA[ch] : null;
+    const targetWord = (ld && ld.primaryCompound) ? ld.primaryCompound : ch;
+    const targetKana = (ld && ld.primaryKana) ? ld.primaryKana : getKanjiAutoReading(targetWord).kana;
+    const targetSent = (ld && ld.primarySentence) ? ld.primarySentence : "";
+
+    testCartQuestions.push({
+      targetKanji: ch,
+      kanji: targetWord,
+      kana: targetKana,
+      grade: `${currentCartGridGrade}年`,
+      sentence: targetSent,
+      hint: targetSent || `${currentCartGridGrade}年配当漢字`
+    });
+  });
+
+  showToast(`🎲 ${currentCartGridGrade}年生から${picked.length}問をカートに追加しました！`);
+  renderCartUI();
+  renderCartKanjiGrid();
+  renderCartSearchResults();
+  renderAiPrintSheet();
+}
+
+/**
+ * 現在の学年の漢字を全選択
+ */
+function addAllCurrentGradeToCart() {
+  if (typeof ALL_GRADE_KANJI === 'undefined') return;
+  const list = ALL_GRADE_KANJI[currentCartGridGrade] || [];
+  let addedCount = 0;
+
+  list.forEach(ch => {
+    if (!testCartQuestions.some(q => q.targetKanji === ch || q.kanji === ch)) {
+      const ld = (typeof KANJI_LEARNING_DATA !== 'undefined') ? KANJI_LEARNING_DATA[ch] : null;
+      const targetWord = (ld && ld.primaryCompound) ? ld.primaryCompound : ch;
+      const targetKana = (ld && ld.primaryKana) ? ld.primaryKana : getKanjiAutoReading(targetWord).kana;
+      const targetSent = (ld && ld.primarySentence) ? ld.primarySentence : "";
+
+      testCartQuestions.push({
+        targetKanji: ch,
+        kanji: targetWord,
+        kana: targetKana,
+        grade: `${currentCartGridGrade}年`,
+        sentence: targetSent,
+        hint: targetSent || `${currentCartGridGrade}年配当漢字`
+      });
+      addedCount++;
+    }
+  });
+
+  showToast(`➕ ${currentCartGridGrade}年生の漢字を${addedCount}字カートに追加しました！`);
+  renderCartUI();
+  renderCartKanjiGrid();
+  renderCartSearchResults();
+  renderAiPrintSheet();
+}
 
 function setCartGradeFilter(grade) {
   currentCartGradeFilter = grade;
@@ -4693,6 +4891,7 @@ function toggleQuestionInCart(targetKanji, kanji, kana, sentence, grade) {
     showToast(`🛒 「${escapeHtml(kanji)}」をカートに追加しました（計${testCartQuestions.length}問）`);
   }
   renderCartUI();
+  renderCartKanjiGrid();
   renderCartSearchResults();
   renderAiPrintSheet();
 }
@@ -4702,6 +4901,7 @@ function removeQuestionFromCart(idx) {
     const removed = testCartQuestions.splice(idx, 1)[0];
     showToast(`🛒 「${escapeHtml(removed.kanji)}」を削除しました`);
     renderCartUI();
+    renderCartKanjiGrid();
     renderCartSearchResults();
     renderAiPrintSheet();
   }
@@ -4711,6 +4911,7 @@ function clearCartQuestions() {
   if (testCartQuestions.length === 0) return;
   testCartQuestions = [];
   renderCartUI();
+  renderCartKanjiGrid();
   renderCartSearchResults();
   renderAiPrintSheet();
   showToast('🗑️ テスト問題カートを空にしました');
@@ -4724,7 +4925,7 @@ function renderCartUI() {
   badge.textContent = `${testCartQuestions.length}問`;
 
   if (testCartQuestions.length === 0) {
-    preview.innerHTML = '<span style="font-size: 12px; color: #94a3b8;" id="cart-empty-message">※下の検索バーから漢字（例：「構」「桜」「修理」）を検索し、問題にチェックを入れるとここにストックされます。</span>';
+    preview.innerHTML = '<span style="font-size: 12px; color: #94a3b8;" id="cart-empty-message">※上の学年別漢字一覧または検索から漢字を選ぶと、ここにストックされます。</span>';
     return;
   }
 
@@ -5351,6 +5552,7 @@ window.addEventListener('DOMContentLoaded', () => {
   loadKanjiGrid(1);
   renderQuestionTable();
   initTeacherDifficultySetting();
+  renderCartKanjiGrid();
   renderCartSearchResults();
   renderCartUI();
 

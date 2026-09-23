@@ -815,7 +815,7 @@ window.addEventListener('DOMContentLoaded', () => {
     .fiducial-marker.bottom-left { bottom: 5mm; left: 5mm; }
     .fiducial-marker.bottom-right { bottom: 5mm; right: 5mm; }
 
-    /* シートヘッダー */
+    /* シートヘッダー（タイトル改行崩れ完全防止） */
     .sheet-header {
       display: flex;
       justify-content: space-between;
@@ -823,31 +823,31 @@ window.addEventListener('DOMContentLoaded', () => {
       border-bottom: 2px solid #000;
       padding-bottom: 8px;
       margin-bottom: 12px;
-      gap: 16px;
+      gap: 14px;
     }
     .sheet-title-area {
       flex: 1;
       min-width: 0;
+      padding-right: 8px;
     }
     .sheet-main-title {
-      font-size: 22px;
+      font-size: 21px;
       font-weight: 900;
-      letter-spacing: 2px;
+      letter-spacing: 1px;
       color: #000;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin-bottom: 5px;
-      line-height: 1.2;
+      margin-bottom: 4px;
+      line-height: 1.25;
+      word-break: keep-all;
+      overflow-wrap: anywhere;
     }
     .sheet-sub-title {
       font-size: 11px;
       color: #333;
       font-family: sans-serif;
-      white-space: nowrap;
       display: flex;
       gap: 8px;
       align-items: center;
+      flex-wrap: wrap;
     }
 
     .sheet-student-info {
@@ -1219,7 +1219,7 @@ window.addEventListener('DOMContentLoaded', () => {
       color: #94a3b8;
     }
 
-    /* 印刷スタイル（A4完全適合・余白ゼロで1枚完結） */
+    /* 印刷スタイル（A4完全適合・余白ゼロで1枚完結・白紙2ページ目完全抑止） */
     @media print {
       @page {
         size: A4 portrait;
@@ -1232,6 +1232,7 @@ window.addEventListener('DOMContentLoaded', () => {
       html, body {
         width: 210mm !important;
         height: 297mm !important;
+        max-height: 297mm !important;
         margin: 0 !important;
         padding: 0 !important;
         background: #ffffff !important;
@@ -1250,20 +1251,24 @@ window.addEventListener('DOMContentLoaded', () => {
         top: 0;
         width: 210mm;
         height: 297mm;
+        max-height: 297mm;
         margin: 0;
         padding: 0;
+        overflow: hidden;
       }
       .ai-print-sheet {
         width: 210mm !important;
         height: 297mm !important;
         min-height: 297mm !important;
         max-height: 297mm !important;
-        padding: 12mm 15mm !important;
+        padding: 12mm 15mm 10mm 15mm !important;
         box-shadow: none !important;
         box-sizing: border-box !important;
         page-break-after: avoid !important;
+        page-break-before: avoid !important;
         page-break-inside: avoid !important;
         break-inside: avoid !important;
+        break-after: avoid !important;
         overflow: hidden !important;
       }
     }
@@ -1646,6 +1651,13 @@ window.addEventListener('DOMContentLoaded', () => {
               <button class="btn-header" onclick="setCartGradeFilter('5')">5年</button>
               <button class="btn-header" onclick="setCartGradeFilter('6')">6年</button>
             </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+            <div style="font-size: 12px; color: #94a3b8;" id="cart-search-result-count">
+              ※漢字（例: 構, 桜）や熟語で検索すると、問題文付きで抽出されます。
+            </div>
+            <button type="button" class="btn-action secondary" onclick="addAllSearchResultsToCart()" style="font-size: 11.5px; padding: 4px 12px;">
+              ＋ 検索結果をすべてカートに追加
+            </button>
           </div>
           <!-- 検索結果グリッド -->
           <div id="cart-search-results-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; max-height: 260px; overflow-y: auto; padding-right: 4px;">
@@ -1679,6 +1691,26 @@ window.addEventListener('DOMContentLoaded', () => {
               <option value="sentence" selected>📝 短文穴埋めテスト（標準国語形式）</option>
               <option value="word">🔤 熟語・単語書き取りテスト</option>
               <option value="handout">📖 熟語・例文学習ハンドアウト</option>
+            </select>
+          </div>
+          <div class="form-group" style="min-width: 130px;">
+            <label for="sheet-target-grade-select">出題対象学年</label>
+            <select id="sheet-target-grade-select" onchange="onSheetGradeSettingChanged()">
+              <option value="auto" selected>自動判定（学年表記準拠）</option>
+              <option value="1">1年生（1年のみ）</option>
+              <option value="2">2年生（1〜2年配当）</option>
+              <option value="3">3年生（1〜3年配当）</option>
+              <option value="4">4年生（1〜4年配当）</option>
+              <option value="5">5年生（1〜5年配当）</option>
+              <option value="6">6年生（全1026字）</option>
+            </select>
+          </div>
+          <div class="form-group" style="min-width: 175px;">
+            <label for="sheet-unlearned-filter-mode">未習漢字フィルター</label>
+            <select id="sheet-unlearned-filter-mode" onchange="renderAiPrintSheet()">
+              <option value="convert" selected>🛡️ 未習漢字をひらがなに変換</option>
+              <option value="exclude">🚫 未習漢字を含む問題を除外</option>
+              <option value="raw">📖 チェックなし（漢字そのまま）</option>
             </select>
           </div>
           <div class="form-group" style="min-width: 120px;">
@@ -4266,23 +4298,184 @@ function getKanjiAutoReading(word) {
   return { kana: primaryKana, hint };
 }
 
+/* ==========================================================================
+   文部科学省 学年別配当漢字（1〜6年・計1026字）未習漢字フィルター & バリデーション
+   ========================================================================== */
+
+// 1〜6年の各学年配当漢字Set（O(1)高速検索）
+const GRADE_KANJI_SETS = {
+  1: new Set((typeof ALL_GRADE_KANJI !== 'undefined' && ALL_GRADE_KANJI[1]) || []),
+  2: new Set((typeof ALL_GRADE_KANJI !== 'undefined' && ALL_GRADE_KANJI[2]) || []),
+  3: new Set((typeof ALL_GRADE_KANJI !== 'undefined' && ALL_GRADE_KANJI[3]) || []),
+  4: new Set((typeof ALL_GRADE_KANJI !== 'undefined' && ALL_GRADE_KANJI[4]) || []),
+  5: new Set((typeof ALL_GRADE_KANJI !== 'undefined' && ALL_GRADE_KANJI[5]) || []),
+  6: new Set((typeof ALL_GRADE_KANJI !== 'undefined' && ALL_GRADE_KANJI[6]) || [])
+};
+
+// 漢字 -> 配当学年 (1〜6) マップ
+const KANJI_GRADE_MAP = new Map();
+if (typeof ALL_GRADE_KANJI !== 'undefined') {
+  for (let g = 1; g <= 6; g++) {
+    (ALL_GRADE_KANJI[g] || []).forEach(ch => KANJI_GRADE_MAP.set(ch, g));
+  }
+}
+
 /**
- * 漢字小テスト問題データ スキーマ定義 & 抽出・正規化ロジック (Step 1)
- *
- * 【スキーマ仕様】
- * @typedef {Object} QuestionSchema
- * @property {string} targetKanji   出題対象となる配当漢字（例: "修"）
- * @property {string} kanji         解答欄のマス目に書く漢字（例: "修理" または "修"）
- * @property {string} kana          解答欄の上に表示するふりがな（例: "しゅうり"）
- * @property {string} sentence      前後の文脈を含む問題文全文（例: "壊れた自転車を修理する。"）
- * @property {string} grade         対象学年（例: "5年"）
- * @property {string} hint          ヒント情報
- * @property {string} beforeText    解答欄の直前の文章（例: "壊れた自転車を"）
- * @property {string} afterText     解答欄の直後の文章（例: "する。"）
- * @property {boolean} isMatched    文中に解答漢字が100%厳密一致で存在し、文脈抽出が成立しているか
- * @property {Array<string>} chars  模範解答表示用の文字配列（例: ["修", "理"]）
+ * 出題対象学年までに習う全漢字のSetを取得
+ * @param {number|string} targetGrade 1〜6
+ * @returns {Set<string>}
  */
-function extractQuestionData(rawItem) {
+function getLearnedKanjiSet(targetGrade) {
+  const gNum = Math.max(1, Math.min(6, parseInt(targetGrade, 10) || 6));
+  const set = new Set();
+  for (let g = 1; g <= gNum; g++) {
+    if (GRADE_KANJI_SETS[g]) {
+      GRADE_KANJI_SETS[g].forEach(ch => set.add(ch));
+    }
+  }
+  return set;
+}
+
+/**
+ * テキスト中の「未習漢字」（対象学年より上で習う漢字、および常用外漢字）を検出
+ * @param {string} text 対象テキスト
+ * @param {number|string} targetGrade 出題対象学年 (1〜6)
+ * @returns {Array<{char: string, grade: number|string, index: number}>}
+ */
+function getUnlearnedKanjiInText(text, targetGrade) {
+  if (!text) return [];
+  const gNum = Math.max(1, Math.min(6, parseInt(targetGrade, 10) || 6));
+  const learnedSet = getLearnedKanjiSet(gNum);
+  const unlearnedList = [];
+
+  const kanjiRegex = /[\u4E00-\u9FFF\u3400-\u4DBF]/g;
+  let match;
+  while ((match = kanjiRegex.exec(text)) !== null) {
+    const ch = match[0];
+    if (!learnedSet.has(ch)) {
+      const g = KANJI_GRADE_MAP.get(ch) || '常用外/中学生以上';
+      unlearnedList.push({ char: ch, grade: g, index: match.index });
+    }
+  }
+  return unlearnedList;
+}
+
+/**
+ * テキストが対象学年以下ですべて習っているか判定（未習漢字が0文字ならtrue）
+ * @param {string} text
+ * @param {number|string} targetGrade
+ * @returns {boolean}
+ */
+function isAppropriateForGrade(text, targetGrade) {
+  return getUnlearnedKanjiInText(text, targetGrade).length === 0;
+}
+
+/**
+ * テキスト中の未習漢字（指定学年より上で習う漢字、常用外）のみを自動的にひらがなに変換
+ * 解答欄にするターゲット漢字（preserveWord）は変換から保護
+ * @param {string} text 変換前テキスト
+ * @param {number|string} targetGrade 指定学年
+ * @param {string} preserveWord 保護する漢字（マス目にする漢字）
+ * @returns {string} ひらがな変換後のテキスト
+ */
+function convertUnlearnedKanjiToHiragana(text, targetGrade, preserveWord = "") {
+  if (!text) return "";
+  const gNum = Math.max(1, Math.min(6, parseInt(targetGrade, 10) || 6));
+  const learnedSet = getLearnedKanjiSet(gNum);
+  const preserveSet = new Set((preserveWord || "").split(""));
+
+  // 1. よく使われる熟語辞書から未習漢字を含む熟語を変換
+  let replacedText = text;
+  if (typeof COMPOUND_READINGS !== 'undefined') {
+    for (const comp in COMPOUND_READINGS) {
+      if (comp.length >= 2 && replacedText.includes(comp)) {
+        if (preserveWord && (comp.includes(preserveWord) || preserveWord.includes(comp))) {
+          continue;
+        }
+        const hasUnlearned = comp.split("").some(c => /[\u4E00-\u9FFF]/.test(c) && !learnedSet.has(c));
+        if (hasUnlearned) {
+          const reading = COMPOUND_READINGS[comp];
+          if (reading) {
+            replacedText = replacedText.split(comp).join(reading);
+          }
+        }
+      }
+    }
+  }
+
+  // 2. 残った未習漢字を単文字ごとにひらがな置換
+  let result = "";
+  for (let i = 0; i < replacedText.length; i++) {
+    const ch = replacedText[i];
+    if (/[\u4E00-\u9FFF\u3400-\u4DBF]/.test(ch) && !learnedSet.has(ch) && !preserveSet.has(ch)) {
+      const autoR = getKanjiAutoReading(ch);
+      let kana = autoR.kana;
+      if (kana && kana !== ch) {
+        result += kana;
+      } else {
+        result += ch;
+      }
+    } else {
+      result += ch;
+    }
+  }
+  return result;
+}
+
+/**
+ * 問題全体の学年適合性バリデーション関数
+ * @param {Object} rawQuestion
+ * @param {number|string} targetGrade
+ * @param {string} filterMode 'convert' | 'exclude' | 'raw'
+ * @returns {{ valid: boolean, question: Object, unlearnedList: Array }}
+ */
+function validateQuestionForGrade(rawQuestion, targetGrade, filterMode = 'convert') {
+  if (!rawQuestion) return { valid: false, question: null, unlearnedList: [] };
+
+  let gNum = 6;
+  if (targetGrade && targetGrade !== 'auto') {
+    gNum = Math.max(1, Math.min(6, parseInt(targetGrade, 10) || 6));
+  } else {
+    const gMatch = String(rawQuestion.grade || "").match(/([1-6])/);
+    if (gMatch) gNum = parseInt(gMatch[1], 10);
+  }
+
+  const qData = extractQuestionData(rawQuestion, { targetGrade: gNum, unlearnedMode: filterMode });
+
+  // ターゲット漢字そのものの未習判定
+  const targetUnlearned = (qData.chars || []).filter(ch => {
+    const kGrade = KANJI_GRADE_MAP.get(ch);
+    return kGrade && kGrade > gNum;
+  });
+
+  // 文中の未習漢字検出（マス目漢字以外）
+  const sentenceUnlearned = getUnlearnedKanjiInText(
+    (qData.beforeText || "") + (qData.afterText || ""),
+    gNum
+  );
+
+  const totalUnlearned = [...targetUnlearned.map(ch => ({ char: ch, grade: KANJI_GRADE_MAP.get(ch), isTarget: true })), ...sentenceUnlearned];
+
+  if (filterMode === 'exclude') {
+    if (totalUnlearned.length > 0) {
+      return { valid: false, question: qData, unlearnedList: totalUnlearned };
+    }
+  }
+
+  return { valid: true, question: qData, unlearnedList: totalUnlearned };
+}
+
+/**
+ * 漢字小テスト問題データ スキーマ定義 & 100%完全一致抽出ロジック (Step 1)
+ *
+ * ターゲット漢字、ふりがな、前後の例文が100%完全に一致することを保証する。
+ * 文中の熟語境界を認識し、マス目・ふりがな・前後の文の不自然な寸断を完全抑止。
+ *
+ * @param {Object} rawItem 入力問題データ
+ * @param {Object} [options] オプション { targetGrade, unlearnedMode: 'convert' | 'exclude' | 'raw' }
+ * @returns {QuestionData}
+ */
+function extractQuestionData(rawItem, options = {}) {
   if (!rawItem) {
     return {
       targetKanji: "",
@@ -4307,7 +4500,7 @@ function extractQuestionData(rawItem) {
   let displaySentence = (rawItem.displaySentence || "").trim();
   let targetKanji = (rawItem.targetKanji || "").trim();
 
-  // targetKanji が未指定の場合、kanji 内の最初の漢字を特定
+  // ターゲット配当漢字の特定
   if (!targetKanji) {
     for (const ch of kanji) {
       if (typeof KANJI_LEARNING_DATA !== 'undefined' && KANJI_LEARNING_DATA[ch]) {
@@ -4315,43 +4508,96 @@ function extractQuestionData(rawItem) {
         break;
       }
     }
-    if (!targetKanji && kanji.length > 0) targetKanji = kanji[0];
+    if (!targetKanji && kanji.length > 0) {
+      const m = kanji.match(/[\u4E00-\u9FFF]/);
+      targetKanji = m ? m[0] : kanji[0];
+    }
   }
 
   const ld = (typeof KANJI_LEARNING_DATA !== 'undefined' && targetKanji) ? KANJI_LEARNING_DATA[targetKanji] : null;
 
-  // 2. データの整合性チェックと不整合の自動是正
-  // ケースA: sentence が空、または kanji が sentence 内に含まれない場合
-  if (!sentence || !sentence.includes(kanji)) {
-    // もし ld があり、kanji が ld.primaryCompound と一致するなら、ld.primarySentence を採用
-    if (ld && ld.primaryCompound === kanji && ld.primarySentence && ld.primarySentence.includes(kanji)) {
-      sentence = ld.primarySentence;
-      if (!displaySentence && ld.displaySentence) displaySentence = ld.displaySentence;
-    }
-    // もし ld があり、代表短文・熟語ペアが存在するならそれに更新
-    else if (ld && ld.primarySentence && ld.primaryCompound && ld.primarySentence.includes(ld.primaryCompound)) {
-      kanji = ld.primaryCompound;
-      kana = ld.primaryKana;
-      sentence = ld.primarySentence;
-      if (!displaySentence && ld.displaySentence) displaySentence = ld.displaySentence;
+  // 2. 例文の補完と不整合の是正
+  if (!sentence || (!sentence.includes(kanji) && !sentence.includes(targetKanji))) {
+    if (ld) {
+      kanji = ld.primaryCompound || targetKanji;
+      kana = ld.primaryKana || getKanjiAutoReading(kanji).kana;
+      sentence = ld.primarySentence || `${kanji}を学習する。`;
+      displaySentence = ld.displaySentence || sentence;
+    } else {
+      if (!sentence) sentence = `${kanji || targetKanji}を使った文。`;
+      if (!kanji) kanji = targetKanji;
     }
   }
 
-  // ケースB: kanji が 1 文字で、kana が熟語読み（2拍以上の無関係な読み）になっているバグの是正
-  // （例：kanji="修" に対して kana="しゅうり" になってしまっているケース）
-  if (kanji.length === 1 && ld && ld.primaryCompound && ld.primaryCompound !== kanji && kana === ld.primaryKana) {
-    if (sentence && sentence.includes(ld.primaryCompound)) {
-      kanji = ld.primaryCompound;
-      kana = ld.primaryKana;
-    } else {
-      const singleReading = getKanjiAutoReading(kanji);
-      if (singleReading && singleReading.kana && singleReading.kana !== ld.primaryKana) {
-        kana = singleReading.kana;
+  // 3. 文中の熟語境界認識による「出題漢字（kanji）」の完全整合
+  if (kanji.length === 1 && sentence.includes(kanji)) {
+    const idx = sentence.indexOf(kanji);
+    let start = idx;
+    while (start > 0 && /[\u4E00-\u9FFF]/.test(sentence[start - 1])) {
+      start--;
+    }
+    let end = idx + 1;
+    while (end < sentence.length && /[\u4E00-\u9FFF]/.test(sentence[end])) {
+      end++;
+    }
+    const detectedCompound = sentence.substring(start, end);
+    if (detectedCompound.length >= 2) {
+      if ((typeof COMPOUND_READINGS !== 'undefined' && COMPOUND_READINGS[detectedCompound]) ||
+          (ld && ld.primaryCompound === detectedCompound)) {
+        kanji = detectedCompound;
+        if (typeof COMPOUND_READINGS !== 'undefined' && COMPOUND_READINGS[detectedCompound]) {
+          kana = COMPOUND_READINGS[detectedCompound];
+        } else if (ld && ld.primaryCompound === detectedCompound) {
+          kana = ld.primaryKana;
+        }
       }
     }
   }
 
-  // displaySentence の補完（未習漢字ひらがな化文）
+  // 文中に kanji が見当たらないが targetKanji はある場合
+  if (!sentence.includes(kanji) && targetKanji && sentence.includes(targetKanji)) {
+    const idx = sentence.indexOf(targetKanji);
+    let start = idx;
+    while (start > 0 && /[\u4E00-\u9FFF]/.test(sentence[start - 1])) {
+      start--;
+    }
+    let end = idx + 1;
+    while (end < sentence.length && /[\u4E00-\u9FFF]/.test(sentence[end])) {
+      end++;
+    }
+    const matchedWord = sentence.substring(start, end);
+    if (matchedWord && matchedWord.length > 0) {
+      kanji = matchedWord;
+    }
+  }
+
+  // 4. ふりがな（kana）の完全一致保証
+  if (!kana || kana === kanji) {
+    if (kanji.length >= 2 && typeof COMPOUND_READINGS !== 'undefined' && COMPOUND_READINGS[kanji]) {
+      kana = COMPOUND_READINGS[kanji];
+    } else {
+      kana = getKanjiAutoReading(kanji).kana;
+    }
+  } else {
+    // 漢字1文字なのにふりがなが熟語読み（3拍以上）になっているバグの是正
+    if (kanji.length === 1 && kana.length >= 3 && typeof KANJI_READINGS !== 'undefined' && KANJI_READINGS[kanji]) {
+      const singleR = getKanjiAutoReading(kanji);
+      if (singleR && singleR.kana) {
+        kana = singleR.kana;
+      }
+    }
+    // 漢字2文字以上の熟語なのにふりがなが1文字の読みになっているバグの是正
+    if (kanji.length >= 2) {
+      if (typeof COMPOUND_READINGS !== 'undefined' && COMPOUND_READINGS[kanji]) {
+        kana = COMPOUND_READINGS[kanji];
+      }
+    }
+  }
+
+  // 5. 未習漢字フィルター（学年適合性変換）の適用
+  const targetGradeNum = parseInt(options.targetGrade || (grade ? grade.replace(/[^0-9]/g, '') : '') || (ld ? ld.grade : 6), 10) || 6;
+  const unlearnedMode = options.unlearnedMode || 'convert'; // 'convert' | 'exclude' | 'raw'
+
   if (!displaySentence) {
     if (ld && ld.displaySentence && (ld.primarySentence === sentence || ld.displaySentence.includes(kanji))) {
       displaySentence = ld.displaySentence;
@@ -4360,13 +4606,17 @@ function extractQuestionData(rawItem) {
     }
   }
 
-  // 3. 文脈分割（beforeText, afterText）の厳密抽出
-  // 未習漢字をひらがなに変換した displaySentence を優先して分割
+  let finalSentence = displaySentence || sentence;
+  if (unlearnedMode === 'convert') {
+    finalSentence = convertUnlearnedKanjiToHiragana(finalSentence, targetGradeNum, kanji);
+  }
+
+  // 6. 文脈分割（beforeText, afterText）の厳密抽出（100%完全一致保証）
   let beforeText = "";
   let afterText = "";
   let isMatched = false;
 
-  const splitBase = (displaySentence && displaySentence.includes(kanji)) ? displaySentence : (sentence && sentence.includes(kanji) ? sentence : "");
+  const splitBase = (finalSentence && finalSentence.includes(kanji)) ? finalSentence : (sentence && sentence.includes(kanji) ? sentence : "");
 
   if (splitBase && splitBase.includes(kanji)) {
     const splitIndex = splitBase.indexOf(kanji);
@@ -4380,9 +4630,9 @@ function extractQuestionData(rawItem) {
     kanji,
     kana,
     sentence,          // 元の文（漢字のまま保持）
-    displaySentence,   // 未習漢字をひらがな化した文
-    grade,
-    hint: displaySentence || rawItem.hint || sentence,
+    displaySentence: finalSentence,   // 未習漢字をひらがな化した文
+    grade: grade || (ld ? `${ld.grade}年` : ''),
+    hint: finalSentence || rawItem.hint || sentence,
     beforeText,
     afterText,
     isMatched,
@@ -4970,12 +5220,46 @@ function renderCartUI() {
   }).join('');
 }
 
+function addAllSearchResultsToCart() {
+  const query = document.getElementById('cart-kanji-search-input')?.value || '';
+  const results = searchKanjiQuestions(query, currentCartGradeFilter);
+  if (results.length === 0) {
+    showToast('⚠️ 追加できる検索結果がありません');
+    return;
+  }
+  let addedCount = 0;
+  results.forEach(q => {
+    if (!isQuestionInCart(q)) {
+      testCartQuestions.push({
+        targetKanji: q.targetKanji,
+        kanji: q.kanji,
+        kana: q.kana,
+        sentence: q.sentence,
+        displaySentence: q.displaySentence,
+        grade: q.grade,
+        hint: q.displaySentence || q.sentence
+      });
+      addedCount++;
+    }
+  });
+  renderCartUI();
+  renderCartKanjiGrid();
+  renderCartSearchResults();
+  renderAiPrintSheet();
+  showToast(`🛒 検索結果から ${addedCount} 問をカートに追加しました（計${testCartQuestions.length}問）`);
+}
+
 function renderCartSearchResults() {
   const grid = document.getElementById('cart-search-results-grid');
   if (!grid) return;
 
   const query = document.getElementById('cart-kanji-search-input')?.value || '';
   const results = searchKanjiQuestions(query, currentCartGradeFilter);
+  const countLabel = document.getElementById('cart-search-result-count');
+
+  if (countLabel) {
+    countLabel.textContent = `🔍 検索結果: ${results.length} 件 （出題したい問題にチェックを入れてください）`;
+  }
 
   if (results.length === 0) {
     grid.innerHTML = `
@@ -4995,6 +5279,11 @@ function renderCartSearchResults() {
     const safeDisplaySent = escapeHtml(q.displaySentence || q.sentence);
     const safeGrade = escapeHtml(q.grade);
 
+    // 未習漢字の判定
+    const gNum = parseInt(q.grade || '6', 10) || 6;
+    const unlearnedInSent = getUnlearnedKanjiInText(q.sentence, gNum);
+    const hasUnlearned = unlearnedInSent.length > 0;
+
     return `
       <div class="cart-result-card" style="background: ${inCart ? 'rgba(2, 132, 199, 0.2)' : 'rgba(15, 23, 42, 0.6)'}; border: 1.5px solid ${inCart ? '#00ff88' : '#334155'}; border-radius: 8px; padding: 10px 12px; display: flex; flex-direction: column; justify-content: space-between; gap: 8px; transition: all 0.2s;">
         <div>
@@ -5002,6 +5291,7 @@ function renderCartSearchResults() {
             <div style="display: flex; align-items: center; gap: 6px;">
               <span style="font-size: 11px; background: rgba(56, 189, 248, 0.25); color: #38bdf8; padding: 1px 6px; border-radius: 4px; font-weight: bold;">${safeGrade}</span>
               <span style="font-size: 11px; color: #94a3b8;">対象: <strong>${safeTarget}</strong></span>
+              ${hasUnlearned ? '<span style="font-size: 10px; background: rgba(245, 158, 11, 0.2); color: #fbbf24; padding: 1px 4px; border-radius: 3px;" title="未習漢字を自動ひらがな化">🛡️未習漢字対応</span>' : ''}
             </div>
             <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 12px; color: ${inCart ? '#00ff88' : '#94a3b8'}; font-weight: bold;">
               <input type="checkbox" ${inCart ? 'checked' : ''} onchange="toggleQuestionInCart('${safeTarget}', '${safeKanji}', '${safeKana}', '${safeSent}', '${safeGrade}', '${safeDisplaySent}')" style="cursor: pointer; width: 15px; height: 15px;">
@@ -5078,174 +5368,222 @@ function shufflePrintQuestions() {
   renderAiPrintSheet();
 }
 
+function onSheetGradeSettingChanged() {
+  renderAiPrintSheet();
+}
+
 function renderAiPrintSheet() {
   const container = document.getElementById('ai-print-sheet-preview');
   if (!container) return;
 
-  const title = document.getElementById('sheet-title-input')?.value.trim() || '漢字チャレンジ小テスト';
+  const rawTitle = document.getElementById('sheet-title-input')?.value.trim() || '漢字チャレンジ小テスト';
   const gradeText = document.getElementById('sheet-grade-input')?.value.trim() || '第3学年 漢字マスター';
   const countMode = document.getElementById('sheet-count-select')?.value || '10';
   const mode = document.getElementById('sheet-mode-select')?.value || 'problem'; // 'problem' | 'answer'
+  const targetGradeSetting = document.getElementById('sheet-target-grade-select')?.value || 'auto';
+  const unlearnedMode = document.getElementById('sheet-unlearned-filter-mode')?.value || 'convert'; // 'convert' | 'exclude' | 'raw'
+
+  // 出題対象学年の決定
+  let targetGrade = 6;
+  if (targetGradeSetting !== 'auto') {
+    targetGrade = parseInt(targetGradeSetting, 10) || 6;
+  } else {
+    // gradeText から数字を抽出（例: "第3学年" -> 3, "5年" -> 5）
+    const gMatch = gradeText.match(/([1-6])/);
+    if (gMatch) {
+      targetGrade = parseInt(gMatch[1], 10);
+    }
+  }
 
   let allQuestions = getActivePrintQuestions();
-  let questions = (countMode === 'all') ? allQuestions : allQuestions.slice(0, parseInt(countMode, 10) || 10);
+
+  // 未習漢字フィルターの適用（除外モードの場合は不適合問題をフィルタリング）
+  let filteredQuestions = allQuestions;
+  if (unlearnedMode === 'exclude') {
+    filteredQuestions = allQuestions.filter(q => {
+      const v = validateQuestionForGrade(q, targetGrade, 'exclude');
+      return v.valid;
+    });
+    // もし除外の結果0件になった場合は安全のため全問に戻して変換モードを適用
+    if (filteredQuestions.length === 0) {
+      filteredQuestions = allQuestions;
+    }
+  }
+
+  let questions = (countMode === 'all') ? filteredQuestions : filteredQuestions.slice(0, parseInt(countMode, 10) || 10);
   if (questions.length === 0) questions = SAMPLE_QUESTIONS;
 
   const isModelAnswer = (mode === 'answer');
   const pointsPerQuestion = questions.length > 0 ? Math.floor(100 / questions.length) : 10;
+
+  // タイトル文字数に応じた動的フォントサイズ（不自然な改行崩れ完全防止）
+  const title = escapeHtml(rawTitle);
+  let titleFontSize = '21px';
+  if (rawTitle.length > 20) {
+    titleFontSize = '15px';
+  } else if (rawTitle.length > 14) {
+    titleFontSize = '18px';
+  }
 
   // テスト識別QRコード用データ生成
   const testId = `KJ-${Date.now().toString(36).toUpperCase().slice(-6)}`;
   const qrPayload = JSON.stringify({
     type: "kanji_ai_sheet",
     id: testId,
-    title: title,
+    title: rawTitle,
+    grade: targetGrade,
     count: questions.length,
-    answers: questions.map(q => q.kanji)
+    answers: questions.map(q => {
+      const qd = extractQuestionData(q, { targetGrade, unlearnedMode });
+      return qd.kanji;
+    })
   });
 
   const formatMode = document.getElementById('sheet-format-select')?.value || 'sentence';
 
-    // 問題HTML構築
-    let problemsHtml = '';
+  // 問題HTML構築
+  let problemsHtml = '';
 
-    if (formatMode === 'handout') {
-      // 熟語・例文学習ハンドアウト形式
-      problemsHtml = questions.map((q, idx) => {
-        const num = idx + 1;
-        const kanjiStr = q.kanji || '';
-        const kanaStr = q.kana || '';
-        const targetCh = q.targetKanji || kanjiStr[0] || '';
-        const ld = (typeof KANJI_LEARNING_DATA !== 'undefined') ? KANJI_LEARNING_DATA[targetCh] : null;
-        const compList = (ld && ld.compounds && ld.compounds.length > 0) ? ld.compounds.slice(0, 8).join('、') : kanjiStr;
-        const sentList = (ld && ld.sentences && ld.sentences.length > 0) ? ld.sentences.slice(0, 3).join(' ') : (q.sentence || q.hint || '');
+  if (formatMode === 'handout') {
+    // 熟語・例文学習ハンドアウト形式
+    problemsHtml = questions.map((q, idx) => {
+      const num = idx + 1;
+      const qData = extractQuestionData(q, { targetGrade, unlearnedMode });
+      const kanjiStr = qData.kanji || '';
+      const kanaStr = qData.kana || '';
+      const targetCh = qData.targetKanji || kanjiStr[0] || '';
+      const ld = (typeof KANJI_LEARNING_DATA !== 'undefined') ? KANJI_LEARNING_DATA[targetCh] : null;
+      const compList = (ld && ld.compounds && ld.compounds.length > 0) ? ld.compounds.slice(0, 8).join('、') : kanjiStr;
+      const sentList = qData.displaySentence || (ld && ld.sentences && ld.sentences.length > 0 ? ld.sentences.slice(0, 3).join(' ') : (q.sentence || q.hint || ''));
 
-        return `
-          <div class="problem-item" style="display: flex; flex-direction: column; gap: 4px; border-bottom: 1px dashed #cbd5e1; padding-bottom: 8px; margin-bottom: 8px;">
-            <div style="display: flex; align-items: center; gap: 10px;">
-              <span class="problem-num" style="font-size: 14px; font-weight: bold; color: #0284c7;">${num}.</span>
-              <div style="font-size: 20px; font-weight: 900; letter-spacing: 2px; color: #0f172a; border: 2px solid #0284c7; padding: 2px 10px; border-radius: 4px; background: #f0f9ff;">
-                ${escapeHtml(kanjiStr)} <span style="font-size: 13px; font-weight: normal; color: #475569;">（${escapeHtml(kanaStr)}）</span>
-              </div>
-            </div>
-            <div style="font-size: 12px; color: #334155; margin-left: 24px;">
-              <strong style="color: #0369a1;">よく使う言葉:</strong> ${escapeHtml(compList)}
-            </div>
-            <div style="font-size: 12px; color: #1e293b; margin-left: 24px; background: #f8fafc; padding: 4px 8px; border-left: 3px solid #0284c7; border-radius: 2px;">
-              <strong style="color: #0369a1;">短文用例:</strong> ${escapeHtml(sentList)}
+      return `
+        <div class="problem-item" style="display: flex; flex-direction: column; gap: 4px; border-bottom: 1px dashed #cbd5e1; padding-bottom: 8px; margin-bottom: 8px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span class="problem-num" style="font-size: 14px; font-weight: bold; color: #0284c7;">${num}.</span>
+            <div style="font-size: 20px; font-weight: 900; letter-spacing: 2px; color: #0f172a; border: 2px solid #0284c7; padding: 2px 10px; border-radius: 4px; background: #f0f9ff;">
+              ${escapeHtml(kanjiStr)} <span style="font-size: 13px; font-weight: normal; color: #475569;">（${escapeHtml(kanaStr)}）</span>
             </div>
           </div>
-        `;
-      }).join('');
-    } else if (formatMode === 'sentence') {
-      // 短文穴埋めテスト形式（標準国語テスト形式）
-      problemsHtml = questions.map((q, idx) => {
-        const num = idx + 1;
-        const qData = extractQuestionData(q);
-        const kanjiStr = qData.kanji;
-        const kanaStr = qData.kana;
-        const chars = qData.chars;
+          <div style="font-size: 12px; color: #334155; margin-left: 24px;">
+            <strong style="color: #0369a1;">よく使う言葉:</strong> ${escapeHtml(compList)}
+          </div>
+          <div style="font-size: 12px; color: #1e293b; margin-left: 24px; background: #f8fafc; padding: 4px 8px; border-left: 3px solid #0284c7; border-radius: 2px;">
+            <strong style="color: #0369a1;">短文用例:</strong> ${escapeHtml(sentList)}
+          </div>
+        </div>
+      `;
+    }).join('');
+  } else if (formatMode === 'sentence') {
+    // 短文穴埋めテスト形式（標準国語テスト形式・ターゲット漢字・ふりがな・前後の例文が100%一致）
+    problemsHtml = questions.map((q, idx) => {
+      const num = idx + 1;
+      const qData = extractQuestionData(q, { targetGrade, unlearnedMode });
+      const kanjiStr = qData.kanji;
+      const kanaStr = qData.kana;
+      const chars = qData.chars;
 
-        // マス目生成（漢字の文字数分、最低1マス）
-        const cellCount = Math.max(chars.length, 1);
-        let cellsHtml = '';
-        for (let c = 0; c < cellCount; c++) {
-          const char = chars[c] || '';
-          if (isModelAnswer) {
-            cellsHtml += `<div class="kanji-cell-box sentence-slot model-answer">${escapeHtml(char)}</div>`;
-          } else {
-            cellsHtml += `<div class="kanji-cell-box sentence-slot"></div>`;
-          }
-        }
-
-        // 短文の中に kanjiStr が厳密に含まれているか判定
-        let sentenceHtml = '';
-        if (qData.isMatched) {
-          sentenceHtml = `
-            <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 4px; font-size: 15px; color: #0f172a; line-height: 1.8;">
-              <span>${escapeHtml(qData.beforeText)}</span>
-              <div style="display: inline-flex; flex-direction: column; align-items: center; margin: 0 4px;">
-                <span style="font-size: 11px; color: #0284c7; font-weight: bold; margin-bottom: 1px;">${escapeHtml(kanaStr)}</span>
-                <div style="display: flex; gap: 2px;">${cellsHtml}</div>
-              </div>
-              <span>${escapeHtml(qData.afterText)}</span>
-            </div>
-          `;
+      // 解答欄の十字点線入りマス目（※絶対に崩してはいけない最重要項目）
+      const cellCount = Math.max(chars.length, 1);
+      let cellsHtml = '';
+      for (let c = 0; c < cellCount; c++) {
+        const char = chars[c] || '';
+        if (isModelAnswer) {
+          cellsHtml += `<div class="kanji-cell-box sentence-slot model-answer">${escapeHtml(char)}</div>`;
         } else {
-          sentenceHtml = `
-            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-              <div style="font-size: 14px; color: #0f172a;">
-                つぎの ひらがな を かん字 で かきましょう。<br>
-                <span class="problem-kana-highlight" style="font-size: 16px; font-weight: bold; color: #0284c7;">${escapeHtml(kanaStr)}</span>
-                ${qData.hint ? `<span style="font-size: 12px; color: #64748b;">（${escapeHtml(qData.hint)}）</span>` : ''}
-              </div>
-              <div class="answer-grid-container" style="display: flex; gap: 2px;">
-                ${cellsHtml}
-              </div>
-            </div>
-          `;
+          cellsHtml += `<div class="kanji-cell-box sentence-slot"></div>`;
         }
+      }
 
-        return `
-          <div class="problem-item" style="padding: 10px 0; border-bottom: 1px dashed #e2e8f0; display: flex; align-items: center; gap: 8px;">
-            <span class="problem-num" style="font-size: 16px; font-weight: bold; color: #0284c7; min-width: 24px;">${num}.</span>
-            <div style="flex: 1;">
-              ${sentenceHtml}
+      // 短文の中に kanjiStr が100%厳密一致で存在する場合（自然な短文穴埋め）
+      let sentenceHtml = '';
+      if (qData.isMatched) {
+        sentenceHtml = `
+          <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 4px; font-size: 15px; color: #0f172a; line-height: 1.8;">
+            <span>${escapeHtml(qData.beforeText)}</span>
+            <div style="display: inline-flex; flex-direction: column; align-items: center; margin: 0 4px;">
+              <span style="font-size: 11px; color: #0284c7; font-weight: bold; margin-bottom: 1px;">${escapeHtml(kanaStr)}</span>
+              <div style="display: flex; gap: 2px;">${cellsHtml}</div>
             </div>
+            <span>${escapeHtml(qData.afterText)}</span>
           </div>
         `;
-      }).join('');
-    } else {
-      // 従来の単語書き取り形式
-      problemsHtml = questions.map((q, idx) => {
-        const num = idx + 1;
-        const qData = extractQuestionData(q);
-        const kanjiStr = qData.kanji || '';
-        const kanaStr = qData.kana || '';
-        const hintStr = qData.hint ? `（${escapeHtml(qData.hint)}）` : '';
-
-        const cellCount = Math.max(qData.chars.length, 1);
-        let cellsHtml = '';
-        for (let c = 0; c < cellCount; c++) {
-          const char = qData.chars[c] || '';
-          if (isModelAnswer) {
-            cellsHtml += `<div class="kanji-cell-box model-answer" style="border: 1.5px solid #0284c7; background: #fff5f5; color: #dc2626; font-weight: bold;">${escapeHtml(char)}</div>`;
-          } else {
-            cellsHtml += `<div class="kanji-cell-box"></div>`;
-          }
-        }
-
-        return `
-          <div class="problem-item">
-            <div class="problem-meta">
-              <span class="problem-num">${num}.</span>
-              <div class="problem-sentence">
-                つぎの ひらがな を かん字 で かきましょう。<br>
-                <span class="problem-kana-highlight">${escapeHtml(kanaStr)}</span> ${hintStr}
-              </div>
+      } else {
+        // フォールバック（単語書き取り形式）
+        sentenceHtml = `
+          <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+            <div style="font-size: 14px; color: #0f172a;">
+              つぎの ひらがな を かん字 で かきましょう。<br>
+              <span class="problem-kana-highlight" style="font-size: 16px; font-weight: bold; color: #0284c7;">${escapeHtml(kanaStr)}</span>
+              ${qData.hint ? `<span style="font-size: 12px; color: #64748b;">（${escapeHtml(qData.hint)}）</span>` : ''}
             </div>
-            <div class="answer-grid-container">
+            <div class="answer-grid-container" style="display: flex; gap: 2px;">
               ${cellsHtml}
             </div>
           </div>
         `;
-      }).join('');
-    }
+      }
+
+      return `
+        <div class="problem-item" style="padding: 9px 0; border-bottom: 1px dashed #e2e8f0; display: flex; align-items: center; gap: 8px;">
+          <span class="problem-num" style="font-size: 16px; font-weight: bold; color: #0284c7; min-width: 24px;">${num}.</span>
+          <div style="flex: 1;">
+            ${sentenceHtml}
+          </div>
+        </div>
+      `;
+    }).join('');
+  } else {
+    // 従来の単語書き取り形式
+    problemsHtml = questions.map((q, idx) => {
+      const num = idx + 1;
+      const qData = extractQuestionData(q, { targetGrade, unlearnedMode });
+      const kanjiStr = qData.kanji || '';
+      const kanaStr = qData.kana || '';
+      const hintStr = qData.hint ? `（${escapeHtml(qData.hint)}）` : '';
+
+      const cellCount = Math.max(qData.chars.length, 1);
+      let cellsHtml = '';
+      for (let c = 0; c < cellCount; c++) {
+        const char = qData.chars[c] || '';
+        if (isModelAnswer) {
+          cellsHtml += `<div class="kanji-cell-box model-answer" style="border: 1.5px solid #0284c7; background: #fff5f5; color: #dc2626; font-weight: bold;">${escapeHtml(char)}</div>`;
+        } else {
+          cellsHtml += `<div class="kanji-cell-box"></div>`;
+        }
+      }
+
+      return `
+        <div class="problem-item">
+          <div class="problem-meta">
+            <span class="problem-num">${num}.</span>
+            <div class="problem-sentence">
+              つぎの ひらがな を かん字 で かきましょう。<br>
+              <span class="problem-kana-highlight">${escapeHtml(kanaStr)}</span> ${hintStr}
+            </div>
+          </div>
+          <div class="answer-grid-container">
+            ${cellsHtml}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
 
   container.innerHTML = `
-    <!-- 四隅のアライメントマーカー（■ フィデューシャルマーク） -->
+    <!-- 四隅のアライメントマーカー（■ フィデューシャルマーク / AI自動採点の絶対基準点：厳格保持） -->
     <div class="fiducial-marker top-left"></div>
     <div class="fiducial-marker top-right"></div>
     <div class="fiducial-marker bottom-left"></div>
     <div class="fiducial-marker bottom-right"></div>
 
-    <!-- 用紙ヘッダー -->
+    <!-- 用紙ヘッダー（タイトル改行崩れ完全防止） -->
     <div class="sheet-header">
       <div class="sheet-title-area">
-        <div class="sheet-main-title">${escapeHtml(title)}${isModelAnswer ? '【模範解答】' : ''}</div>
+        <div class="sheet-main-title" style="font-size: ${titleFontSize};">${title}${isModelAnswer ? '【模範解答】' : ''}</div>
         <div class="sheet-sub-title">
           <span>${escapeHtml(gradeText)}</span> ｜ 
           <span>全${questions.length}問（各${pointsPerQuestion}点 / 100点満点）</span>
+          ${unlearnedMode === 'convert' ? '<span style="font-size:9.5px; background:#e0f2fe; color:#0369a1; padding:1px 5px; border-radius:3px;">未習漢字ひらがな化済</span>' : ''}
         </div>
       </div>
 
@@ -5274,13 +5612,13 @@ function renderAiPrintSheet() {
       ${problemsHtml}
     </div>
 
-    <!-- シートフッター（用紙右下にAI採点照合コードと識別コードを安全配置） -->
+    <!-- シートフッター（スキャン時に切り取られないよう用紙右下にAI採点照合コード・識別コードを安全配置） -->
     <div class="sheet-footer">
       <div class="sheet-footer-left">
         <div class="sheet-footer-note">※ 四隅の四角マーカー（■）とマス目の中央線（十字点線）に合わせて、枠内に丁寧な文字で書きましょう。</div>
-        <div class="sheet-footer-sub">漢字ジェット AI採点対応フォーマット (Version 2.0 / A4)</div>
+        <div class="sheet-footer-sub">漢字ジェット AI採点対応フォーマット (Version 2.0 / A4・1枚完結)</div>
       </div>
-      <div class="sheet-footer-right">
+      <div class="sheet-footer-right" style="margin-right: 3mm;">
         <div class="sheet-qr-box" id="sheet-footer-qr"></div>
         <div class="sheet-qr-info">
           <div class="sheet-qr-label">AI採点照合コード</div>

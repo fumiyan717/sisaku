@@ -270,6 +270,188 @@ window.addEventListener('DOMContentLoaded', () => {
       to { opacity: 1; transform: translateY(0); }
     }
 
+    /* タブバッジ＆開発中表示 */
+    .tab-badge-dev {
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 9999px;
+      background: rgba(239, 68, 68, 0.2);
+      color: #fca5a5;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      font-weight: normal;
+      margin-left: 4px;
+    }
+    .tab-badge-prod {
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 9999px;
+      background: rgba(245, 158, 11, 0.2);
+      color: #fcd34d;
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      font-weight: normal;
+      margin-left: 4px;
+    }
+    .dev-notice-banner {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(245, 158, 11, 0.12) 100%);
+      border: 1.5px dashed rgba(245, 158, 11, 0.5);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .dev-notice-icon {
+      font-size: 32px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .dev-notice-title {
+      font-size: 16px;
+      font-weight: bold;
+      color: #fcd34d;
+      margin-bottom: 6px;
+    }
+    .dev-notice-desc {
+      font-size: 13px;
+      color: #e2e8f0;
+      line-height: 1.6;
+    }
+
+    /* 賞状画面プレビュースタイル */
+    #print-certificate-container {
+      background: #fffdf5;
+      color: #1c1917;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+      margin: 16px auto;
+      max-width: 780px;
+      padding: 14px;
+      box-sizing: border-box;
+    }
+    .cert-inner-frame {
+      box-sizing: border-box;
+      border: 8px double #b45309;
+      border-radius: 6px;
+      padding: 38px 40px 30px 40px;
+      background: #fffdf7;
+      position: relative;
+      font-family: 'Yu Mincho', 'Hiragino Mincho ProN', 'MS Mincho', serif;
+    }
+    .cert-header {
+      text-align: center;
+      margin-bottom: 24px;
+      border-bottom: 2px solid #b45309;
+      padding-bottom: 12px;
+    }
+    .cert-main-title {
+      font-size: 34px;
+      font-weight: 900;
+      letter-spacing: 12px;
+      color: #78350f;
+      margin: 0;
+      line-height: 1.2;
+    }
+    .cert-sub-title {
+      font-size: 13px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      color: #b45309;
+      margin-top: 6px;
+      font-family: 'Times New Roman', serif;
+    }
+    .cert-recipient {
+      font-size: 21px;
+      font-weight: bold;
+      color: #1c1917;
+      margin-bottom: 20px;
+      padding-left: 6px;
+    }
+    .cert-recipient .cert-student-highlight {
+      font-size: 26px;
+      border-bottom: 2px solid #b45309;
+      padding-bottom: 2px;
+      margin: 0 6px;
+    }
+    .cert-body-text {
+      font-size: 16px;
+      line-height: 2.1;
+      color: #292524;
+      text-indent: 1em;
+      text-align: justify;
+      margin-bottom: 20px;
+    }
+    .cert-msg-box {
+      background: rgba(254, 243, 199, 0.7);
+      border: 1.5px solid #fde68a;
+      border-radius: 8px;
+      padding: 12px 18px;
+      margin-bottom: 24px;
+      font-style: italic;
+      color: #451a03;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    .cert-msg-label {
+      font-size: 12px;
+      font-weight: bold;
+      color: #b45309;
+      margin-bottom: 4px;
+      font-style: normal;
+    }
+    .cert-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-top: 24px;
+      padding: 0 8px;
+    }
+    .cert-date {
+      font-size: 14px;
+      color: #57534e;
+    }
+    .cert-teacher-box {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      text-align: right;
+    }
+    .cert-teacher-name {
+      font-size: 19px;
+      font-weight: bold;
+      color: #1c1917;
+    }
+    .cert-seal-stamp {
+      width: 90px;
+      height: 90px;
+      min-width: 90px;
+      min-height: 90px;
+      border: 3px double #dc2626;
+      border-radius: 50%;
+      color: #dc2626;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transform: rotate(-6deg);
+      box-shadow: 0 0 4px rgba(220, 38, 38, 0.3);
+      user-select: none;
+      background: rgba(254, 226, 226, 0.3);
+    }
+    .cert-seal-stamp .seal-icon {
+      font-size: 24px;
+      line-height: 1;
+      margin-bottom: 2px;
+    }
+    .cert-seal-stamp .seal-text {
+      font-size: 11.5px;
+      font-weight: 900;
+      line-height: 1.15;
+      text-align: center;
+      font-family: 'Yu Mincho', serif;
+      letter-spacing: 0.5px;
+    }
+
     /* パネルカード */
     .panel-card {
       background: var(--panel-bg);
@@ -1282,6 +1464,54 @@ window.addEventListener('DOMContentLoaded', () => {
       .sheet-title-area {
         overflow: hidden !important;
       }
+      /* 賞状印刷用スタイル（A4縦・余白なし・1枚完結） */
+      #print-area-wrapper .cert-print-sheet,
+      #print-certificate-container.cert-print-sheet {
+        width: 210mm !important;
+        height: 297mm !important;
+        max-height: 297mm !important;
+        padding: 14mm 14mm !important;
+        box-sizing: border-box !important;
+        background: #ffffff !important;
+        color: #1c1917 !important;
+        page-break-after: avoid !important;
+        page-break-before: avoid !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        break-after: avoid !important;
+        overflow: hidden !important;
+        display: flex !important;
+        flex-direction: column !important;
+        box-shadow: none !important;
+      }
+      #print-area-wrapper .cert-print-sheet .cert-inner-frame,
+      #print-certificate-container.cert-print-sheet .cert-inner-frame {
+        width: 100% !important;
+        height: 100% !important;
+        box-sizing: border-box !important;
+        border: 8px double #b45309 !important;
+        padding: 24mm 20mm 20mm 20mm !important;
+        background: #fffdf5 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        position: relative !important;
+      }
+      #print-area-wrapper .cert-msg-box,
+      #print-certificate-container .cert-msg-box {
+        background: #fef3c7 !important;
+        border: 1.5px solid #fde68a !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      #print-area-wrapper .cert-seal-stamp,
+      #print-certificate-container .cert-seal-stamp {
+        border: 3px double #dc2626 !important;
+        color: #dc2626 !important;
+        background: #fee2e2 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
     }
 
     @media screen {
@@ -1353,14 +1583,14 @@ window.addEventListener('DOMContentLoaded', () => {
       <button class="tab-btn" onclick="switchTab('print')" id="tab-btn-print">
         🖨️ AI対応プリント自動生成
       </button>
-      <button class="tab-btn" onclick="switchTab('live')" id="tab-btn-live">
-        📺 電子黒板・ライブ授業
-      </button>
       <button class="tab-btn" onclick="switchTab('cert')" id="tab-btn-cert">
-        💮 はなまる学習証明書（賞状）
+        💮 はなまる学習証明書（賞状印刷） <span class="tab-badge-prod">本番運用</span>
+      </button>
+      <button class="tab-btn" onclick="switchTab('live')" id="tab-btn-live">
+        📺 電子黒板・ライブ授業 <span class="tab-badge-dev">開発中</span>
       </button>
       <button class="tab-btn" onclick="switchTab('class')" id="tab-btn-class">
-        🏫 今日のクラス防衛作戦本部
+        🏫 今日のクラス防衛作戦本部 <span class="tab-badge-dev">開発中</span>
       </button>
     </div>
 
@@ -1387,8 +1617,8 @@ window.addEventListener('DOMContentLoaded', () => {
             <span>🖨️ AIプリント発行</span>
             <span>▶</span>
           </button>
-          <button class="btn-distribute-large" onclick="switchTab('live')" style="background: linear-gradient(135deg, #7c3aed 0%, #db2777 100%);">
-            <span>📺 電子黒板レイド戦</span>
+          <button class="btn-distribute-large" onclick="switchTab('cert')" style="background: linear-gradient(135deg, #d97706 0%, #b45309 100%); box-shadow: 0 4px 18px rgba(217, 119, 6, 0.35);">
+            <span>💮 はなまる学習証明書</span>
             <span>▶</span>
           </button>
           <button class="btn-distribute-large" onclick="openDistributeModal('single')" style="background: rgba(30, 41, 59, 0.8); border: 1px solid #475569;">
@@ -1760,8 +1990,99 @@ window.addEventListener('DOMContentLoaded', () => {
       </div>
     </div>
 
-    <!-- タブ4: 📺 電子黒板・ライブ授業 (Step 2) -->
+    <!-- タブ3: 💮 はなまる学習証明書（賞状印刷） [本番運用] -->
+    <div class="tab-content" id="tab-content-cert">
+      <div class="panel-card">
+        <div class="panel-header" style="flex-wrap: wrap; gap: 8px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span class="panel-title">💮 はなまる学習証明書（賞状印刷）</span>
+            <span class="tab-badge-prod">本番運用</span>
+          </div>
+          <span style="font-size: 12.5px; color: #cbd5e1;">A4サイズで美麗に印刷・PDF保存できます</span>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="cert-title-type">賞状の種類（表題）</label>
+            <select id="cert-title-type" onchange="renderCertPreview()">
+              <option value="賞　状" selected>賞　状（標準）</option>
+              <option value="努力賞">努力賞</option>
+              <option value="漢字マスター認定証">漢字マスター認定証</option>
+              <option value="完全制覇修了証">完全制覇修了証</option>
+              <option value="たいへんよくできました証">たいへんよくできました証</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="cert-student-name">表彰名（児童のお名前・二つ名）</label>
+            <input type="text" id="cert-student-name" placeholder="例: 漢字マスター たろう" oninput="renderCertPreview()">
+          </div>
+          <div class="form-group">
+            <label for="cert-class-name">学年・組</label>
+            <input type="text" id="cert-class-name" placeholder="例: 3年1組" oninput="renderCertPreview()">
+          </div>
+          <div class="form-group">
+            <label for="cert-teacher-name">先生のお名前</label>
+            <input type="text" id="cert-teacher-name" placeholder="例: 担任 田中先生" oninput="renderCertPreview()">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="cert-date">授与日（和暦）</label>
+            <input type="text" id="cert-date" placeholder="例: 令和8年 9月23日" oninput="renderCertPreview()">
+          </div>
+          <div class="form-group">
+            <label for="cert-stamp-type">先生スタンプ（認印・花丸）</label>
+            <select id="cert-stamp-type" onchange="renderCertPreview()">
+              <option value="hanamaru" selected>💮 たいへんよくできました</option>
+              <option value="master">🌟 漢字マスター認定</option>
+              <option value="kaiden">✨ 免許皆伝 合格</option>
+              <option value="perfect">🎯 百点満点 優秀</option>
+              <option value="pilot">🚀 銀河防衛エースパイロット認定</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label for="cert-message">先生からの一言メッセージ</label>
+          <input type="text" id="cert-message" value="毎日コツコツ集中してよくがんばりました！たいへん立派です！" oninput="renderCertPreview()">
+          <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; align-items: center;">
+            <span style="font-size: 11.5px; color: #94a3b8;">💡 定型文から選ぶ:</span>
+            <button type="button" class="btn-action secondary" style="padding: 3px 8px; font-size: 11.5px;" onclick="setCertMessagePreset('毎日コツコツ集中してよくがんばりました！たいへん立派です！')">💮 毎日コツコツ</button>
+            <button type="button" class="btn-action secondary" style="padding: 3px 8px; font-size: 11.5px;" onclick="setCertMessagePreset('漢字テスト完全制覇！素晴らしい集中力と努力を讃えます！')">🏆 完全制覇</button>
+            <button type="button" class="btn-action secondary" style="padding: 3px 8px; font-size: 11.5px;" onclick="setCertMessagePreset('一文字一文字、丁寧にていねいに正しく書けるようになりました！')">✏️ 丁寧な文字</button>
+            <button type="button" class="btn-action secondary" style="padding: 3px 8px; font-size: 11.5px;" onclick="setCertMessagePreset('難しい漢字にも諦めずに、最後まで果敢に挑戦できました！')">🔥 果敢な挑戦</button>
+            <button type="button" class="btn-action secondary" style="padding: 3px 8px; font-size: 11.5px;" onclick="setCertMessagePreset('クラスの仲間とともに全力で漢字を防衛した功績をたたえます！')">🛡️ クラス防衛</button>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin: 20px 0 12px 0;">
+          <button class="btn-action warning" onclick="printCertificate()" style="font-size: 16px; padding: 12px 36px; background: linear-gradient(135deg, #d97706, #b45309); box-shadow: 0 4px 16px rgba(217, 119, 6, 0.4);">
+            🖨️ A4で印刷する（PDF保存）
+          </button>
+        </div>
+
+        <!-- プレビュー -->
+        <div id="print-certificate-container" class="cert-print-sheet">
+          <!-- プレビュー内容はJSで動的生成 -->
+        </div>
+      </div>
+    </div>
+
+    <!-- タブ4: 📺 電子黒板・ライブ授業 [開発中] -->
     <div class="tab-content" id="tab-content-live">
+      <!-- 開発中案内バナー -->
+      <div class="dev-notice-banner">
+        <div class="dev-notice-icon">🚧</div>
+        <div class="dev-notice-body">
+          <div class="dev-notice-title">【開発中・先行プレビュー機能】電子黒板・リアルタイムレイドバトル</div>
+          <div class="dev-notice-desc">
+            Firebase Realtime Database 等を用いた「児童端末からのリアルタイム攻撃集計・双方向通信」は現在バックエンド拡張に向けて開発中です。<br>
+            ※ 本画面での3コースQR表示やレイドボスの動作確認（プレビュー）は可能です。日常の授業・小テストには「<strong>単元から選んで出題・QR配布</strong>」「<strong>AI対応プリント自動生成</strong>」「<strong>はなまる学習証明書</strong>」をご活用ください。
+          </div>
+        </div>
+      </div>
+
       <!-- ライブ授業トップバナー -->
       <div class="live-hero-banner">
         <div>
@@ -1831,56 +2152,20 @@ window.addEventListener('DOMContentLoaded', () => {
       </div>
     </div>
 
-    <!-- タブ5: 💮 はなまる学習証明書（賞状） -->
-    <div class="tab-content" id="tab-content-cert">
-      <div class="panel-card">
-        <div class="panel-header">
-          <span class="panel-title">💮 はなまる学習証明書（賞状印刷）</span>
-          <span style="font-size: 12.5px; color: #cbd5e1;">A4サイズで綺麗に印刷・PDF保存できます</span>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="cert-student-name">表彰名（児童のニックネーム等）</label>
-            <input type="text" id="cert-student-name" placeholder="例: 漢字マスター たろう" oninput="renderCertPreview()">
+    <!-- タブ5: 🏫 今日のクラス防衛作戦本部 [開発中] -->
+    <div class="tab-content" id="tab-content-class">
+      <!-- 開発中案内バナー -->
+      <div class="dev-notice-banner">
+        <div class="dev-notice-icon">🚧</div>
+        <div class="dev-notice-body">
+          <div class="dev-notice-title">【開発中・先行プレビュー機能】今日のクラス防衛作戦本部</div>
+          <div class="dev-notice-desc">
+            全児童端末からの撃破数リアルタイム合算・大型提示機能は、Firebase連携バックエンドの整備に向けて現在開発中です。<br>
+            ※ 画面の表示やローカル集計のプレビュー設定は保存可能です。
           </div>
-          <div class="form-group">
-            <label for="cert-class-name">学年・組</label>
-            <input type="text" id="cert-class-name" placeholder="例: 3年1組" oninput="renderCertPreview()">
-          </div>
-          <div class="form-group">
-            <label for="cert-teacher-name">先生のお名前</label>
-            <input type="text" id="cert-teacher-name" placeholder="例: 担任 田中先生" oninput="renderCertPreview()">
-          </div>
-          <div class="form-group">
-            <label for="cert-stamp-type">先生スタンプ</label>
-            <select id="cert-stamp-type" onchange="renderCertPreview()">
-              <option value="💮 たいへんよくできました">💮 たいへんよくできました</option>
-              <option value="🌟 漢字マスター認定">🌟 漢字マスター認定</option>
-              <option value="✨ 免許皆伝">✨ 免許皆伝</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group" style="margin-bottom: 16px;">
-          <label for="cert-message">先生からの一言メッセージ</label>
-          <input type="text" id="cert-message" value="毎日コツコツ集中してよくがんばりました！たいへん立派です！" oninput="renderCertPreview()">
-        </div>
-
-        <div style="text-align: center; margin: 16px 0;">
-          <button class="btn-action warning" onclick="printCertificate()" style="font-size: 16px; padding: 12px 30px;">
-            🖨️ A4で印刷する（PDF保存）
-          </button>
-        </div>
-
-        <!-- プレビュー -->
-        <div id="print-certificate-container" style="background: #fff; color: #1c1917; padding: 36px 40px; border-radius: 12px; border: 8px double #d97706; margin-top: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
-          <!-- プレビュー内容はJSで動的生成 -->
         </div>
       </div>
-    </div>
 
-    <!-- タブ4: 🏫 クラス防衛作戦本部 -->
-    <div class="tab-content" id="tab-content-class">
       <div class="panel-card">
         <div class="panel-header">
           <span class="panel-title">🏫 今日のクラス防衛作戦本部 設定</span>
@@ -4824,38 +5109,101 @@ function importSelectedKanjiToQuestions() {
 }
 
 /* ==========================================================================
-   賞状印刷
+   賞状印刷（はなまる学習証明書）
    ========================================================================== */
-function renderCertPreview() {
-  const sName = document.getElementById('cert-student-name').value.trim() || '漢字マスター';
-  const cName = document.getElementById('cert-class-name').value.trim() || '3年1組';
-  const tName = document.getElementById('cert-teacher-name').value.trim() || '担任より';
-  const stamp = document.getElementById('cert-stamp-type').value;
-  const msg = document.getElementById('cert-message').value.trim();
+const CERT_TITLES = {
+  '賞　状': 'KANJI JET ACADEMY CERTIFICATE OF EXCELLENCE',
+  '努力賞': 'SPECIAL EFFORT AWARD / KANJI JET',
+  '漢字マスター認定証': 'OFFICIAL KANJI MASTER CERTIFICATION',
+  '完全制覇修了証': 'CERTIFICATE OF COMPLETE MASTERY',
+  'たいへんよくできました証': 'HANAMARU EXCELLENCE CERTIFICATE'
+};
 
+const CERT_STAMPS = {
+  'hanamaru': { icon: '💮', line1: 'たいへん', line2: 'よくできました' },
+  'master': { icon: '🌟', line1: '漢字マスター', line2: '認　定' },
+  'kaiden': { icon: '✨', line1: '免許皆伝', line2: '合　格' },
+  'perfect': { icon: '🎯', line1: '百点満点', line2: '優　秀' },
+  'pilot': { icon: '🚀', line1: '銀河防衛', line2: 'エース認定' }
+};
+
+function getJapaneseEraDate(d = new Date()) {
+  const y = d.getFullYear();
+  const eraYear = y - 2018;
+  const eraStr = eraYear === 1 ? '元年' : `${eraYear}年`;
+  return `令和${eraStr} ${d.getMonth() + 1}月${d.getDate()}日`;
+}
+
+function setCertMessagePreset(text) {
+  const input = document.getElementById('cert-message');
+  if (input) {
+    input.value = text;
+    renderCertPreview();
+  }
+}
+
+function renderCertPreview() {
   const container = document.getElementById('print-certificate-container');
+  if (!container) return;
+
+  const titleEl = document.getElementById('cert-title-type');
+  const title = (titleEl && titleEl.value) ? titleEl.value : '賞　状';
+  const subTitle = CERT_TITLES[title] || 'KANJI JET ACADEMY CERTIFICATE OF EXCELLENCE';
+
+  const sNameEl = document.getElementById('cert-student-name');
+  const sName = (sNameEl && sNameEl.value.trim()) ? sNameEl.value.trim() : '漢字マスター たろう';
+
+  const cNameEl = document.getElementById('cert-class-name');
+  const cName = (cNameEl && cNameEl.value.trim()) ? cNameEl.value.trim() : '3年1組';
+
+  const tNameEl = document.getElementById('cert-teacher-name');
+  const tName = (tNameEl && tNameEl.value.trim()) ? tNameEl.value.trim() : '担任 田中先生';
+
+  const dateEl = document.getElementById('cert-date');
+  const dateStr = (dateEl && dateEl.value.trim()) ? dateEl.value.trim() : getJapaneseEraDate();
+
+  const stampEl = document.getElementById('cert-stamp-type');
+  const stampKey = (stampEl && stampEl.value) ? stampEl.value : 'hanamaru';
+  const stampInfo = CERT_STAMPS[stampKey] || CERT_STAMPS['hanamaru'];
+
+  const msgEl = document.getElementById('cert-message');
+  const msg = (msgEl && msgEl.value.trim()) ? msgEl.value.trim() : '毎日コツコツ集中してよくがんばりました！たいへん立派です！';
+
+  container.className = 'cert-print-sheet';
   container.innerHTML = `
-    <div style="text-align: center; border-bottom: 2px solid #b45309; padding-bottom: 14px; margin-bottom: 20px;">
-      <h2 style="font-size: 32px; letter-spacing: 6px; color: #9a3412; font-family: 'Yu Mincho', serif;">賞　状</h2>
-      <div style="font-size: 14px; color: #78350f; font-weight: bold; margin-top: 4px;">KANJI JET CERTIFICATE OF EXCELLENCE</div>
-    </div>
-    <div style="font-size: 20px; font-weight: bold; margin-bottom: 12px; color: #1c1917;">
-      ${escapeHtml(cName)}　${escapeHtml(sName)} 殿
-    </div>
-    <p style="font-size: 16px; line-height: 2; margin-bottom: 28px; color: #292524; text-indent: 1em;">
-      あなたは漢字ジェットにおいて、日々の学習に熱心に取り組み、見事に素晴らしい成果を収めました。<br>
-      よってここにその努力と栄誉をたたえ、これを賞します。
-    </p>
-    <div style="font-size: 15px; color: #44403c; font-style: italic; margin-bottom: 30px; text-align: center; background: #fffbeb; padding: 10px; border-radius: 6px;">
-      「${escapeHtml(msg)}」
-    </div>
-    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 30px;">
-      <div style="font-size: 14px; color: #57534e;">
-        授与日: ${new Date().toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' })}
+    <div class="cert-inner-frame">
+      <div class="cert-header">
+        <h2 class="cert-main-title">${escapeHtml(title)}</h2>
+        <div class="cert-sub-title">${escapeHtml(subTitle)}</div>
       </div>
-      <div style="text-align: right; display: flex; align-items: center; gap: 16px;">
-        <div style="font-size: 18px; font-weight: bold; color: #1c1917;">${escapeHtml(tName)}</div>
-        <div style="font-size: 38px;">${stamp.split(' ')[0]}</div>
+
+      <div class="cert-recipient">
+        <span>${escapeHtml(cName)}</span>
+        <span class="cert-student-highlight">${escapeHtml(sName)}</span>
+        <span>殿</span>
+      </div>
+
+      <p class="cert-body-text">
+        あなたは「ファイブツアーズジェット 漢字バトル」において、
+        日々の学習に熱心に取り組み、漢字の読みと正しい筆順を修得して、
+        見事に素晴らしい成果を収めました。<br>
+        よってここにその努力と栄誉をたたえ、これを賞します。
+      </p>
+
+      <div class="cert-msg-box">
+        <div class="cert-msg-label">💬 先生より一言メッセージ</div>
+        <div class="cert-msg-content">「${escapeHtml(msg)}」</div>
+      </div>
+
+      <div class="cert-footer">
+        <div class="cert-date">${escapeHtml(dateStr)}</div>
+        <div class="cert-teacher-box">
+          <div class="cert-teacher-name">${escapeHtml(tName)}</div>
+          <div class="cert-seal-stamp">
+            <div class="seal-icon">${stampInfo.icon}</div>
+            <div class="seal-text">${stampInfo.line1}<br>${stampInfo.line2}</div>
+          </div>
+        </div>
       </div>
     </div>
   `;
@@ -5720,6 +6068,7 @@ function printWorksheet() {
 }
 
 function printCertificate() {
+  renderCertPreview();
   const preview = document.getElementById('print-certificate-container');
   const printWrapper = document.getElementById('print-area-wrapper');
   if (!preview || !printWrapper) return;
@@ -6009,6 +6358,13 @@ window.addEventListener('DOMContentLoaded', () => {
   if (cName) document.getElementById('class-name-input').value = cName;
   if (cTarget) document.getElementById('class-target-input').value = cTarget;
   if (cFb) document.getElementById('firebase-url-input').value = cFb;
+
+  // はなまる学習証明書の初期化
+  const certDateInput = document.getElementById('cert-date');
+  if (certDateInput && !certDateInput.value) {
+    certDateInput.value = getJapaneseEraDate();
+  }
+  renderCertPreview();
 });
 </script>
 </body>

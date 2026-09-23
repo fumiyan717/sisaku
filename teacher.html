@@ -821,25 +821,28 @@ window.addEventListener('DOMContentLoaded', () => {
       justify-content: space-between;
       align-items: flex-end;
       border-bottom: 2px solid #000;
-      padding-bottom: 8px;
-      margin-bottom: 12px;
-      gap: 14px;
+      padding-bottom: 6px;
+      margin-bottom: 10px;
+      gap: 12px;
     }
     .sheet-title-area {
-      flex: 1;
+      flex: 1 1 auto;
       min-width: 0;
-      padding-right: 8px;
+      overflow: hidden;
     }
     .sheet-main-title {
-      font-size: 21px;
+      font-size: 20px;
       font-weight: 900;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
       color: #000;
-      margin-bottom: 4px;
-      line-height: 1.25;
-      word-break: keep-all;
-      overflow-wrap: anywhere;
+      margin-bottom: 3px;
+      line-height: 1.2;
+      white-space: nowrap !important;
+      word-break: keep-all !important;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
+
     .sheet-sub-title {
       font-size: 11px;
       color: #333;
@@ -852,44 +855,44 @@ window.addEventListener('DOMContentLoaded', () => {
 
     .sheet-student-info {
       display: flex;
-      gap: 6px;
+      gap: 4px;
       align-items: flex-end;
       flex-shrink: 0;
     }
     .info-box {
       border: 1px solid #000;
-      padding: 3px 6px;
-      font-size: 10px;
+      padding: 2px 4px;
+      font-size: 9px;
       color: #000;
       font-family: sans-serif;
     }
     .name-box {
       border: 1.5px solid #000;
-      width: 44mm;
-      height: 14mm;
+      width: 38mm;
+      height: 13mm;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: 2px 5px;
-      font-size: 9px;
+      padding: 2px 4px;
+      font-size: 8.5px;
       color: #000;
       font-family: sans-serif;
     }
     .score-box {
       border: 2px solid #000;
-      width: 20mm;
-      height: 14mm;
+      width: 16mm;
+      height: 13mm;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       font-weight: bold;
-      font-size: 9px;
+      font-size: 8.5px;
       color: #000;
       font-family: sans-serif;
     }
     .score-val {
-      font-size: 15px;
+      font-size: 14px;
     }
 
     /* 用紙右下のフッター領域（AI採点照合コード・識別コード） */
@@ -1271,7 +1274,16 @@ window.addEventListener('DOMContentLoaded', () => {
         break-after: avoid !important;
         overflow: hidden !important;
       }
+      .sheet-main-title {
+        white-space: nowrap !important;
+        word-break: keep-all !important;
+        line-height: 1.2 !important;
+      }
+      .sheet-title-area {
+        overflow: hidden !important;
+      }
     }
+
   </style>
 </head>
 <body>
@@ -3677,9 +3689,9 @@ const TEACHER_PRESETS = [
 
 // 初期サンプル問題
 const SAMPLE_QUESTIONS = [
-  { kanji: "一番", kana: "いちばん", grade: "1年", hint: "一番星見つけた。", sentence: "一番星見つけた。", displaySentence: "一番ほしみつけた。", targetKanji: "一" },
+  { kanji: "一つ", kana: "ひとつ", grade: "1年", hint: "一つずつ分ける。", sentence: "一つずつ分ける。", displaySentence: "一つずつわける。", targetKanji: "一" },
   { kanji: "右手", kana: "みぎて", grade: "1年", hint: "右手を挙げる。", sentence: "右手を挙げる。", displaySentence: "右手をあげる。", targetKanji: "右" },
-  { kanji: "雨宿り", kana: "あまやどり", grade: "1年", hint: "雨宿りをする。", sentence: "雨宿りをする。", displaySentence: "雨やどりをする。", targetKanji: "雨" },
+  { kanji: "小雨", kana: "こさめ", grade: "1年", hint: "小雨の中を出かける。", sentence: "小雨の中を出かける。", displaySentence: "小雨のなかをでかける。", targetKanji: "雨" },
   { kanji: "青空", kana: "あおぞら", grade: "1年", hint: "青空を見上げる。", sentence: "青空を見上げる。", displaySentence: "青空をみあげる。", targetKanji: "青" },
   { kanji: "学校", kana: "がっこう", grade: "1年", hint: "学校で楽しく学ぶ。", sentence: "学校で楽しく学ぶ。", displaySentence: "学校でたのしく学ぶ。", targetKanji: "校" },
   { kanji: "元気", kana: "げんき", grade: "2年", hint: "元気の出る話を聞く。", sentence: "元気の出る話を聞く。", displaySentence: "元気のでるはなしをきく。", targetKanji: "元" },
@@ -4371,6 +4383,133 @@ function isAppropriateForGrade(text, targetGrade) {
 }
 
 /**
+ * 解答ターゲット熟語（文字列）が指定学年配当漢字およびひらがな・カタカナ・記号のみで構成されているか判定。
+ * 指定した学年より上で習う漢字や常用外漢字が「1文字でも」含まれている場合は false を返す。
+ * （AI対応プリント自動生成の最重要バリデーション）
+ * @param {string} targetWord 解答となる漢字・熟語文字列
+ * @param {number|string} targetGrade 指定学年 (1〜6)
+ * @returns {boolean}
+ */
+function isTargetWordAllowedForGrade(targetWord, targetGrade) {
+  if (!targetWord) return false;
+  const gNum = Math.max(1, Math.min(6, parseInt(targetGrade, 10) || 6));
+  const learnedSet = getLearnedKanjiSet(gNum);
+  for (const ch of targetWord) {
+    if (/[\u4E00-\u9FFF\u3400-\u4DBF]/.test(ch)) {
+      if (!learnedSet.has(ch)) return false;
+    }
+  }
+  return true;
+}
+
+/**
+ * 漢字1文字について、指定学年配当に100%適合する小テスト用問題データを取得
+ * primaryCompound が適合しない場合は compounds 配列から適合する熟語を探索し、それでも無ければ単漢字で適合
+ * @param {string} kanjiChar 対象漢字
+ * @param {number|string} targetGrade 出題指定学年
+ * @returns {Object|null}
+ */
+function getGradeAppropriateQuestionForKanji(kanjiChar, targetGrade) {
+  if (typeof KANJI_LEARNING_DATA === 'undefined') return null;
+  const ld = KANJI_LEARNING_DATA[kanjiChar];
+  if (!ld) return null;
+  const gNum = Math.max(1, Math.min(6, parseInt(targetGrade, 10) || 6));
+  const learnedSet = getLearnedKanjiSet(gNum);
+
+  // 対象漢字そのものが未習ならnull
+  if (!learnedSet.has(kanjiChar)) return null;
+
+  // 1. primaryCompound が適合するかチェック
+  if (ld.primaryCompound && isTargetWordAllowedForGrade(ld.primaryCompound, gNum)) {
+    return {
+      targetKanji: kanjiChar,
+      kanji: ld.primaryCompound,
+      kana: ld.primaryKana || (typeof COMPOUND_READINGS !== 'undefined' && COMPOUND_READINGS[ld.primaryCompound]) || "",
+      sentence: ld.primarySentence || `${ld.primaryCompound}を学習する。`,
+      displaySentence: ld.displaySentence || ld.primarySentence || `${ld.primaryCompound}を学習する。`,
+      grade: `${ld.grade}年`,
+      hint: ld.displaySentence || ld.primarySentence || `${ld.primaryCompound}を学習する。`
+    };
+  }
+
+  // 2. compounds リストから適合する熟語を探索
+  if (ld.compounds && ld.compounds.length > 0) {
+    for (const comp of ld.compounds) {
+      if (isTargetWordAllowedForGrade(comp, gNum)) {
+        let foundSent = (ld.sentences || []).find(s => s.includes(comp));
+        let kana = (typeof COMPOUND_READINGS !== 'undefined' && COMPOUND_READINGS[comp]) || "";
+        if (!kana && typeof getKanjiAutoReading === 'function') {
+          kana = getKanjiAutoReading(comp).kana;
+        }
+        const sent = foundSent || `${comp}を学習する。`;
+        return {
+          targetKanji: kanjiChar,
+          kanji: comp,
+          kana: kana || comp,
+          sentence: sent,
+          displaySentence: sent,
+          grade: `${ld.grade}年`,
+          hint: sent
+        };
+      }
+    }
+  }
+
+  // 3. 熟語がなければ単漢字として出題
+  const singleR = (typeof getKanjiAutoReading === 'function') ? getKanjiAutoReading(kanjiChar).kana : "";
+  let foundSent = (ld.sentences || []).find(s => s.includes(kanjiChar)) || `${kanjiChar}の漢字を書く。`;
+  return {
+    targetKanji: kanjiChar,
+    kanji: kanjiChar,
+    kana: singleR || kanjiChar,
+    sentence: foundSent,
+    displaySentence: foundSent,
+    grade: `${ld.grade}年`,
+    hint: foundSent
+  };
+}
+
+/**
+ * 指定学年に100%適合する安全問題を自動補充
+ * @param {number|string} targetGrade 指定学年
+ * @param {number} countNeeded 必要問題数
+ * @param {Set<string>} [excludeKanjiSet] 既出の漢字Set
+ * @returns {Array<Object>}
+ */
+function getSafeFallbackQuestions(targetGrade, countNeeded, excludeKanjiSet = new Set()) {
+  const gNum = Math.max(1, Math.min(6, parseInt(targetGrade, 10) || 6));
+  const fallbackList = [];
+  if (typeof ALL_GRADE_KANJI === 'undefined' || typeof KANJI_LEARNING_DATA === 'undefined') {
+    return fallbackList;
+  }
+
+  // 指定学年配当の漢字リスト（指定学年優先、足りなければそれ以下の学年）
+  const candidateKanji = [];
+  if (ALL_GRADE_KANJI[gNum]) {
+    candidateKanji.push(...ALL_GRADE_KANJI[gNum]);
+  }
+  for (let g = gNum - 1; g >= 1; g--) {
+    if (ALL_GRADE_KANJI[g]) {
+      candidateKanji.push(...ALL_GRADE_KANJI[g]);
+    }
+  }
+
+  for (const ch of candidateKanji) {
+    if (fallbackList.length >= countNeeded) break;
+    if (excludeKanjiSet.has(ch)) continue;
+
+    const q = getGradeAppropriateQuestionForKanji(ch, gNum);
+    if (q && isTargetWordAllowedForGrade(q.kanji, gNum)) {
+      fallbackList.push(q);
+      excludeKanjiSet.add(ch);
+      excludeKanjiSet.add(q.kanji);
+    }
+  }
+
+  return fallbackList;
+}
+
+/**
  * テキスト中の未習漢字（指定学年より上で習う漢字、常用外）のみを自動的にひらがなに変換
  * 解答欄にするターゲット漢字（preserveWord）は変換から保護
  * @param {string} text 変換前テキスト
@@ -4442,10 +4581,10 @@ function validateQuestionForGrade(rawQuestion, targetGrade, filterMode = 'conver
 
   const qData = extractQuestionData(rawQuestion, { targetGrade: gNum, unlearnedMode: filterMode });
 
-  // ターゲット漢字そのものの未習判定
+  // ターゲット漢字そのものの未習判定（指定学年より上で習う漢字、および常用外・中学生以上漢字を完全検出）
+  const learnedSet = getLearnedKanjiSet(gNum);
   const targetUnlearned = (qData.chars || []).filter(ch => {
-    const kGrade = KANJI_GRADE_MAP.get(ch);
-    return kGrade && kGrade > gNum;
+    return /[\u4E00-\u9FFF\u3400-\u4DBF]/.test(ch) && !learnedSet.has(ch);
   });
 
   // 文中の未習漢字検出（マス目漢字以外）
@@ -4454,8 +4593,17 @@ function validateQuestionForGrade(rawQuestion, targetGrade, filterMode = 'conver
     gNum
   );
 
-  const totalUnlearned = [...targetUnlearned.map(ch => ({ char: ch, grade: KANJI_GRADE_MAP.get(ch), isTarget: true })), ...sentenceUnlearned];
+  const totalUnlearned = [
+    ...targetUnlearned.map(ch => ({ char: ch, grade: KANJI_GRADE_MAP.get(ch) || '常用外/中学生以上', isTarget: true })),
+    ...sentenceUnlearned
+  ];
 
+  // 【要件1】ターゲット漢字（解答熟語）自体に未習漢字が含まれている場合は、いかなるモードでも常に不合格（出題除外）
+  if (targetUnlearned.length > 0) {
+    return { valid: false, question: qData, unlearnedList: totalUnlearned };
+  }
+
+  // exclude モード時は文中の未習漢字が1つでもあれば不合格
   if (filterMode === 'exclude') {
     if (totalUnlearned.length > 0) {
       return { valid: false, question: qData, unlearnedList: totalUnlearned };
@@ -5397,32 +5545,67 @@ function renderAiPrintSheet() {
 
   let allQuestions = getActivePrintQuestions();
 
-  // 未習漢字フィルターの適用（除外モードの場合は不適合問題をフィルタリング）
-  let filteredQuestions = allQuestions;
-  if (unlearnedMode === 'exclude') {
-    filteredQuestions = allQuestions.filter(q => {
-      const v = validateQuestionForGrade(q, targetGrade, 'exclude');
-      return v.valid;
-    });
-    // もし除外の結果0件になった場合は安全のため全問に戻して変換モードを適用
-    if (filteredQuestions.length === 0) {
-      filteredQuestions = allQuestions;
+  // 【要件1】解答（ターゲット熟語）自体の学年検証 ＆ 未習漢字除外（最重要）
+  // 出題リストから問題を抽出する際、ターゲットとなる解答文字列（漢字）を1文字ずつ学年配当リストで検証。
+  // 指定した学年より上で習う漢字や常用外漢字が「1文字でも」含まれている場合は、出題候補から完全に除外（スキップ）。
+  const validQuestions = [];
+  for (const q of allQuestions) {
+    const qd = extractQuestionData(q, { targetGrade, unlearnedMode });
+    const targetWord = qd.kanji || q.kanji || "";
+
+    // 1. 解答（ターゲット熟語）自体の学年適合性チェック
+    if (!isTargetWordAllowedForGrade(targetWord, targetGrade)) {
+      continue; // 解答に1文字でも未習漢字・常用外漢字が含まれていれば完全に除外（スキップ）
     }
+    if (q.kanji && !isTargetWordAllowedForGrade(q.kanji, targetGrade)) {
+      continue;
+    }
+
+    // 2. unlearnedMode が 'exclude' の場合は、例文全体の未習漢字もチェック
+    if (unlearnedMode === 'exclude') {
+      const v = validateQuestionForGrade(q, targetGrade, 'exclude');
+      if (!v.valid) {
+        continue;
+      }
+    }
+
+    validQuestions.push(q);
   }
 
-  let questions = (countMode === 'all') ? filteredQuestions : filteredQuestions.slice(0, parseInt(countMode, 10) || 10);
-  if (questions.length === 0) questions = SAMPLE_QUESTIONS;
+  // 出題問題数の決定
+  const desiredCount = (countMode === 'all') ? validQuestions.length : (parseInt(countMode, 10) || 10);
+  let questions = (countMode === 'all') ? validQuestions : validQuestions.slice(0, desiredCount);
+
+  // もし除外の結果、問題数が不足している（または0問）の場合は、安全な指定学年問題を自動補充
+  const minRequired = (countMode === 'all') ? Math.max(validQuestions.length, 1) : desiredCount;
+  if (questions.length < minRequired) {
+    const needed = minRequired - questions.length;
+    const existingTargetKanji = new Set(questions.map(q => {
+      const d = extractQuestionData(q, { targetGrade, unlearnedMode });
+      return d.targetKanji || d.kanji;
+    }));
+    const fallbacks = getSafeFallbackQuestions(targetGrade, needed, existingTargetKanji);
+    questions = [...questions, ...fallbacks];
+  }
+  if (questions.length === 0) {
+    questions = getSafeFallbackQuestions(targetGrade, 10);
+  }
 
   const isModelAnswer = (mode === 'answer');
   const pointsPerQuestion = questions.length > 0 ? Math.floor(100 / questions.length) : 10;
 
   // タイトル文字数に応じた動的フォントサイズ（不自然な改行崩れ完全防止）
   const title = escapeHtml(rawTitle);
-  let titleFontSize = '21px';
-  if (rawTitle.length > 20) {
+  const titleLen = rawTitle.length + (isModelAnswer ? 6 : 0);
+  let titleFontSize = '20px';
+  if (titleLen > 24) {
+    titleFontSize = '13px';
+  } else if (titleLen > 18) {
     titleFontSize = '15px';
-  } else if (rawTitle.length > 14) {
-    titleFontSize = '18px';
+  } else if (titleLen > 13) {
+    titleFontSize = '17px';
+  } else if (titleLen > 10) {
+    titleFontSize = '18.5px';
   }
 
   // テスト識別QRコード用データ生成
@@ -5583,22 +5766,21 @@ function renderAiPrintSheet() {
         <div class="sheet-sub-title">
           <span>${escapeHtml(gradeText)}</span> ｜ 
           <span>全${questions.length}問（各${pointsPerQuestion}点 / 100点満点）</span>
-          ${unlearnedMode === 'convert' ? '<span style="font-size:9.5px; background:#e0f2fe; color:#0369a1; padding:1px 5px; border-radius:3px;">未習漢字ひらがな化済</span>' : ''}
         </div>
       </div>
 
       <div class="sheet-student-info">
         <div class="info-box">
-          <div style="font-size: 8px; color: #555;">実施日</div>
-          <div style="font-size: 11px; min-width: 18mm; text-align: center;">　月　日</div>
+          <div style="font-size: 7.5px; color: #555;">実施日</div>
+          <div style="font-size: 10px; min-width: 14mm; text-align: center;">　月　日</div>
         </div>
         <div class="info-box">
-          <div style="font-size: 8px; color: #555;">年・組・番</div>
-          <div style="font-size: 11px; min-width: 20mm; text-align: center;">年　組　番</div>
+          <div style="font-size: 7.5px; color: #555;">組・番</div>
+          <div style="font-size: 10px; min-width: 15mm; text-align: center;">組　番</div>
         </div>
         <div class="name-box">
-          <div style="font-size: 8px; color: #555;">なまえ（ふりがな）</div>
-          <div style="font-size: 13px; text-align: right; color: #999;">${isModelAnswer ? '<span style="color:#dc2626; font-weight:bold;">模範解答</span>' : '　'}</div>
+          <div style="font-size: 7.5px; color: #555;">なまえ（ふりがな）</div>
+          <div style="font-size: 12px; text-align: right; color: #999;">${isModelAnswer ? '<span style="color:#dc2626; font-weight:bold;">模範解答</span>' : '　'}</div>
         </div>
         <div class="score-box">
           <div>得点</div>

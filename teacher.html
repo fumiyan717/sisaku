@@ -1284,6 +1284,12 @@ window.addEventListener('DOMContentLoaded', () => {
       }
     }
 
+    @media screen {
+      #print-area-wrapper {
+        display: none !important;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -5708,6 +5714,9 @@ function printWorksheet() {
   if (!preview || !printWrapper) return;
   printWrapper.innerHTML = preview.outerHTML;
   window.print();
+  setTimeout(() => {
+    printWrapper.innerHTML = '';
+  }, 500);
 }
 
 function printCertificate() {
@@ -5716,7 +5725,17 @@ function printCertificate() {
   if (!preview || !printWrapper) return;
   printWrapper.innerHTML = preview.outerHTML;
   window.print();
+  setTimeout(() => {
+    printWrapper.innerHTML = '';
+  }, 500);
 }
+
+window.addEventListener('afterprint', () => {
+  const printWrapper = document.getElementById('print-area-wrapper');
+  if (printWrapper) {
+    printWrapper.innerHTML = '';
+  }
+});
 
 /* ==========================================================================
    電子黒板 ライブ授業・レイドボス機能 (Step 2)

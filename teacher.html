@@ -837,10 +837,10 @@ window.addEventListener('DOMContentLoaded', () => {
       color: #000;
       margin-bottom: 3px;
       line-height: 1.2;
-      white-space: nowrap !important;
-      word-break: keep-all !important;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      /* 以下を変更：無理な1行収めをやめ、自然に折り返して美しく見せる */
+      white-space: normal !important;
+      word-break: normal !important;
+      overflow: visible;
     }
 
     .sheet-sub-title {
@@ -1275,8 +1275,8 @@ window.addEventListener('DOMContentLoaded', () => {
         overflow: hidden !important;
       }
       .sheet-main-title {
-        white-space: nowrap !important;
-        word-break: keep-all !important;
+        white-space: normal !important;
+        word-break: normal !important;
         line-height: 1.2 !important;
       }
       .sheet-title-area {
@@ -1717,14 +1717,7 @@ window.addEventListener('DOMContentLoaded', () => {
               <option value="6">6年生（全1026字）</option>
             </select>
           </div>
-          <div class="form-group" style="min-width: 175px;">
-            <label for="sheet-unlearned-filter-mode">未習漢字フィルター</label>
-            <select id="sheet-unlearned-filter-mode" onchange="renderAiPrintSheet()">
-              <option value="convert" selected>🛡️ 未習漢字をひらがなに変換</option>
-              <option value="exclude">🚫 未習漢字を含む問題を除外</option>
-              <option value="raw">📖 チェックなし（漢字そのまま）</option>
-            </select>
-          </div>
+
           <div class="form-group" style="min-width: 120px;">
             <label for="sheet-mode-select">用紙モード</label>
             <select id="sheet-mode-select" onchange="renderAiPrintSheet()">
@@ -4549,7 +4542,7 @@ function getSafeFallbackQuestions(targetGrade, countNeeded, excludeKanjiSet = ne
     if (excludeKanjiSet.has(ch)) continue;
 
     const q = getGradeAppropriateQuestionForKanji(ch, gNum);
-    if (q && isTargetWordAllowedForGrade(q.kanji, gNum) && isNaturalSentence(q.sentence, q.kanji)) {
+    if (q && isTargetWordAllowedForGrade(q.kanji, gNum) && isNaturalSentence(q.sentence, q.kanji) && isSentenceAllowedForGrade(q.displaySentence || q.sentence, gNum)) {
       fallbackList.push(q);
       excludeKanjiSet.add(ch);
       excludeKanjiSet.add(q.kanji);
@@ -4560,145 +4553,28 @@ function getSafeFallbackQuestions(targetGrade, countNeeded, excludeKanjiSet = ne
 }
 
 /**
- * テキスト中の未習漢字（指定学年より上で習う漢字、常用外）のみを自動的にひらがなに変換
- * 解答欄にするターゲット漢字（preserveWord）は文構造ごと完全保護し、前後の文脈のみを正確に置換
- * @param {string} text 変換前テキスト
- * @param {number|string} targetGrade 指定学年
- * @param {string} preserveWord 保護する漢字（マス目にする漢字）
- * @returns {string} ひらがな変換後のテキスト
+ * 【完全ホワイトリスト方式】テキスト全体が指定学年以下の漢字とひらがな・カタカナのみか判定
  */
-function convertUnlearnedKanjiToHiragana(text, targetGrade, preserveWord = "") {
-  if (!text) return "";
+function isSentenceAllowedForGrade(text, targetGrade) {
+  if (!text) return false;
   const gNum = Math.max(1, Math.min(6, parseInt(targetGrade, 10) || 6));
   const learnedSet = getLearnedKanjiSet(gNum);
-
-  // preserveWord が指定されている場合は文中の出現位置で構造分離し、preserveWord は1文字も触らず保護
-  if (preserveWord && text.includes(preserveWord)) {
-    const idx = text.indexOf(preserveWord);
-    const beforePart = text.slice(0, idx);
-    const afterPart = text.slice(idx + preserveWord.length);
-    const convertedBefore = convertUnlearnedKanjiToHiragana(beforePart, gNum, "");
-    const convertedAfter = convertUnlearnedKanjiToHiragana(afterPart, gNum, "");
-    return convertedBefore + preserveWord + convertedAfter;
-  }
-
-  let replacedText = text;
-
-  // 1. よく使われる熟語辞書から未習漢字を含む熟語を置換（※最長一致で文脈崩れを完全防止）
-  if (typeof COMPOUND_READINGS !== 'undefined') {
-    const compoundKeys = Object.keys(COMPOUND_READINGS).sort((a, b) => b.length - a.length);
-    for (const comp of compoundKeys) {
-      if (comp.length >= 2 && replacedText.includes(comp)) {
-        const hasUnlearned = comp.split("").some(c => /[\u4E00-\u9FFF]/.test(c) && !learnedSet.has(c));
-        if (hasUnlearned) {
-          const reading = COMPOUND_READINGS[comp];
-          if (reading) {
-            replacedText = replacedText.split(comp).join(reading);
-          }
-        }
-      }
-    }
-  }
-
-  // 2. 残った未習漢字を単文字ごとにひらがな置換
-  let result = "";
-  for (let i = 0; i < replacedText.length; i++) {
-    const ch = replacedText[i];
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    // 漢字圏の文字でありながら、学習済みリストにない場合は即アウト
     if (/[\u4E00-\u9FFF\u3400-\u4DBF]/.test(ch) && !learnedSet.has(ch)) {
-      const autoR = getKanjiAutoReading(ch);
-      let kana = autoR.kana;
-      if (kana && kana !== ch) {
-        result += kana;
-      } else {
-        result += ch;
-      }
-    } else {
-      result += ch;
+      return false;
     }
   }
-  return result;
+  return true;
 }
 
 /**
- * 問題全体の学年適合性バリデーション関数
- * @param {Object} rawQuestion
- * @param {number|string} targetGrade
- * @param {string} filterMode 'convert' | 'exclude' | 'raw'
- * @returns {{ valid: boolean, question: Object, unlearnedList: Array }}
- */
-function validateQuestionForGrade(rawQuestion, targetGrade, filterMode = 'convert') {
-  if (!rawQuestion) return { valid: false, question: null, unlearnedList: [] };
-
-  let gNum = 6;
-  if (targetGrade && targetGrade !== 'auto') {
-    gNum = Math.max(1, Math.min(6, parseInt(targetGrade, 10) || 6));
-  } else {
-    const gMatch = String(rawQuestion.grade || "").match(/([1-6])/);
-    if (gMatch) gNum = parseInt(gMatch[1], 10);
-  }
-
-  const qData = extractQuestionData(rawQuestion, { targetGrade: gNum, unlearnedMode: filterMode });
-
-  // ターゲット漢字そのものの未習判定（指定学年より上で習う漢字、および常用外・中学生以上漢字を完全検出）
-  const learnedSet = getLearnedKanjiSet(gNum);
-  const targetUnlearned = (qData.chars || []).filter(ch => {
-    return /[\u4E00-\u9FFF\u3400-\u4DBF]/.test(ch) && !learnedSet.has(ch);
-  });
-
-  // 文中の未習漢字検出（マス目漢字以外）
-  const sentenceUnlearned = getUnlearnedKanjiInText(
-    (qData.beforeText || "") + (qData.afterText || ""),
-    gNum
-  );
-
-  const totalUnlearned = [
-    ...targetUnlearned.map(ch => ({ char: ch, grade: KANJI_GRADE_MAP.get(ch) || '常用外/中学生以上', isTarget: true })),
-    ...sentenceUnlearned
-  ];
-
-  // 【要件1】ターゲット漢字（解答熟語）自体に未習漢字が含まれている場合は、いかなるモードでも常に不合格（出題除外）
-  if (targetUnlearned.length > 0) {
-    return { valid: false, question: qData, unlearnedList: totalUnlearned };
-  }
-
-  // exclude モード時は文中の未習漢字が1つでもあれば不合格
-  if (filterMode === 'exclude') {
-    if (totalUnlearned.length > 0) {
-      return { valid: false, question: qData, unlearnedList: totalUnlearned };
-    }
-  }
-
-  return { valid: true, question: qData, unlearnedList: totalUnlearned };
-}
-
-/**
- * 漢字小テスト問題データ スキーマ定義 & 100%完全一致抽出ロジック (Step 1)
- *
- * ターゲット漢字、ふりがな、前後の例文が100%完全に一致することを保証する。
- * 文中の熟語境界を認識し、マス目・ふりがな・前後の文の不自然な寸断を完全抑止。
- *
- * @param {Object} rawItem 入力問題データ
- * @param {Object} [options] オプション { targetGrade, unlearnedMode: 'convert' | 'exclude' | 'raw' }
- * @returns {QuestionData}
+ * 漢字小テスト問題データ スキーマ抽出（置換処理を一切排除したピュアな抽出）
  */
 function extractQuestionData(rawItem, options = {}) {
-  if (!rawItem) {
-    return {
-      targetKanji: "",
-      kanji: "",
-      kana: "",
-      sentence: "",
-      displaySentence: "",
-      grade: "",
-      hint: "",
-      beforeText: "",
-      afterText: "",
-      isMatched: false,
-      chars: []
-    };
-  }
+  if (!rawItem) return { targetKanji: "", kanji: "", kana: "", sentence: "", displaySentence: "", grade: "", hint: "", beforeText: "", afterText: "", isMatched: false, chars: [] };
 
-  // 1. 各項目の初期抽出
   let kanji = (rawItem.kanji || "").trim();
   let kana = (rawItem.kana || "").trim();
   let grade = rawItem.grade || "";
@@ -4706,12 +4582,11 @@ function extractQuestionData(rawItem, options = {}) {
   let displaySentence = (rawItem.displaySentence || "").trim();
   let targetKanji = (rawItem.targetKanji || "").trim();
 
-  // ターゲット配当漢字の特定
+  // ターゲット漢字特定
   if (!targetKanji) {
     for (const ch of kanji) {
       if (typeof KANJI_LEARNING_DATA !== 'undefined' && KANJI_LEARNING_DATA[ch]) {
-        targetKanji = ch;
-        break;
+        targetKanji = ch; break;
       }
     }
     if (!targetKanji && kanji.length > 0) {
@@ -4722,142 +4597,60 @@ function extractQuestionData(rawItem, options = {}) {
 
   const ld = (typeof KANJI_LEARNING_DATA !== 'undefined' && targetKanji) ? KANJI_LEARNING_DATA[targetKanji] : null;
 
-  // 2. 例文の確認と整合（※定型文「〜を学習する」「〜を使った文」などの捏造・補完は完全削除）
+  // 定型文の捏造を排除し、自然な文のみを取得
   if (!isNaturalSentence(sentence, kanji)) {
     if (ld) {
       if (ld.primaryCompound && isNaturalSentence(ld.primarySentence, ld.primaryCompound)) {
         kanji = ld.primaryCompound;
         kana = ld.primaryKana || (typeof COMPOUND_READINGS !== 'undefined' && COMPOUND_READINGS[kanji]) || "";
         sentence = ld.primarySentence;
-        displaySentence = ld.displaySentence || ld.primarySentence;
       } else {
         const foundComp = (ld.compounds || []).find(c => (ld.sentences || []).some(s => isNaturalSentence(s, c)));
         if (foundComp) {
           kanji = foundComp;
           sentence = (ld.sentences || []).find(s => isNaturalSentence(s, foundComp)) || "";
           kana = (typeof COMPOUND_READINGS !== 'undefined' && COMPOUND_READINGS[kanji]) || "";
-          displaySentence = sentence;
         } else {
           const foundSingle = (ld.sentences || []).find(s => isNaturalSentence(s, targetKanji));
           if (foundSingle) {
             kanji = targetKanji;
             sentence = foundSingle;
             kana = getKanjiAutoReading(kanji).kana;
-            displaySentence = sentence;
           }
         }
       }
+      displaySentence = sentence;
     }
   }
 
-  // 3. 文中の熟語境界認識による「出題漢字（kanji）」の完全整合
-  if (sentence && isNaturalSentence(sentence, kanji)) {
-    if (kanji.length === 1 && sentence.includes(kanji)) {
-      const idx = sentence.indexOf(kanji);
-      let start = idx;
-      while (start > 0 && /[\u4E00-\u9FFF]/.test(sentence[start - 1])) {
-        start--;
-      }
-      let end = idx + 1;
-      while (end < sentence.length && /[\u4E00-\u9FFF]/.test(sentence[end])) {
-        end++;
-      }
-      const detectedCompound = sentence.substring(start, end);
-      if (detectedCompound.length >= 2) {
-        if ((typeof COMPOUND_READINGS !== 'undefined' && COMPOUND_READINGS[detectedCompound]) ||
-            (ld && ld.primaryCompound === detectedCompound)) {
-          kanji = detectedCompound;
-          if (typeof COMPOUND_READINGS !== 'undefined' && COMPOUND_READINGS[detectedCompound]) {
-            kana = COMPOUND_READINGS[detectedCompound];
-          } else if (ld && ld.primaryCompound === detectedCompound) {
-            kana = ld.primaryKana;
-          }
-        }
-      }
-    }
-
-    // 文中に kanji が見当たらないが targetKanji はある場合
-    if (!sentence.includes(kanji) && targetKanji && sentence.includes(targetKanji)) {
-      const idx = sentence.indexOf(targetKanji);
-      let start = idx;
-      while (start > 0 && /[\u4E00-\u9FFF]/.test(sentence[start - 1])) {
-        start--;
-      }
-      let end = idx + 1;
-      while (end < sentence.length && /[\u4E00-\u9FFF]/.test(sentence[end])) {
-        end++;
-      }
-      const matchedWord = sentence.substring(start, end);
-      if (matchedWord && matchedWord.length > 0) {
-        kanji = matchedWord;
-      }
-    }
-  }
-
-  // 4. ふりがな（kana）の完全一致保証
+  // ふりがなの補完
   if (!kana || kana === kanji) {
     if (kanji.length >= 2 && typeof COMPOUND_READINGS !== 'undefined' && COMPOUND_READINGS[kanji]) {
       kana = COMPOUND_READINGS[kanji];
     } else {
       kana = getKanjiAutoReading(kanji).kana;
     }
-  } else {
-    // 漢字1文字なのにふりがなが熟語読み（3拍以上）になっているバグの是正
-    if (kanji.length === 1 && kana.length >= 3 && typeof KANJI_READINGS !== 'undefined' && KANJI_READINGS[kanji]) {
-      const singleR = getKanjiAutoReading(kanji);
-      if (singleR && singleR.kana) {
-        kana = singleR.kana;
-      }
-    }
-    // 漢字2文字以上の熟語なのにふりがなが1文字の読みになっているバグの是正
-    if (kanji.length >= 2) {
-      if (typeof COMPOUND_READINGS !== 'undefined' && COMPOUND_READINGS[kanji]) {
-        kana = COMPOUND_READINGS[kanji];
-      }
-    }
   }
 
-  // 5. 文脈構造の完全維持分割（beforeText, afterText）
-  // 出題対象漢字 kanji は文構造ごと厳格に保護し、前後の文脈のみを学年適合ひらがな化
-  const targetGradeNum = parseInt(options.targetGrade || (grade ? grade.replace(/[^0-9]/g, '') : '') || (ld ? ld.grade : 6), 10) || 6;
-  const unlearnedMode = options.unlearnedMode || 'convert'; // 'convert' | 'exclude' | 'raw'
-
+  // 文脈構造の完全維持分割（ひらがなへの無理な置換は行わない）
   let beforeText = "";
   let afterText = "";
   let isMatched = false;
-  let finalSentence = "";
-
-  const baseSentence = (displaySentence && isNaturalSentence(displaySentence, kanji))
-    ? displaySentence
-    : (sentence && isNaturalSentence(sentence, kanji) ? sentence : "");
+  const baseSentence = (displaySentence && isNaturalSentence(displaySentence, kanji)) ? displaySentence : (sentence && isNaturalSentence(sentence, kanji) ? sentence : "");
 
   if (baseSentence && baseSentence.includes(kanji)) {
     const splitIndex = baseSentence.indexOf(kanji);
-    const rawBefore = baseSentence.slice(0, splitIndex);
-    const rawAfter = baseSentence.slice(splitIndex + kanji.length);
-
-    if (unlearnedMode === 'convert') {
-      beforeText = convertUnlearnedKanjiToHiragana(rawBefore, targetGradeNum, "");
-      afterText = convertUnlearnedKanjiToHiragana(rawAfter, targetGradeNum, "");
-    } else {
-      beforeText = rawBefore;
-      afterText = rawAfter;
-    }
-    finalSentence = beforeText + kanji + afterText;
+    beforeText = baseSentence.slice(0, splitIndex);
+    afterText = baseSentence.slice(splitIndex + kanji.length);
     isMatched = true;
   }
 
   return {
-    targetKanji,
-    kanji,
-    kana,
-    sentence,          // 元の文（漢字のまま保持）
-    displaySentence: finalSentence || baseSentence, // 未習漢字を文脈崩れなくひらがな化した文
+    targetKanji, kanji, kana, sentence,
+    displaySentence: baseSentence,
     grade: grade || (ld ? `${ld.grade}年` : ''),
-    hint: finalSentence || baseSentence || rawItem.hint || "",
-    beforeText,
-    afterText,
-    isMatched,
+    hint: baseSentence || rawItem.hint || "",
+    beforeText, afterText, isMatched,
     chars: kanji ? kanji.split("") : []
   };
 }
@@ -5617,7 +5410,6 @@ function renderAiPrintSheet() {
   const countMode = document.getElementById('sheet-count-select')?.value || '10';
   const mode = document.getElementById('sheet-mode-select')?.value || 'problem'; // 'problem' | 'answer'
   const targetGradeSetting = document.getElementById('sheet-target-grade-select')?.value || 'auto';
-  const unlearnedMode = document.getElementById('sheet-unlearned-filter-mode')?.value || 'convert'; // 'convert' | 'exclude' | 'raw'
 
   // 出題対象学年の決定
   let targetGrade = 6;
@@ -5633,33 +5425,25 @@ function renderAiPrintSheet() {
 
   let allQuestions = getActivePrintQuestions();
 
-  // 【要件1】解答（ターゲット熟語）の学年適合性 ＆ 自然な例文データの存在検証
-  // 1. 指定した学年より上で習う漢字や常用外漢字が「1文字でも」含まれている場合は除外（スキップ）
-  // 2. 自然な「例文」データが存在しない（空文字、無効、または定型文）単語は出題候補から【完全に除外（スキップ）】
+  // 【要件1】解答（ターゲット熟語）および文脈の学年適合性 ＆ 自然な例文データの存在検証
   const validQuestions = [];
   for (const q of allQuestions) {
-    const qd = extractQuestionData(q, { targetGrade, unlearnedMode });
+    const qd = extractQuestionData(q, { targetGrade });
     const targetWord = qd.kanji || q.kanji || "";
 
-    // 1. 解答（ターゲット熟語）自体の学年適合性チェック
+    // 1. 解答（ターゲット熟語）自体に未習漢字・常用外漢字が含まれていれば完全に除外（スキップ）
     if (!isTargetWordAllowedForGrade(targetWord, targetGrade)) {
-      continue; // 解答に1文字でも未習漢字・常用外漢字が含まれていれば完全に除外（スキップ）
-    }
-    if (q.kanji && !isTargetWordAllowedForGrade(q.kanji, targetGrade)) {
-      continue;
+      continue; 
     }
 
     // 2. 自然な例文が存在するか厳格判定（定型文・空文字・未一致は完全スキップ）
-    if (!qd.isMatched || !isNaturalSentence(qd.sentence, targetWord) || !isNaturalSentence(qd.displaySentence, targetWord)) {
+    if (!qd.isMatched || !isNaturalSentence(qd.sentence, targetWord)) {
       continue;
     }
 
-    // 3. unlearnedMode が 'exclude' の場合は、例文全体の未習漢字もチェック
-    if (unlearnedMode === 'exclude') {
-      const v = validateQuestionForGrade(q, targetGrade, 'exclude');
-      if (!v.valid) {
-        continue;
-      }
+    // 3. 【最重要】例文全体に未習漢字が1文字でも含まれていれば、完全に除外（スキップ）
+    if (!isSentenceAllowedForGrade(qd.displaySentence, targetGrade)) {
+      continue;
     }
 
     validQuestions.push(q);
@@ -5674,7 +5458,7 @@ function renderAiPrintSheet() {
   if (questions.length < minRequired) {
     const needed = minRequired - questions.length;
     const existingTargetKanji = new Set(questions.map(q => {
-      const d = extractQuestionData(q, { targetGrade, unlearnedMode });
+      const d = extractQuestionData(q, { targetGrade });
       return d.targetKanji || d.kanji;
     }));
     const fallbacks = getSafeFallbackQuestions(targetGrade, needed, existingTargetKanji);
@@ -5710,7 +5494,7 @@ function renderAiPrintSheet() {
     grade: targetGrade,
     count: questions.length,
     answers: questions.map(q => {
-      const qd = extractQuestionData(q, { targetGrade, unlearnedMode });
+      const qd = extractQuestionData(q, { targetGrade });
       return qd.kanji;
     })
   });
@@ -5724,7 +5508,7 @@ function renderAiPrintSheet() {
     // 熟語・例文学習ハンドアウト形式
     problemsHtml = questions.map((q, idx) => {
       const num = idx + 1;
-      const qData = extractQuestionData(q, { targetGrade, unlearnedMode });
+      const qData = extractQuestionData(q, { targetGrade });
       const kanjiStr = qData.kanji || '';
       const kanaStr = qData.kana || '';
       const targetCh = qData.targetKanji || kanjiStr[0] || '';
@@ -5753,7 +5537,7 @@ function renderAiPrintSheet() {
     // 短文穴埋めテスト形式（標準国語テスト形式・ターゲット漢字・ふりがな・前後の例文が100%一致）
     problemsHtml = questions.map((q, idx) => {
       const num = idx + 1;
-      const qData = extractQuestionData(q, { targetGrade, unlearnedMode });
+      const qData = extractQuestionData(q, { targetGrade });
       const kanjiStr = qData.kanji;
       const kanaStr = qData.kana;
       const chars = qData.chars;
@@ -5812,7 +5596,7 @@ function renderAiPrintSheet() {
     // 従来の単語書き取り形式
     problemsHtml = questions.map((q, idx) => {
       const num = idx + 1;
-      const qData = extractQuestionData(q, { targetGrade, unlearnedMode });
+      const qData = extractQuestionData(q, { targetGrade });
       const kanjiStr = qData.kanji || '';
       const kanaStr = qData.kana || '';
       const hintStr = qData.hint ? `（${escapeHtml(qData.hint)}）` : '';
